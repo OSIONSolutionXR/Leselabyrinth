@@ -11,9 +11,6 @@
       --bg1:#0b1030;
       --bg2:#171a3a;
 
-      --panel: rgba(18,22,44,.62);
-      --panel2: rgba(18,22,44,.42);
-
       --stroke: rgba(255,255,255,.12);
       --stroke2: rgba(255,255,255,.18);
 
@@ -29,7 +26,6 @@
 
       --shadow: 0 18px 40px rgba(0,0,0,.45);
       --radius: 22px;
-      --radius2: 16px;
 
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     }
@@ -128,6 +124,7 @@
 
     .sep{ opacity:.25; }
     .tiny{ font-size: 12px; color: var(--muted); opacity:.95; }
+
     .btn{
       appearance:none;
       border: 1px solid var(--stroke);
@@ -417,12 +414,11 @@
       display:block;
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
       pointer-events:none;
-      transition: filter .25s ease, opacity .25s ease;
     }
     .hotspot.small img{ width: var(--w, 120px); }
     .hotspot.tiny img{ width: var(--w, 70px); }
 
-    /* Fips MAIN (sehr groß im Bild, links unten) */
+    /* Fips MAIN */
     .fipsMain{
       position:absolute;
       left: 18px;
@@ -515,7 +511,7 @@
       transition: width .28s ease;
     }
 
-    /* Gate opening overlay */
+    /* Gate overlay */
     .gateOpen{
       position:absolute;
       inset:0;
@@ -539,6 +535,77 @@
     .gateOpen .card h3{ margin:0; font-size: 18px; font-weight:1000; }
     .gateOpen .card p{ margin:10px 0 0; color: var(--muted); line-height:1.35; }
 
+    /* BIG BLOCKER HINT */
+    .blocker{
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      display:none;
+      place-items:center;
+      background:
+        radial-gradient(900px 500px at 50% 25%, rgba(255,211,106,.18), transparent 60%),
+        linear-gradient(180deg, rgba(5,8,18,.70), rgba(5,8,18,.92));
+      backdrop-filter: blur(6px);
+    }
+    .blocker.show{ display:grid; animation: fadeIn .25s ease; }
+    .blocker .box{
+      width:min(860px, 94%);
+      border-radius: 24px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8,10,24,.76);
+      box-shadow: 0 30px 80px rgba(0,0,0,.65);
+    }
+    .blocker .hd{
+      padding: 16px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .blocker .hd h3{
+      margin:0;
+      font-size: 20px;
+      font-weight:1000;
+      letter-spacing:.2px;
+    }
+    .blocker .bd{
+      padding: 14px 16px 16px;
+      color: var(--muted);
+      line-height:1.45;
+      font-weight: 700;
+    }
+    .blocker .grid{
+      margin-top: 12px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    @media (max-width: 720px){
+      .blocker .grid{ grid-template-columns: 1fr; }
+    }
+    .blocker .tile{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      padding: 12px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .blocker .tile b{ color: var(--text); }
+    .blocker .ft{
+      padding: 14px 16px 16px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      display:flex;
+      justify-content:flex-end;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+
     /* Toast */
     .toast{
       position: fixed;
@@ -557,7 +624,7 @@
     @keyframes pop{ from{ transform: translateY(6px); opacity:.0;} to{ transform: translateY(0); opacity:1;} }
     .toast b{ font-weight: 1000; }
 
-    /* Pickup animation (Icon fliegt zum HUD) */
+    /* Pickup animation */
     .fly{
       position: fixed;
       z-index: 90;
@@ -565,12 +632,6 @@
       pointer-events:none;
       filter: drop-shadow(0 0 18px rgba(255,211,106,.35));
       transform: translate(-50%, -50%) scale(1);
-      animation: flyTo .65s ease-in forwards;
-    }
-    @keyframes flyTo{
-      0%{ opacity:1; transform: translate(-50%,-50%) scale(1); }
-      70%{ opacity:1; transform: translate(-50%,-50%) scale(.9); }
-      100%{ opacity:0; transform: translate(-50%,-50%) scale(.6); }
     }
     .sparkBurst{
       position: absolute;
@@ -586,7 +647,7 @@
       to{ opacity:0; transform: scale(1.35); }
     }
 
-    /* HUD pulse on change */
+    /* HUD pulse */
     .pulse{ animation: hudPulse .35s ease; }
     @keyframes hudPulse{
       0%{ transform: scale(1); }
@@ -601,7 +662,7 @@
       100%{ transform: rotate(0deg) scale(1); }
     }
 
-    /* Reward Star (groß, niedlich, verschwindet sicher) */
+    /* RICHTIGE-ANTWORT ANIMATION: riesiger Stern */
     .rewardStar{
       position:absolute;
       left:50%;
@@ -622,10 +683,7 @@
       70%{ opacity:1; transform: translate(-50%,-50%) scale(1.00) rotate(0deg); }
       100%{ opacity:0; transform: translate(-50%,-50%) scale(.92) rotate(0deg); }
     }
-    .rewardStar svg{
-      width: 100%;
-      height: 100%;
-    }
+    .rewardStar svg{ width: 100%; height: 100%; }
     .rewardStar .face{
       position:absolute;
       width: 42%;
@@ -704,19 +762,6 @@
     }
     .rep .k{ color: var(--muted); font-weight: 1000; font-size: 12px; }
     .rep .v{ font-weight: 1000; }
-
-    /* Lantern glow when aktiv */
-    .glowLantern{
-      filter:
-        drop-shadow(0 0 22px rgba(255,211,106,.35))
-        drop-shadow(0 0 44px rgba(255,211,106,.18))
-        brightness(1.08);
-      animation: lanternPulse 1.2s ease-in-out infinite;
-    }
-    @keyframes lanternPulse{
-      0%,100%{ filter: drop-shadow(0 0 18px rgba(255,211,106,.28)) brightness(1.05); }
-      50%{ filter: drop-shadow(0 0 28px rgba(255,211,106,.42)) brightness(1.12); }
-    }
   </style>
 </head>
 
@@ -835,7 +880,7 @@
       </div>
 
       <!-- Fips MAIN -->
-      <div class="fipsMain" id="fipsMain">
+      <div class="fipsMain">
         <div class="frame">
           <img id="fipsMainImg" src="assets/chars/fips/idle.png" alt="Fips" />
           <span class="bookTag" id="bookTag">Buch</span>
@@ -889,6 +934,26 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- BIG BLOCKER HINT -->
+  <div class="blocker" id="blocker">
+    <div class="box">
+      <div class="hd">
+        <div>
+          <h3 id="blockerTitle">Noch nicht freigeschaltet</h3>
+          <div class="tiny" id="blockerSub" style="margin-top:6px">Grund: Sammelziel nicht erfüllt.</div>
+        </div>
+        <button class="btn" id="blockerCloseBtn">Schließen</button>
+      </div>
+      <div class="bd">
+        <div id="blockerText">–</div>
+        <div class="grid" id="blockerGrid"></div>
+      </div>
+      <div class="ft">
+        <button class="btn primary" id="blockerOkBtn">Ok, ich sammle weiter</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Water world splash -->
   <div class="splash" id="splash">
     <div class="box">
@@ -897,7 +962,6 @@
         <div>
           <h3>Kapitel 2: Wasserwelt</h3>
           <p>Funkelwald ist geschafft. Hier ist der Abschlussbericht. Als nächstes wartet die Wasserwelt.</p>
-
           <div class="reportGrid" id="reportGrid"></div>
         </div>
         <div class="row">
@@ -942,8 +1006,7 @@
   };
 
   // ------------------------------------------------------------
-  // Content / Nodes (jetzt: 3 Fragen pro Szene + Sammelziel)
-  // Sammelziel pro Szene: 1 Stern, 1 Apfel, 1 Laterne (kannst du je Szene anpassen)
+  // Nodes (3 Fragen + Sammelziel)
   // ------------------------------------------------------------
   const NODES = [
     {
@@ -952,9 +1015,9 @@
       sparkHotspot: { x: 14, y: 78, r: 7 },
       goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
-        { id:"star1", type:"collect_star",   img:ASSETS.interact.Stern,   x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan1",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true, points: 1, label:"Laterne" },
-        { id:"ap1",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 86, y: 40, size:"small", once:true, points: 1, label:"Apfel" }
+        { id:"star1", type:"collect_star",    img:ASSETS.interact.Stern,   x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lan1",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true, points: 1, label:"Laterne" },
+        { id:"ap1",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 86, y: 40, size:"small", once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
         {
@@ -992,9 +1055,9 @@
       sparkHotspot: { x: 82, y: 63, r: 7 },
       goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
-        { id:"star2", type:"collect_star",   img:ASSETS.interact.Stern,   x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan2",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true, points: 1, label:"Laterne" },
-        { id:"ap2",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 80, y: 78, size:"tiny",  once:true, points: 1, label:"Apfel" }
+        { id:"star2", type:"collect_star",    img:ASSETS.interact.Stern,   x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lan2",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true, points: 1, label:"Laterne" },
+        { id:"ap2",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 80, y: 78, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
         {
@@ -1032,9 +1095,9 @@
       sparkHotspot: { x: 50, y: 18, r: 7 },
       goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
-        { id:"star3", type:"collect_star",   img:ASSETS.interact.Stern,   x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"ap3",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 78, y: 40, size:"small", once:true, points: 1, label:"Apfel" },
-        { id:"lan3",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny",  once:true, points: 1, label:"Laterne" }
+        { id:"star3", type:"collect_star",    img:ASSETS.interact.Stern,   x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"ap3",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 78, y: 40, size:"small", once:true, points: 1, label:"Apfel" },
+        { id:"lan3",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny",  once:true, points: 1, label:"Laterne" }
       ],
       readSteps: [
         {
@@ -1072,9 +1135,9 @@
       sparkHotspot: { x: 18, y: 34, r: 7 },
       goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
-        { id:"star4", type:"collect_star",   img:ASSETS.interact.Stern,   x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan4",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true, points: 1, label:"Laterne" },
-        { id:"ap4",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 86, y: 84, size:"tiny",  once:true, points: 1, label:"Apfel" }
+        { id:"star4", type:"collect_star",    img:ASSETS.interact.Stern,   x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lan4",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true, points: 1, label:"Laterne" },
+        { id:"ap4",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 86, y: 84, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
         {
@@ -1106,17 +1169,15 @@
         }
       ]
     },
-
-    // Boss-Tor: 3 Treffer + Sammelziel (hier streng: muss auch Sammeln erfüllen)
     {
       id:"N5", key:"bosstor", title:"Boss-Tor",
       bg: ASSETS.scenes.bosstor,
       sparkHotspot: { x: 90, y: 20, r: 7 },
       goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
-        { id:"star5", type:"collect_star",   img:ASSETS.interact.Stern,   x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan5",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true, points: 1, label:"Laterne" },
-        { id:"ap5",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 84, y: 74, size:"tiny",  once:true, points: 1, label:"Apfel" }
+        { id:"star5", type:"collect_star",    img:ASSETS.interact.Stern,   x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lan5",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true, points: 1, label:"Laterne" },
+        { id:"ap5",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 84, y: 74, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
       boss: { name: "Torwächter", hpMax: 3 },
       readBoss: [
@@ -1154,7 +1215,7 @@
   // ------------------------------------------------------------
   // Storage
   // ------------------------------------------------------------
-  const STORAGE_KEY = "leselabyrinth_funkelwald_v3_3fragen_sammeln_report";
+  const STORAGE_KEY = "leselabyrinth_funkelwald_v4_starAnim_xpOnce_blocker";
 
   const defaultState = () => ({
     nodeIndex: 0,
@@ -1181,10 +1242,12 @@
       collected: {},
 
       qIndex: 0,
-      correctSteps: [false,false,false],
+      correctSteps: [false,false,false],   // pro Frage: true = erledigt
+      xpGrantedSteps: [false,false,false], // verhindert XP-Stacking pro Frage
 
       bossHP: n.boss ? n.boss.hpMax : 0,
-      bossStep: 0
+      bossStep: 0,
+      bossXpGrantedSteps: [false,false,false] // verhindert XP-Stacking im Boss
     }))
   });
 
@@ -1266,6 +1329,14 @@
 
     toast: document.getElementById("toast"),
 
+    blocker: document.getElementById("blocker"),
+    blockerTitle: document.getElementById("blockerTitle"),
+    blockerSub: document.getElementById("blockerSub"),
+    blockerText: document.getElementById("blockerText"),
+    blockerGrid: document.getElementById("blockerGrid"),
+    blockerCloseBtn: document.getElementById("blockerCloseBtn"),
+    blockerOkBtn: document.getElementById("blockerOkBtn"),
+
     splash: document.getElementById("splash"),
     closeSplashBtn: document.getElementById("closeSplashBtn"),
     reportGrid: document.getElementById("reportGrid"),
@@ -1327,18 +1398,28 @@
       s.perfect = true;
       s.collected = {};
       s.sparkFound = false;
+
       s.qIndex = 0;
       s.correctSteps = [false,false,false];
+      s.xpGrantedSteps = [false,false,false];
 
       if(NODES[i].boss){
         s.bossHP = NODES[i].boss.hpMax;
         s.bossStep = 0;
+        s.bossXpGrantedSteps = [false,false,false];
       }
 
       state.hearts = state.heartsMax;
       state.streak = 0;
       setFips("sad", "Nochmal. Lies und sammle.");
     }
+  }
+
+  function burstAtHotspot(hsEl){
+    const b = document.createElement("div");
+    b.className = "sparkBurst";
+    hsEl.appendChild(b);
+    setTimeout(()=>b.remove(), 500);
   }
 
   function flyToHUD(fromClientX, fromClientY, iconSrc, targetEl){
@@ -1353,6 +1434,7 @@
     img.style.top = fromClientY + "px";
 
     document.body.appendChild(img);
+
     img.animate([
       { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
       { transform: `translate(${(tx-fromClientX)}px, ${(ty-fromClientY)}px) scale(.65)`, opacity: 0 }
@@ -1361,18 +1443,12 @@
     setTimeout(()=>img.remove(), 700);
   }
 
-  function burstAtHotspot(hsEl){
-    const b = document.createElement("div");
-    b.className = "sparkBurst";
-    hsEl.appendChild(b);
-    setTimeout(()=>b.remove(), 500);
-  }
-
   function removeAnyRewardStar(){
     const old = el.sceneWrap.querySelector(".rewardStar");
     if(old) old.remove();
   }
 
+  // ANIMATION: riesiger Stern für richtige Antwort
   function showRewardStar(labelText){
     removeAnyRewardStar();
 
@@ -1413,23 +1489,17 @@
         <circle cx="122" cy="92" r="6.5" fill="rgba(10,12,28,.65)"></circle>
         <path d="M78 118 C92 132, 108 132, 122 118" fill="none" stroke="rgba(10,12,28,.65)" stroke-width="6" stroke-linecap="round"/>
       </svg>
-      <div class="face"><div class="cap">${labelText || "Super!"}</div></div>
+      <div class="face"><div class="cap">${labelText || "Richtig!"}</div></div>
     `;
 
     wrap.addEventListener("animationend", () => wrap.remove(), { once:true });
     el.sceneWrap.appendChild(wrap);
-
-    // Safety: falls animationend nicht feuert
     setTimeout(() => { if(wrap.isConnected) wrap.remove(); }, 1400);
   }
 
   function goalsForNode(node){
     const g = node.goals || {stars:0,apples:0,lanterns:0};
-    return {
-      stars: g.stars || 0,
-      apples: g.apples || 0,
-      lanterns: g.lanterns || 0
-    };
+    return { stars: g.stars||0, apples: g.apples||0, lanterns: g.lanterns||0 };
   }
 
   function collectedCountsInNode(i){
@@ -1444,27 +1514,52 @@
     return { stars, apples, lanterns };
   }
 
-  function isGoalMet(i){
+  function missingForNode(i){
     const node = NODES[i];
     const g = goalsForNode(node);
     const c = collectedCountsInNode(i);
-    return c.stars >= g.stars && c.apples >= g.apples && c.lanterns >= g.lanterns;
+    return {
+      stars: Math.max(0, g.stars - c.stars),
+      apples: Math.max(0, g.apples - c.apples),
+      lanterns: Math.max(0, g.lanterns - c.lanterns),
+      have: c,
+      goal: g
+    };
+  }
+
+  function isGoalMet(i){
+    const m = missingForNode(i);
+    return (m.stars === 0 && m.apples === 0 && m.lanterns === 0);
   }
 
   function allQuestionsCorrect(i){
     const s = state.scene[i];
-    // Boss-node zählt nicht über correctSteps, sondern über Boss-HP
     return s.correctSteps.every(Boolean);
   }
 
-  function canUnlockNext(i){
+  function showBlockerWhyNot(i, reasonTitle){
     const node = NODES[i];
-    if(node.boss){
-      // Boss: Boss besiegt + Sammelziel erfüllt
-      const s = state.scene[i];
-      return s.bossHP === 0 && isGoalMet(i);
-    }
-    return allQuestionsCorrect(i) && isGoalMet(i);
+    const m = missingForNode(i);
+
+    el.blockerTitle.textContent = reasonTitle || "Noch nicht freigeschaltet";
+    el.blockerSub.textContent = "Grund: Sammelziel nicht erfüllt.";
+
+    el.blockerText.innerHTML =
+      `Du hast die Fragen geschafft, aber das Sammelziel fehlt noch.<br>
+       Sammel die fehlenden Dinge im Bild. Danach wird die nächste Szene freigeschaltet.`;
+
+    el.blockerGrid.innerHTML = `
+      <div class="tile"><span>Sterne</span><b>${m.have.stars}/${m.goal.stars} (fehlt ${m.stars})</b></div>
+      <div class="tile"><span>Äpfel</span><b>${m.have.apples}/${m.goal.apples} (fehlt ${m.apples})</b></div>
+      <div class="tile"><span>Laternen</span><b>${m.have.lanterns}/${m.goal.lanterns} (fehlt ${m.lanterns})</b></div>
+    `;
+
+    el.blocker.classList.add("show");
+    setFips("thinking", `Sammelziel fehlt: Sterne ${m.stars}, Äpfel ${m.apples}, Laternen ${m.lanterns}.`);
+  }
+
+  function hideBlocker(){
+    el.blocker.classList.remove("show");
   }
 
   function markCompleted(i){
@@ -1480,7 +1575,7 @@
       setFips("happy", "Perfekt gelesen.");
     }else{
       gainXP(20);
-      setFips("happy", "Richtig. Weiter.");
+      setFips("happy", "Erledigt. Weiter.");
     }
 
     state.streak += 1;
@@ -1590,15 +1685,12 @@
     const s = state.scene[i];
 
     el.sceneTitle.textContent = node.title;
-
     el.sceneImg.src = node.bg;
     el.overlay.innerHTML = "";
     el.gateOpen.classList.remove("show");
 
-    // Boss handling
     renderBossUI(node, s);
 
-    // Pergament + Frage
     if(node.boss){
       const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
       const pack = node.readBoss[step];
@@ -1615,17 +1707,15 @@
       el.qProgress.textContent = `Frage ${qi+1}/3`;
     }
 
-    const g = goalsForNode(node);
-    const c = collectedCountsInNode(i);
-    el.goalLine.textContent = `Sammelziel: Sterne ${c.stars}/${g.stars} · Äpfel ${c.apples}/${g.apples} · Laternen ${c.lanterns}/${g.lanterns}`;
+    const m = missingForNode(i);
+    el.goalLine.textContent = `Sammelziel: Sterne ${m.have.stars}/${m.goal.stars} · Äpfel ${m.have.apples}/${m.goal.apples} · Laternen ${m.have.lanterns}/${m.goal.lanterns}`;
 
-    // Next Button: nur wenn Szene komplett erfüllt
+    // Next Button
     el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
 
-    // Interactables
+    // Hotspots
     node.interactables.forEach(it => {
       if(it.once && s.collected[it.id]) return;
-
       const hs = document.createElement("div");
       hs.className = "hotspot " + (it.size || "");
       hs.style.left = it.x + "%";
@@ -1638,12 +1728,6 @@
       img.alt = it.label || "Interaktion";
       hs.appendChild(img);
 
-      // Laterne: Wenn Sammelziel Laterne bereits erfüllt, soll sie nicht mehr da sein (once=true macht das)
-      // Glow: wenn Laternen gesammelt wurden, kann eine aktive Laterne stärker wirken (optional)
-      if(it.type === "collect_lantern" && (s.correctSteps[1] || s.collected[it.id])){
-        img.classList.add("glowLantern");
-      }
-
       hs.addEventListener("click", (e) => {
         e.stopPropagation();
         onInteract(it, hs, e.clientX, e.clientY);
@@ -1652,7 +1736,7 @@
       el.overlay.appendChild(hs);
     });
 
-    // Secret spark hotspot (invisible)
+    // Secret spark hotspot
     const sp = node.sparkHotspot;
     if(sp && !s.sparkFound){
       const hs = document.createElement("div");
@@ -1677,7 +1761,7 @@
       el.overlay.appendChild(hs);
     }
 
-    // Fips-Buch-Effekt: nach 3. richtiger Frage anzeigen (als Status)
+    // Buch-Tag nach 3. richtiger Frage (nur normal)
     el.bookTag.classList.toggle("show", s.correctSteps[2] === true && !node.boss);
   }
 
@@ -1697,17 +1781,15 @@
   }
 
   // ------------------------------------------------------------
-  // Interact (Sammeln: Stern, Apfel, Laterne)
+  // Interact (Sammeln)
   // ------------------------------------------------------------
   function onInteract(it, hsEl, cx, cy){
     const i = state.nodeIndex;
-    const node = NODES[i];
     const s = state.scene[i];
 
     if(state.completed[i]) return;
 
     if(it.once) s.collected[it.id] = true;
-
     burstAtHotspot(hsEl);
 
     if(it.type === "collect_star"){
@@ -1716,7 +1798,6 @@
       gainXP(10);
       toast(`<b>Stern eingesammelt!</b> +${it.points||1} Stern · +10 XP`);
       setFips("happy", "Stern eingesammelt.");
-
       flyToHUD(cx, cy, ASSETS.icons.stern, el.pillStars);
 
     } else if(it.type === "collect_apple"){
@@ -1725,7 +1806,6 @@
       gainXP(8);
       toast(`<b>Apfel eingesammelt!</b> +${it.points||1} Apfel · +8 XP`);
       setFips("happy", "Apfel eingesammelt.");
-
       flyToHUD(cx, cy, ASSETS.interact.Apfel, el.pillApples);
 
     } else if(it.type === "collect_lantern"){
@@ -1734,30 +1814,33 @@
       gainXP(8);
       toast(`<b>Laterne eingesammelt!</b> +${it.points||1} Laterne · +8 XP`);
       setFips("happy", "Laterne eingesammelt.");
-
       flyToHUD(cx, cy, ASSETS.interact.Laterne, el.pillLanterns);
-
-    } else if(it.type === "trap"){
-      s.perfect = false;
-      s.tries += 1;
-      state.streak = 0;
-      loseHeart();
-      toast(`<b>Fehler.</b> ${it.say || "Nicht richtig."}`);
-      setFips("thinking", "Nochmal lesen. Dann antworten.");
-
-    } else {
-      gainXP(5);
-      toast(`<b>Hinweis:</b> ${it.say || "Interessant."}`);
-      setFips("idle", it.say || "Weiter.");
     }
 
-    // Wenn once=true, soll es sofort verschwinden: renderAll sorgt dafür (weil collected=true)
+    // Wenn jetzt bereits alles stimmt, Szene direkt finalisieren (ohne zusätzliche Antwort-Clicks)
+    if(!NODES[i].boss && allQuestionsCorrect(i) && isGoalMet(i) && !state.completed[i]){
+      markCompleted(i);
+      toast(`<b>Freigeschaltet!</b> Sammelziel erfüllt.`);
+    }
+    if(NODES[i].boss){
+      const node = NODES[i];
+      const s2 = state.scene[i];
+      if(s2.bossHP === 0 && isGoalMet(i) && !state.completed[i]){
+        markCompleted(i);
+        el.gateOpen.classList.add("show");
+        setTimeout(() => {
+          el.gateOpen.classList.remove("show");
+          openReportAndSplash();
+        }, 1200);
+      }
+    }
+
     saveState();
     renderAll();
   }
 
   // ------------------------------------------------------------
-  // Answer (3 Fragen pro Szene) + Belohnungsstern groß (verschwindet sicher)
+  // Answer (XP nur einmal pro Frage, kein EP-Stacking)
   // ------------------------------------------------------------
   function onAnswer(idx){
     const i = state.nodeIndex;
@@ -1772,13 +1855,14 @@
     s.tries += 1;
 
     let answers, chosen;
+    let qi = 0;
 
     if(node.boss){
-      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
-      answers = node.readBoss[step].answers;
+      qi = clamp(s.bossStep, 0, 2);
+      answers = node.readBoss[qi].answers;
       chosen = answers[idx];
     }else{
-      const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
+      qi = clamp(s.qIndex, 0, 2);
       answers = node.readSteps[qi].answers;
       chosen = answers[idx];
     }
@@ -1786,59 +1870,82 @@
     if(chosen && chosen.correct){
       cards[idx].classList.add("correct");
 
-      // Großer Belohnungsstern (nicht kleben, verschwindet)
+      // Star-Animation immer bei richtiger Antwort (rein visuell)
       showRewardStar("Richtig!");
 
-      // Fips reagiert stärker
-      setFips("excited", "Richtig.");
+      // Wenn Frage bereits erledigt: KEIN XP, KEIN Fortschritt, nur Hinweis
+      if(!node.boss && s.correctSteps[qi] === true){
+        toast(`<b>Schon erledigt.</b> Diese Frage zählt bereits.`, 2200);
+        setFips("thinking", "Sammelziel prüfen. Dann weiter.");
+        // Wenn alle Fragen richtig, aber Sammelziel fehlt: große Blocker-Erklärung
+        if(allQuestionsCorrect(i) && !isGoalMet(i)){
+          showBlockerWhyNot(i, "Warum es nicht weitergeht");
+        }
+        saveState();
+        renderAll();
+        return;
+      }
+      if(node.boss && s.bossXpGrantedSteps[qi] === true){
+        toast(`<b>Schon erledigt.</b> Diese Bossfrage zählt bereits.`, 2200);
+        if(s.bossHP === 0 && !isGoalMet(i)){
+          showBlockerWhyNot(i, "Warum es nicht weitergeht");
+        }
+        saveState();
+        renderAll();
+        return;
+      }
 
+      // XP nur einmal pro Frage vergeben
       if(node.boss){
-        // Boss: richtig = Boss HP -1
+        if(!s.bossXpGrantedSteps[qi]){
+          s.bossXpGrantedSteps[qi] = true;
+          gainXP(18);
+        }
+
+        // Boss-Logik: Treffer nur einmal pro Bossfrage
         s.bossHP = clamp(s.bossHP - 1, 0, node.boss.hpMax);
         renderBossUI(node, s);
-        gainXP(18);
 
+        toast(`<b>Treffer!</b> Boss verliert Leben.`);
+        setFips("excited", "Richtig. Boss verliert Leben.");
+
+        // nächste Bossfrage
         s.bossStep = clamp(s.bossStep + 1, 0, node.readBoss.length - 1);
 
+        // Boss besiegt
         if(s.bossHP === 0){
-          // Boss besiegt, aber Szene erst komplett, wenn Sammelziel erfüllt
           el.statusLine.innerHTML = `Status: <span class="good">Boss besiegt.</span>`;
 
           if(isGoalMet(i)){
             markCompleted(i);
-
             el.gateOpen.classList.add("show");
             setTimeout(() => {
               el.gateOpen.classList.remove("show");
               openReportAndSplash();
             }, 1200);
           }else{
-            toast(`<b>Boss besiegt!</b> Sammelziel fehlt noch.`);
-            setFips("thinking", "Boss besiegt. Jetzt Sammelziel erfüllen.");
+            toast(`<b>Boss besiegt!</b> Sammelziel fehlt noch.`, 2600);
+            showBlockerWhyNot(i, "Warum es nicht weitergeht");
           }
         }else{
           el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span> Noch ${s.bossHP} Treffer.`;
         }
 
       } else {
-        // Normal: Frage korrekt -> nächste Frage
-        const qi = clamp(s.qIndex, 0, 2);
+        // Normal: Frage als erledigt markieren
         s.correctSteps[qi] = true;
 
-        // Szenen-Story-Effekte:
-        // Q1 korrekt: Fips "steht da" (Mood happy)
-        // Q2 korrekt: Laternen-Glow wird sichtbar (im renderScene via glowLantern)
-        // Q3 korrekt: Buch-Tag erscheint
-        if(qi === 0) setFips("happy", "Richtig. Weiter zur nächsten Frage.");
-        if(qi === 1) setFips("happy", "Richtig. Die Laterne wirkt stärker.");
-        if(qi === 2) setFips("happy", "Richtig. Lesen geschafft.");
+        if(!s.xpGrantedSteps[qi]){
+          s.xpGrantedSteps[qi] = true;
+          gainXP(16);
+        }
 
-        gainXP(16);
+        // zur nächsten Frage wechseln (bis max 3)
+        if(qi < 2) s.qIndex = qi + 1;
 
-        // advance question index, aber maximal 2
-        s.qIndex = clamp(s.qIndex + 1, 0, 2);
+        setFips("happy", "Richtig.");
 
-        // Wenn alle 3 Fragen korrekt: check Sammelziel -> erst dann erledigt
+        // Check: alle Fragen + Sammelziel
         if(allQuestionsCorrect(i)){
           if(isGoalMet(i)){
             markCompleted(i);
@@ -1846,8 +1953,8 @@
             toast(`<b>Szene erledigt!</b>`);
           }else{
             el.statusLine.innerHTML = `Status: <span class="good">Alle Fragen richtig.</span> Sammelziel fehlt.`;
-            toast(`<b>Alle Fragen richtig!</b> Jetzt Sammelziel erfüllen.`);
-            setFips("thinking", "Jetzt Sammelziel erfüllen.");
+            toast(`<b>Alle Fragen richtig!</b> Sammelziel fehlt noch.`, 2600);
+            showBlockerWhyNot(i, "Warum es nicht weitergeht");
           }
         }else{
           el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
@@ -1882,7 +1989,6 @@
   // Abschlussbericht + Splash
   // ------------------------------------------------------------
   function openReportAndSplash(){
-    // Report füllen
     const items = [
       ["Sterne", state.stars],
       ["Äpfel", state.apples],
@@ -1937,6 +2043,12 @@
     setFips("idle", "Sammle zuerst. Dann lies. Dann antworte.");
   });
 
+  el.blockerCloseBtn.addEventListener("click", hideBlocker);
+  el.blockerOkBtn.addEventListener("click", hideBlocker);
+  el.blocker.addEventListener("click", (e) => {
+    if(e.target === el.blocker) hideBlocker();
+  });
+
   el.closeSplashBtn.addEventListener("click", () => {
     el.splash.classList.remove("show");
   });
@@ -1945,6 +2057,7 @@
     const k = e.key.toLowerCase();
     if(k === "h") el.helpBtn.click();
     if(k === "r") el.resetBtn.click();
+    if(k === "escape") hideBlocker();
   });
 
   // ------------------------------------------------------------
@@ -1955,7 +2068,6 @@
     renderPath();
     renderScene();
 
-    // Next button: nur wenn completed + unlocked next
     const i = state.nodeIndex;
     el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
   }
