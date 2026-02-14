@@ -7,14 +7,16 @@
 
   <style>
     :root{
-      --bg:#0b1020;
-      --panel:rgba(17,26,51,.78);
-      --panel2:rgba(15,23,48,.62);
-      --stroke:rgba(255,255,255,.10);
-      --stroke2:rgba(255,255,255,.16);
+      --bg1:#0b1020;
+      --bg2:#0c1330;
 
-      --txt:#eaf0ff;
-      --muted:#aab6da;
+      --panel: rgba(17, 26, 51, .78);
+      --panel2: rgba(15, 23, 48, .62);
+      --stroke: rgba(255,255,255,.12);
+      --stroke2: rgba(255,255,255,.20);
+
+      --txt:#edf3ff;
+      --muted:#b6c2e6;
 
       --good:#43e08b;
       --bad:#ff5a7a;
@@ -22,54 +24,100 @@
       --accent1:#ff2d55;
       --accent2:#7a3cff;
 
+      --kid1:#2fd9ff;
+      --kid2:#ffd33d;
+      --kid3:#7cff6b;
+
+      --radius: 20px;
+      --radius2: 16px;
+
       --shadow: 0 18px 60px rgba(0,0,0,.30);
-      --radius:18px;
-      --radius2:16px;
+      --shadowIn: 0 18px 40px rgba(0,0,0,.20) inset;
     }
 
-    *{ box-sizing:border-box }
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
       color:var(--txt);
       background:
-        radial-gradient(1200px 700px at 12% 10%, rgba(122,60,255,.25), transparent 60%),
-        radial-gradient(1200px 700px at 90% 18%, rgba(255,45,85,.22), transparent 60%),
-        var(--bg);
+        radial-gradient(900px 500px at 15% 10%, rgba(122,60,255,.25), transparent 60%),
+        radial-gradient(900px 500px at 90% 12%, rgba(255,45,85,.22), transparent 60%),
+        radial-gradient(700px 400px at 50% 120%, rgba(47,217,255,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    /* Kleine “Sternchen”-Textur */
+    body:before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.22;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.14) 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(255,255,255,.10) 1px, transparent 1.5px);
+      background-size: 80px 80px, 120px 120px;
+      background-position: 10px 15px, 40px 60px;
+      filter: blur(.2px);
     }
 
     header{
-      position:sticky; top:0; z-index:10;
+      position:sticky; top:0; z-index:20;
       padding:14px 16px;
       border-bottom:1px solid var(--stroke);
-      background:rgba(11,16,32,.85);
+      background: rgba(11,16,32,.85);
       backdrop-filter: blur(10px);
-      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
-    .brand{ display:flex; flex-direction:column; line-height:1.12; }
+    .brand{
+      display:flex; flex-direction:column; line-height:1.1;
+    }
     .brand b{
       font-size:14px; letter-spacing:.8px;
       background: linear-gradient(90deg,var(--accent1),var(--accent2));
       -webkit-background-clip:text; background-clip:text;
       color:transparent;
+      font-weight:900;
     }
-    .brand span{ font-size:12px; color:var(--muted); }
+    .brand span{
+      font-size:12px;
+      color:var(--muted);
+      opacity:.95;
+    }
 
-    .top-actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .top-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+
     button{
       appearance:none;
       border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       color:var(--txt);
       padding:10px 12px;
-      border-radius:12px;
+      border-radius:14px;
       cursor:pointer;
-      font-weight:700;
+      font-weight:800;
+      letter-spacing:.2px;
+      transition: transform .12s ease, border-color .12s ease, filter .12s ease;
+      user-select:none;
     }
-    button:hover{ border-color:rgba(255,255,255,.20) }
+    button:hover{ border-color: rgba(255,255,255,.22); transform: translateY(-1px); }
+    button:active{ transform: translateY(0px) scale(.99); filter: brightness(.98); }
+
     button.primary{
       border:none;
       background: linear-gradient(90deg, rgba(255,45,85,.95), rgba(122,60,255,.95));
+      box-shadow: 0 12px 32px rgba(122,60,255,.16);
     }
 
     main{
@@ -84,19 +132,19 @@
       border-radius: var(--radius);
       padding:14px;
       box-shadow: var(--shadow);
+      position:relative;
     }
 
-    /* --- Layout: Guide oben (schmal), Content unten --- */
     .layout{
       display:grid;
-      grid-template-rows: auto 1fr;
+      grid-template-rows:auto 1fr;
       gap:14px;
     }
 
-    /* --- Top Guide Bar --- */
+    /* --- Guidebar oben --- */
     .guidebar{
       display:grid;
-      grid-template-columns: 1.2fr 1fr 1.4fr;
+      grid-template-columns: 1.2fr 1fr 1.5fr;
       gap:12px;
       align-items:stretch;
     }
@@ -117,19 +165,21 @@
       align-items:flex-start;
     }
     .avatar{
-      width:54px; height:54px;
-      border-radius:16px;
+      width:56px; height:56px;
+      border-radius: 18px;
       border:1px solid var(--stroke);
       background:
         radial-gradient(circle at 30% 30%, rgba(255,255,255,.20), transparent 50%),
-        linear-gradient(135deg, rgba(255,45,85,.65), rgba(122,60,255,.55));
+        linear-gradient(135deg, rgba(47,217,255,.40), rgba(255,211,61,.26)),
+        linear-gradient(135deg, rgba(255,45,85,.55), rgba(122,60,255,.50));
       display:flex;
       align-items:center;
       justify-content:center;
-      font-weight:900;
+      font-weight:1000;
       letter-spacing:.5px;
-      color:rgba(255,255,255,.92);
+      color:rgba(255,255,255,.96);
       flex:0 0 auto;
+      box-shadow: 0 10px 28px rgba(0,0,0,.22);
     }
     .speech{
       flex:1;
@@ -139,7 +189,45 @@
       background: rgba(17,26,51,.60);
       line-height:1.35;
       font-size:13.5px;
-      min-height:54px;
+      min-height:56px;
+    }
+
+    .pills{
+      margin-top:10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    /* Sterne-Pill: Ziel für Animation */
+    .pill.stars{
+      border-color: rgba(255,211,61,.30);
+      background:
+        radial-gradient(200px 40px at 30% 30%, rgba(255,211,61,.18), transparent 60%),
+        rgba(255,255,255,.05);
+      position:relative;
+      overflow:hidden;
+    }
+    .pill.stars.pulse{
+      animation: starPulse .45s ease;
+    }
+    @keyframes starPulse{
+      0%{ transform: scale(1); }
+      40%{ transform: scale(1.08); }
+      100%{ transform: scale(1); }
     }
 
     .stats{
@@ -152,23 +240,16 @@
       border-radius: var(--radius2);
       background: rgba(17,26,51,.35);
       padding:10px 12px;
-      min-height:54px;
+      min-height:56px;
     }
     .stat b{ display:block; font-size:12.5px; letter-spacing:.2px; }
     .stat span{ color:var(--muted); font-size:12px; }
 
-    /* Map: horizontal scroll (kein Überlappen) */
-    .mapwrap{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    /* Map: horizontal scroll */
+    .mapwrap{ display:flex; flex-direction:column; gap:10px; }
     .maphead{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
+      display:flex; justify-content:space-between;
+      gap:10px; align-items:center; flex-wrap:wrap;
     }
     .maphead b{ font-size:13px; }
     .maphead span{ font-size:12px; color:var(--muted); }
@@ -181,43 +262,34 @@
       -webkit-overflow-scrolling: touch;
     }
     .node{
-      min-width: 170px;
+      min-width: 180px;
       border:1px solid var(--stroke);
       border-radius: var(--radius2);
-      background: rgba(17,26,51,.30);
+      background:
+        radial-gradient(240px 50px at 15% 20%, rgba(47,217,255,.10), transparent 60%),
+        rgba(17,26,51,.30);
       padding:10px 12px;
       cursor:pointer;
       flex:0 0 auto;
+      transition: transform .12s ease, border-color .12s ease;
     }
-    .node:hover{ border-color:rgba(255,255,255,.20) }
-    .node.locked{ opacity:.45; cursor:not-allowed; }
+    .node:hover{ border-color: rgba(255,255,255,.22); transform: translateY(-1px); }
+    .node.locked{ opacity:.45; cursor:not-allowed; filter: grayscale(.1); }
     .node.done{
       border-color: rgba(67,224,139,.35);
-      background: rgba(67,224,139,.10);
+      background:
+        radial-gradient(260px 60px at 15% 20%, rgba(124,255,107,.12), transparent 60%),
+        rgba(67,224,139,.10);
     }
     .node small{ color:var(--muted); display:block; margin-bottom:4px; }
     .node b{ display:block; font-size:13px; }
 
-    .pill{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.04);
-      font-size:12px;
-      color:var(--muted);
-      white-space:nowrap;
-    }
-
-    /* --- Bottom Content --- */
+    /* --- Content unten --- */
     .content{
       display:grid;
       grid-template-columns: 1fr;
       gap:14px;
     }
-
     .titleRow{
       display:flex;
       justify-content:space-between;
@@ -236,13 +308,13 @@
       border-radius: var(--radius);
       background: rgba(15,23,48,.55);
       padding:14px;
+      position:relative;
     }
 
-    /* Szene Kopf */
     .scene{
       border-radius: var(--radius);
       border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       padding:14px;
       display:flex;
       justify-content:space-between;
@@ -254,18 +326,38 @@
     .scene .meta small{ color:var(--muted); }
     .scene .meta b{ font-size:16px; }
 
-    /* Lesetext: deutlich hervorgehoben */
+    /* Lesetext: deutlich + kindgerecht */
     .readingBox{
       border-radius: var(--radius);
-      border:1px solid var(--stroke2);
+      border:1px solid rgba(255,255,255,.22);
       background:
-        radial-gradient(900px 200px at 0% 0%, rgba(122,60,255,.20), transparent 55%),
-        radial-gradient(900px 200px at 100% 0%, rgba(255,45,85,.18), transparent 55%),
+        radial-gradient(900px 180px at 0% 0%, rgba(47,217,255,.16), transparent 55%),
+        radial-gradient(900px 180px at 100% 0%, rgba(255,211,61,.14), transparent 55%),
         rgba(255,255,255,.035);
-      padding:16px 16px;
+      padding:16px;
       margin:12px 0 14px;
-      box-shadow: 0 18px 40px rgba(0,0,0,.20) inset;
+      box-shadow: var(--shadowIn);
+      position:relative;
+      overflow:hidden;
     }
+    .readingBox:after{
+      content:"";
+      position:absolute;
+      top:-40%;
+      left:-60%;
+      width:60%;
+      height:180%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      transform: rotate(18deg);
+      animation: gentleShine 6.5s linear infinite;
+      opacity:.55;
+      pointer-events:none;
+    }
+    @keyframes gentleShine{
+      0%{ transform: translateX(0) rotate(18deg); }
+      100%{ transform: translateX(260%) rotate(18deg); }
+    }
+
     .readingLabel{
       display:flex;
       align-items:center;
@@ -278,38 +370,105 @@
       font-size:12.5px;
       letter-spacing:.35px;
       text-transform:uppercase;
-      color:rgba(255,255,255,.85);
+      color:rgba(255,255,255,.90);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .readingLabel b:before{
+      content:"📖";
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.25));
     }
     .readingHint{
       color:var(--muted);
       font-size:12px;
     }
+
     .text{
-      font-size:20px;          /* wichtiger Punkt: groß */
-      line-height:1.75;        /* leicht lesbar */
-      font-weight:800;         /* klare Betonung */
+      font-size:22px;
+      line-height:1.75;
+      font-weight:950;
       letter-spacing:.15px;
+      text-shadow: 0 10px 24px rgba(0,0,0,.20);
     }
     @media (max-width: 520px){
-      .text{ font-size:18px; }
+      .text{ font-size:19px; }
     }
 
     .question{
-      font-weight:900;
+      font-weight:950;
       margin:10px 0 10px;
       font-size:16px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .question:before{
+      content:"❓";
+      opacity:.95;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,.22));
     }
 
+    /* Antwort-Buttons (kindgerecht + farbig + shimmer) */
     .answers{
       display:grid;
       gap:10px;
+      margin-top:10px;
     }
-    .answers button{
+    .option{
+      position:relative;
       width:100%;
       text-align:left;
       padding:14px 14px;
-      border-radius: 16px;
-      font-size:14px;
+      border-radius: 18px;
+      font-size:15px;
+      border:1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(260px 60px at 15% 25%, rgba(47,217,255,.16), transparent 60%),
+        radial-gradient(260px 60px at 85% 65%, rgba(255,211,61,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      overflow:hidden;
+      transition: transform .12s ease, border-color .12s ease, filter .12s ease;
+    }
+    .option:before{
+      content:"";
+      position:absolute;
+      top:-60%;
+      left:-80%;
+      width:60%;
+      height:220%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+      transform: rotate(20deg);
+      animation: shimmer 3.8s linear infinite;
+      opacity:.45;
+      pointer-events:none;
+    }
+    @keyframes shimmer{
+      0%{ transform: translateX(0) rotate(20deg); }
+      100%{ transform: translateX(320%) rotate(20deg); }
+    }
+    .option:hover{
+      border-color: rgba(255,255,255,.26);
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+    .option:active{
+      transform: translateY(0px) scale(.99);
+      filter: brightness(.98);
+    }
+
+    /* Feedback states */
+    .option.correctFlash{
+      border-color: rgba(67,224,139,.55);
+      background:
+        radial-gradient(260px 60px at 15% 25%, rgba(124,255,107,.20), transparent 60%),
+        linear-gradient(180deg, rgba(67,224,139,.16), rgba(255,255,255,.02));
+    }
+    .option.wrongFlash{
+      border-color: rgba(255,90,122,.55);
+      background:
+        radial-gradient(260px 60px at 15% 25%, rgba(255,90,122,.20), transparent 60%),
+        linear-gradient(180deg, rgba(255,90,122,.12), rgba(255,255,255,.02));
     }
 
     .helpers{
@@ -330,7 +489,7 @@
     .feedback{
       padding:12px;
       border-radius: var(--radius);
-      border:1px dashed rgba(255,255,255,.18);
+      border:1px dashed rgba(255,255,255,.20);
       background: rgba(255,255,255,.03);
       color:var(--muted);
       font-size:13px;
@@ -340,11 +499,6 @@
     .hidden{ display:none !important; }
 
     /* Diagnose */
-    .dashgrid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:12px;
-    }
     .table{
       width:100%;
       border-collapse:collapse;
@@ -356,10 +510,22 @@
       padding:8px 6px;
       text-align:left;
     }
-    .table th{ color:var(--muted); font-weight:800; }
+    .table th{ color:var(--muted); font-weight:950; }
 
-    .good{ color:var(--good); font-weight:900; }
-    .bad{ color:var(--bad); font-weight:900; }
+    .good{ color:var(--good); font-weight:950; }
+    .bad{ color:var(--bad); font-weight:950; }
+
+    /* Stern-Fly Animation Element */
+    .flyStar{
+      position: fixed;
+      z-index: 9999;
+      font-size: 22px;
+      pointer-events:none;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,.35));
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      transition: transform .55s cubic-bezier(.2,.9,.2,1), left .55s cubic-bezier(.2,.9,.2,1), top .55s cubic-bezier(.2,.9,.2,1), opacity .55s ease;
+    }
   </style>
 </head>
 
@@ -367,7 +533,7 @@
 <header>
   <div class="brand">
     <b>OSION Solution XR</b>
-    <span>Leselabyrinth · MVP · Adventure + AdaptiV + Diagnose</span>
+    <span>Leselabyrinth · Adventure + AdaptiV + Diagnose</span>
   </div>
   <div class="top-actions">
     <button id="btnPlay" class="primary">Adventure</button>
@@ -388,9 +554,11 @@
             <div class="avatar" id="monsterAvatar">M</div>
             <div class="speech" id="monsterSpeech"></div>
           </div>
-          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+
+          <div class="pills">
             <span class="pill" id="uiHelp"></span>
             <span class="pill" id="uiProgress"></span>
+            <span class="pill stars" id="uiStarsPill">⭐ Sterne: <b id="uiStarsCount" style="color:var(--txt)">0</b></span>
           </div>
         </div>
 
@@ -401,16 +569,16 @@
               <span id="uiLevel"></span>
             </div>
             <div class="stat">
-              <b>Sterne</b>
-              <span id="uiStars"></span>
-            </div>
-            <div class="stat">
               <b>Serie</b>
               <span id="uiStreak"></span>
             </div>
             <div class="stat">
               <b>Status</b>
               <span id="uiStatus"></span>
+            </div>
+            <div class="stat">
+              <b>Hinweis</b>
+              <span id="uiTip"></span>
             </div>
           </div>
         </div>
@@ -439,6 +607,7 @@
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <span class="pill" id="uiFocus"></span>
               <span class="pill" id="uiNodeState"></span>
+              <span class="pill" id="uiNodeId"></span>
             </div>
           </div>
 
@@ -451,7 +620,7 @@
             <h2>Kapitel abgeschlossen</h2>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <span class="pill"><span class="good">Stark</span></span>
-              <span class="pill" id="completeStars"></span>
+              <span class="pill">⭐ Sterne: <b id="completeStars" style="color:var(--txt)">0</b></span>
             </div>
           </div>
 
@@ -477,21 +646,16 @@
           </div>
 
           <div class="card">
-            <div class="dashgrid">
-              <div>
-                <b style="display:block;margin-bottom:8px;">Fehlmuster (Top)</b>
-                <table class="table">
-                  <thead><tr><th>Kategorie</th><th>Anzahl</th><th>Beispiel</th></tr></thead>
-                  <tbody id="dPatterns"></tbody>
-                </table>
-              </div>
+            <b style="display:block;margin-bottom:8px;">Fehlmuster (Top)</b>
+            <table class="table">
+              <thead><tr><th>Kategorie</th><th>Anzahl</th><th>Beispiel</th></tr></thead>
+              <tbody id="dPatterns"></tbody>
+            </table>
 
-              <div>
-                <div class="hr"></div>
-                <b style="display:block;margin-bottom:8px;">Stärken & Fokus</b>
-                <div class="feedback" id="dCoach"></div>
-              </div>
-            </div>
+            <div class="hr"></div>
+
+            <b style="display:block;margin-bottom:8px;">Stärken & Fokus</b>
+            <div class="feedback" id="dCoach"></div>
           </div>
         </div>
 
@@ -522,10 +686,11 @@ const HELP_RULES = {
   3: { syllables: false, hintButton: false, rereadButton: true }
 };
 
-const STORE_KEY = "leselabyrinth_state_v2";
+const STORE_KEY = "leselabyrinth_state_v3";
 
 /** =========================
- *  CONTENT IM CODE
+ *  CONTENT (IM CODE)
+ *  WICHTIG: Jede Frage muss aus dem Lesetext lösbar sein.
  *  ========================= */
 const CARDS = [
   {
@@ -533,9 +698,9 @@ const CARDS = [
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Start am Waldweg",
     textByLevel:{
-      1:["Momo geht in den Wald.","Ein Vogel singt."],
-      2:["Momo geht in den Wald.","Ein kleiner Vogel singt laut."],
-      3:["Momo geht in den Wald.","Ein kleiner Vogel singt laut im Baum."]
+      1:["Momo geht in den Wald.","Ein Vogel singt im Baum."],
+      2:["Momo geht in den Wald.","Ein kleiner Vogel singt laut im Baum."],
+      3:["Momo geht in den Wald.","Ein kleiner Vogel singt laut im Baum.","Momo bleibt kurz stehen."]
     },
     questionByLevel:{ 1:"Wo geht Momo hin?", 2:"Wo geht Momo hin?", 3:"Wo geht Momo hin?" },
     answersByLevel:{
@@ -544,7 +709,7 @@ const CARDS = [
       3:["In den Wald.","In die Stadt.","Ins Meer."]
     },
     correctIndex:0,
-    hint:"Im Satz steht: in den Wald.",
+    hint:"Im Satz steht: Momo geht in den Wald.",
     focus:"W-Frage"
   },
   {
@@ -552,9 +717,9 @@ const CARDS = [
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Die Holzbrücke",
     textByLevel:{
-      1:["Vor Momo ist eine Brücke.","Sie ist aus Holz."],
-      2:["Vor Momo ist eine kleine Brücke.","Sie ist aus Holz."],
-      3:["Vor Momo ist eine kleine Brücke.","Sie ist aus Holz und wackelt leicht."]
+      1:["Vor Momo ist eine Brücke.","Die Brücke ist aus Holz."],
+      2:["Vor Momo ist eine kleine Brücke.","Die Brücke ist aus Holz."],
+      3:["Vor Momo ist eine kleine Brücke.","Die Brücke ist aus Holz und wackelt leicht."]
     },
     questionByLevel:{ 1:"Woraus ist die Brücke?", 2:"Woraus ist die Brücke?", 3:"Woraus ist die Brücke?" },
     answersByLevel:{
@@ -563,17 +728,18 @@ const CARDS = [
       3:["Aus Holz.","Aus Eis.","Aus Papier."]
     },
     correctIndex:0,
-    hint:"Lies den zweiten Satz: aus Holz.",
+    hint:"Im Text steht: Die Brücke ist aus Holz.",
     focus:"Detail"
   },
   {
     id:"n3",
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Der Apfelbaum",
+    // FIX: Farbe muss im Text stehen, sonst ist es nicht lösbar.
     textByLevel:{
-      1:["Ein Apfel fällt runter.","Momo schaut."],
-      2:["Ein grüner Apfel fällt runter.","Momo schaut nach oben."],
-      3:["Ein grüner Apfel fällt runter.","Momo schaut nach oben und lacht."]
+      1:["Ein grüner Apfel fällt runter.","Momo schaut nach oben."],
+      2:["Ein grüner Apfel fällt runter.","Momo schaut nach oben und lächelt."],
+      3:["Ein grüner Apfel fällt runter.","Momo schaut nach oben und lächelt.","Der Apfel rollt ins Gras."]
     },
     questionByLevel:{ 1:"Welche Farbe hat der Apfel?", 2:"Welche Farbe hat der Apfel?", 3:"Welche Farbe hat der Apfel?" },
     answersByLevel:{
@@ -582,7 +748,7 @@ const CARDS = [
       3:["Grün.","Blau.","Schwarz."]
     },
     correctIndex:0,
-    hint:"Im Satz steht: grüner Apfel.",
+    hint:"Im Text steht: grüner Apfel.",
     focus:"Wortverwechslung"
   },
   {
@@ -590,9 +756,9 @@ const CARDS = [
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Der Schlüsselstein",
     textByLevel:{
-      1:["Momo findet einen Stein.","Darauf ist ein Zeichen."],
-      2:["Momo findet einen Stein.","Darauf ist ein Stern-Zeichen."],
-      3:["Momo findet einen Stein.","Darauf ist ein Stern-Zeichen und es glitzert."]
+      1:["Momo findet einen Stein.","Auf dem Stein ist ein Stern."],
+      2:["Momo findet einen Stein.","Auf dem Stein ist ein Stern.","Der Stern glitzert."],
+      3:["Momo findet einen Stein.","Auf dem Stein ist ein Stern.","Der Stern glitzert hell im Licht."]
     },
     questionByLevel:{ 1:"Was ist auf dem Stein?", 2:"Was ist auf dem Stein?", 3:"Was ist auf dem Stein?" },
     answersByLevel:{
@@ -601,7 +767,7 @@ const CARDS = [
       3:["Ein Stern.","Ein Auto.","Ein Haus."]
     },
     correctIndex:0,
-    hint:"Im Satz steht: Stern-Zeichen.",
+    hint:"Im Text steht: Auf dem Stein ist ein Stern.",
     focus:"Satzverständnis"
   },
   {
@@ -609,9 +775,9 @@ const CARDS = [
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Die Boss-Tür",
     textByLevel:{
-      1:["Vor Momo ist eine Tür.","Sie ist zu."],
-      2:["Vor Momo ist eine große Tür.","Sie ist zu und sehr schwer."],
-      3:["Vor Momo ist eine große Tür.","Sie ist zu und sehr schwer.","Momo braucht den Schlüssel."]
+      1:["Vor Momo ist eine große Tür.","Momo braucht einen Schlüssel."],
+      2:["Vor Momo ist eine große Tür.","Momo braucht einen Schlüssel.","Die Tür bleibt zu."],
+      3:["Vor Momo ist eine große Tür.","Momo braucht einen Schlüssel.","Die Tür bleibt zu.","Momo sucht den Schlüsselstein."]
     },
     questionByLevel:{ 1:"Was braucht Momo?", 2:"Was braucht Momo?", 3:"Was braucht Momo?" },
     answersByLevel:{
@@ -620,7 +786,7 @@ const CARDS = [
       3:["Den Schlüssel.","Eine Leiter.","Einen Ball."]
     },
     correctIndex:0,
-    hint:"Im letzten Satz steht: braucht den Schlüssel.",
+    hint:"Im Text steht: Momo braucht einen Schlüssel.",
     focus:"Ursache/Wirkung"
   }
 ];
@@ -634,12 +800,7 @@ const MAP = {
     { id:"n4", unlockFrom:"n3" },
     { id:"n5", unlockFrom:"n4" }
   ],
-  sidepaths: [
-    "Quatsch-Tunnel",
-    "Kicherweg",
-    "Sackgasse",
-    "Rutschweg zurück zum Satz"
-  ]
+  sidepaths: ["Quatsch-Tunnel","Kicherweg","Sackgasse","Rutschweg zurück zum Satz"]
 };
 
 /** =========================
@@ -670,10 +831,17 @@ function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 let state = loadState();
 
 /** =========================
- *  Helpers
+ *  Utils
  *  ========================= */
 const $ = (id) => document.getElementById(id);
 function getCard(nodeId){ return CARDS.find(c => c.id === nodeId); }
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
 
 function isUnlocked(nodeId){
   const node = MAP.nodes.find(n => n.id===nodeId);
@@ -681,11 +849,31 @@ function isUnlocked(nodeId){
   if(node.unlockFrom===null) return true;
   return !!state.done[node.unlockFrom];
 }
-
 function allNodesDone(){
   return MAP.nodes.every(n => !!state.done[n.id]);
 }
+function nextUnlockedUndoneNode(){
+  for(const n of MAP.nodes){
+    if(isUnlocked(n.id) && !state.done[n.id]) return n.id;
+  }
+  return null;
+}
 
+/** =========================
+ *  Monster
+ *  ========================= */
+function setMonster(text, mood="neutral"){
+  $("monsterAvatar").textContent = (APP.MONSTER_NAME || "M").slice(0,1).toUpperCase();
+  const prefix =
+    mood==="good" ? "Yes! " :
+    mood==="bad"  ? "Oh! "  :
+                    "";
+  $("monsterSpeech").innerHTML = `<b>${APP.MONSTER_NAME}</b><br>${prefix}${text}`;
+}
+
+/** =========================
+ *  Hilfen / Anzeige
+ *  ========================= */
 function helpSummary(level){
   const h = HELP_RULES[level];
   const parts = [];
@@ -695,43 +883,82 @@ function helpSummary(level){
   return parts.length ? parts.join(" · ") : "keine";
 }
 
-function setMonster(text, mood="neutral"){
-  // Avatar bewusst schlicht. Kein UI-Overkill.
-  $("monsterAvatar").textContent = (APP.MONSTER_NAME || "M").slice(0,1).toUpperCase();
-  const prefix =
-    mood==="good" ? "Top. " :
-    mood==="bad"  ? "Stopp. " :
-                    "";
-  $("monsterSpeech").innerHTML = `<b>${APP.MONSTER_NAME}</b><br>${prefix}${text}`;
+/** =========================
+ *  Stern Animation (Button -> Sterne Pill)
+ *  ========================= */
+function flyStarFromElement(fromEl){
+  const toEl = $("uiStarsPill");
+  if(!fromEl || !toEl) return;
+
+  const a = fromEl.getBoundingClientRect();
+  const b = toEl.getBoundingClientRect();
+
+  const startX = a.left + a.width * 0.85;
+  const startY = a.top + a.height * 0.50;
+  const endX   = b.left + b.width * 0.20;
+  const endY   = b.top + b.height * 0.55;
+
+  const star = document.createElement("div");
+  star.className = "flyStar";
+  star.textContent = "⭐";
+  star.style.left = startX + "px";
+  star.style.top  = startY + "px";
+  document.body.appendChild(star);
+
+  // Start-Pop
+  star.style.transform = "translate(-50%, -50%) scale(1.15)";
+
+  requestAnimationFrame(()=>{
+    star.style.left = endX + "px";
+    star.style.top  = endY + "px";
+    star.style.transform = "translate(-50%, -50%) scale(.55)";
+    star.style.opacity = "0.85";
+  });
+
+  setTimeout(()=>{
+    star.style.opacity = "0";
+  }, 430);
+
+  setTimeout(()=>{
+    star.remove();
+    toEl.classList.remove("pulse");
+    void toEl.offsetWidth; // reflow
+    toEl.classList.add("pulse");
+  }, 560);
 }
 
 /** =========================
- *  Rendering
+ *  Render Top
  *  ========================= */
 function renderTop(){
-  $("uiLevel").textContent = `Stufe ${state.level}`;
-  $("uiStars").textContent = `${state.stars} Sterne`;
+  $("uiHelp").textContent = `Hilfen: ${helpSummary(state.level)}`;
+  $("uiProgress").textContent = `Abgeschlossen: ${Object.keys(state.done).length} / ${MAP.nodes.length}`;
 
+  $("uiLevel").textContent = `Stufe ${state.level}`;
   const streakText =
     state.streakCorrect > 0 ? `${state.streakCorrect} richtig in Folge` :
     state.streakWrong > 0   ? `${state.streakWrong} falsch in Folge` :
                               "keine Serie";
   $("uiStreak").textContent = streakText;
 
-  $("uiHelp").textContent = `Hilfen: ${helpSummary(state.level)}`;
-  $("uiProgress").textContent = `Abgeschlossen: ${Object.keys(state.done).length} / ${MAP.nodes.length}`;
-
   $("uiStatus").textContent = state.chapterComplete ? "Kapitel abgeschlossen" : "läuft";
+  $("uiTip").textContent = "Lies zuerst den Text.";
 
-  const c = getCard(state.currentNodeId);
+  $("uiStarsCount").textContent = String(state.stars);
+
+  const c = state.currentNodeId ? getCard(state.currentNodeId) : null;
   $("uiFocus").textContent = c ? `Fokus: ${c.focus}` : "Fokus: -";
-  const nodeDone = state.currentNodeId ? !!state.done[state.currentNodeId] : false;
-  $("uiNodeState").textContent = nodeDone ? "Status: erledigt" : "Status: offen";
+  $("uiNodeState").textContent = (c && state.done[c.id]) ? "Status: erledigt" : "Status: offen";
+  $("uiNodeId").textContent = state.currentNodeId ? `Knoten: ${state.currentNodeId.toUpperCase()}` : "Knoten: -";
 }
 
+/** =========================
+ *  Render Map
+ *  ========================= */
 function renderMap(){
   const wrap = $("map");
   wrap.innerHTML = "";
+
   MAP.nodes.forEach(n=>{
     const card = getCard(n.id);
     const unlocked = isUnlocked(n.id);
@@ -754,10 +981,9 @@ function renderMap(){
   });
 }
 
-/** -------------------------
- *  Lesetext: Silben Demo
- *  (Platzhalter. Für echte Silbentrennung später ersetzen)
- *  ------------------------- */
+/** =========================
+ *  Silben Demo (Platzhalter)
+ *  ========================= */
 function syllabifySimple(word){
   return word.replace(/([aeiouäöüy]{1,2})([^aeiouäöüy])/gi, "$1-$2");
 }
@@ -766,19 +992,23 @@ function applySyllablesToText(lines){
     return line.split(" ").map(w=>{
       const clean = w.replace(/[.,!?]/g,"");
       if(clean.length >= 7){
-        const s = syllabifySimple(clean);
-        return w.replace(clean, s);
+        return w.replace(clean, syllabifySimple(clean));
       }
       return w;
     }).join(" ");
   });
 }
 
+/** =========================
+ *  Card Rendering
+ *  ========================= */
 let cardStartTs = null;
+let currentOptions = null; // [{text,isCorrect}]
+let lastOptionButtons = null;
 
 function renderCard(){
   const nodeId = state.currentNodeId;
-  const c = getCard(nodeId);
+  const c = nodeId ? getCard(nodeId) : null;
 
   if(state.chapterComplete || !c){
     $("card").innerHTML = `<div class="feedback">Kein aktiver Knoten. Öffne die Diagnose oder starte neu.</div>`;
@@ -789,10 +1019,14 @@ function renderCard(){
   let lines = c.textByLevel[level] || c.textByLevel[1];
   const question = c.questionByLevel[level] || c.questionByLevel[1];
   const answers = c.answersByLevel[level] || c.answersByLevel[1];
-
   const helps = HELP_RULES[level];
+
   let renderedLines = lines;
   if(helps.syllables) renderedLines = applySyllablesToText(lines);
+
+  // Optionen bauen + mischen (Fix: richtige Antwort nicht immer oben)
+  const base = answers.map((t, idx)=>({ text:t, isCorrect: idx === c.correctIndex }));
+  currentOptions = shuffle([...base]);
 
   $("card").innerHTML = `
     <div class="scene">
@@ -800,7 +1034,7 @@ function renderCard(){
         <small>Szene</small>
         <b>${c.nodeTitle}</b>
       </div>
-      <div class="pill">Knoten: ${c.id.toUpperCase()}</div>
+      <span class="pill">🏁 Ziel: richtig lesen</span>
     </div>
 
     <div class="readingBox" id="readingBox">
@@ -820,7 +1054,7 @@ function renderCard(){
     <div class="helpers">
       ${helps.rereadButton ? `<button id="btnReread">Nochmal lesen</button>` : ""}
       ${helps.hintButton ? `<button id="btnHint">Hinweis</button>` : ""}
-      <span class="pill">Fokus: <b style="color:var(--txt)">${c.focus}</b></span>
+      <span class="pill">🎯 Fokus: <b style="color:var(--txt)">${c.focus}</b></span>
     </div>
 
     <div class="hr"></div>
@@ -828,21 +1062,24 @@ function renderCard(){
   `;
 
   const ansWrap = $("answers");
-  answers.forEach((txt, idx)=>{
+  lastOptionButtons = [];
+
+  currentOptions.forEach((opt, idx)=>{
     const b = document.createElement("button");
-    b.textContent = txt;
-    b.onclick = () => submitAnswer(idx);
+    b.className = "option";
+    b.textContent = opt.text;
+    b.onclick = () => submitAnswer(idx, b);
     ansWrap.appendChild(b);
+    lastOptionButtons.push(b);
   });
 
   if(helps.rereadButton){
     $("btnReread").onclick = () => {
       setMonster("Lies den Text noch einmal. Die Lösung steht im Satz.");
       $("feedback").textContent = "Nochmal lesen aktiviert.";
-      // Lesetext optisch kurz anheben
       const box = $("readingBox");
-      box.style.borderColor = "rgba(255,255,255,.28)";
-      setTimeout(()=> box.style.borderColor = "var(--stroke2)", 450);
+      box.style.borderColor = "rgba(255,255,255,.35)";
+      setTimeout(()=> box.style.borderColor = "rgba(255,255,255,.22)", 520);
     };
   }
   if(helps.hintButton){
@@ -866,9 +1103,9 @@ function adaptAfterAnswer(correct){
     if(state.streakCorrect >= APP.TARGET_STREAK_UP && state.level < APP.LEVEL_MAX){
       state.level += 1;
       state.streakCorrect = 0;
-      setMonster(`Stufe erhöht: ${state.level}.`);
+      setMonster(`Stufe erhöht: ${state.level}.`, "good");
     } else {
-      setMonster("Richtig. Weiter.");
+      setMonster("Richtig. Weiter.", "good");
     }
   }else{
     state.streakWrong += 1;
@@ -880,23 +1117,23 @@ function adaptAfterAnswer(correct){
 }
 
 /** =========================
- *  Submit + Kapitel-Ende Fix
+ *  Submit
  *  ========================= */
-function nextUnlockedUndoneNode(){
-  for(const n of MAP.nodes){
-    if(isUnlocked(n.id) && !state.done[n.id]) return n.id;
-  }
-  return null;
+function lockOptions(){
+  if(!lastOptionButtons) return;
+  lastOptionButtons.forEach(btn => btn.disabled = true);
 }
 
-function submitAnswer(chosenIndex){
+function submitAnswer(optionIdx, btnEl){
   const nodeId = state.currentNodeId;
   const c = getCard(nodeId);
-  if(!c || state.chapterComplete) return;
+  if(!c || state.chapterComplete || !currentOptions) return;
 
   const timeMs = Math.max(1, Math.round(performance.now() - (cardStartTs ?? performance.now())));
-  const correct = chosenIndex === c.correctIndex;
+  const chosen = currentOptions[optionIdx];
+  const correct = !!chosen?.isCorrect;
 
+  // Logging
   state.logs.push({
     ts: Date.now(),
     nodeId,
@@ -904,18 +1141,25 @@ function submitAnswer(chosenIndex){
     correct,
     timeMs,
     focus: c.focus,
-    chosenIndex,
-    correctIndex: c.correctIndex
+    chosenText: chosen?.text ?? "",
+    correctText: (c.answersByLevel[state.level] || c.answersByLevel[1])[c.correctIndex]
   });
+
+  lockOptions();
 
   if(correct){
     state.stars += 1;
     state.done[nodeId] = true;
 
+    if(btnEl) btnEl.classList.add("correctFlash");
+    flyStarFromElement(btnEl);
+
+    $("uiStarsCount").textContent = String(state.stars);
+    $("feedback").innerHTML = `<span class="good">Richtig.</span> ⭐ 1 Stern.`;
+
     adaptAfterAnswer(true);
 
     if(allNodesDone()){
-      // FIX: Kein Zurück auf Karte 1, sondern Abschluss-Screen
       state.chapterComplete = true;
       state.currentNodeId = null;
       saveState();
@@ -925,14 +1169,18 @@ function submitAnswer(chosenIndex){
     }
 
     state.currentNodeId = nextUnlockedUndoneNode();
-    $("feedback").innerHTML = `<span class="good">Richtig.</span> 1 Stern.`;
-  } else {
-    adaptAfterAnswer(false);
-    $("feedback").innerHTML = `<span class="bad">Noch nicht.</span> Tipp: ${c.hint}`;
+    saveState();
+
+    // Mini-Delay für “Feedback Gefühl”, dann neue Karte
+    setTimeout(()=> renderAll(), 280);
+    return;
   }
 
+  // Falsch
+  if(btnEl) btnEl.classList.add("wrongFlash");
+  $("feedback").innerHTML = `<span class="bad">Noch nicht.</span> Tipp: ${c.hint}`;
+  adaptAfterAnswer(false);
   saveState();
-  renderAll();
 }
 
 /** =========================
@@ -949,7 +1197,7 @@ function renderDashboard(){
   const avgTime = total ? Math.round(logs.reduce((a,b)=>a+b.timeMs,0)/total) : 0;
 
   $("dDone").textContent = `Abgeschlossen: ${doneCount} / ${MAP.nodes.length}`;
-  $("dAcc").innerHTML = `Trefferquote: ${acc}%`;
+  $("dAcc").textContent = `Trefferquote: ${acc}%`;
   $("dTime").textContent = `Ø Zeit: ${Math.round(avgTime/1000)} s`;
 
   const wrong = logs.filter(x=>!x.correct);
@@ -982,15 +1230,16 @@ function renderDashboard(){
 
   const strengths = [];
   if(acc >= 80) strengths.push("Trefferquote ist hoch.");
-  if(avgTime && avgTime < 6000) strengths.push("Entscheidungen wirken sicher (Tempo).");
-  if(doneCount >= 3) strengths.push("Gute Ausdauer.");
+  if(avgTime && avgTime < 6000) strengths.push("Tempo ist stabil.");
+  if(doneCount >= 3) strengths.push("Viele Karten geschafft.");
 
   if(strengths.length===0) strengths.push("Startphase: weiter spielen, dann wird die Diagnose präziser.");
 
   const focus = rows.length ? rows[0][0] : "Aufmerksamkeit";
-  const mission = acc >= 80 ? "8 Minuten pro Tag. Schwierigkeit stabil halten." :
-                 acc >= 60 ? "8 Minuten pro Tag. Hinweis nur bei Bedarf." :
-                             "8 Minuten pro Tag. Text zuerst, dann Frage. Hinweis nutzen.";
+  const mission =
+    acc >= 80 ? "8 Minuten pro Tag. Schwierigkeit stabil halten." :
+    acc >= 60 ? "8 Minuten pro Tag. Hinweis nur bei Bedarf." :
+                "8 Minuten pro Tag. Text zuerst, dann Frage. Hinweis nutzen.";
 
   $("dCoach").innerHTML = `
     <b>Stärken</b>
@@ -1016,7 +1265,6 @@ function showPlay(){
   $("btnPlay").classList.add("primary");
   $("btnDash").classList.remove("primary");
 }
-
 function showDash(){
   $("viewDash").classList.remove("hidden");
   $("viewPlay").classList.add("hidden");
@@ -1025,7 +1273,6 @@ function showDash(){
   $("btnPlay").classList.remove("primary");
   renderDashboard();
 }
-
 function showComplete(){
   $("viewComplete").classList.remove("hidden");
   $("viewPlay").classList.add("hidden");
@@ -1038,7 +1285,7 @@ function showComplete(){
  *  Complete Screen
  *  ========================= */
 function renderComplete(){
-  $("completeStars").textContent = `Sterne: ${state.stars}`;
+  $("completeStars").textContent = String(state.stars);
   $("completeText").innerHTML = `
     Kapitel abgeschlossen.<br>
     Abgeschlossene Knoten: <b>${Object.keys(state.done).length}</b> / <b>${MAP.nodes.length}</b><br>
@@ -1060,12 +1307,18 @@ function renderAll(){
     return;
   }
 
-  renderCard();
-
-  // Default Guide Text (nicht überschreiben, wenn gerade Feedback gesetzt wurde)
-  if(!state.logs.length){
-    setMonster("Willkommen im Wald. Lies den Text. Beantworte die Frage. Weiter geht es über richtige Antworten.");
+  // Guide Standardtext
+  if(state.logs.length === 0){
+    setMonster("Willkommen im Wald. Lies den Text. Beantworte die Frage. Sammle Sterne.");
+  } else {
+    // nicht aggressiv überschreiben, wenn gerade Feedback im Monster steht
+    // nur, wenn kein Text vorhanden wäre
+    if(!$("monsterSpeech").innerText.trim()){
+      setMonster("Weiter geht es. Lies den Text. Dann die Frage.");
+    }
   }
+
+  renderCard();
 }
 
 /** =========================
@@ -1073,6 +1326,7 @@ function renderAll(){
  *  ========================= */
 $("btnPlay").onclick = () => { showPlay(); renderAll(); };
 $("btnDash").onclick = () => { showDash(); };
+
 $("btnReset").onclick = () => {
   const ok = confirm("Alles zurücksetzen? Sterne, Fortschritt und Diagnose werden gelöscht.");
   if(!ok) return;
@@ -1090,6 +1344,7 @@ $("btnReplay").onclick = () => {
   setMonster("Neu gestartet. Los geht es.");
   renderAll();
 };
+
 $("btnGoDash").onclick = () => showDash();
 
 /** Init */
