@@ -4,29 +4,36 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Leselabyrinth – Funkelwald (MVP)</title>
+
   <style>
     :root{
       --bg0:#070a14;
       --bg1:#0b1030;
       --bg2:#171a3a;
+
       --panel: rgba(18,22,44,.62);
       --panel2: rgba(18,22,44,.42);
+
       --stroke: rgba(255,255,255,.12);
       --stroke2: rgba(255,255,255,.18);
+
       --text:#eaf0ff;
       --muted:#b9c2e8;
+
       --good:#45d483;
       --bad:#ff6b6b;
+
       --gold:#ffd36a;
       --blue:#6fd0ff;
       --pink:#ff4fa3;
+
       --shadow: 0 18px 40px rgba(0,0,0,.45);
       --radius: 22px;
       --radius2: 16px;
-      --pad: 16px;
-      --pad2: 12px;
+
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     }
+
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
@@ -41,32 +48,18 @@
       overflow-x:hidden;
     }
 
-    /* Layout */
-    .wrap{
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 18px 14px 26px;
-      display:grid;
-      gap: 14px;
-      grid-template-columns: 320px 1fr;
-      align-items:start;
-    }
-    @media (max-width: 980px){
-      .wrap{ grid-template-columns: 1fr; }
-    }
-
     /* Top HUD */
     .topbar{
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 50;
       backdrop-filter: blur(10px);
       background: linear-gradient(180deg, rgba(8,10,24,.78), rgba(8,10,24,.38));
       border-bottom: 1px solid var(--stroke);
       padding: 12px 14px;
     }
     .topbar-inner{
-      max-width: 1280px;
+      max-width: 1400px;
       margin:0 auto;
       display:flex;
       gap: 10px;
@@ -84,7 +77,7 @@
       box-shadow: 0 0 18px rgba(255,79,163,.45);
     }
     .brand .title{
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: .2px;
       line-height: 1.1;
     }
@@ -107,41 +100,70 @@
       display:flex;
       gap: 10px;
       align-items:center;
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-radius: 999px;
       background: rgba(255,255,255,.06);
       border: 1px solid var(--stroke);
       box-shadow: 0 10px 30px rgba(0,0,0,.25);
       white-space: nowrap;
+      position: relative;
+      overflow:hidden;
     }
-    .pill b{ font-weight: 800; }
+    .pill b{ font-weight: 1000; }
     .icon{
-      width: 18px; height: 18px; object-fit: contain;
-      filter: drop-shadow(0 0 10px rgba(255,255,255,.10));
+      width: 26px; height: 26px; object-fit: contain;
+      filter: drop-shadow(0 0 14px rgba(255,255,255,.12));
+      transform-origin:center;
     }
-    .hearts{ display:flex; gap:6px; align-items:center; }
+
+    .hearts{ display:flex; gap:7px; align-items:center; }
     .hearts .heart{
-      width: 18px; height: 18px; opacity: .95;
-      filter: drop-shadow(0 0 10px rgba(255,79,163,.22));
+      width: 26px; height: 26px; opacity: .98;
+      filter: drop-shadow(0 0 14px rgba(255,79,163,.26));
+      transform-origin:center;
     }
-    .hearts .heart.off{ opacity: .25; filter:none; }
+    .hearts .heart.off{ opacity: .20; filter:none; }
+
+    .sep{ opacity:.25; }
+    .tiny{ font-size: 12px; color: var(--muted); opacity:.95; }
+    .btn{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 900;
+      cursor:pointer;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,79,163,.92), rgba(255,211,106,.88));
+      border-color: rgba(255,255,255,.18);
+      color: #1a1022;
+      box-shadow: 0 14px 35px rgba(255,79,163,.18);
+    }
 
     .xp{
-      min-width: 260px;
-      max-width: 420px;
+      min-width: 320px;
+      max-width: 520px;
       flex: 1;
       display:flex;
       align-items:center;
       gap: 10px;
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-radius: 999px;
       background: rgba(255,255,255,.06);
       border: 1px solid var(--stroke);
+      position:relative;
+      overflow:hidden;
     }
-    .xp small{ color: var(--muted); }
+    .xp small{ color: var(--muted); font-weight:900; }
     .xpbar{
       flex: 1;
-      height: 10px;
+      height: 12px;
       border-radius: 999px;
       background: rgba(255,255,255,.10);
       border: 1px solid rgba(255,255,255,.10);
@@ -149,34 +171,32 @@
     }
     .xpbar > div{
       height: 100%;
-      width: 30%;
+      width: 0%;
       border-radius: 999px;
       background: linear-gradient(90deg, rgba(111,208,255,.92), rgba(255,211,106,.95));
       box-shadow: 0 0 18px rgba(111,208,255,.25);
       transition: width .35s ease;
     }
 
-    .btn{
-      appearance:none;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-weight: 700;
-      cursor:pointer;
-      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    /* Layout: 3-spaltig (links Pergament), Mitte Szene, rechts Guide+Kapitel */
+    .wrap{
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 14px 26px;
+      display:grid;
+      gap: 14px;
+      grid-template-columns: 380px 1fr 340px;
+      align-items:start;
     }
-    .btn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
-    .btn:active{ transform: translateY(1px); }
-    .btn.primary{
-      background: linear-gradient(135deg, rgba(255,79,163,.9), rgba(255,211,106,.85));
-      border-color: rgba(255,255,255,.18);
-      color: #1a1022;
-      box-shadow: 0 14px 35px rgba(255,79,163,.18);
+    @media (max-width: 1200px){
+      .wrap{ grid-template-columns: 360px 1fr; }
+      .right{ display:none; }
+    }
+    @media (max-width: 980px){
+      .wrap{ grid-template-columns: 1fr; }
+      .right{ display:block; }
     }
 
-    /* Panels */
     .panel{
       background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       border: 1px solid var(--stroke);
@@ -198,229 +218,56 @@
       font-size: 14px;
       letter-spacing: .2px;
       opacity: .95;
+      font-weight:1000;
     }
     .panel .bd{ padding: 14px 16px; }
 
-    /* Sidebar */
-    .side{
-      position: sticky;
-      top: 74px;
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-    }
-    @media (max-width: 980px){
-      .side{ position: static; }
-    }
-    .mini{
-      display:flex; gap: 12px; align-items:flex-start;
-    }
-    .avatar{
-      width: 52px; height: 52px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--stroke);
-      display:grid; place-items:center;
-      overflow:hidden;
-    }
-    .avatar img{ width: 100%; height: 100%; object-fit: contain; }
-    .speech{
-      flex:1;
-      background: rgba(0,0,0,.14);
-      border: 1px solid var(--stroke);
-      border-radius: 16px;
-      padding: 10px 12px;
-      min-height: 52px;
-    }
-    .speech .name{ font-weight: 900; }
-    .speech .line{ margin-top: 2px; color: var(--muted); font-size: 13px; }
-
-    .pathlist{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .node{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.05);
-      cursor:pointer;
-      user-select:none;
-    }
-    .node:hover{ border-color: var(--stroke2); background: rgba(255,255,255,.08); }
-    .node.locked{ opacity:.5; cursor:not-allowed; }
-    .node.active{ outline: 2px solid rgba(111,208,255,.35); }
-    .node .left{ display:flex; gap:10px; align-items:center; }
-    .badge{
-      width: 28px; height: 28px;
-      border-radius: 10px;
-      display:grid; place-items:center;
-      font-weight: 900;
-      background: rgba(111,208,255,.12);
-      border: 1px solid rgba(111,208,255,.20);
-    }
-    .node.locked .badge{
-      background: rgba(255,255,255,.06);
-      border-color: rgba(255,255,255,.12);
-      color: rgba(255,255,255,.65);
-    }
-    .node .label{
-      font-weight: 900;
-      line-height:1.05;
-    }
-    .node .sub{
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-    .tiny{
-      font-size: 12px;
-      color: var(--muted);
-      opacity:.95;
-    }
-
-    /* Main */
-    .grid{
-      display:grid;
-      gap: 14px;
-    }
-
-    .sceneWrap{
-      position: relative;
-      border-radius: var(--radius);
-      overflow:hidden;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.16);
-      min-height: 360px;
-    }
-    .sceneWrap::after{
-      content:"";
-      position:absolute; inset:0;
-      pointer-events:none;
+    /* Pergament */
+    .parchment{
       background:
-        radial-gradient(900px 350px at 35% 20%, rgba(255,211,106,.10), transparent 60%),
-        radial-gradient(900px 450px at 70% 80%, rgba(111,208,255,.08), transparent 60%),
-        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.28));
-      mix-blend-mode: screen;
-      opacity: .75;
-    }
-    .sceneImg{
-      width: 100%;
-      height: min(56vh, 520px);
-      object-fit: cover;
-      display:block;
-      transform: scale(1.01);
-    }
-
-    /* Overlays */
-    .overlay{
-      position:absolute; inset:0;
-      z-index: 3;
-    }
-    .hotspot{
-      position:absolute;
-      transform: translate(-50%, -50%);
-      cursor:pointer;
-      user-select:none;
-      touch-action: manipulation;
-      transition: transform .08s ease, filter .2s ease, opacity .2s ease;
-    }
-    .hotspot:hover{ transform: translate(-50%,-50%) scale(1.03); filter: drop-shadow(0 0 18px rgba(255,211,106,.22)); }
-    .hotspot:active{ transform: translate(-50%,-50%) scale(.99); }
-    .hotspot img{
-      width: var(--w, 110px);
-      height: auto;
-      display:block;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
-    }
-    .hotspot.small img{ width: var(--w, 70px); }
-    .hotspot.tiny img{ width: var(--w, 54px); }
-
-    .toast{
-      position: fixed;
-      right: 14px;
-      bottom: 14px;
-      z-index: 50;
-      max-width: 420px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(10,12,28,.92);
+        radial-gradient(800px 340px at 20% 20%, rgba(255,240,205,.22), transparent 55%),
+        radial-gradient(700px 320px at 80% 35%, rgba(255,220,150,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,235,190,.16), rgba(255,235,190,.08));
       border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 18px 40px rgba(0,0,0,.55);
-      display:none;
     }
-    .toast.show{ display:block; animation: pop .18s ease; }
-    @keyframes pop{ from{ transform: translateY(6px); opacity:.0;} to{ transform: translateY(0); opacity:1;} }
-    .toast b{ font-weight: 900; }
-
-    /* Reading card */
-    .card{
-      border-radius: var(--radius);
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.16);
-      overflow:hidden;
+    .parchment .bd{
+      padding: 16px 16px 16px;
     }
-    .card .hd{
-      padding: 14px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      border-bottom: 1px solid var(--stroke);
-    }
-    .card .hd .meta{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      flex-wrap:wrap;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .chip{
-      display:inline-flex;
-      gap: 8px;
-      align-items:center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-    }
-    .card .bd{ padding: 14px 16px 16px; }
-    .readbox{
+    .paper{
       border-radius: 18px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(700px 220px at 35% 10%, rgba(255,255,255,.15), transparent 60%),
+        radial-gradient(700px 260px at 65% 90%, rgba(0,0,0,.10), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06));
       padding: 14px 14px;
-      min-height: 130px;
-      position: relative;
+      box-shadow: 0 12px 26px rgba(0,0,0,.25) inset;
+      min-height: 190px;
     }
-    .readbox .label{
+    .paper .label{
       font-size: 12px;
-      color: var(--muted);
+      color: rgba(255,255,255,.85);
       letter-spacing: .2px;
-      font-weight: 900;
-      opacity: .9;
+      font-weight: 1000;
+      opacity: .95;
     }
-    .readbox .text{
-      margin-top: 8px;
+    .paper .text{
+      margin-top: 10px;
       font-size: 22px;
       line-height: 1.35;
-      font-weight: 900;
+      font-weight: 1000;
       letter-spacing: .1px;
+      text-shadow: 0 2px 18px rgba(0,0,0,.25);
     }
     @media (max-width: 560px){
-      .readbox .text{ font-size: 18px; }
+      .paper .text{ font-size: 18px; }
     }
+
     .q{
       margin-top: 14px;
       border-radius: 18px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
       padding: 12px 12px;
     }
     .q .qt{
@@ -443,15 +290,20 @@
       gap: 10px;
       padding: 12px 12px;
       border-radius: 16px;
-      border: 1px solid var(--stroke);
+      border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.05);
       cursor:pointer;
       user-select:none;
-      font-weight: 900;
+      font-weight: 1000;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+      position:relative;
+      overflow:hidden;
     }
-    .ans:hover{ border-color: var(--stroke2); background: rgba(255,255,255,.08); }
-    .ans.correct{ border-color: rgba(69,212,131,.45); background: rgba(69,212,131,.10); }
-    .ans.wrong{ border-color: rgba(255,107,107,.45); background: rgba(255,107,107,.10); }
+    .ans:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
+    .ans:active{ transform: translateY(1px); }
+    .ans.correct{ border-color: rgba(69,212,131,.55); background: rgba(69,212,131,.12); }
+    .ans.wrong{ border-color: rgba(255,107,107,.55); background: rgba(255,107,107,.12); }
+
     .foot{
       margin-top: 12px;
       display:flex;
@@ -460,31 +312,329 @@
       justify-content:space-between;
       flex-wrap: wrap;
     }
+    .row{ display:flex; gap: 10px; align-items:center; flex-wrap:wrap; }
     .statusline{
       font-size: 13px;
       color: var(--muted);
     }
-    .statusline .good{ color: var(--good); font-weight: 900; }
-    .statusline .bad{ color: var(--bad); font-weight: 900; }
+    .statusline .good{ color: var(--good); font-weight: 1000; }
+    .statusline .bad{ color: var(--bad); font-weight: 1000; }
 
-    .kbd{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      font-size: 12px;
-      padding: 2px 6px;
-      border-radius: 8px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--stroke);
-      color: var(--muted);
+    /* Right side (Guide + Kapitel) */
+    .right{
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+      position: sticky;
+      top: 80px;
+    }
+    @media (max-width: 980px){
+      .right{ position: static; }
     }
 
-    /* Small helper */
-    .row{ display:flex; gap: 10px; align-items:center; flex-wrap:wrap; }
-    .sep{ opacity:.25; }
+    .mini{
+      display:flex; gap: 12px; align-items:flex-start;
+    }
+    .avatar{
+      width: 64px; height: 64px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      display:grid; place-items:center;
+      overflow:hidden;
+    }
+    .avatar img{ width: 100%; height: 100%; object-fit: contain; }
+    .speech{
+      flex:1;
+      background: rgba(0,0,0,.14);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px;
+      padding: 10px 12px;
+      min-height: 64px;
+    }
+    .speech .name{ font-weight: 1000; }
+    .speech .line{ margin-top: 4px; color: var(--muted); font-size: 13px; line-height:1.35; }
 
+    .pathlist{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .node{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
+      user-select:none;
+    }
+    .node:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
+    .node.locked{ opacity:.5; cursor:not-allowed; }
+    .node.active{ outline: 2px solid rgba(111,208,255,.35); }
+    .node .left{ display:flex; gap:10px; align-items:center; }
+    .badge{
+      width: 30px; height: 30px;
+      border-radius: 11px;
+      display:grid; place-items:center;
+      font-weight: 1000;
+      background: rgba(111,208,255,.12);
+      border: 1px solid rgba(111,208,255,.20);
+    }
+
+    /* Scene */
+    .sceneWrap{
+      position: relative;
+      border-radius: var(--radius);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      min-height: 520px;
+      box-shadow: var(--shadow);
+    }
+    .sceneImg{
+      width: 100%;
+      height: min(64vh, 620px);
+      object-fit: cover;
+      display:block;
+      transform: scale(1.01);
+    }
+    .overlay{
+      position:absolute; inset:0;
+      z-index: 3;
+    }
+
+    /* Hotspots */
+    .hotspot{
+      position:absolute;
+      transform: translate(-50%, -50%);
+      cursor:pointer;
+      user-select:none;
+      touch-action: manipulation;
+      transition: transform .08s ease, filter .2s ease, opacity .2s ease;
+    }
+    .hotspot:hover{ transform: translate(-50%,-50%) scale(1.04); filter: drop-shadow(0 0 18px rgba(255,211,106,.22)); }
+    .hotspot:active{ transform: translate(-50%,-50%) scale(.99); }
+    .hotspot img{
+      width: var(--w, 110px);
+      height: auto;
+      display:block;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+      pointer-events:none;
+    }
+    .hotspot.small img{ width: var(--w, 110px); }
+    .hotspot.tiny img{ width: var(--w, 60px); }
+
+    /* Fips big (unten links im Main-Bild) */
+    .fipsBig{
+      position:absolute;
+      left: 18px;
+      bottom: 18px;
+      z-index: 6;
+      display:flex;
+      align-items:flex-end;
+      gap: 12px;
+      pointer-events:none;
+    }
+    .fipsBig .frame{
+      width: 120px;
+      height: 120px;
+      border-radius: 26px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+    }
+    .fipsBig .frame img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform-origin:center;
+    }
+    .fipsBig .bubble{
+      max-width: 420px;
+      border-radius: 18px;
+      background: rgba(8,10,24,.60);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      padding: 10px 12px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+    .fipsBig .bubble b{ font-weight:1000; }
+    .fipsBig .bubble .line{ color: var(--muted); margin-top:4px; font-size: 13px; line-height:1.35; }
+
+    /* Boss HUD (nur in Boss-Tor) */
+    .bossHud{
+      position:absolute;
+      left: 50%;
+      top: 14px;
+      transform: translateX(-50%);
+      z-index: 7;
+      display:none;
+      gap: 10px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+    .bossHud.show{ display:flex; }
+    .bossName{ font-weight:1000; }
+    .bossBar{
+      width: 220px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
+      overflow:hidden;
+    }
+    .bossBar > div{
+      height:100%;
+      width: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,107,107,.92), rgba(255,211,106,.95));
+      box-shadow: 0 0 18px rgba(255,107,107,.22);
+      transition: width .28s ease;
+    }
+
+    /* Gate opening overlay */
+    .gateOpen{
+      position:absolute;
+      inset:0;
+      z-index: 8;
+      display:none;
+      place-items:center;
+      background: radial-gradient(900px 500px at 50% 40%, rgba(255,211,106,.18), rgba(0,0,0,.55));
+      backdrop-filter: blur(2px);
+    }
+    .gateOpen.show{ display:grid; animation: fadeIn .35s ease; }
+    @keyframes fadeIn{ from{ opacity:0 } to{ opacity:1 } }
+    .gateOpen .card{
+      width:min(560px, 92%);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8,10,24,.72);
+      box-shadow: 0 22px 60px rgba(0,0,0,.55);
+      padding: 16px 16px;
+      text-align:center;
+    }
+    .gateOpen .card h3{ margin:0; font-size: 18px; font-weight:1000; }
+    .gateOpen .card p{ margin:10px 0 0; color: var(--muted); line-height:1.35; }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 80;
+      max-width: 440px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(10,12,28,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
+      display:none;
+    }
+    .toast.show{ display:block; animation: pop .18s ease; }
+    @keyframes pop{ from{ transform: translateY(6px); opacity:.0;} to{ transform: translateY(0); opacity:1;} }
+    .toast b{ font-weight: 1000; }
+
+    /* Pickup animation (Icon fliegt zum HUD) */
+    .fly{
+      position: fixed;
+      z-index: 90;
+      width: 44px; height: 44px;
+      pointer-events:none;
+      filter: drop-shadow(0 0 18px rgba(255,211,106,.35));
+      transform: translate(-50%, -50%) scale(1);
+      animation: flyTo .65s ease-in forwards;
+    }
+    @keyframes flyTo{
+      0%{ opacity:1; transform: translate(-50%,-50%) scale(1); }
+      70%{ opacity:1; transform: translate(-50%,-50%) scale(.9); }
+      100%{ opacity:0; transform: translate(-50%,-50%) scale(.6); }
+    }
+    .sparkBurst{
+      position: absolute;
+      inset: -26px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255,211,106,.35), transparent 60%);
+      animation: burst .45s ease-out forwards;
+      pointer-events:none;
+    }
+    @keyframes burst{
+      from{ opacity:.0; transform: scale(.6); }
+      35%{ opacity:1; transform: scale(1.05); }
+      to{ opacity:0; transform: scale(1.35); }
+    }
+
+    /* HUD pulse on change */
+    .pulse{
+      animation: hudPulse .35s ease;
+    }
+    @keyframes hudPulse{
+      0%{ transform: scale(1); }
+      45%{ transform: scale(1.06); }
+      100%{ transform: scale(1); }
+    }
+    .wiggle{
+      animation: wiggle .45s ease;
+    }
+    @keyframes wiggle{
+      0%{ transform: rotate(0deg) scale(1); }
+      30%{ transform: rotate(-6deg) scale(1.06); }
+      60%{ transform: rotate(6deg) scale(1.06); }
+      100%{ transform: rotate(0deg) scale(1); }
+    }
+
+    /* Water world splash */
+    .splash{
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display:none;
+      place-items:center;
+      background:
+        radial-gradient(900px 500px at 50% 25%, rgba(111,208,255,.22), transparent 60%),
+        linear-gradient(180deg, rgba(5,8,18,.75), rgba(5,8,18,.92));
+      backdrop-filter: blur(6px);
+    }
+    .splash.show{ display:grid; animation: fadeIn .35s ease; }
+    .splash .box{
+      width:min(880px, 94%);
+      border-radius: 24px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8,10,24,.68);
+      box-shadow: 0 30px 80px rgba(0,0,0,.60);
+    }
+    .splash img{
+      width:100%;
+      height: 320px;
+      object-fit: cover;
+      display:block;
+    }
+    .splash .content{
+      padding: 14px 16px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .splash h3{ margin:0; font-size: 18px; font-weight:1000; }
+    .splash p{ margin:6px 0 0; color: var(--muted); line-height:1.35; }
   </style>
 </head>
-<body>
 
+<body>
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand">
@@ -496,19 +646,19 @@
       </div>
 
       <div class="hud">
-        <div class="pill" title="Hearts / Leben">
+        <div class="pill" id="pillHearts" title="Leben (3 Herzen)">
           <span class="tiny"><b>Leben</b></span>
           <div class="hearts" id="hearts"></div>
         </div>
 
-        <div class="pill" title="Sterne">
+        <div class="pill" id="pillStars" title="Sterne">
           <img class="icon" src="assets/ui/icons/stern.png" alt="Stern" />
           <span><b id="starsVal">0</b></span>
           <span class="sep">|</span>
           <span class="tiny">Sterne</span>
         </div>
 
-        <div class="pill" title="Geheimfunken">
+        <div class="pill" id="pillSparks" title="Geheimfunken">
           <img class="icon" src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke" />
           <span><b id="sparksVal">0</b></span>
           <span class="sep">|</span>
@@ -523,20 +673,83 @@
           <span class="tiny">Fokus</span> <b id="focusVal">W-Frage</b>
         </div>
 
-        <div class="xp" title="XP Fortschritt">
+        <div class="xp" id="pillXP" title="XP Fortschritt">
           <small><b>XP</b> <span id="xpVal">0</span>/<span id="xpNeed">100</span></small>
-          <div class="xpbar" aria-label="XP Balken"><div id="xpBar"></div></div>
+          <div class="xpbar"><div id="xpBar"></div></div>
         </div>
 
-        <button class="btn" id="resetBtn" title="Alles zurücksetzen">Reset</button>
-        <button class="btn primary" id="helpBtn" title="Hinweis anzeigen">Hilfe</button>
+        <button class="btn" id="resetBtn">Reset</button>
+        <button class="btn primary" id="helpBtn">Hilfe</button>
       </div>
     </div>
   </div>
 
   <div class="wrap">
-    <!-- Sidebar -->
-    <div class="side">
+    <!-- LEFT: Pergament + Frage -->
+    <div class="panel parchment">
+      <div class="hd">
+        <h2>Pergament</h2>
+        <span class="tiny"><b>Szene</b> <span id="sceneTitle">–</span></span>
+      </div>
+      <div class="bd">
+        <div class="paper">
+          <div class="label">LESETEXT</div>
+          <div class="text" id="readText">–</div>
+        </div>
+
+        <div class="q">
+          <div class="qt">
+            <h3 id="question">–</h3>
+            <span class="tiny">Erst lesen, dann antworten.</span>
+          </div>
+
+          <div class="answers" id="answers"></div>
+
+          <div class="foot">
+            <div class="row">
+              <button class="btn" id="reReadBtn">Nochmal lesen</button>
+              <button class="btn" id="nextBtn" disabled>Nächste Szene</button>
+            </div>
+            <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDDLE: Szene -->
+    <div class="sceneWrap" id="sceneWrap">
+      <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
+      <div class="overlay" id="overlay"></div>
+
+      <!-- Boss HUD -->
+      <div class="bossHud" id="bossHud">
+        <span class="bossName" id="bossName">Boss</span>
+        <div class="bossBar"><div id="bossBarFill"></div></div>
+        <span class="tiny"><b id="bossHPText">3</b>/3</span>
+      </div>
+
+      <!-- Fips big bottom-left -->
+      <div class="fipsBig">
+        <div class="frame">
+          <img id="fipsBigImg" src="assets/chars/fips/idle.png" alt="Fips" />
+        </div>
+        <div class="bubble">
+          <b>Fips</b>
+          <div class="line" id="fipsBigLine">Tippe Dinge im Bild an. Dann lies das Pergament.</div>
+        </div>
+      </div>
+
+      <!-- Gate open -->
+      <div class="gateOpen" id="gateOpen">
+        <div class="card">
+          <h3>Das Tor öffnet sich</h3>
+          <p>Du hast den Boss besiegt. Als Nächstes geht es in die Wasserwelt.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Guide + Kapitel -->
+    <div class="right">
       <div class="panel">
         <div class="hd">
           <h2>Guide</h2>
@@ -547,13 +760,8 @@
             <div class="avatar"><img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" /></div>
             <div class="speech">
               <div class="name">Fips</div>
-              <div class="line" id="fipsLine">Tippe ins Bild: Sammle Dinge. Lies dann den Text. Beantworte die Frage.</div>
+              <div class="line" id="fipsLine">Sammle Dinge, lies, antworte. Bonus: Finde den Geheimfunken.</div>
             </div>
-          </div>
-          <div style="height:12px"></div>
-          <div class="row">
-            <span class="chip" title="Tipp: Tastatur"><span class="kbd">H</span> Hilfe</span>
-            <span class="chip" title="Tipp: Tastatur"><span class="kbd">R</span> Reset</span>
           </div>
         </div>
       </div>
@@ -570,108 +778,84 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Main -->
-    <div class="grid">
-      <div class="sceneWrap panel" style="padding:0">
-        <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
-        <div class="overlay" id="overlay"></div>
-      </div>
+  <div class="toast" id="toast"></div>
 
-      <div class="card">
-        <div class="hd">
-          <div class="meta">
-            <span class="chip"><b>Szene</b> <span id="sceneTitle">–</span></span>
-            <span class="chip"><b>Knoten</b> <span id="nodeId">–</span></span>
-            <span class="chip"><b>Status</b> <span id="nodeStatus">offen</span></span>
-          </div>
-          <div class="meta">
-            <span class="chip"><b>Versuche</b> <span id="triesVal">0</span></span>
-            <span class="chip"><b>Geheimfunke</b> <span id="sceneSparkVal">0</span>/1</span>
-          </div>
+  <!-- Water world splash (nach Boss-Tor) -->
+  <div class="splash" id="splash">
+    <div class="box">
+      <img src="assets/scenes/wasserwelt.png" alt="Wasserwelt" />
+      <div class="content">
+        <div>
+          <h3>Kapitel 2: Wasserwelt</h3>
+          <p>Funkelwald ist geschafft. Als nächstes wartet eine Wasserwelt auf dich. Das bauen wir als nächstes aus.</p>
         </div>
-
-        <div class="bd">
-          <div class="readbox">
-            <div class="label">LESETEXT</div>
-            <div class="text" id="readText">–</div>
-          </div>
-
-          <div class="q">
-            <div class="qt">
-              <h3 id="question">–</h3>
-              <span class="tiny">Erst lesen, dann antworten.</span>
-            </div>
-            <div class="answers" id="answers"></div>
-
-            <div class="foot">
-              <div class="row">
-                <button class="btn" id="reReadBtn">Nochmal lesen</button>
-                <button class="btn" id="nextBtn" disabled>Nächste Szene</button>
-              </div>
-              <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
-            </div>
-          </div>
+        <div class="row">
+          <button class="btn primary" id="closeSplashBtn">Schließen</button>
         </div>
       </div>
-
-      <div class="toast" id="toast"></div>
     </div>
   </div>
 
 <script>
 (() => {
-  // -----------------------------
-  // Data (MVP) – alles in dieser Datei
-  // -----------------------------
+  // ------------------------------------------------------------
+  // Assets (achte auf exakte Pfade/Namen aus deinem Repo)
+  // ------------------------------------------------------------
   const ASSETS = {
     scenes: {
-      waldweg: "assets/scenes/waldweg.png",
+      waldweg:     "assets/scenes/waldweg.png",
       holzbruecke: "assets/scenes/holzbruecke.png",
-      apfelbaum: "assets/scenes/apfelbaum.png",
-      sternstein: "assets/scenes/sternstein.png",
-      bosstor: "assets/scenes/bosstor.png",
+      apfelbaum:   "assets/scenes/apfelbaum.png",
+      sternstein:  "assets/scenes/sternstein.png",
+      bosstor:     "assets/scenes/bosstor.png",
+      wasserwelt:  "assets/scenes/wasserwelt.png",
     },
     interact: {
-      Stern: "assets/ui/interactables/Stern.png",
-      Apfel: "assets/ui/interactables/Apfel.png",
+      Stern:   "assets/ui/interactables/Stern.png",
+      Apfel:   "assets/ui/interactables/Apfel.png",
       Laterne: "assets/ui/interactables/Laterne.png",
-      Schild: "assets/ui/interactables/Schild.png",
+      Schild:  "assets/ui/interactables/Schild.png",
     },
     icons: {
-      herz: "assets/ui/icons/herz.png",
+      herz:  "assets/ui/icons/herz.png",
       stern: "assets/ui/icons/stern.png",
       spark: "assets/ui/icons/geheimfunke.png",
     },
     fips: {
-      idle: "assets/chars/fips/idle.png",
-      happy: "assets/chars/fips/happy.png",
-      excited: "assets/chars/fips/excited.png",
+      idle:     "assets/chars/fips/idle.png",
+      happy:    "assets/chars/fips/happy.png",
+      excited:  "assets/chars/fips/excited.png",
       thinking: "assets/chars/fips/thinking.png",
-      sad: "assets/chars/fips/sad.png",
+      sad:      "assets/chars/fips/sad.png",
     }
   };
 
-  // Szenen-Definition: Hintergrund + Interactables + Leseaufgabe
-  // Positionsangaben sind Prozentwerte (x,y) bezogen auf Bildfläche.
+  // ------------------------------------------------------------
+  // 5 weitere Dinge (jetzt drin):
+  // 1) Bild im Main-Bild groß + Fips groß unten links (mit Mood-Wechsel)
+  // 2) Gegenstände aufheben -> Animation (Sparkburst + Icon fliegt zum HUD)
+  // 3) Nach richtiger Antwort Auto-Weiter zur nächsten Szene (Timer)
+  // 4) Pergament-Optik links, Guide rechts (Layout-Umstellung)
+  // 5) HUD größer + animiert, 3 Herzen korrekt sichtbar
+  // ------------------------------------------------------------
+
+  // ------------------------------------------------------------
+  // Content / Nodes
+  // ------------------------------------------------------------
   const NODES = [
     {
       id:"N1", key:"waldweg", title:"Waldweg",
       bg: ASSETS.scenes.waldweg,
-      sparkHotspot: { x: 14, y: 78, r: 7 }, // unsichtbarer Bereich (Geheimfunke)
+      sparkHotspot: { x: 14, y: 78, r: 7 }, // geheim (unsichtbar)
       interactables: [
         { id:"star1", type:"collect_star", img:ASSETS.interact.Stern, x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lantern1", type:"lore", img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true,
-          say:"Die Laterne flackert: Sie zeigt dir den Weg, wenn du genau liest." },
-        { id:"appleWrong", type:"trap", img:ASSETS.interact.Apfel, x: 86, y: 40, size:"small", once:true,
-          say:"Der Apfel glitzert, aber er ist eine Ablenkung. Fokus!" }
+        { id:"lan1",  type:"lore",         img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true, say:"Die Laterne flackert: Lies genau, dann findest du die Antwort." },
+        { id:"ap1",   type:"trap",         img:ASSETS.interact.Apfel, x: 86, y: 40, size:"small", once:true, say:"Ablenkung. Erst lesen, dann tippen." }
       ],
       read: {
-        text: [
-          "Fips steht am Waldweg.",
-          "Eine Laterne leuchtet.",
-          "Fips bleibt ruhig und liest."
-        ].join("<br>"),
+        text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
         question: "Wo steht Fips?",
         answers: [
           { t:"Am Waldweg.", correct:true },
@@ -686,17 +870,11 @@
       sparkHotspot: { x: 82, y: 63, r: 7 },
       interactables: [
         { id:"star2", type:"collect_star", img:ASSETS.interact.Stern, x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lantern2", type:"lore", img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true,
-          say:"Die Laterne sagt: Über die Brücke geht man Schritt für Schritt." },
-        { id:"appleTrap2", type:"trap", img:ASSETS.interact.Apfel, x: 80, y: 78, size:"tiny", once:true,
-          say:"Ups. Das war nicht die richtige Sache." }
+        { id:"lan2",  type:"lore",         img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true, say:"Schritt für Schritt. Lies den Text." },
+        { id:"ap2",   type:"trap",         img:ASSETS.interact.Apfel, x: 80, y: 78, size:"tiny", once:true, say:"Das war nicht die richtige Sache." }
       ],
       read: {
-        text: [
-          "Vor Fips ist eine Holzbrücke.",
-          "Fips geht langsam.",
-          "Die Brücke knarrt leise."
-        ].join("<br>"),
+        text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
         question: "Was ist vor Fips?",
         answers: [
           { t:"Eine Holzbrücke.", correct:true },
@@ -711,17 +889,11 @@
       sparkHotspot: { x: 50, y: 18, r: 7 },
       interactables: [
         { id:"star3", type:"collect_star", img:ASSETS.interact.Stern, x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"appleGood", type:"lore", img:ASSETS.interact.Apfel, x: 78, y: 40, size:"small", once:true,
-          say:"Der Apfelbaum ist freundlich. Ein Apfel fällt plopp ins Gras." },
-        { id:"lantern3", type:"lore", img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny", once:true,
-          say:"Die Laterne flüstert: Das wichtigste Wort steht im Text." }
+        { id:"ap3",   type:"lore",         img:ASSETS.interact.Apfel, x: 78, y: 40, size:"small", once:true, say:"Der Apfelbaum ist freundlich. Aber die Antwort steht im Text." },
+        { id:"lan3",  type:"lore",         img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny", once:true, say:"Das wichtigste Wort ist im Text." }
       ],
       read: {
-        text: [
-          "Fips sieht einen Apfelbaum.",
-          "Ein Apfel hängt am Ast.",
-          "Fips lächelt."
-        ].join("<br>"),
+        text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
         question: "Was sieht Fips?",
         answers: [
           { t:"Einen Apfelbaum.", correct:true },
@@ -736,17 +908,11 @@
       sparkHotspot: { x: 18, y: 34, r: 7 },
       interactables: [
         { id:"star4", type:"collect_star", img:ASSETS.interact.Stern, x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lantern4", type:"lore", img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true,
-          say:"Hier ist es magisch. Die Laterne leuchtet blau." },
-        { id:"appleTrap4", type:"trap", img:ASSETS.interact.Apfel, x: 86, y: 84, size:"tiny", once:true,
-          say:"Der Apfel ist hier nicht wichtig." }
+        { id:"lan4",  type:"lore",         img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true, say:"Hier ist es magisch. Lies den Text." },
+        { id:"ap4",   type:"trap",         img:ASSETS.interact.Apfel, x: 86, y: 84, size:"tiny", once:true, say:"Der Apfel ist hier nicht wichtig." }
       ],
       read: {
-        text: [
-          "Fips findet einen Sternstein.",
-          "Der Stein glitzert.",
-          "Fips tippt ihn an."
-        ].join("<br>"),
+        text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
         question: "Was glitzert?",
         answers: [
           { t:"Der Stein.", correct:true },
@@ -755,43 +921,63 @@
         ]
       }
     },
+
+    // Boss-Tor: 3 Fragen, Boss HP sinkt bei richtiger Antwort.
     {
       id:"N5", key:"bosstor", title:"Boss-Tor",
       bg: ASSETS.scenes.bosstor,
       sparkHotspot: { x: 90, y: 20, r: 7 },
       interactables: [
         { id:"star5", type:"collect_star", img:ASSETS.interact.Stern, x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lantern5", type:"lore", img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true,
-          say:"Die Laterne sagt: Das Tor öffnet sich nur mit dem richtigen Wort." },
-        { id:"appleTrap5", type:"trap", img:ASSETS.interact.Apfel, x: 84, y: 74, size:"tiny", once:true,
-          say:"Fokus. Nicht ablenken lassen." }
+        { id:"lan5",  type:"lore",         img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true, say:"Boss-Regel: 3 richtige Antworten. Dann öffnet sich das Tor." },
+        { id:"ap5",   type:"trap",         img:ASSETS.interact.Apfel, x: 84, y: 74, size:"tiny", once:true, say:"Ablenkung. Boss-Fokus!" }
       ],
-      read: {
-        text: [
-          "Vor Fips ist ein großes Tor.",
-          "Fips braucht einen Schlüssel.",
-          "Das Tor bleibt zu."
-        ].join("<br>"),
-        question: "Was braucht Fips?",
-        answers: [
-          { t:"Den Schlüssel.", correct:true },
-          { t:"Einen Ball.", correct:false },
-          { t:"Eine Leiter.", correct:false }
-        ]
-      }
+      boss: {
+        name: "Torwächter",
+        hpMax: 3
+      },
+      readBoss: [
+        {
+          text: ["Vor Fips ist ein großes Tor.","Fips braucht einen Schlüssel.","Das Tor bleibt zu."].join("<br>"),
+          question: "Was braucht Fips?",
+          answers: [
+            { t:"Den Schlüssel.", correct:true },
+            { t:"Einen Ball.", correct:false },
+            { t:"Eine Leiter.", correct:false }
+          ]
+        },
+        {
+          text: ["Fips bleibt ruhig.","Fips liest den Text.","Fips denkt nach."].join("<br>"),
+          question: "Was macht Fips?",
+          answers: [
+            { t:"Er liest den Text.", correct:true },
+            { t:"Er schläft.", correct:false },
+            { t:"Er fliegt.", correct:false }
+          ]
+        },
+        {
+          text: ["Ein Funken glitzert.","Fips bleibt aufmerksam.","Das Tor wartet."].join("<br>"),
+          question: "Was glitzert?",
+          answers: [
+            { t:"Ein Funken.", correct:true },
+            { t:"Ein Auto.", correct:false },
+            { t:"Ein Baum.", correct:false }
+          ]
+        }
+      ]
     }
   ];
 
-  // -----------------------------
-  // Save State
-  // -----------------------------
-  const STORAGE_KEY = "leselabyrinth_funkelwald_v1";
+  // ------------------------------------------------------------
+  // Storage
+  // ------------------------------------------------------------
+  const STORAGE_KEY = "leselabyrinth_funkelwald_v2_layout_parchment_boss";
 
   const defaultState = () => ({
     nodeIndex: 0,
     unlocked: [true, false, false, false, false],
     completed: [false, false, false, false, false],
-    // Progression
+
     stars: 0,
     sparks: 0,
     streak: 0,
@@ -801,13 +987,17 @@
     heartsMax: 3,
     hearts: 3,
     focus: "W-Frage",
-    // Per scene flags
-    scene: NODES.map(() => ({
+
+    // per node
+    scene: NODES.map(n => ({
       tries: 0,
       answered: false,
       perfect: true,
       sparkFound: false,
-      collected: {} // interactables once
+      collected: {},
+      // boss
+      bossHP: n.boss ? n.boss.hpMax : 0,
+      bossStep: 0
     }))
   });
 
@@ -816,7 +1006,6 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if(!raw) return defaultState();
       const parsed = JSON.parse(raw);
-      // minimal merge
       const d = defaultState();
       return {
         ...d,
@@ -827,33 +1016,48 @@
       return defaultState();
     }
   }
-  function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  function saveState(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
 
   let state = loadState();
 
-  // -----------------------------
+  // ------------------------------------------------------------
   // UI refs
-  // -----------------------------
+  // ------------------------------------------------------------
   const el = {
-    pathList: document.getElementById("pathList"),
-    chapterStatus: document.getElementById("chapterStatus"),
-    sceneImg: document.getElementById("sceneImg"),
-    overlay: document.getElementById("overlay"),
+    // left
     sceneTitle: document.getElementById("sceneTitle"),
-    nodeId: document.getElementById("nodeId"),
-    nodeStatus: document.getElementById("nodeStatus"),
     readText: document.getElementById("readText"),
     question: document.getElementById("question"),
     answers: document.getElementById("answers"),
-    triesVal: document.getElementById("triesVal"),
-    sceneSparkVal: document.getElementById("sceneSparkVal"),
-    statusLine: document.getElementById("statusLine"),
     reReadBtn: document.getElementById("reReadBtn"),
     nextBtn: document.getElementById("nextBtn"),
-    resetBtn: document.getElementById("resetBtn"),
-    helpBtn: document.getElementById("helpBtn"),
-    toast: document.getElementById("toast"),
-    // HUD
+    statusLine: document.getElementById("statusLine"),
+
+    // middle
+    sceneWrap: document.getElementById("sceneWrap"),
+    sceneImg: document.getElementById("sceneImg"),
+    overlay: document.getElementById("overlay"),
+    gateOpen: document.getElementById("gateOpen"),
+
+    // boss
+    bossHud: document.getElementById("bossHud"),
+    bossName: document.getElementById("bossName"),
+    bossBarFill: document.getElementById("bossBarFill"),
+    bossHPText: document.getElementById("bossHPText"),
+
+    // fips
+    fipsAvatar: document.getElementById("fipsAvatar"),
+    fipsLine: document.getElementById("fipsLine"),
+    fipsBigImg: document.getElementById("fipsBigImg"),
+    fipsBigLine: document.getElementById("fipsBigLine"),
+
+    // right
+    pathList: document.getElementById("pathList"),
+    chapterStatus: document.getElementById("chapterStatus"),
+
+    // hud
     hearts: document.getElementById("hearts"),
     starsVal: document.getElementById("starsVal"),
     sparksVal: document.getElementById("sparksVal"),
@@ -863,54 +1067,121 @@
     xpVal: document.getElementById("xpVal"),
     xpNeed: document.getElementById("xpNeed"),
     xpBar: document.getElementById("xpBar"),
-    // Fips
-    fipsAvatar: document.getElementById("fipsAvatar"),
-    fipsLine: document.getElementById("fipsLine"),
+
+    pillHearts: document.getElementById("pillHearts"),
+    pillStars: document.getElementById("pillStars"),
+    pillSparks: document.getElementById("pillSparks"),
+    pillXP: document.getElementById("pillXP"),
+
+    // buttons
+    resetBtn: document.getElementById("resetBtn"),
+    helpBtn: document.getElementById("helpBtn"),
+
+    // toast
+    toast: document.getElementById("toast"),
+
+    // splash
+    splash: document.getElementById("splash"),
+    closeSplashBtn: document.getElementById("closeSplashBtn"),
   };
 
-  // -----------------------------
+  // ------------------------------------------------------------
   // Helpers
-  // -----------------------------
+  // ------------------------------------------------------------
   const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
+
   function toast(html, ms=2200){
     el.toast.innerHTML = html;
     el.toast.classList.add("show");
-    window.clearTimeout(toast._t);
-    toast._t = window.setTimeout(()=>el.toast.classList.remove("show"), ms);
+    clearTimeout(toast._t);
+    toast._t = setTimeout(()=>el.toast.classList.remove("show"), ms);
   }
 
   function setFips(mood, line){
-    el.fipsAvatar.src = ASSETS.fips[mood] || ASSETS.fips.idle;
+    const src = ASSETS.fips[mood] || ASSETS.fips.idle;
+    el.fipsAvatar.src = src;
+    el.fipsBigImg.src = src;
     el.fipsLine.textContent = line;
+    el.fipsBigLine.textContent = line;
+    // kleines wiggle bei Mood-Change
+    el.fipsBigImg.classList.remove("wiggle");
+    void el.fipsBigImg.offsetWidth;
+    el.fipsBigImg.classList.add("wiggle");
+  }
+
+  function pulse(pill){
+    pill.classList.remove("pulse");
+    void pill.offsetWidth;
+    pill.classList.add("pulse");
   }
 
   function gainXP(amount){
     state.xp += amount;
+
+    // Level up loop
     while(state.xp >= state.xpNeed){
       state.xp -= state.xpNeed;
       state.level += 1;
-      // XP Bedarf leicht steigern
       state.xpNeed = Math.round(state.xpNeed * 1.18 + 10);
       toast(`<b>Level Up!</b> Stufe ${state.level} erreicht.`);
-      setFips("excited", `Wow! Stufe ${state.level}. Weiter so.`);
+      setFips("excited", `Wow. Stufe ${state.level}. Weiter.`);
     }
+    pulse(el.pillXP);
   }
 
   function loseHeart(){
     state.hearts = clamp(state.hearts - 1, 0, state.heartsMax);
+    pulse(el.pillHearts);
+
     if(state.hearts === 0){
-      toast(`<b>Oh nein.</b> Keine Herzen mehr. Du startest diese Szene neu.`);
+      toast(`<b>Oh nein.</b> Keine Herzen mehr. Die Szene startet neu.`);
       // Szene reset (nur diese)
       const i = state.nodeIndex;
-      state.scene[i].tries = 0;
-      state.scene[i].answered = false;
-      state.scene[i].perfect = true;
-      state.scene[i].collected = {};
-      state.scene[i].sparkFound = false;
+      const s = state.scene[i];
+      s.tries = 0;
+      s.answered = false;
+      s.perfect = true;
+      s.collected = {};
+      s.sparkFound = false;
+
+      // boss reset
+      if(NODES[i].boss){
+        s.bossHP = NODES[i].boss.hpMax;
+        s.bossStep = 0;
+      }
+
       state.hearts = state.heartsMax;
       state.streak = 0;
       setFips("sad", "Das war schwer. Wir schaffen das zusammen.");
     }
+  }
+
+  function flyToHUD(fromClientX, fromClientY, iconSrc, targetEl){
+    const rect = targetEl.getBoundingClientRect();
+    const tx = rect.left + rect.width/2;
+    const ty = rect.top + rect.height/2;
+
+    const img = document.createElement("img");
+    img.src = iconSrc;
+    img.className = "fly";
+    img.style.left = fromClientX + "px";
+    img.style.top = fromClientY + "px";
+
+    // trick: animate by updating keyframes with CSS variables not used -> do with Web Animations
+    document.body.appendChild(img);
+    img.animate([
+      { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
+      { transform: `translate(${(tx-fromClientX)}px, ${(ty-fromClientY)}px) scale(.65)`, opacity: 0 }
+    ], { duration: 650, easing: "ease-in", fill: "forwards" });
+
+    setTimeout(()=>img.remove(), 700);
+  }
+
+  function burstAtHotspot(hsEl){
+    const b = document.createElement("div");
+    b.className = "sparkBurst";
+    hsEl.appendChild(b);
+    setTimeout(()=>b.remove(), 500);
   }
 
   function markCompleted(i){
@@ -919,35 +1190,55 @@
 
     // Bonus: perfekt (keine Fehler)
     if(state.scene[i].perfect){
-      state.stars += 1;           // Bonus-Stern
-      gainXP(35);                 // Bonus-XP
+      state.stars += 1;  // Bonus Stern
+      pulse(el.pillStars);
+      gainXP(35);
       toast(`<b>Perfekt!</b> Bonus erhalten.`);
-      setFips("happy", "Perfekt gelesen. Das war stark.");
+      setFips("happy", "Perfekt gelesen. Stark.");
     }else{
       gainXP(20);
-      setFips("happy", "Richtig! Weiter geht’s.");
+      setFips("happy", "Richtig. Weiter geht’s.");
     }
 
-    // Serie erhöhen
+    // Serie
     state.streak += 1;
+
+    // unlock next
+    if(i < NODES.length - 1) state.unlocked[i+1] = true;
   }
 
-  // -----------------------------
+  function autoAdvance(){
+    // 3) Auto-Weiter nach richtiger Antwort
+    const i = state.nodeIndex;
+    if(i < NODES.length - 1 && state.unlocked[i+1]){
+      setTimeout(() => {
+        // nur wenn wir immer noch in der Szene sind und erledigt
+        if(state.nodeIndex === i && state.completed[i]){
+          state.nodeIndex = i+1;
+          saveState();
+          renderAll();
+        }
+      }, 900);
+    }
+  }
+
+  // ------------------------------------------------------------
   // Render HUD
-  // -----------------------------
+  // ------------------------------------------------------------
   function renderHUD(){
     el.starsVal.textContent = state.stars;
     el.sparksVal.textContent = state.sparks;
     el.streakVal.textContent = state.streak;
     el.levelVal.textContent = state.level;
     el.focusVal.textContent = state.focus;
+
     el.xpVal.textContent = state.xp;
     el.xpNeed.textContent = state.xpNeed;
 
     const pct = clamp((state.xp / state.xpNeed) * 100, 0, 100);
     el.xpBar.style.width = pct.toFixed(1) + "%";
 
-    // hearts
+    // hearts (immer 3)
     el.hearts.innerHTML = "";
     for(let i=0;i<state.heartsMax;i++){
       const img = document.createElement("img");
@@ -958,9 +1249,9 @@
     }
   }
 
-  // -----------------------------
+  // ------------------------------------------------------------
   // Render Path
-  // -----------------------------
+  // ------------------------------------------------------------
   function renderPath(){
     el.pathList.innerHTML = "";
     const done = state.completed.filter(Boolean).length;
@@ -969,14 +1260,15 @@
     NODES.forEach((n, i) => {
       const unlocked = state.unlocked[i];
       const completed = state.completed[i];
+
       const btn = document.createElement("div");
       btn.className = "node" + (unlocked ? "" : " locked") + (i===state.nodeIndex ? " active" : "");
       btn.innerHTML = `
         <div class="left">
           <div class="badge">${i+1}</div>
           <div>
-            <div class="label">${n.title}</div>
-            <div class="sub">${completed ? "erledigt" : (unlocked ? "bereit" : "gesperrt")}</div>
+            <div style="font-weight:1000; line-height:1.05;">${n.title}</div>
+            <div class="tiny" style="margin-top:2px;">${completed ? "erledigt" : (unlocked ? "bereit" : "gesperrt")}</div>
           </div>
         </div>
         <div class="tiny">${completed ? "✓" : (unlocked ? "→" : "🔒")}</div>
@@ -991,53 +1283,64 @@
     });
   }
 
-  // -----------------------------
-  // Render Scene + Overlays
-  // -----------------------------
+  // ------------------------------------------------------------
+  // Boss UI
+  // ------------------------------------------------------------
+  function renderBossUI(node, sceneState){
+    if(node.boss){
+      el.bossHud.classList.add("show");
+      el.bossName.textContent = node.boss.name;
+      const hpMax = node.boss.hpMax;
+      const hp = clamp(sceneState.bossHP, 0, hpMax);
+      el.bossHPText.textContent = hp;
+      el.bossBarFill.style.width = ((hp / hpMax) * 100) + "%";
+    }else{
+      el.bossHud.classList.remove("show");
+    }
+  }
+
+  // ------------------------------------------------------------
+  // Render Scene
+  // ------------------------------------------------------------
   function renderScene(){
     const i = state.nodeIndex;
     const node = NODES[i];
-    const sceneState = state.scene[i];
+    const s = state.scene[i];
+
+    el.sceneTitle.textContent = node.title;
 
     el.sceneImg.src = node.bg;
-    el.sceneTitle.textContent = node.title;
-    el.nodeId.textContent = node.id;
-    el.nodeStatus.textContent = state.completed[i] ? "erledigt" : "offen";
-    el.triesVal.textContent = sceneState.tries;
-    el.sceneSparkVal.textContent = sceneState.sparkFound ? "1" : "0";
-
-    el.readText.innerHTML = node.read.text;
-    el.question.textContent = node.read.question;
-
-    // Next Button
-    const nextUnlocked = (i < NODES.length-1) && state.unlocked[i+1];
-    el.nextBtn.disabled = !(state.completed[i] && nextUnlocked);
-
-    // Answers
-    el.answers.innerHTML = "";
-    node.read.answers.forEach((a, idx) => {
-      const div = document.createElement("div");
-      div.className = "ans";
-      div.innerHTML = `<span>${a.t}</span><span class="tiny">Antwort</span>`;
-      div.addEventListener("click", () => onAnswer(idx));
-      el.answers.appendChild(div);
-    });
-
-    // Status line
-    el.statusLine.innerHTML = `Status: <span class="tiny">${state.completed[i] ? "erledigt" : "offen"}</span>`;
-
-    // Overlay hotspots
     el.overlay.innerHTML = "";
+    el.gateOpen.classList.remove("show");
 
-    // Visible interactables
+    // Boss handling
+    renderBossUI(node, s);
+
+    // Reading content
+    if(node.boss){
+      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
+      const pack = node.readBoss[step];
+      el.readText.innerHTML = pack.text;
+      el.question.textContent = pack.question;
+      renderAnswers(pack.answers);
+    } else {
+      el.readText.innerHTML = node.read.text;
+      el.question.textContent = node.read.question;
+      renderAnswers(node.read.answers);
+    }
+
+    // next button
+    el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
+
+    // Interactables
     node.interactables.forEach(it => {
-      if(it.once && sceneState.collected[it.id]) return;
+      if(it.once && s.collected[it.id]) return;
 
       const hs = document.createElement("div");
       hs.className = "hotspot " + (it.size || "");
       hs.style.left = it.x + "%";
       hs.style.top  = it.y + "%";
-      hs.style.setProperty("--w", (it.size==="tiny" ? "54px" : it.size==="small" ? "110px" : "140px"));
+      hs.style.setProperty("--w", it.size==="tiny" ? "60px" : "110px");
       hs.title = "Tippe: " + (it.label || "Interaktion");
 
       const img = document.createElement("img");
@@ -1047,118 +1350,194 @@
 
       hs.addEventListener("click", (e) => {
         e.stopPropagation();
-        onInteract(it);
+        onInteract(it, hs, e.clientX, e.clientY);
       });
 
       el.overlay.appendChild(hs);
     });
 
-    // Invisible secret spark hotspot
-    const s = node.sparkHotspot;
-    if(s && !sceneState.sparkFound){
+    // Secret spark hotspot (invisible)
+    const sp = node.sparkHotspot;
+    if(sp && !s.sparkFound){
       const hs = document.createElement("div");
       hs.className = "hotspot";
-      hs.style.left = s.x + "%";
-      hs.style.top  = s.y + "%";
-      hs.style.width = (s.r*2) + "%";
-      hs.style.height = (s.r*2) + "%";
+      hs.style.left = sp.x + "%";
+      hs.style.top  = sp.y + "%";
+      hs.style.width = (sp.r*2) + "%";
+      hs.style.height = (sp.r*2) + "%";
       hs.style.borderRadius = "999px";
-      hs.style.opacity = "0.001"; // klickbar, aber unsichtbar
+      hs.style.opacity = "0.001";
       hs.addEventListener("click", (e) => {
         e.stopPropagation();
-        sceneState.sparkFound = true;
+        s.sparkFound = true;
         state.sparks += 1;
+        pulse(el.pillSparks);
         gainXP(15);
-        toast(`<b>Geheimfunke!</b> Du hast etwas verstecktes gefunden.`);
-        setFips("excited", "Geheimfunke gefunden. Du hast Adleraugen.");
+        toast(`<b>Geheimfunke!</b> Du hast etwas Verstecktes gefunden.`);
+        setFips("excited", "Geheimfunke gefunden. Stark.");
         saveState();
         renderAll();
       });
       el.overlay.appendChild(hs);
     }
-
-    // Click on scene (generic hint)
-    el.overlay.onclick = () => {
-      toast(`<b>Tipp:</b> Sammle Dinge im Bild. Danach beantworte die Frage.`);
-    };
   }
 
-  function onInteract(it){
-    const i = state.nodeIndex;
-    const sceneState = state.scene[i];
+  function renderAnswers(list){
+    el.answers.innerHTML = "";
+    list.forEach((a, idx) => {
+      const div = document.createElement("div");
+      div.className = "ans";
+      div.innerHTML = `<span>${a.t}</span><span class="tiny">Antwort</span>`;
+      div.addEventListener("click", () => onAnswer(idx));
+      el.answers.appendChild(div);
+    });
 
-    // mark collected
-    if(it.once) sceneState.collected[it.id] = true;
+    el.statusLine.innerHTML = `Status: <span class="tiny">${state.completed[state.nodeIndex] ? "erledigt" : "offen"}</span>`;
+  }
+
+  // ------------------------------------------------------------
+  // Interact
+  // ------------------------------------------------------------
+  function onInteract(it, hsEl, cx, cy){
+    const i = state.nodeIndex;
+    const node = NODES[i];
+    const s = state.scene[i];
+
+    if(it.once) s.collected[it.id] = true;
+
+    burstAtHotspot(hsEl);
 
     if(it.type === "collect_star"){
       state.stars += (it.points || 1);
+      pulse(el.pillStars);
       gainXP(10);
       toast(`<b>Stern eingesammelt!</b> +${it.points||1} Stern · +10 XP`);
-      setFips("happy", "Stern eingesammelt. Stark.");
+      setFips("happy", "Stern eingesammelt. Weiter.");
+
+      // 2) Animation: Icon fliegt zum HUD
+      flyToHUD(cx, cy, ASSETS.icons.stern, el.pillStars);
+
     } else if(it.type === "trap"){
-      sceneState.perfect = false;
-      sceneState.tries += 1;
+      s.perfect = false;
+      s.tries += 1;
       state.streak = 0;
       loseHeart();
       toast(`<b>Fehler.</b> ${it.say || "Nicht richtig."}`);
-      setFips("thinking", "Nochmal lesen. Such das Wort im Text.");
+      setFips("thinking", "Nochmal lesen. Dann antworten.");
+
     } else {
       gainXP(5);
       toast(`<b>Hinweis:</b> ${it.say || "Interessant."}`);
-      setFips("idle", it.say || "Weiter geht’s.");
+      setFips("idle", it.say || "Weiter.");
     }
 
     saveState();
     renderAll();
   }
 
+  // ------------------------------------------------------------
+  // Answer
+  // ------------------------------------------------------------
   function onAnswer(idx){
     const i = state.nodeIndex;
     const node = NODES[i];
-    const sceneState = state.scene[i];
+    const s = state.scene[i];
 
     if(state.completed[i]) return;
 
-    // UI feedback
     const cards = [...el.answers.querySelectorAll(".ans")];
     cards.forEach(c => c.classList.remove("correct","wrong"));
 
-    const chosen = node.read.answers[idx];
-    sceneState.tries += 1;
+    s.tries += 1;
 
-    if(chosen.correct){
-      cards[idx].classList.add("correct");
-      markCompleted(i);
-
-      // unlock next
-      if(i < NODES.length - 1){
-        state.unlocked[i+1] = true;
-      }
-
-      el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
-
-      toast(`<b>Richtig!</b> Knoten ${node.id} erledigt.`);
-    } else {
-      cards[idx].classList.add("wrong");
-      sceneState.perfect = false;
-      state.streak = 0;
-      loseHeart();
-
-      el.statusLine.innerHTML = `Status: <span class="bad">Falsch.</span> Lies den Text nochmal.`;
-      toast(`<b>Falsch.</b> Lies nochmal und suche das passende Wort.`);
-      setFips("thinking", "Nochmal lesen. Such das passende Wort.");
+    // Determine correct in current context
+    let answers, chosen;
+    if(node.boss){
+      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
+      answers = node.readBoss[step].answers;
+      chosen = answers[idx];
+    }else{
+      answers = node.read.answers;
+      chosen = answers[idx];
     }
 
-    saveState();
-    renderAll();
+    if(chosen && chosen.correct){
+      cards[idx].classList.add("correct");
+
+      if(node.boss){
+        // Boss: richtig = Boss HP -1, next boss question
+        s.bossHP = clamp(s.bossHP - 1, 0, node.boss.hpMax);
+        renderBossUI(node, s);
+
+        toast(`<b>Treffer!</b> Der Boss verliert Leben.`);
+        setFips("excited", "Richtig. Boss verliert Leben.");
+
+        // boss hp tick animation -> pulse XP as reward
+        gainXP(18);
+
+        // advance boss step
+        s.bossStep = clamp(s.bossStep + 1, 0, node.readBoss.length - 1);
+
+        // Boss defeated
+        if(s.bossHP === 0){
+          // mark node complete
+          markCompleted(i);
+
+          el.statusLine.innerHTML = `Status: <span class="good">Boss besiegt.</span>`;
+
+          // Gate animation overlay
+          el.gateOpen.classList.add("show");
+
+          // show waterworld splash after a short beat
+          setTimeout(() => {
+            el.gateOpen.classList.remove("show");
+            el.splash.classList.add("show");
+          }, 1200);
+
+        }else{
+          // continue boss fight: render next question/text
+          el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span> Noch ${s.bossHP} Treffer.`;
+        }
+
+      } else {
+        // Normal node: complete
+        markCompleted(i);
+
+        el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
+        toast(`<b>Richtig!</b> Szene erledigt.`);
+      }
+
+      saveState();
+      renderAll();
+
+      // 3) Auto-Weiter (nur wenn nicht Boss-Ende)
+      if(!node.boss || (node.boss && state.completed[i])){
+        autoAdvance();
+      }
+
+    } else {
+      cards[idx].classList.add("wrong");
+      s.perfect = false;
+      state.streak = 0;
+
+      // boss wrong: heart loss too
+      loseHeart();
+
+      el.statusLine.innerHTML = `Status: <span class="bad">Falsch.</span> Lies nochmal.`;
+      toast(`<b>Falsch.</b> Lies nochmal und suche das passende Wort.`);
+      setFips("thinking", "Nochmal lesen. Du findest die Antwort.");
+
+      saveState();
+      renderAll();
+    }
   }
 
-  // -----------------------------
-  // Events
-  // -----------------------------
+  // ------------------------------------------------------------
+  // Buttons
+  // ------------------------------------------------------------
   el.reReadBtn.addEventListener("click", () => {
-    toast(`<b>Nochmal lesen:</b> Lies den Text und suche das Schlüsselwort.`);
-    setFips("thinking", "Du schaffst das. Lies den Text und finde das Wort.");
+    toast(`<b>Nochmal lesen:</b> Lies das Pergament und suche das Schlüsselwort.`, 2600);
+    setFips("thinking", "Lies das Pergament. Such das Schlüsselwort.");
   });
 
   el.nextBtn.addEventListener("click", () => {
@@ -1176,35 +1555,41 @@
     saveState();
     renderAll();
     toast("<b>Reset.</b> Alles wurde zurückgesetzt.");
-    setFips("idle", "Los geht’s. Tippe ins Bild und lies den Text.");
+    setFips("idle", "Los geht’s. Tippe Dinge im Bild an.");
   });
 
   el.helpBtn.addEventListener("click", () => {
     toast(`<b>So funktioniert es:</b><br>
       1) Tippe auf Dinge im Bild (Stern, Laterne, Apfel).<br>
-      2) Lies den Text.<br>
+      2) Lies das Pergament.<br>
       3) Beantworte die Frage.<br>
-      Bonus: Finde den Geheimfunken (versteckt).`, 3800);
-    setFips("idle", "Tippe ins Bild. Lies den Text. Dann beantworte die Frage.");
+      Bonus: Finde den Geheimfunken (versteckt).`, 4200);
+    setFips("idle", "Tippe Dinge im Bild an. Dann lies das Pergament.");
   });
 
-  // keyboard
+  // Splash close
+  el.closeSplashBtn.addEventListener("click", () => {
+    el.splash.classList.remove("show");
+  });
+
+  // keyboard (optional)
   window.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
     if(k === "h") el.helpBtn.click();
     if(k === "r") el.resetBtn.click();
   });
 
-  // -----------------------------
+  // ------------------------------------------------------------
   // Render All
-  // -----------------------------
+  // ------------------------------------------------------------
   function renderAll(){
     renderHUD();
     renderPath();
     renderScene();
   }
 
-  // First boot - small asset sanity toast
+  // Initial
+  setFips("idle", "Tippe Dinge im Bild an. Dann lies das Pergament.");
   renderAll();
   saveState();
 })();
