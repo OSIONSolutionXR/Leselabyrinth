@@ -2,217 +2,1212 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Leselabyrinth – Funkelwald MVP</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Leselabyrinth – Funkelwald (MVP)</title>
   <style>
     :root{
-      --bg1:#080a14;
-      --bg2:#1a0f2f;
-      --panel: rgba(18, 24, 48, .72);
+      --bg0:#070a14;
+      --bg1:#0b1030;
+      --bg2:#171a3a;
+      --panel: rgba(18,22,44,.62);
+      --panel2: rgba(18,22,44,.42);
       --stroke: rgba(255,255,255,.12);
-      --glow: rgba(120, 200, 255, .35);
-      --gold: #ffd36b;
+      --stroke2: rgba(255,255,255,.18);
+      --text:#eaf0ff;
+      --muted:#b9c2e8;
+      --good:#45d483;
+      --bad:#ff6b6b;
+      --gold:#ffd36a;
+      --blue:#6fd0ff;
+      --pink:#ff4fa3;
+      --shadow: 0 18px 40px rgba(0,0,0,.45);
+      --radius: 22px;
+      --radius2: 16px;
+      --pad: 16px;
+      --pad2: 12px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     }
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:#eaf1ff;
-      background: radial-gradient(1200px 700px at 20% 10%, #2a1560 0%, transparent 60%),
-                  radial-gradient(900px 600px at 80% 20%, #0a4a7b 0%, transparent 55%),
-                  linear-gradient(160deg, var(--bg2), var(--bg1));
-      min-height:100vh;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 30% 10%, rgba(255,79,163,.18), transparent 60%),
+        radial-gradient(900px 600px at 70% 20%, rgba(111,208,255,.14), transparent 60%),
+        radial-gradient(900px 700px at 50% 80%, rgba(255,211,106,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 40%, var(--bg2));
+      overflow-x:hidden;
+    }
+
+    /* Layout */
+    .wrap{
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 18px 14px 26px;
+      display:grid;
+      gap: 14px;
+      grid-template-columns: 320px 1fr;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .wrap{ grid-template-columns: 1fr; }
+    }
+
+    /* Top HUD */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(8,10,24,.78), rgba(8,10,24,.38));
+      border-bottom: 1px solid var(--stroke);
+      padding: 12px 14px;
+    }
+    .topbar-inner{
+      max-width: 1280px;
+      margin:0 auto;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      min-width: 240px;
+    }
+    .brand .dot{
+      width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+      box-shadow: 0 0 18px rgba(255,79,163,.45);
+    }
+    .brand .title{
+      font-weight: 800;
+      letter-spacing: .2px;
+      line-height: 1.1;
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted);
+      opacity: .95;
+      margin-top: 2px;
+    }
+
+    .hud{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex: 1;
+      justify-content:flex-end;
+      flex-wrap: wrap;
+    }
+    .pill{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      white-space: nowrap;
+    }
+    .pill b{ font-weight: 800; }
+    .icon{
+      width: 18px; height: 18px; object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.10));
+    }
+    .hearts{ display:flex; gap:6px; align-items:center; }
+    .hearts .heart{
+      width: 18px; height: 18px; opacity: .95;
+      filter: drop-shadow(0 0 10px rgba(255,79,163,.22));
+    }
+    .hearts .heart.off{ opacity: .25; filter:none; }
+
+    .xp{
+      min-width: 260px;
+      max-width: 420px;
+      flex: 1;
       display:flex;
       align-items:center;
-      justify-content:center;
-      padding:24px;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
     }
-    .frame{
-      width:min(1200px, 96vw);
-      border:1px solid var(--stroke);
-      border-radius:18px;
-      background: rgba(0,0,0,.18);
-      box-shadow: 0 20px 60px rgba(0,0,0,.55);
+    .xp small{ color: var(--muted); }
+    .xpbar{
+      flex: 1;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.10);
       overflow:hidden;
     }
-    .hud{
+    .xpbar > div{
+      height: 100%;
+      width: 30%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(111,208,255,.92), rgba(255,211,106,.95));
+      box-shadow: 0 0 18px rgba(111,208,255,.25);
+      transition: width .35s ease;
+    }
+
+    .btn{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor:pointer;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,79,163,.9), rgba(255,211,106,.85));
+      border-color: rgba(255,255,255,.18);
+      color: #1a1022;
+      box-shadow: 0 14px 35px rgba(255,79,163,.18);
+    }
+
+    /* Panels */
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel .hd{
+      padding: 14px 16px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:12px 16px;
-      background: rgba(10, 12, 25, .68);
-      border-bottom:1px solid var(--stroke);
-      gap:12px;
+      gap: 12px;
+      border-bottom: 1px solid var(--stroke);
+      background: rgba(0,0,0,.16);
     }
-    .hud .left, .hud .mid, .hud .right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-    .chip{
-      display:flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:999px;
+    .panel .hd h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .2px;
+      opacity: .95;
+    }
+    .panel .bd{ padding: 14px 16px; }
+
+    /* Sidebar */
+    .side{
+      position: sticky;
+      top: 74px;
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+    @media (max-width: 980px){
+      .side{ position: static; }
+    }
+    .mini{
+      display:flex; gap: 12px; align-items:flex-start;
+    }
+    .avatar{
+      width: 52px; height: 52px;
+      border-radius: 16px;
       background: rgba(255,255,255,.06);
-      border:1px solid var(--stroke);
-      font-weight:700;
-      font-size:14px;
-      line-height:1;
-    }
-    .chip img{width:22px;height:22px;display:block;filter: drop-shadow(0 6px 10px rgba(0,0,0,.45));}
-    .xp{
-      min-width:260px;
-      max-width:360px;
-      flex:1;
-      display:flex;align-items:center;gap:10px;
-    }
-    .bar{
-      position:relative;
-      height:14px;
-      border-radius:999px;
-      background: rgba(255,255,255,.10);
-      border:1px solid var(--stroke);
+      border: 1px solid var(--stroke);
+      display:grid; place-items:center;
       overflow:hidden;
-      flex:1;
     }
-    .fill{
-      position:absolute;left:0;top:0;bottom:0;
-      width:38%;
-      background: linear-gradient(90deg, rgba(120,200,255,.9), rgba(255,211,107,.9));
-      box-shadow: 0 0 18px rgba(120,200,255,.35);
+    .avatar img{ width: 100%; height: 100%; object-fit: contain; }
+    .speech{
+      flex:1;
+      background: rgba(0,0,0,.14);
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      padding: 10px 12px;
+      min-height: 52px;
+    }
+    .speech .name{ font-weight: 900; }
+    .speech .line{ margin-top: 2px; color: var(--muted); font-size: 13px; }
+
+    .pathlist{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .node{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
+      user-select:none;
+    }
+    .node:hover{ border-color: var(--stroke2); background: rgba(255,255,255,.08); }
+    .node.locked{ opacity:.5; cursor:not-allowed; }
+    .node.active{ outline: 2px solid rgba(111,208,255,.35); }
+    .node .left{ display:flex; gap:10px; align-items:center; }
+    .badge{
+      width: 28px; height: 28px;
+      border-radius: 10px;
+      display:grid; place-items:center;
+      font-weight: 900;
+      background: rgba(111,208,255,.12);
+      border: 1px solid rgba(111,208,255,.20);
+    }
+    .node.locked .badge{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.65);
+    }
+    .node .label{
+      font-weight: 900;
+      line-height:1.05;
+    }
+    .node .sub{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .tiny{
+      font-size: 12px;
+      color: var(--muted);
+      opacity:.95;
     }
 
-    .content{
+    /* Main */
+    .grid{
       display:grid;
-      grid-template-rows: auto 1fr auto;
-      gap:12px;
-      padding:16px;
+      gap: 14px;
     }
 
     .sceneWrap{
-      border:1px solid var(--stroke);
-      border-radius:18px;
-      background: var(--panel);
+      position: relative;
+      border-radius: var(--radius);
       overflow:hidden;
-      position:relative;
-      min-height:420px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.16);
+      min-height: 360px;
     }
-    .sceneWrap img.bg{
-      width:100%;
-      height:100%;
-      object-fit:cover;
+    .sceneWrap::after{
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 350px at 35% 20%, rgba(255,211,106,.10), transparent 60%),
+        radial-gradient(900px 450px at 70% 80%, rgba(111,208,255,.08), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.28));
+      mix-blend-mode: screen;
+      opacity: .75;
+    }
+    .sceneImg{
+      width: 100%;
+      height: min(56vh, 520px);
+      object-fit: cover;
       display:block;
-      filter: saturate(1.05) contrast(1.02);
+      transform: scale(1.01);
     }
 
-    /* Interactables liegen als Layer oben drauf */
-    .obj{
+    /* Overlays */
+    .overlay{
+      position:absolute; inset:0;
+      z-index: 3;
+    }
+    .hotspot{
       position:absolute;
-      width:92px;
-      height:auto;
-      cursor:pointer;
       transform: translate(-50%, -50%);
-      filter: drop-shadow(0 14px 18px rgba(0,0,0,.55));
-      transition: transform .15s ease, filter .15s ease;
+      cursor:pointer;
       user-select:none;
+      touch-action: manipulation;
+      transition: transform .08s ease, filter .2s ease, opacity .2s ease;
     }
-    .obj:hover{
-      transform: translate(-50%, -50%) scale(1.07);
-      filter: drop-shadow(0 18px 22px rgba(0,0,0,.62)) drop-shadow(0 0 18px var(--glow));
+    .hotspot:hover{ transform: translate(-50%,-50%) scale(1.03); filter: drop-shadow(0 0 18px rgba(255,211,106,.22)); }
+    .hotspot:active{ transform: translate(-50%,-50%) scale(.99); }
+    .hotspot img{
+      width: var(--w, 110px);
+      height: auto;
+      display:block;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+    }
+    .hotspot.small img{ width: var(--w, 70px); }
+    .hotspot.tiny img{ width: var(--w, 54px); }
+
+    .toast{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 50;
+      max-width: 420px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(10,12,28,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
+      display:none;
+    }
+    .toast.show{ display:block; animation: pop .18s ease; }
+    @keyframes pop{ from{ transform: translateY(6px); opacity:.0;} to{ transform: translateY(0); opacity:1;} }
+    .toast b{ font-weight: 900; }
+
+    /* Reading card */
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.16);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--stroke);
+    }
+    .card .hd .meta{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .chip{
+      display:inline-flex;
+      gap: 8px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+    }
+    .card .bd{ padding: 14px 16px 16px; }
+    .readbox{
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      padding: 14px 14px;
+      min-height: 130px;
+      position: relative;
+    }
+    .readbox .label{
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: .2px;
+      font-weight: 900;
+      opacity: .9;
+    }
+    .readbox .text{
+      margin-top: 8px;
+      font-size: 22px;
+      line-height: 1.35;
+      font-weight: 900;
+      letter-spacing: .1px;
+    }
+    @media (max-width: 560px){
+      .readbox .text{ font-size: 18px; }
+    }
+    .q{
+      margin-top: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      padding: 12px 12px;
+    }
+    .q .qt{
+      display:flex; align-items:center; justify-content:space-between; gap: 10px;
+      margin-bottom: 10px;
+    }
+    .q .qt h3{
+      margin:0;
+      font-size: 16px;
+      font-weight: 1000;
+    }
+    .answers{
+      display:grid;
+      gap: 10px;
+    }
+    .ans{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
+      user-select:none;
+      font-weight: 900;
+    }
+    .ans:hover{ border-color: var(--stroke2); background: rgba(255,255,255,.08); }
+    .ans.correct{ border-color: rgba(69,212,131,.45); background: rgba(69,212,131,.10); }
+    .ans.wrong{ border-color: rgba(255,107,107,.45); background: rgba(255,107,107,.10); }
+    .foot{
+      margin-top: 12px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap: wrap;
+    }
+    .statusline{
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .statusline .good{ color: var(--good); font-weight: 900; }
+    .statusline .bad{ color: var(--bad); font-weight: 900; }
+
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
+      color: var(--muted);
     }
 
-    .parchment{
-      border:1px solid var(--stroke);
-      border-radius:18px;
-      background: rgba(12, 18, 38, .76);
-      padding:14px 14px;
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-    }
-    .parchment .col{flex:1}
-    .title{font-weight:900;font-size:18px;margin:0 0 6px}
-    .text{margin:0;color:rgba(234,241,255,.9);font-size:16px;line-height:1.35}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .btn{
-      padding:10px 12px;border-radius:14px;
-      background: rgba(255,255,255,.08);
-      border:1px solid var(--stroke);
-      color:#eaf1ff;
-      font-weight:800;
-      cursor:pointer;
-    }
+    /* Small helper */
+    .row{ display:flex; gap: 10px; align-items:center; flex-wrap:wrap; }
+    .sep{ opacity:.25; }
+
   </style>
 </head>
 <body>
-  <div class="frame">
 
-    <!-- HUD -->
-    <div class="hud">
-      <div class="left">
-        <div class="chip">
-          <img src="assets/ui/icons/herz.png" alt="Herz">
-          <span>❤️ 3</span>
-        </div>
-        <div class="chip">
-          <img src="assets/ui/icons/stern.png" alt="Stern">
-          <span>0</span>
-        </div>
-        <div class="chip">
-          <img src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke">
-          <span>0</span>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>
+          <div class="title">Leselabyrinth – Funkelwald</div>
+          <div class="sub">Kinder-RPG Lesetraining · Szene-Pfad · Progression</div>
         </div>
       </div>
 
-      <div class="mid xp">
-        <div class="chip"><span>Level 1</span></div>
-        <div class="bar" aria-label="XP">
-          <div class="fill"></div>
+      <div class="hud">
+        <div class="pill" title="Hearts / Leben">
+          <span class="tiny"><b>Leben</b></span>
+          <div class="hearts" id="hearts"></div>
         </div>
-        <div class="chip"><span>38 / 100</span></div>
-      </div>
 
-      <div class="right">
-        <div class="chip"><span>Kapitel: Funkelwald</span></div>
-      </div>
-    </div>
-
-    <div class="content">
-      <!-- Szene -->
-      <div class="sceneWrap">
-        <img class="bg" src="assets/scenes/waldweg.png" alt="Waldweg Szene">
-
-        <!-- Interactables Testpositionen -->
-        <img class="obj" id="obj-stern"    src="assets/ui/interactables/Stern.png"   alt="Stern"   style="left:78%;top:62%;">
-        <img class="obj" id="obj-apfel"    src="assets/ui/interactables/Apfel.png"   alt="Apfel"   style="left:90%;top:60%; width:84px;">
-        <img class="obj" id="obj-laterne"  src="assets/ui/interactables/Laterne.png" alt="Laterne" style="left:20%;top:68%; width:96px;">
-        <img class="obj" id="obj-schild"   src="assets/ui/interactables/Schild.png"  alt="Schild"  style="left:28%;top:45%; width:140px;">
-      </div>
-
-      <!-- Quest/Pergament -->
-      <div class="parchment">
-        <div class="col">
-          <p class="title">Quest: Waldweg</p>
-          <p class="text"><b>Lesetext:</b> Fips folgt dem Funkelweg. Ein Stern glitzert im Gras.</p>
-          <div class="row">
-            <button class="btn" id="btn-reset">Szene neu</button>
-            <button class="btn" id="btn-next">Weiter (Test)</button>
-          </div>
+        <div class="pill" title="Sterne">
+          <img class="icon" src="assets/ui/icons/stern.png" alt="Stern" />
+          <span><b id="starsVal">0</b></span>
+          <span class="sep">|</span>
+          <span class="tiny">Sterne</span>
         </div>
-        <div class="col">
-          <p class="title">Test-Feedback</p>
-          <p class="text" id="log">Klicke Stern, Apfel, Laterne oder Schild.</p>
+
+        <div class="pill" title="Geheimfunken">
+          <img class="icon" src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke" />
+          <span><b id="sparksVal">0</b></span>
+          <span class="sep">|</span>
+          <span class="tiny">Funken</span>
         </div>
+
+        <div class="pill" title="Serie, Stufe, Fokus">
+          <span class="tiny">Serie</span> <b id="streakVal">0</b>
+          <span class="sep">|</span>
+          <span class="tiny">Stufe</span> <b id="levelVal">1</b>
+          <span class="sep">|</span>
+          <span class="tiny">Fokus</span> <b id="focusVal">W-Frage</b>
+        </div>
+
+        <div class="xp" title="XP Fortschritt">
+          <small><b>XP</b> <span id="xpVal">0</span>/<span id="xpNeed">100</span></small>
+          <div class="xpbar" aria-label="XP Balken"><div id="xpBar"></div></div>
+        </div>
+
+        <button class="btn" id="resetBtn" title="Alles zurücksetzen">Reset</button>
+        <button class="btn primary" id="helpBtn" title="Hinweis anzeigen">Hilfe</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const log = (t)=> document.getElementById('log').textContent = t;
+  <div class="wrap">
+    <!-- Sidebar -->
+    <div class="side">
+      <div class="panel">
+        <div class="hd">
+          <h2>Guide</h2>
+          <span class="tiny">Fips der Funkenkobold</span>
+        </div>
+        <div class="bd">
+          <div class="mini">
+            <div class="avatar"><img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" /></div>
+            <div class="speech">
+              <div class="name">Fips</div>
+              <div class="line" id="fipsLine">Tippe ins Bild: Sammle Dinge. Lies dann den Text. Beantworte die Frage.</div>
+            </div>
+          </div>
+          <div style="height:12px"></div>
+          <div class="row">
+            <span class="chip" title="Tipp: Tastatur"><span class="kbd">H</span> Hilfe</span>
+            <span class="chip" title="Tipp: Tastatur"><span class="kbd">R</span> Reset</span>
+          </div>
+        </div>
+      </div>
 
-    document.getElementById('obj-stern').onclick   = ()=> log("⭐ Stern geklickt – später: einsammeln + Animation ins HUD.");
-    document.getElementById('obj-apfel').onclick   = ()=> log("🍎 Apfel geklickt – später: falsche Spur / Spaß-Reaktion.");
-    document.getElementById('obj-laterne').onclick = ()=> log("🏮 Laterne geklickt – später: Hinweis/Glow/Lesefokus.");
-    document.getElementById('obj-schild').onclick  = ()=> log("🪧 Schild geklickt – später: Lore/Navigation.");
+      <div class="panel">
+        <div class="hd">
+          <h2>Kapitel: Funkelwald</h2>
+          <span class="tiny" id="chapterStatus">0/5 erledigt</span>
+        </div>
+        <div class="bd">
+          <div class="pathlist" id="pathList"></div>
+          <div style="height:10px"></div>
+          <div class="tiny" id="unlockHint">Nächster Knoten wird nach richtiger Antwort freigeschaltet.</div>
+        </div>
+      </div>
+    </div>
 
-    document.getElementById('btn-reset').onclick = ()=> location.reload();
-    document.getElementById('btn-next').onclick  = ()=> log("Weiter (Test) – als nächstes bauen wir die echte Game-Logik.");
-  </script>
+    <!-- Main -->
+    <div class="grid">
+      <div class="sceneWrap panel" style="padding:0">
+        <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
+        <div class="overlay" id="overlay"></div>
+      </div>
+
+      <div class="card">
+        <div class="hd">
+          <div class="meta">
+            <span class="chip"><b>Szene</b> <span id="sceneTitle">–</span></span>
+            <span class="chip"><b>Knoten</b> <span id="nodeId">–</span></span>
+            <span class="chip"><b>Status</b> <span id="nodeStatus">offen</span></span>
+          </div>
+          <div class="meta">
+            <span class="chip"><b>Versuche</b> <span id="triesVal">0</span></span>
+            <span class="chip"><b>Geheimfunke</b> <span id="sceneSparkVal">0</span>/1</span>
+          </div>
+        </div>
+
+        <div class="bd">
+          <div class="readbox">
+            <div class="label">LESETEXT</div>
+            <div class="text" id="readText">–</div>
+          </div>
+
+          <div class="q">
+            <div class="qt">
+              <h3 id="question">–</h3>
+              <span class="tiny">Erst lesen, dann antworten.</span>
+            </div>
+            <div class="answers" id="answers"></div>
+
+            <div class="foot">
+              <div class="row">
+                <button class="btn" id="reReadBtn">Nochmal lesen</button>
+                <button class="btn" id="nextBtn" disabled>Nächste Szene</button>
+              </div>
+              <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  // -----------------------------
+  // Data (MVP) – alles in dieser Datei
+  // -----------------------------
+  const ASSETS = {
+    scenes: {
+      waldweg: "assets/scenes/waldweg.png",
+      holzbruecke: "assets/scenes/holzbruecke.png",
+      apfelbaum: "assets/scenes/apfelbaum.png",
+      sternstein: "assets/scenes/sternstein.png",
+      bosstor: "assets/scenes/bosstor.png",
+    },
+    interact: {
+      Stern: "assets/ui/interactables/Stern.png",
+      Apfel: "assets/ui/interactables/Apfel.png",
+      Laterne: "assets/ui/interactables/Laterne.png",
+      Schild: "assets/ui/interactables/Schild.png",
+    },
+    icons: {
+      herz: "assets/ui/icons/herz.png",
+      stern: "assets/ui/icons/stern.png",
+      spark: "assets/ui/icons/geheimfunke.png",
+    },
+    fips: {
+      idle: "assets/chars/fips/idle.png",
+      happy: "assets/chars/fips/happy.png",
+      excited: "assets/chars/fips/excited.png",
+      thinking: "assets/chars/fips/thinking.png",
+      sad: "assets/chars/fips/sad.png",
+    }
+  };
+
+  // Szenen-Definition: Hintergrund + Interactables + Leseaufgabe
+  // Positionsangaben sind Prozentwerte (x,y) bezogen auf Bildfläche.
+  const NODES = [
+    {
+      id:"N1", key:"waldweg", title:"Waldweg",
+      bg: ASSETS.scenes.waldweg,
+      sparkHotspot: { x: 14, y: 78, r: 7 }, // unsichtbarer Bereich (Geheimfunke)
+      interactables: [
+        { id:"star1", type:"collect_star", img:ASSETS.interact.Stern, x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lantern1", type:"lore", img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true,
+          say:"Die Laterne flackert: Sie zeigt dir den Weg, wenn du genau liest." },
+        { id:"appleWrong", type:"trap", img:ASSETS.interact.Apfel, x: 86, y: 40, size:"small", once:true,
+          say:"Der Apfel glitzert, aber er ist eine Ablenkung. Fokus!" }
+      ],
+      read: {
+        text: [
+          "Fips steht am Waldweg.",
+          "Eine Laterne leuchtet.",
+          "Fips bleibt ruhig und liest."
+        ].join("<br>"),
+        question: "Wo steht Fips?",
+        answers: [
+          { t:"Am Waldweg.", correct:true },
+          { t:"Im Wasser.", correct:false },
+          { t:"Auf dem Dach.", correct:false }
+        ]
+      }
+    },
+    {
+      id:"N2", key:"holzbruecke", title:"Holzbrücke",
+      bg: ASSETS.scenes.holzbruecke,
+      sparkHotspot: { x: 82, y: 63, r: 7 },
+      interactables: [
+        { id:"star2", type:"collect_star", img:ASSETS.interact.Stern, x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lantern2", type:"lore", img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true,
+          say:"Die Laterne sagt: Über die Brücke geht man Schritt für Schritt." },
+        { id:"appleTrap2", type:"trap", img:ASSETS.interact.Apfel, x: 80, y: 78, size:"tiny", once:true,
+          say:"Ups. Das war nicht die richtige Sache." }
+      ],
+      read: {
+        text: [
+          "Vor Fips ist eine Holzbrücke.",
+          "Fips geht langsam.",
+          "Die Brücke knarrt leise."
+        ].join("<br>"),
+        question: "Was ist vor Fips?",
+        answers: [
+          { t:"Eine Holzbrücke.", correct:true },
+          { t:"Ein Auto.", correct:false },
+          { t:"Ein Flugzeug.", correct:false }
+        ]
+      }
+    },
+    {
+      id:"N3", key:"apfelbaum", title:"Apfelbaum",
+      bg: ASSETS.scenes.apfelbaum,
+      sparkHotspot: { x: 50, y: 18, r: 7 },
+      interactables: [
+        { id:"star3", type:"collect_star", img:ASSETS.interact.Stern, x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"appleGood", type:"lore", img:ASSETS.interact.Apfel, x: 78, y: 40, size:"small", once:true,
+          say:"Der Apfelbaum ist freundlich. Ein Apfel fällt plopp ins Gras." },
+        { id:"lantern3", type:"lore", img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny", once:true,
+          say:"Die Laterne flüstert: Das wichtigste Wort steht im Text." }
+      ],
+      read: {
+        text: [
+          "Fips sieht einen Apfelbaum.",
+          "Ein Apfel hängt am Ast.",
+          "Fips lächelt."
+        ].join("<br>"),
+        question: "Was sieht Fips?",
+        answers: [
+          { t:"Einen Apfelbaum.", correct:true },
+          { t:"Einen Fernseher.", correct:false },
+          { t:"Eine Rakete.", correct:false }
+        ]
+      }
+    },
+    {
+      id:"N4", key:"sternstein", title:"Sternstein",
+      bg: ASSETS.scenes.sternstein,
+      sparkHotspot: { x: 18, y: 34, r: 7 },
+      interactables: [
+        { id:"star4", type:"collect_star", img:ASSETS.interact.Stern, x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lantern4", type:"lore", img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true,
+          say:"Hier ist es magisch. Die Laterne leuchtet blau." },
+        { id:"appleTrap4", type:"trap", img:ASSETS.interact.Apfel, x: 86, y: 84, size:"tiny", once:true,
+          say:"Der Apfel ist hier nicht wichtig." }
+      ],
+      read: {
+        text: [
+          "Fips findet einen Sternstein.",
+          "Der Stein glitzert.",
+          "Fips tippt ihn an."
+        ].join("<br>"),
+        question: "Was glitzert?",
+        answers: [
+          { t:"Der Stein.", correct:true },
+          { t:"Der Schuh.", correct:false },
+          { t:"Der Stuhl.", correct:false }
+        ]
+      }
+    },
+    {
+      id:"N5", key:"bosstor", title:"Boss-Tor",
+      bg: ASSETS.scenes.bosstor,
+      sparkHotspot: { x: 90, y: 20, r: 7 },
+      interactables: [
+        { id:"star5", type:"collect_star", img:ASSETS.interact.Stern, x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lantern5", type:"lore", img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true,
+          say:"Die Laterne sagt: Das Tor öffnet sich nur mit dem richtigen Wort." },
+        { id:"appleTrap5", type:"trap", img:ASSETS.interact.Apfel, x: 84, y: 74, size:"tiny", once:true,
+          say:"Fokus. Nicht ablenken lassen." }
+      ],
+      read: {
+        text: [
+          "Vor Fips ist ein großes Tor.",
+          "Fips braucht einen Schlüssel.",
+          "Das Tor bleibt zu."
+        ].join("<br>"),
+        question: "Was braucht Fips?",
+        answers: [
+          { t:"Den Schlüssel.", correct:true },
+          { t:"Einen Ball.", correct:false },
+          { t:"Eine Leiter.", correct:false }
+        ]
+      }
+    }
+  ];
+
+  // -----------------------------
+  // Save State
+  // -----------------------------
+  const STORAGE_KEY = "leselabyrinth_funkelwald_v1";
+
+  const defaultState = () => ({
+    nodeIndex: 0,
+    unlocked: [true, false, false, false, false],
+    completed: [false, false, false, false, false],
+    // Progression
+    stars: 0,
+    sparks: 0,
+    streak: 0,
+    level: 1,
+    xp: 0,
+    xpNeed: 100,
+    heartsMax: 3,
+    hearts: 3,
+    focus: "W-Frage",
+    // Per scene flags
+    scene: NODES.map(() => ({
+      tries: 0,
+      answered: false,
+      perfect: true,
+      sparkFound: false,
+      collected: {} // interactables once
+    }))
+  });
+
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return defaultState();
+      const parsed = JSON.parse(raw);
+      // minimal merge
+      const d = defaultState();
+      return {
+        ...d,
+        ...parsed,
+        scene: (parsed.scene && parsed.scene.length === NODES.length) ? parsed.scene : d.scene
+      };
+    }catch(e){
+      return defaultState();
+    }
+  }
+  function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+  let state = loadState();
+
+  // -----------------------------
+  // UI refs
+  // -----------------------------
+  const el = {
+    pathList: document.getElementById("pathList"),
+    chapterStatus: document.getElementById("chapterStatus"),
+    sceneImg: document.getElementById("sceneImg"),
+    overlay: document.getElementById("overlay"),
+    sceneTitle: document.getElementById("sceneTitle"),
+    nodeId: document.getElementById("nodeId"),
+    nodeStatus: document.getElementById("nodeStatus"),
+    readText: document.getElementById("readText"),
+    question: document.getElementById("question"),
+    answers: document.getElementById("answers"),
+    triesVal: document.getElementById("triesVal"),
+    sceneSparkVal: document.getElementById("sceneSparkVal"),
+    statusLine: document.getElementById("statusLine"),
+    reReadBtn: document.getElementById("reReadBtn"),
+    nextBtn: document.getElementById("nextBtn"),
+    resetBtn: document.getElementById("resetBtn"),
+    helpBtn: document.getElementById("helpBtn"),
+    toast: document.getElementById("toast"),
+    // HUD
+    hearts: document.getElementById("hearts"),
+    starsVal: document.getElementById("starsVal"),
+    sparksVal: document.getElementById("sparksVal"),
+    streakVal: document.getElementById("streakVal"),
+    levelVal: document.getElementById("levelVal"),
+    focusVal: document.getElementById("focusVal"),
+    xpVal: document.getElementById("xpVal"),
+    xpNeed: document.getElementById("xpNeed"),
+    xpBar: document.getElementById("xpBar"),
+    // Fips
+    fipsAvatar: document.getElementById("fipsAvatar"),
+    fipsLine: document.getElementById("fipsLine"),
+  };
+
+  // -----------------------------
+  // Helpers
+  // -----------------------------
+  const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
+  function toast(html, ms=2200){
+    el.toast.innerHTML = html;
+    el.toast.classList.add("show");
+    window.clearTimeout(toast._t);
+    toast._t = window.setTimeout(()=>el.toast.classList.remove("show"), ms);
+  }
+
+  function setFips(mood, line){
+    el.fipsAvatar.src = ASSETS.fips[mood] || ASSETS.fips.idle;
+    el.fipsLine.textContent = line;
+  }
+
+  function gainXP(amount){
+    state.xp += amount;
+    while(state.xp >= state.xpNeed){
+      state.xp -= state.xpNeed;
+      state.level += 1;
+      // XP Bedarf leicht steigern
+      state.xpNeed = Math.round(state.xpNeed * 1.18 + 10);
+      toast(`<b>Level Up!</b> Stufe ${state.level} erreicht.`);
+      setFips("excited", `Wow! Stufe ${state.level}. Weiter so.`);
+    }
+  }
+
+  function loseHeart(){
+    state.hearts = clamp(state.hearts - 1, 0, state.heartsMax);
+    if(state.hearts === 0){
+      toast(`<b>Oh nein.</b> Keine Herzen mehr. Du startest diese Szene neu.`);
+      // Szene reset (nur diese)
+      const i = state.nodeIndex;
+      state.scene[i].tries = 0;
+      state.scene[i].answered = false;
+      state.scene[i].perfect = true;
+      state.scene[i].collected = {};
+      state.scene[i].sparkFound = false;
+      state.hearts = state.heartsMax;
+      state.streak = 0;
+      setFips("sad", "Das war schwer. Wir schaffen das zusammen.");
+    }
+  }
+
+  function markCompleted(i){
+    state.completed[i] = true;
+    state.scene[i].answered = true;
+
+    // Bonus: perfekt (keine Fehler)
+    if(state.scene[i].perfect){
+      state.stars += 1;           // Bonus-Stern
+      gainXP(35);                 // Bonus-XP
+      toast(`<b>Perfekt!</b> Bonus erhalten.`);
+      setFips("happy", "Perfekt gelesen. Das war stark.");
+    }else{
+      gainXP(20);
+      setFips("happy", "Richtig! Weiter geht’s.");
+    }
+
+    // Serie erhöhen
+    state.streak += 1;
+  }
+
+  // -----------------------------
+  // Render HUD
+  // -----------------------------
+  function renderHUD(){
+    el.starsVal.textContent = state.stars;
+    el.sparksVal.textContent = state.sparks;
+    el.streakVal.textContent = state.streak;
+    el.levelVal.textContent = state.level;
+    el.focusVal.textContent = state.focus;
+    el.xpVal.textContent = state.xp;
+    el.xpNeed.textContent = state.xpNeed;
+
+    const pct = clamp((state.xp / state.xpNeed) * 100, 0, 100);
+    el.xpBar.style.width = pct.toFixed(1) + "%";
+
+    // hearts
+    el.hearts.innerHTML = "";
+    for(let i=0;i<state.heartsMax;i++){
+      const img = document.createElement("img");
+      img.src = ASSETS.icons.herz;
+      img.alt = "Herz";
+      img.className = "heart" + (i < state.hearts ? "" : " off");
+      el.hearts.appendChild(img);
+    }
+  }
+
+  // -----------------------------
+  // Render Path
+  // -----------------------------
+  function renderPath(){
+    el.pathList.innerHTML = "";
+    const done = state.completed.filter(Boolean).length;
+    el.chapterStatus.textContent = `${done}/5 erledigt`;
+
+    NODES.forEach((n, i) => {
+      const unlocked = state.unlocked[i];
+      const completed = state.completed[i];
+      const btn = document.createElement("div");
+      btn.className = "node" + (unlocked ? "" : " locked") + (i===state.nodeIndex ? " active" : "");
+      btn.innerHTML = `
+        <div class="left">
+          <div class="badge">${i+1}</div>
+          <div>
+            <div class="label">${n.title}</div>
+            <div class="sub">${completed ? "erledigt" : (unlocked ? "bereit" : "gesperrt")}</div>
+          </div>
+        </div>
+        <div class="tiny">${completed ? "✓" : (unlocked ? "→" : "🔒")}</div>
+      `;
+      btn.addEventListener("click", () => {
+        if(!state.unlocked[i]) return;
+        state.nodeIndex = i;
+        saveState();
+        renderAll();
+      });
+      el.pathList.appendChild(btn);
+    });
+  }
+
+  // -----------------------------
+  // Render Scene + Overlays
+  // -----------------------------
+  function renderScene(){
+    const i = state.nodeIndex;
+    const node = NODES[i];
+    const sceneState = state.scene[i];
+
+    el.sceneImg.src = node.bg;
+    el.sceneTitle.textContent = node.title;
+    el.nodeId.textContent = node.id;
+    el.nodeStatus.textContent = state.completed[i] ? "erledigt" : "offen";
+    el.triesVal.textContent = sceneState.tries;
+    el.sceneSparkVal.textContent = sceneState.sparkFound ? "1" : "0";
+
+    el.readText.innerHTML = node.read.text;
+    el.question.textContent = node.read.question;
+
+    // Next Button
+    const nextUnlocked = (i < NODES.length-1) && state.unlocked[i+1];
+    el.nextBtn.disabled = !(state.completed[i] && nextUnlocked);
+
+    // Answers
+    el.answers.innerHTML = "";
+    node.read.answers.forEach((a, idx) => {
+      const div = document.createElement("div");
+      div.className = "ans";
+      div.innerHTML = `<span>${a.t}</span><span class="tiny">Antwort</span>`;
+      div.addEventListener("click", () => onAnswer(idx));
+      el.answers.appendChild(div);
+    });
+
+    // Status line
+    el.statusLine.innerHTML = `Status: <span class="tiny">${state.completed[i] ? "erledigt" : "offen"}</span>`;
+
+    // Overlay hotspots
+    el.overlay.innerHTML = "";
+
+    // Visible interactables
+    node.interactables.forEach(it => {
+      if(it.once && sceneState.collected[it.id]) return;
+
+      const hs = document.createElement("div");
+      hs.className = "hotspot " + (it.size || "");
+      hs.style.left = it.x + "%";
+      hs.style.top  = it.y + "%";
+      hs.style.setProperty("--w", (it.size==="tiny" ? "54px" : it.size==="small" ? "110px" : "140px"));
+      hs.title = "Tippe: " + (it.label || "Interaktion");
+
+      const img = document.createElement("img");
+      img.src = it.img;
+      img.alt = it.label || "Interaktion";
+      hs.appendChild(img);
+
+      hs.addEventListener("click", (e) => {
+        e.stopPropagation();
+        onInteract(it);
+      });
+
+      el.overlay.appendChild(hs);
+    });
+
+    // Invisible secret spark hotspot
+    const s = node.sparkHotspot;
+    if(s && !sceneState.sparkFound){
+      const hs = document.createElement("div");
+      hs.className = "hotspot";
+      hs.style.left = s.x + "%";
+      hs.style.top  = s.y + "%";
+      hs.style.width = (s.r*2) + "%";
+      hs.style.height = (s.r*2) + "%";
+      hs.style.borderRadius = "999px";
+      hs.style.opacity = "0.001"; // klickbar, aber unsichtbar
+      hs.addEventListener("click", (e) => {
+        e.stopPropagation();
+        sceneState.sparkFound = true;
+        state.sparks += 1;
+        gainXP(15);
+        toast(`<b>Geheimfunke!</b> Du hast etwas verstecktes gefunden.`);
+        setFips("excited", "Geheimfunke gefunden. Du hast Adleraugen.");
+        saveState();
+        renderAll();
+      });
+      el.overlay.appendChild(hs);
+    }
+
+    // Click on scene (generic hint)
+    el.overlay.onclick = () => {
+      toast(`<b>Tipp:</b> Sammle Dinge im Bild. Danach beantworte die Frage.`);
+    };
+  }
+
+  function onInteract(it){
+    const i = state.nodeIndex;
+    const sceneState = state.scene[i];
+
+    // mark collected
+    if(it.once) sceneState.collected[it.id] = true;
+
+    if(it.type === "collect_star"){
+      state.stars += (it.points || 1);
+      gainXP(10);
+      toast(`<b>Stern eingesammelt!</b> +${it.points||1} Stern · +10 XP`);
+      setFips("happy", "Stern eingesammelt. Stark.");
+    } else if(it.type === "trap"){
+      sceneState.perfect = false;
+      sceneState.tries += 1;
+      state.streak = 0;
+      loseHeart();
+      toast(`<b>Fehler.</b> ${it.say || "Nicht richtig."}`);
+      setFips("thinking", "Nochmal lesen. Such das Wort im Text.");
+    } else {
+      gainXP(5);
+      toast(`<b>Hinweis:</b> ${it.say || "Interessant."}`);
+      setFips("idle", it.say || "Weiter geht’s.");
+    }
+
+    saveState();
+    renderAll();
+  }
+
+  function onAnswer(idx){
+    const i = state.nodeIndex;
+    const node = NODES[i];
+    const sceneState = state.scene[i];
+
+    if(state.completed[i]) return;
+
+    // UI feedback
+    const cards = [...el.answers.querySelectorAll(".ans")];
+    cards.forEach(c => c.classList.remove("correct","wrong"));
+
+    const chosen = node.read.answers[idx];
+    sceneState.tries += 1;
+
+    if(chosen.correct){
+      cards[idx].classList.add("correct");
+      markCompleted(i);
+
+      // unlock next
+      if(i < NODES.length - 1){
+        state.unlocked[i+1] = true;
+      }
+
+      el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
+
+      toast(`<b>Richtig!</b> Knoten ${node.id} erledigt.`);
+    } else {
+      cards[idx].classList.add("wrong");
+      sceneState.perfect = false;
+      state.streak = 0;
+      loseHeart();
+
+      el.statusLine.innerHTML = `Status: <span class="bad">Falsch.</span> Lies den Text nochmal.`;
+      toast(`<b>Falsch.</b> Lies nochmal und suche das passende Wort.`);
+      setFips("thinking", "Nochmal lesen. Such das passende Wort.");
+    }
+
+    saveState();
+    renderAll();
+  }
+
+  // -----------------------------
+  // Events
+  // -----------------------------
+  el.reReadBtn.addEventListener("click", () => {
+    toast(`<b>Nochmal lesen:</b> Lies den Text und suche das Schlüsselwort.`);
+    setFips("thinking", "Du schaffst das. Lies den Text und finde das Wort.");
+  });
+
+  el.nextBtn.addEventListener("click", () => {
+    const i = state.nodeIndex;
+    if(i < NODES.length - 1 && state.unlocked[i+1]){
+      state.nodeIndex = i+1;
+      saveState();
+      renderAll();
+    }
+  });
+
+  el.resetBtn.addEventListener("click", () => {
+    if(!confirm("Wirklich alles zurücksetzen?")) return;
+    state = defaultState();
+    saveState();
+    renderAll();
+    toast("<b>Reset.</b> Alles wurde zurückgesetzt.");
+    setFips("idle", "Los geht’s. Tippe ins Bild und lies den Text.");
+  });
+
+  el.helpBtn.addEventListener("click", () => {
+    toast(`<b>So funktioniert es:</b><br>
+      1) Tippe auf Dinge im Bild (Stern, Laterne, Apfel).<br>
+      2) Lies den Text.<br>
+      3) Beantworte die Frage.<br>
+      Bonus: Finde den Geheimfunken (versteckt).`, 3800);
+    setFips("idle", "Tippe ins Bild. Lies den Text. Dann beantworte die Frage.");
+  });
+
+  // keyboard
+  window.addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    if(k === "h") el.helpBtn.click();
+    if(k === "r") el.resetBtn.click();
+  });
+
+  // -----------------------------
+  // Render All
+  // -----------------------------
+  function renderAll(){
+    renderHUD();
+    renderPath();
+    renderScene();
+  }
+
+  // First boot - small asset sanity toast
+  renderAll();
+  saveState();
+})();
+</script>
 </body>
 </html>
