@@ -3,45 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OSION Solution XR – Leselabyrinth MVP</title>
+  <title>OSION Solution XR – Leselabyrinth (1-Datei MVP)</title>
   <style>
     :root{
-      /* Brand + kinderfreundlich */
-      --bg1:#070a18;
-      --bg2:#241055;
-      --bg3:#43114a;
-
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
-      --stroke: rgba(255,255,255,.10);
-      --stroke2: rgba(255,255,255,.14);
-
+      --bg1:#070a18; --bg2:#241055; --bg3:#43114a;
+      --card: rgba(255,255,255,.07);
+      --stroke: rgba(255,255,255,.12);
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-
-      --pink:#ff3fa9;
-      --violet:#7b4dff;
-      --cyan:#2ee3ff;
-      --lime:#7CFF5C;
-      --gold:#ffd24d;
-
-      --ok:#28d17c;
-      --bad:#ff4b6e;
-      --warn:#ffb84d;
-
-      --shadow: 0 20px 60px rgba(0,0,0,.35);
-      --radius: 18px;
-      --radius2: 24px;
-
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      --muted: rgba(255,255,255,.72);
+      --pink:#ff3fa9; --violet:#7b4dff; --cyan:#2ee3ff; --lime:#7CFF5C; --gold:#ffd24d;
+      --ok:#28d17c; --bad:#ff4b6e; --warn:#ffb84d;
+      --shadow: 0 22px 70px rgba(0,0,0,.38);
+      --r:18px; --r2:26px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
-      font-family: var(--font);
-      color: var(--text);
+      margin:0; font-family:var(--font); color:var(--text);
       background:
         radial-gradient(1200px 600px at 10% 20%, rgba(123,77,255,.35), transparent 55%),
         radial-gradient(900px 700px at 80% 30%, rgba(255,63,169,.25), transparent 55%),
@@ -49,420 +28,225 @@
         linear-gradient(180deg, var(--bg1), var(--bg2) 55%, var(--bg3));
       overflow-x:hidden;
     }
-
-    /* leichte Sternchen */
     body:before{
-      content:"";
-      position:fixed; inset:0;
-      background-image:
-        radial-gradient(rgba(255,255,255,.13) 1px, transparent 1px);
-      background-size: 38px 38px;
-      opacity:.18;
-      pointer-events:none;
-      transform: translateZ(0);
+      content:""; position:fixed; inset:0; pointer-events:none;
+      background-image: radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px);
+      background-size: 38px 38px; opacity:.18;
     }
 
     .topbar{
       position:sticky; top:0; z-index:50;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
       padding:14px 18px;
-      background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.05));
+      background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.06));
+      border-bottom:1px solid rgba(255,255,255,.08);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
     }
-    .brand{
-      display:flex; flex-direction:column; gap:2px;
-      min-width: 240px;
-    }
-    .brand .title{
-      font-weight: 900;
-      letter-spacing:.4px;
-      font-size: 15px;
-      color: var(--pink);
-    }
-    .brand .sub{
-      font-size: 12px;
-      color: var(--muted);
-      white-space:nowrap;
-    }
-
-    .actions{
-      display:flex; gap:10px; align-items:center;
-    }
-
+    .brand{display:flex; flex-direction:column; gap:2px}
+    .brand .t{font-weight:1000; font-size:15px; color:var(--pink); letter-spacing:.3px}
+    .brand .s{font-size:12px; color:var(--muted)}
     .btn{
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius: 999px;
-      font-weight: 800;
-      cursor:pointer;
-      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      color:var(--text);
+      padding:10px 12px; border-radius:999px;
+      font-weight:1000; cursor:pointer;
+      transition:.15s transform,.2s background,.2s border-color;
       user-select:none;
     }
-    .btn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.10);
-      border-color: rgba(255,255,255,.20);
-    }
+    .btn:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.20)}
     .btn.primary{
       background: linear-gradient(90deg, rgba(255,63,169,.95), rgba(123,77,255,.95));
-      border-color: rgba(255,255,255,.18);
-      box-shadow: 0 12px 30px rgba(255,63,169,.18);
+      box-shadow: 0 12px 28px rgba(255,63,169,.18);
     }
-    .btn.ghost{
-      background: rgba(255,255,255,.05);
-    }
-    .btn.danger{
-      background: rgba(255,75,110,.10);
-      border-color: rgba(255,75,110,.25);
-    }
+    .btn.danger{ background: rgba(255,75,110,.10); border-color: rgba(255,75,110,.25); }
 
-    .wrap{
-      max-width: 1180px;
-      margin: 18px auto 40px;
-      padding: 0 16px;
-      display:grid;
-      grid-template-columns: 260px 1fr;
-      gap: 14px;
-      align-items:start;
-    }
-
-    @media (max-width: 980px){
-      .wrap{grid-template-columns: 1fr}
-    }
-
+    .wrap{ max-width: 1180px; margin: 18px auto 44px; padding: 0 16px; display:grid; grid-template-columns: 1fr; gap:14px; }
     .panel{
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--r2);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-
-    /* Minimalistische Leiste oben im Spiel */
     .miniBar{
-      display:flex;
-      gap:10px;
-      align-items:center;
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
       padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.15);
-      flex-wrap:wrap;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.14);
     }
-
     .pill{
       display:flex; gap:8px; align-items:center;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
+      padding: 7px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
-      font-weight: 900;
-      font-size: 12px;
-      color: var(--text);
+      font-weight:1000; font-size:12px;
       user-select:none;
     }
-    .pill b{
-      font-size: 12px;
-      opacity:.75;
-      letter-spacing:.2px;
-    }
-    .pill .v{
-      font-size: 12px;
-      color: rgba(255,255,255,.92);
-    }
-    .pill.badgePink{ border-color: rgba(255,63,169,.28); background: rgba(255,63,169,.10); }
-    .pill.badgeCyan{ border-color: rgba(46,227,255,.26); background: rgba(46,227,255,.09); }
-    .pill.badgeGold{ border-color: rgba(255,210,77,.26); background: rgba(255,210,77,.10); }
-    .pill.badgeLime{ border-color: rgba(124,255,92,.22); background: rgba(124,255,92,.08); }
+    .pill b{opacity:.75}
+    .pill.right{margin-left:auto}
+    .badgeGold{border-color: rgba(255,210,77,.26); background: rgba(255,210,77,.10)}
+    .badgePink{border-color: rgba(255,63,169,.26); background: rgba(255,63,169,.10)}
+    .badgeCyan{border-color: rgba(46,227,255,.24); background: rgba(46,227,255,.09)}
+    .badgeLime{border-color: rgba(124,255,92,.22); background: rgba(124,255,92,.08)}
 
-    .pill.right{
-      margin-left:auto;
-    }
-
-    .chapterPanel{
+    .guide{
+      display:flex; align-items:center; gap:12px;
       padding: 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(90deg, rgba(255,210,77,.14), rgba(46,227,255,.08), rgba(255,63,169,.08));
     }
-    .chapterTitle{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
-    }
-    .chapterTitle .h{
-      font-weight: 1000;
-      letter-spacing:.2px;
-      font-size: 13px;
-      color: rgba(255,255,255,.92);
-    }
-    .chapterTitle .tag{
-      font-size:12px;
-      color: var(--muted);
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      user-select:none;
-    }
-
-    .nodeList{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .nodeBtn{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 11px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      cursor:pointer;
-      transition: transform .15s ease, background .2s ease, border-color .2s ease;
-      user-select:none;
-    }
-    .nodeBtn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.08);
-      border-color: rgba(255,255,255,.18);
-    }
-    .nodeBtn[aria-disabled="true"]{
-      opacity:.50;
-      cursor:not-allowed;
-      transform:none !important;
-      filter: grayscale(.2);
-    }
-
-    .nodeLeft{
-      display:flex; flex-direction:column; gap:2px;
-      min-width: 0;
-    }
-    .nodeLeft .small{
-      font-size: 11px;
-      color: var(--muted);
-      font-weight: 800;
-    }
-    .nodeLeft .name{
-      font-size: 13px;
-      font-weight: 1000;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .nodeState{
-      font-size: 11px;
-      font-weight: 1000;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.9);
-      flex: 0 0 auto;
-    }
-    .nodeState.done{ border-color: rgba(40,209,124,.30); background: rgba(40,209,124,.12); }
-    .nodeState.ready{ border-color: rgba(255,210,77,.30); background: rgba(255,210,77,.10); }
-    .nodeState.lock{ border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.05); }
-
-    /* Main */
-    .main{
-      padding: 0;
-    }
-
-    .guideStrip{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding: 12px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: linear-gradient(90deg, rgba(255,63,169,.12), rgba(46,227,255,.08), rgba(124,255,92,.06));
-    }
-
     .avatar{
-      width:42px; height:42px;
-      border-radius: 14px;
+      width:44px; height:44px; border-radius:16px;
       border:1px solid rgba(255,255,255,.16);
-      background: radial-gradient(circle at 30% 30%, rgba(255,210,77,.35), rgba(123,77,255,.20));
+      background: radial-gradient(circle at 30% 30%, rgba(255,210,77,.38), rgba(123,77,255,.22));
       display:flex; align-items:center; justify-content:center;
-      font-weight: 1000;
-      color: rgba(255,255,255,.92);
-      flex: 0 0 auto;
+      font-weight:1000;
       box-shadow: 0 14px 30px rgba(0,0,0,.25);
     }
+    .gtext{display:flex; flex-direction:column; gap:4px; min-width:0}
+    .gtext .who{font-weight:1000; font-size:13px}
+    .gtext .msg{font-weight:1000; font-size:13px; color:rgba(255,255,255,.86); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 
-    .guideText{
-      display:flex; flex-direction:column; gap:4px;
-      min-width: 0;
-    }
-    .guideText .who{
-      font-weight: 1000;
-      font-size: 13px;
-      letter-spacing:.2px;
-    }
-    .guideText .msg{
-      font-weight: 900;
-      font-size: 13px;
-      color: rgba(255,255,255,.84);
-      line-height: 1.25;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .card{
+    .content{
       padding: 14px;
       display:grid;
       gap: 12px;
+      grid-template-columns: 1.2fr .8fr;
+      align-items:start;
     }
+    @media (max-width: 980px){ .content{grid-template-columns:1fr} }
 
-    .rowTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .rowTop .quest{
-      font-weight: 1000;
-      letter-spacing:.2px;
-      font-size: 14px;
-      color: rgba(255,255,255,.92);
-    }
-    .rowTop .chips{
-      display:flex; gap:8px; flex-wrap:wrap;
-    }
-    .chip{
-      font-size: 12px;
-      font-weight: 1000;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      user-select:none;
-    }
-
+    /* ===== Scene (heller + RPG Feel) ===== */
     .sceneBox{
-      border-radius: var(--radius);
+      border-radius: var(--r2);
       border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
+      background:
+        radial-gradient(900px 380px at 20% 20%, rgba(46,227,255,.22), transparent 55%),
+        radial-gradient(900px 420px at 85% 40%, rgba(255,210,77,.18), transparent 60%),
+        radial-gradient(900px 420px at 60% 80%, rgba(124,255,92,.10), transparent 60%),
+        rgba(255,255,255,.04);
       overflow:hidden;
       position:relative;
+      min-height: 320px;
     }
 
     .sceneHint{
-      position:absolute;
-      right: 10px;
-      top: 10px;
+      position:absolute; top:10px; right:10px;
       padding: 8px 10px;
-      font-weight: 1000;
-      font-size: 12px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.18);
+      backdrop-filter: blur(10px);
+      font-weight:1000; font-size:12px;
       color: rgba(255,255,255,.86);
-      backdrop-filter: blur(8px);
       user-select:none;
     }
 
-    .hotTip{
-      padding: 10px 12px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-      background: rgba(0,0,0,.12);
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      font-weight: 1000;
+    /* Mini tooltip */
+    .tooltip{
+      position:absolute;
+      padding:8px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.28);
+      backdrop-filter: blur(10px);
+      font-weight:1000;
       font-size: 12px;
-      user-select:none;
+      color: rgba(255,255,255,.92);
+      pointer-events:none;
+      opacity:0;
+      transform: translateY(6px);
+      transition:.15s opacity,.15s transform;
+      z-index:10;
+      max-width: 220px;
+    }
+    .tooltip.show{ opacity:1; transform: translateY(0); }
+
+    /* FIPS sprite (stilisiert) */
+    .fips{
+      position:absolute; left: 18px; bottom: 16px;
+      width: 120px; height: 140px;
+      display:flex; align-items:flex-end; justify-content:center;
+      pointer-events:none;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,.35));
     }
 
-    .readBlock{
-      border-radius: var(--radius);
+    /* Pergament Questlog */
+    .questlog{
+      border-radius: var(--r2);
       border:1px solid rgba(255,255,255,.12);
       background:
-        radial-gradient(500px 180px at 20% 30%, rgba(255,210,77,.14), transparent 55%),
-        radial-gradient(500px 220px at 80% 50%, rgba(46,227,255,.12), transparent 60%),
-        rgba(255,255,255,.05);
+        radial-gradient(700px 220px at 30% 30%, rgba(255,210,77,.20), transparent 60%),
+        radial-gradient(700px 240px at 70% 40%, rgba(255,63,169,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,244,214,.12), rgba(255,255,255,.05));
       padding: 14px;
-      display:grid;
-      gap: 10px;
       position:relative;
+      overflow:hidden;
     }
-    .readLabel{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:10px;
-      font-weight: 1000;
-      letter-spacing:.3px;
-      font-size: 12px;
-      color: rgba(255,255,255,.84);
-      text-transform: uppercase;
+    .questlog:before{
+      content:"";
+      position:absolute; inset:-20%;
+      background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,.20), transparent 60%);
+      transform: translateX(-40%) rotate(10deg);
+      animation: shine 3.2s ease-in-out infinite;
+      opacity:.55;
+      pointer-events:none;
     }
-    .readText{
-      font-weight: 1000;
-      font-size: 26px;            /* groß für Kinder */
-      line-height: 1.35;
-      color: rgba(255,255,255,.96);
-      padding-right: 10px;
-    }
-    @media (max-width: 780px){
-      .readText{ font-size: 22px; }
+    @keyframes shine{
+      0%{ transform: translateX(-60%) rotate(10deg); opacity:.0; }
+      20%{ opacity:.55; }
+      55%{ transform: translateX(20%) rotate(10deg); opacity:.35; }
+      100%{ transform: translateX(60%) rotate(10deg); opacity:0; }
     }
 
+    .qhdr{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+    .qhdr .title{font-weight:1000; font-size:14px}
+    .qhdr .tag{
+      font-size:12px; font-weight:1000;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.10);
+      color: rgba(255,255,255,.86);
+      user-select:none;
+    }
+
+    .readText{
+      margin-top: 10px;
+      font-weight:1000;
+      font-size: 26px;
+      line-height: 1.35;
+      color: rgba(255,255,255,.96);
+    }
     .readText .hl{
-      padding: 0 .16em;
+      padding: 0 .18em;
       border-radius: .35em;
-      background: rgba(255,210,77,.18);
-      border: 1px solid rgba(255,210,77,.18);
+      background: rgba(255,210,77,.20);
+      border: 1px solid rgba(255,210,77,.20);
       box-shadow: 0 10px 24px rgba(255,210,77,.08);
     }
 
-    .qBlock{
-      border-radius: var(--radius);
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      padding: 14px;
-      display:grid;
-      gap: 10px;
-    }
-    .qTitle{
-      font-weight: 1000;
-      font-size: 20px;           /* größer */
+    .question{
+      margin-top: 12px;
+      font-weight:1000;
+      font-size: 20px;
       color: rgba(255,255,255,.96);
-      letter-spacing:.2px;
     }
 
-    .answers{
-      display:grid;
-      gap:10px;
-    }
+    .answers{ display:grid; gap:10px; margin-top: 10px; }
 
     .ans{
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.14);
       padding: 14px 14px;
-      font-size: 18px;           /* größer */
-      font-weight: 1000;
+      font-size: 18px;
+      font-weight:1000;
       background:
-        radial-gradient(600px 120px at 20% 20%, rgba(255,63,169,.10), transparent 55%),
-        radial-gradient(600px 140px at 80% 40%, rgba(46,227,255,.10), transparent 60%),
+        radial-gradient(700px 140px at 20% 20%, rgba(46,227,255,.12), transparent 55%),
+        radial-gradient(700px 160px at 80% 40%, rgba(255,63,169,.10), transparent 60%),
         rgba(255,255,255,.06);
       cursor:pointer;
-      transition: transform .15s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+      transition:.15s transform,.2s background,.2s border-color,.2s box-shadow;
       position:relative;
       overflow:hidden;
       user-select:none;
@@ -470,33 +254,26 @@
     .ans:before{
       content:"";
       position:absolute; inset:-40%;
-      background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,.16), transparent 60%);
+      background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,.18), transparent 60%);
       transform: translateX(-40%) rotate(12deg);
       animation: shine 2.6s ease-in-out infinite;
-      opacity:.55;
+      opacity:.45;
       pointer-events:none;
-    }
-    @keyframes shine{
-      0%{ transform: translateX(-60%) rotate(12deg); opacity:.0; }
-      25%{ opacity:.55; }
-      50%{ transform: translateX(20%) rotate(12deg); opacity:.35; }
-      100%{ transform: translateX(60%) rotate(12deg); opacity:0; }
     }
     .ans:hover{
       transform: translateY(-1px);
       border-color: rgba(255,255,255,.20);
       box-shadow: 0 16px 34px rgba(0,0,0,.22);
       background:
-        radial-gradient(600px 120px at 20% 20%, rgba(124,255,92,.12), transparent 55%),
-        radial-gradient(600px 140px at 80% 40%, rgba(255,210,77,.12), transparent 60%),
+        radial-gradient(700px 140px at 20% 20%, rgba(124,255,92,.14), transparent 55%),
+        radial-gradient(700px 160px at 80% 40%, rgba(255,210,77,.12), transparent 60%),
         rgba(255,255,255,.07);
     }
-
     .ans.correct{
       border-color: rgba(40,209,124,.38);
       background:
         radial-gradient(700px 140px at 20% 20%, rgba(40,209,124,.22), transparent 55%),
-        radial-gradient(700px 160px at 80% 40%, rgba(255,210,77,.16), transparent 60%),
+        radial-gradient(700px 160px at 80% 40%, rgba(255,210,77,.14), transparent 60%),
         rgba(40,209,124,.08);
     }
     .ans.wrong{
@@ -507,346 +284,301 @@
         rgba(255,75,110,.07);
     }
 
-    .controls{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-top: 2px;
-    }
-
+    .controls{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top: 10px; }
     .mini{
       padding: 10px 12px;
       border-radius: 999px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.05);
-      font-weight: 1000;
+      font-weight:1000;
       cursor:pointer;
-      transition: transform .15s ease, background .2s ease;
+      transition:.15s transform,.2s background;
       user-select:none;
     }
     .mini:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
-    .mini[aria-disabled="true"]{ opacity:.55; cursor:not-allowed; transform:none; }
 
     .statusLine{
+      margin-top: 10px;
       border-radius: 16px;
       border:1px dashed rgba(255,255,255,.16);
       padding: 12px 12px;
-      color: rgba(255,255,255,.86);
       background: rgba(0,0,0,.12);
-      font-weight: 900;
+      font-weight: 1000;
       font-size: 13px;
       line-height: 1.3;
+      color: rgba(255,255,255,.86);
     }
-    .statusLine.good{
-      border-color: rgba(40,209,124,.35);
-      background: rgba(40,209,124,.08);
-      color: rgba(255,255,255,.92);
-    }
-    .statusLine.bad{
-      border-color: rgba(255,75,110,.40);
-      background: rgba(255,75,110,.08);
-    }
-    .statusLine.neutral{
-      border-color: rgba(255,210,77,.30);
-      background: rgba(255,210,77,.06);
-    }
+    .statusLine.good{ border-color: rgba(40,209,124,.35); background: rgba(40,209,124,.08); }
+    .statusLine.bad{ border-color: rgba(255,75,110,.40); background: rgba(255,75,110,.08); }
+    .statusLine.neutral{ border-color: rgba(255,210,77,.30); background: rgba(255,210,77,.06); }
 
-    /* Big star reward overlay */
+    /* Reward Overlay */
     .reward{
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:200;
-      pointer-events:none;
-      background: radial-gradient(800px 600px at 50% 45%, rgba(255,210,77,.18), rgba(0,0,0,.70));
+      position:fixed; inset:0;
+      display:none; align-items:center; justify-content:center;
+      z-index:200; pointer-events:none;
+      background: radial-gradient(820px 620px at 50% 45%, rgba(255,210,77,.20), rgba(0,0,0,.72));
     }
     .reward.show{ display:flex; }
     .starWrap{
-      width:min(520px, 82vw);
-      aspect-ratio: 1 / 1;
+      width:min(540px, 84vw);
+      aspect-ratio:1/1;
       position:relative;
       filter: drop-shadow(0 30px 60px rgba(0,0,0,.45));
       animation: pop .55s cubic-bezier(.18,1.2,.3,1) forwards;
     }
     @keyframes pop{
       0%{ transform: scale(.40) rotate(-18deg); opacity:0; }
-      70%{ transform: scale(1.05) rotate(6deg); opacity:1; }
+      70%{ transform: scale(1.06) rotate(6deg); opacity:1; }
       100%{ transform: scale(1) rotate(0deg); opacity:1; }
     }
     .spark{
       position:absolute; inset:-15%;
-      border-radius: 999px;
+      border-radius:999px;
       background: conic-gradient(from 0deg,
         rgba(255,210,77,.0),
-        rgba(255,210,77,.35),
-        rgba(46,227,255,.25),
-        rgba(255,63,169,.25),
-        rgba(124,255,92,.20),
+        rgba(255,210,77,.38),
+        rgba(46,227,255,.28),
+        rgba(255,63,169,.26),
+        rgba(124,255,92,.22),
         rgba(255,210,77,.0)
       );
       animation: spin 1.2s linear infinite;
       filter: blur(1px);
-      opacity:.9;
+      opacity:.95;
     }
-    @keyframes spin{
-      0%{ transform: rotate(0deg); }
-      100%{ transform: rotate(360deg); }
-    }
-    .starSvg{
-      position:absolute; inset:0;
-      display:block;
-    }
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
     .rewardText{
       position:absolute;
-      bottom: -10px;
-      left: 50%;
+      bottom:-10px; left:50%;
       transform: translateX(-50%);
       background: rgba(0,0,0,.35);
       border:1px solid rgba(255,255,255,.14);
       padding: 10px 14px;
-      border-radius: 999px;
-      font-weight: 1000;
-      text-align:center;
-      color: rgba(255,255,255,.92);
+      border-radius:999px;
+      font-weight:1000;
       backdrop-filter: blur(10px);
-      box-shadow: 0 20px 40px rgba(0,0,0,.25);
       white-space:nowrap;
     }
 
-    /* Diagnose */
-    .diag{
-      padding: 14px;
-      display:none;
-      gap: 12px;
+    /* Tiny floating particles (CSS only) */
+    .particle{
+      position:absolute;
+      width: 6px; height: 6px;
+      border-radius: 999px;
+      background: rgba(255,210,77,.75);
+      filter: blur(.2px);
+      opacity:.0;
+      animation: drift 4.4s linear infinite;
+      pointer-events:none;
     }
-    .diag.show{ display:grid; }
-    .diag h2{
-      margin: 0;
-      font-size: 16px;
-      letter-spacing:.2px;
-      font-weight: 1000;
+    @keyframes drift{
+      0%{ transform: translate(0,0) scale(.6); opacity:0; }
+      10%{ opacity:.7; }
+      60%{ opacity:.55; }
+      100%{ transform: translate(40px,-120px) scale(1.2); opacity:0; }
     }
-    .grid2{
-      display:grid;
-      gap: 12px;
-      grid-template-columns: 1fr 1fr;
-    }
-    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
-
-    .diagCard{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      padding: 12px;
-      display:grid;
-      gap: 10px;
-    }
-    .kpis{
-      display:grid;
-      gap: 10px;
-      grid-template-columns: repeat(3, 1fr);
-    }
-    @media (max-width: 650px){ .kpis{ grid-template-columns: 1fr; } }
-    .kpi{
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.12);
-      padding: 10px;
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-    }
-    .kpi .k{
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 900;
-    }
-    .kpi .v{
-      font-size: 18px;
-      font-weight: 1000;
-      color: rgba(255,255,255,.92);
-    }
-
-    .list{
-      display:grid;
-      gap:8px;
-    }
-    .li{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.10);
-      font-weight: 900;
-      font-size: 13px;
-    }
-    .li small{ color: var(--muted); font-weight: 900; }
-    .muted{ color: var(--muted); }
-
-    /* hidden */
-    .hide{ display:none !important; }
   </style>
 </head>
 
 <body>
   <div class="topbar">
     <div class="brand">
-      <div class="title">OSION Solution XR</div>
-      <div class="sub">Leselabyrinth • Funkelwald (MVP) • Adventure + Adaptiv + Diagnose</div>
+      <div class="t">OSION Solution XR</div>
+      <div class="s">Leselabyrinth • 1-Datei MVP • Funkelwald Quest-Screen</div>
     </div>
-
-    <div class="actions">
-      <button class="btn primary" id="btnAdventure" type="button">Adventure</button>
-      <button class="btn" id="btnDiagnose" type="button">Diagnose</button>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="btn primary" id="btnPlay" type="button">Play</button>
       <button class="btn danger" id="btnReset" type="button">Reset</button>
     </div>
   </div>
 
   <div class="wrap">
-    <!-- Left: Kapitel-Pfad -->
-    <aside class="panel">
-      <div class="chapterPanel">
-        <div class="chapterTitle">
-          <div class="h" id="chapterName">Kapitel: Funkelwald</div>
-          <div class="tag" id="pathTag">Pfad</div>
-        </div>
-
-        <div class="nodeList" id="nodeList"></div>
-
-        <div style="margin-top:10px" class="muted">
-          <div style="font-size:12px; font-weight:900; line-height:1.35;">
-            Daten bleiben im Browser (LocalStorage). Kein Server. Ideal für GitHub Pages.
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main -->
-    <main class="panel main">
-      <!-- Minimalistische Info-Leiste -->
+    <div class="panel">
       <div class="miniBar">
-        <div class="pill badgeGold"><b>Sterne</b> <span class="v" id="kpiStars">0</span></div>
-        <div class="pill badgePink"><b>Serie</b> <span class="v" id="kpiStreak">0</span></div>
-        <div class="pill badgeCyan"><b>Stufe</b> <span class="v" id="kpiLevel">1</span></div>
-        <div class="pill badgeLime"><b>Fokus</b> <span class="v" id="kpiFocus">W-Frage</span></div>
-
-        <div class="pill right"><b>Knoten</b> <span class="v" id="kpiProgress">0 / 5</span></div>
+        <div class="pill badgeGold"><b>Sterne</b> <span id="kStars">0</span></div>
+        <div class="pill badgePink"><b>Serie</b> <span id="kStreak">0</span></div>
+        <div class="pill badgeCyan"><b>Stufe</b> <span id="kLevel">1</span></div>
+        <div class="pill badgeLime"><b>Fokus</b> <span id="kFocus">Ursache/Wirkung</span></div>
+        <div class="pill right"><b>Quest</b> <span id="kQuest">Boss-Tor</span></div>
       </div>
 
-      <!-- Guide -->
-      <div class="guideStrip">
-        <div class="avatar" id="avatar">F</div>
-        <div class="guideText">
-          <div class="who" id="guideName">Fips der Funkenkobold</div>
-          <div class="msg" id="guideMsg">Lies den Text. Dann beantworte die Frage. Sammle Sterne.</div>
+      <div class="guide">
+        <div class="avatar">F</div>
+        <div class="gtext">
+          <div class="who" id="gName">Fips der Funkenkobold</div>
+          <div class="msg" id="gMsg">Tippe in die Szene. Sammle Geheimfunken. Dann Quest lösen.</div>
         </div>
       </div>
 
-      <!-- Adventure view -->
-      <section class="card" id="viewAdventure">
-        <div class="rowTop">
-          <div class="quest" id="questTitle">Quest: Waldweg</div>
-          <div class="chips">
-            <div class="chip" id="chipNode">Knoten: N1</div>
-            <div class="chip" id="chipStatus">Status: offen</div>
-            <div class="chip" id="chipMode">Modus: Quest</div>
-          </div>
-        </div>
-
-        <div class="sceneBox">
+      <div class="content">
+        <!-- SCENE -->
+        <div class="sceneBox" id="scene">
           <div class="sceneHint" id="sceneHint">Tippe ins Bild: Dinge entdecken</div>
-          <div id="sceneHost"></div>
-          <div class="hotTip" id="hotTip"></div>
-        </div>
+          <div class="tooltip" id="tip"></div>
 
-        <div class="readBlock">
-          <div class="readLabel">
-            <span>Lesetext</span>
-            <span class="muted" id="readSideNote">Erst lesen, dann antworten.</span>
+          <!-- stylisierte Szene als SVG (hell, klar) -->
+          <svg viewBox="0 0 900 420" width="100%" height="320" style="display:block;">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(46,227,255,.30)"/>
+                <stop offset="100%" stop-color="rgba(123,77,255,.18)"/>
+              </linearGradient>
+              <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(124,255,92,.22)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,.08)"/>
+              </linearGradient>
+              <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="7" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <rect x="0" y="0" width="900" height="420" fill="url(#sky)"/>
+
+            <!-- funkeln -->
+            <g opacity=".9">
+              <circle cx="120" cy="90" r="4" fill="rgba(255,210,77,.9)" filter="url(#glow)"/>
+              <circle cx="190" cy="130" r="3" fill="rgba(255,210,77,.75)" filter="url(#glow)"/>
+              <circle cx="760" cy="110" r="4" fill="rgba(255,210,77,.85)" filter="url(#glow)"/>
+              <circle cx="680" cy="160" r="3" fill="rgba(255,210,77,.75)" filter="url(#glow)"/>
+              <circle cx="420" cy="95" r="3" fill="rgba(255,210,77,.75)" filter="url(#glow)"/>
+            </g>
+
+            <path d="M0,285 C140,250 300,305 420,284 C560,260 700,320 900,292 L900,420 L0,420 Z" fill="url(#ground)"/>
+
+            <!-- Bäume -->
+            <g opacity=".95">
+              <g transform="translate(130,110)">
+                <rect x="46" y="140" width="34" height="110" rx="10" fill="rgba(120,80,40,.55)"/>
+                <circle cx="64" cy="130" r="80" fill="rgba(40,255,198,.18)" filter="url(#glow)"/>
+                <circle cx="34" cy="130" r="55" fill="rgba(124,255,92,.16)"/>
+                <circle cx="98" cy="126" r="58" fill="rgba(46,227,255,.12)"/>
+              </g>
+              <g transform="translate(690,110)">
+                <rect x="46" y="140" width="34" height="110" rx="10" fill="rgba(120,80,40,.52)"/>
+                <circle cx="64" cy="130" r="84" fill="rgba(255,63,169,.12)" filter="url(#glow)"/>
+                <circle cx="34" cy="130" r="55" fill="rgba(124,255,92,.14)"/>
+                <circle cx="102" cy="126" r="60" fill="rgba(255,210,77,.10)"/>
+              </g>
+            </g>
+
+            <!-- Funkelweg -->
+            <path d="M455,420 C450,350 520,340 580,320 C660,290 640,258 590,240 C540,220 470,215 410,205 C330,190 270,175 235,140"
+                  fill="none" stroke="rgba(255,255,255,.16)" stroke-width="20" stroke-linecap="round"/>
+            <path d="M455,420 C450,350 520,340 580,320 C660,290 640,258 590,240 C540,220 470,215 410,205 C330,190 270,175 235,140"
+                  fill="none" stroke="rgba(255,210,77,.22)" stroke-width="8" stroke-linecap="round" filter="url(#glow)"/>
+
+            <!-- Boss-Tor -->
+            <g transform="translate(470,180)">
+              <rect x="-110" y="-110" width="220" height="210" rx="24"
+                    fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+              <rect x="-85" y="-85" width="170" height="160" rx="20"
+                    fill="rgba(0,0,0,.18)" stroke="rgba(255,255,255,.12)"/>
+              <circle cx="70" cy="-5" r="10" fill="rgba(255,210,77,.65)" filter="url(#glow)"/>
+              <path d="M-60,60 Q0,20 60,60" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="8" stroke-linecap="round"/>
+            </g>
+
+            <!-- Hotspots (unsichtbar, aber klickbar) -->
+            <g style="cursor:pointer;">
+              <rect data-hot="gate" x="360" y="70" width="240" height="260" rx="20"
+                    fill="rgba(255,255,255,0)" stroke="rgba(255,255,255,0)"/>
+              <rect data-hot="lock" x="520" y="150" width="120" height="150" rx="18"
+                    fill="rgba(255,255,255,0)" stroke="rgba(255,255,255,0)"/>
+              <rect data-hot="apple" x="720" y="140" width="120" height="140" rx="18"
+                    fill="rgba(255,255,255,0)" stroke="rgba(255,255,255,0)"/>
+              <rect data-hot="star" x="240" y="150" width="140" height="140" rx="18"
+                    fill="rgba(255,255,255,0)" stroke="rgba(255,255,255,0)"/>
+            </g>
+
+            <rect x="12" y="12" width="876" height="396" rx="20" fill="none" stroke="rgba(255,255,255,.10)"/>
+          </svg>
+
+          <!-- FIPS (stilisiert als SVG-Figur, später ersetzbar durch PNG) -->
+          <div class="fips" aria-hidden="true">
+            <svg viewBox="0 0 120 140" width="120" height="140">
+              <defs>
+                <radialGradient id="fBody" cx="35%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="rgba(255,255,255,.95)"/>
+                  <stop offset="45%" stop-color="rgba(255,210,77,.88)"/>
+                  <stop offset="100%" stop-color="rgba(255,63,169,.24)"/>
+                </radialGradient>
+                <filter id="fGlow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="5" result="b"/>
+                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <!-- shadow -->
+              <ellipse cx="60" cy="132" rx="36" ry="8" fill="rgba(0,0,0,.25)"/>
+              <!-- body -->
+              <path filter="url(#fGlow)" fill="url(#fBody)"
+                d="M60 18
+                   C82 18 96 36 96 56
+                   C96 84 84 114 60 114
+                   C36 114 24 84 24 56
+                   C24 36 38 18 60 18 Z"/>
+              <!-- belly core -->
+              <circle cx="60" cy="78" r="10" fill="rgba(46,227,255,.25)" stroke="rgba(46,227,255,.30)"/>
+              <circle cx="60" cy="78" r="4" fill="rgba(46,227,255,.75)" filter="url(#fGlow)"/>
+              <!-- eyes -->
+              <circle cx="48" cy="54" r="9" fill="rgba(0,0,0,.28)"/>
+              <circle cx="48" cy="54" r="4" fill="rgba(255,255,255,.9)"/>
+              <circle cx="72" cy="54" r="9" fill="rgba(0,0,0,.28)"/>
+              <circle cx="72" cy="54" r="4" fill="rgba(255,255,255,.9)"/>
+              <!-- smile -->
+              <path d="M46,70 Q60,82 74,70" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="5" stroke-linecap="round"/>
+              <!-- spark hair -->
+              <path d="M42,20 Q60,2 78,20" fill="none" stroke="rgba(255,210,77,.70)" stroke-width="8" stroke-linecap="round" filter="url(#fGlow)"/>
+              <circle cx="60" cy="8" r="4" fill="rgba(255,210,77,.95)" filter="url(#fGlow)"/>
+              <!-- arms -->
+              <path d="M24,64 Q12,78 18,92" fill="none" stroke="rgba(255,210,77,.55)" stroke-width="10" stroke-linecap="round"/>
+              <path d="M96,64 Q108,78 102,92" fill="none" stroke="rgba(255,210,77,.55)" stroke-width="10" stroke-linecap="round"/>
+              <!-- legs -->
+              <path d="M46,114 Q42,126 50,132" fill="none" stroke="rgba(255,210,77,.55)" stroke-width="10" stroke-linecap="round"/>
+              <path d="M74,114 Q78,126 70,132" fill="none" stroke="rgba(255,210,77,.55)" stroke-width="10" stroke-linecap="round"/>
+            </svg>
           </div>
-          <div class="readText" id="readText">…</div>
         </div>
 
-        <div class="qBlock">
-          <div class="qTitle" id="qTitle">Frage</div>
+        <!-- QUESTLOG -->
+        <div class="questlog">
+          <div class="qhdr">
+            <div class="title" id="qName">Questlog: Boss-Tor</div>
+            <div class="tag" id="qFocus">Fokus: Ursache/Wirkung</div>
+          </div>
+
+          <div class="readText" id="readText"></div>
+          <div class="question" id="question"></div>
+
           <div class="answers" id="answers"></div>
 
           <div class="controls">
-            <button class="mini" id="btnReadAgain" type="button">Nochmal lesen</button>
+            <button class="mini" id="btnRead" type="button">Nochmal lesen</button>
             <button class="mini" id="btnHelp" type="button">Hilfe</button>
-            <span class="badge" id="triesBadge">Versuche: 0</span>
-            <span class="badge" id="secretBadge">Geheimfunke: 0 / 1</span>
+            <span class="pill" style="font-size:12px;"><b>Versuche</b> <span id="tries">0</span></span>
+            <span class="pill" style="font-size:12px;"><b>Geheimfunke</b> <span id="secret">0/1</span></span>
           </div>
 
-          <div class="statusLine neutral" id="statusLine">Text im Fokus.</div>
+          <div class="statusLine neutral" id="status">Tippe in die Szene oder lies den Text. Dann antworte.</div>
         </div>
-      </section>
-
-      <!-- Diagnose view -->
-      <section class="diag" id="viewDiagnose">
-        <h2>Diagnose</h2>
-
-        <div class="diagCard">
-          <div class="kpis">
-            <div class="kpi"><div class="k">Abgeschlossen</div><div class="v" id="dDone">0</div></div>
-            <div class="kpi"><div class="k">Trefferquote</div><div class="v" id="dAcc">0%</div></div>
-            <div class="kpi"><div class="k">Ø Zeit / Aufgabe</div><div class="v" id="dTime">0s</div></div>
-          </div>
-          <div class="muted" id="dSummary">Noch keine Daten. Spiele ein paar Karten.</div>
-        </div>
-
-        <div class="grid2">
-          <div class="diagCard">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="font-weight:1000;">Stärken</div>
-              <small class="muted">Top</small>
-            </div>
-            <div class="list" id="dStrengths"></div>
-          </div>
-
-          <div class="diagCard">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-              <div style="font-weight:1000;">Fokus</div>
-              <small class="muted">Nächster Schritt</small>
-            </div>
-            <div class="list" id="dFocus"></div>
-          </div>
-        </div>
-
-        <div class="diagCard">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-            <div style="font-weight:1000;">Fehlmuster</div>
-            <small class="muted">Top 5</small>
-          </div>
-          <div class="list" id="dPatterns"></div>
-        </div>
-      </section>
-    </main>
+      </div>
+    </div>
   </div>
 
   <!-- Reward overlay -->
   <div class="reward" id="reward">
     <div class="starWrap">
       <div class="spark"></div>
-      <svg class="starSvg" viewBox="0 0 200 200" aria-hidden="true">
+      <svg viewBox="0 0 200 200" style="position:absolute;inset:0;">
         <defs>
           <radialGradient id="gStar" cx="35%" cy="30%" r="70%">
             <stop offset="0%" stop-color="rgba(255,255,255,.95)"/>
-            <stop offset="45%" stop-color="rgba(255,210,77,.90)"/>
+            <stop offset="45%" stop-color="rgba(255,210,77,.92)"/>
             <stop offset="100%" stop-color="rgba(255,63,169,.28)"/>
           </radialGradient>
           <filter id="glowBig" x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="6" result="b"/>
-            <feMerge>
-              <feMergeNode in="b"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
         </defs>
         <path filter="url(#glowBig)" fill="url(#gStar)"
@@ -857,1066 +589,269 @@
   </div>
 
 <script>
-/* =========================================================
-   OSION Solution XR – Leselabyrinth MVP (Single File)
-   Stabil: keine JSON-Dateien, keine externen Assets
-   ========================================================= */
+(()=>{"use strict";
 
-(function(){
-  "use strict";
+  /* ====== State (LocalStorage) ====== */
+  const LS="osion_xr_onefile_mvp_v1";
+  const base={ stars:0, streak:0, level:1, secretTotal:0 };
+  const state=load();
 
-  /* ---------------------------
-     Helpers
-  --------------------------- */
-  const $ = (id)=>document.getElementById(id);
-  const now = ()=>Date.now();
-  const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
-  const rand = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+  function load(){
+    try{
+      const s=JSON.parse(localStorage.getItem(LS)||"null");
+      if(!s) return {...base};
+      return {
+        stars: Number(s.stars||0),
+        streak: Number(s.streak||0),
+        level: Math.max(1, Math.min(3, Number(s.level||1))),
+        secretTotal: Number(s.secretTotal||0)
+      };
+    }catch{ return {...base}; }
+  }
+  function save(){ localStorage.setItem(LS, JSON.stringify(state)); }
+  function reset(){ localStorage.removeItem(LS); location.reload(); }
+
+  /* ====== Content (im Code) ====== */
+  const CARD={
+    quest:"Boss-Tor",
+    focus:"Ursache/Wirkung",
+    text:"Vor Fips ist ein großes Tor. Das Tor ist zu. Fips braucht einen Schlüssel.",
+    question:"Warum geht das Tor nicht auf?",
+    options:[
+      {id:"a", text:"Weil das Tor zu ist.", correct:true, hintKey:"zu"},
+      {id:"b", text:"Weil Fips fliegt.", correct:false},
+      {id:"c", text:"Weil es regnet.", correct:false}
+    ],
+    help:"Ursache/Wirkung: Suche die Aussage im Text, die erklärt, was los ist."
+  };
+
+  /* ====== UI ====== */
+  const $=(id)=>document.getElementById(id);
+  const ui={
+    kStars:$("kStars"), kStreak:$("kStreak"), kLevel:$("kLevel"), kFocus:$("kFocus"), kQuest:$("kQuest"),
+    gMsg:$("gMsg"),
+    readText:$("readText"), question:$("question"), answers:$("answers"),
+    tries:$("tries"), secret:$("secret"),
+    status:$("status"),
+    btnRead:$("btnRead"), btnHelp:$("btnHelp"),
+    btnReset:$("btnReset"), btnPlay:$("btnPlay"),
+    scene:$("scene"), tip:$("tip"),
+    reward:$("reward"), rewardText:$("rewardText")
+  };
+
+  let tries=0;
+  let answered=false;
+  let secretFound=false;
+  let lastHint="";
+
+  function renderKpis(){
+    ui.kStars.textContent=String(state.stars);
+    ui.kStreak.textContent=String(state.streak);
+    ui.kLevel.textContent=String(state.level);
+    ui.kFocus.textContent=CARD.focus;
+    ui.kQuest.textContent=CARD.quest;
+  }
 
   function shuffle(arr){
-    const a = arr.slice();
+    const a=arr.slice();
     for(let i=a.length-1;i>0;i--){
-      const j = Math.floor(Math.random()*(i+1));
+      const j=Math.floor(Math.random()*(i+1));
       [a[i],a[j]]=[a[j],a[i]];
     }
     return a;
   }
 
-  function safeJsonParse(s, fallback){
-    try{ return JSON.parse(s); }catch(e){ return fallback; }
+  function escapeHtml(s){
+    return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
-
-  /* ---------------------------
-     Local Storage
-  --------------------------- */
-  const LS_KEY = "osion_xr_leselabyrinth_v1";
-
-  function loadState(){
-    const raw = localStorage.getItem(LS_KEY);
-    const base = {
-      monsterName: "Fips der Funkenkobold",
-      chapterId: "funkelwald",
-      level: 1,              // 1..3
-      stars: 0,
-      streak: 0,
-      secret: 0,
-      unlocked: ["N1"],
-      done: [],
-      currentNode: "N1",
-      tries: 0,
-      lastStartTs: 0,
-      logs: []               // {ts,node,focus,correct,ms,wrongOptionId}
-    };
-    if(!raw) return base;
-    const s = safeJsonParse(raw, base);
-    // Hardening
-    s.level = clamp(Number(s.level||1),1,3);
-    s.stars = Number(s.stars||0);
-    s.streak = Number(s.streak||0);
-    s.secret = Number(s.secret||0);
-    s.unlocked = Array.isArray(s.unlocked)? s.unlocked : ["N1"];
-    s.done = Array.isArray(s.done)? s.done : [];
-    s.logs = Array.isArray(s.logs)? s.logs : [];
-    s.currentNode = s.currentNode || "N1";
-    s.tries = Number(s.tries||0);
-    s.lastStartTs = Number(s.lastStartTs||0);
-    return s;
-  }
-
-  function saveState(){
-    localStorage.setItem(LS_KEY, JSON.stringify(state));
-  }
-
-  function resetState(){
-    localStorage.removeItem(LS_KEY);
-    location.reload();
-  }
-
-  /* ---------------------------
-     Content (im Code, kein JSON extern)
-     Kapitel: Funkelwald (5 Knoten)
-  --------------------------- */
-  const FOCUS = {
-    W: "W-Frage",
-    DETAIL: "Detail",
-    WORD: "Wortverwechslung",
-    ORDER: "Reihenfolge",
-    CAUSE: "Ursache/Wirkung"
-  };
-
-  // Pro Node: 3 Stufenvarianten (level 1..3)
-  // Wichtig: Frage muss IM Text beantwortbar sein (dein Kritikpunkt Apfel/Grün).
-  const CHAPTER = {
-    id: "funkelwald",
-    name: "Funkelwald",
-    nodes: [
-      {
-        id:"N1",
-        name:"Waldweg",
-        scene:"Waldweg",
-        focusKey:"W",
-        hotspots: [
-          {id:"bird", label:"Vogel"},
-          {id:"tree", label:"Baum"}
-        ],
-        cardsByLevel: {
-          1: {
-            text: "Fips geht in den Wald. Ein Vogel singt.",
-            question: "Wohin geht Fips?",
-            options: [
-              {id:"a", text:"In den Wald.", correct:true, hintKey:"Wald"},
-              {id:"b", text:"In die Stadt.", correct:false},
-              {id:"c", text:"Ins Meer.", correct:false}
-            ],
-            help: "Suche im Text das Wort, das zur Frage passt."
-          },
-          2: {
-            text: "Fips läuft den Waldweg entlang. Ein Vogel singt laut.",
-            question: "Wer singt?",
-            options: [
-              {id:"a", text:"Der Vogel.", correct:true, hintKey:"Vogel"},
-              {id:"b", text:"Der Frosch.", correct:false},
-              {id:"c", text:"Der Hund.", correct:false}
-            ],
-            help: "Achte auf das Nomen im Satz."
-          },
-          3: {
-            text: "Fips läuft den Waldweg entlang. Ein Vogel singt laut. Fips bleibt kurz stehen.",
-            question: "Was macht Fips am Ende?",
-            options: [
-              {id:"a", text:"Er bleibt stehen.", correct:true, hintKey:"stehen"},
-              {id:"b", text:"Er schwimmt.", correct:false},
-              {id:"c", text:"Er fliegt.", correct:false}
-            ],
-            help: "Lies den letzten Satz nochmal."
-          }
-        }
-      },
-      {
-        id:"N2",
-        name:"Holzbrücke",
-        scene:"Holzbrücke",
-        focusKey:"DETAIL",
-        hotspots: [
-          {id:"bridge", label:"Brücke"},
-          {id:"wood", label:"Holz"}
-        ],
-        cardsByLevel:{
-          1:{
-            text: "Vor Fips ist eine Brücke. Die Brücke ist aus Holz.",
-            question:"Woraus ist die Brücke?",
-            options:[
-              {id:"a", text:"Aus Holz.", correct:true, hintKey:"Holz"},
-              {id:"b", text:"Aus Eis.", correct:false},
-              {id:"c", text:"Aus Stein.", correct:false}
-            ],
-            help:"Im Text steht das Material."
-          },
-          2:{
-            text: "Vor Fips ist eine Brücke. Die Brücke ist aus Holz. Sie knarrt leise.",
-            question:"Wie klingt die Brücke?",
-            options:[
-              {id:"a", text:"Sie knarrt leise.", correct:true, hintKey:"knarrt"},
-              {id:"b", text:"Sie brüllt laut.", correct:false},
-              {id:"c", text:"Sie pfeift.", correct:false}
-            ],
-            help:"Suche das Wort, das einen Ton beschreibt."
-          },
-          3:{
-            text: "Vor Fips ist eine Brücke. Die Brücke ist aus Holz. Sie knarrt leise. Fips geht langsam.",
-            question:"Wie geht Fips?",
-            options:[
-              {id:"a", text:"Langsam.", correct:true, hintKey:"langsam"},
-              {id:"b", text:"Mit dem Fahrrad.", correct:false},
-              {id:"c", text:"Rückwärts.", correct:false}
-            ],
-            help:"Das letzte Wort gibt die Antwort."
-          }
-        }
-      },
-      {
-        id:"N3",
-        name:"Apfelbaum",
-        scene:"Apfelbaum",
-        focusKey:"WORD",
-        hotspots:[
-          {id:"apple", label:"Apfel"},
-          {id:"grass", label:"Wiese"}
-        ],
-        cardsByLevel:{
-          1:{
-            text:"Ein grüner Apfel fällt runter. Fips schaut hin.",
-            question:"Welche Farbe hat der Apfel?",
-            options:[
-              {id:"a", text:"Grün.", correct:true, hintKey:"grüner"},
-              {id:"b", text:"Blau.", correct:false},
-              {id:"c", text:"Schwarz.", correct:false}
-            ],
-            help:"Das Adjektiv vor Apfel verrät die Farbe."
-          },
-          2:{
-            text:"Ein grüner Apfel fällt runter. Fips schaut hin. Der Apfel rollt ins Gras.",
-            question:"Wohin rollt der Apfel?",
-            options:[
-              {id:"a", text:"Ins Gras.", correct:true, hintKey:"Gras"},
-              {id:"b", text:"In den Himmel.", correct:false},
-              {id:"c", text:"In die Tasche.", correct:false}
-            ],
-            help:"Suche das Zielwort nach rollt."
-          },
-          3:{
-            text:"Ein grüner Apfel fällt runter. Fips schaut hin. Der Apfel rollt ins Gras. Fips lacht leise.",
-            question:"Was macht Fips?",
-            options:[
-              {id:"a", text:"Er lacht leise.", correct:true, hintKey:"lacht"},
-              {id:"b", text:"Er schreit.", correct:false},
-              {id:"c", text:"Er schläft.", correct:false}
-            ],
-            help:"Die letzte Zeile enthält die Antwort."
-          }
-        }
-      },
-      {
-        id:"N4",
-        name:"Sternstein",
-        scene:"Sternstein",
-        focusKey:"DETAIL",
-        hotspots:[
-          {id:"stone", label:"Stein"},
-          {id:"star", label:"Stern"}
-        ],
-        cardsByLevel:{
-          1:{
-            text:"Fips findet einen Stein. Auf dem Stein ist ein Stern. Der Stern glitzert.",
-            question:"Was ist auf dem Stein?",
-            options:[
-              {id:"a", text:"Ein Stern.", correct:true, hintKey:"Stern"},
-              {id:"b", text:"Ein Haus.", correct:false},
-              {id:"c", text:"Ein Auto.", correct:false}
-            ],
-            help:"Wort für Wort lesen: auf dem Stein ist …"
-          },
-          2:{
-            text:"Fips findet einen Stein. Auf dem Stein ist ein Stern. Der Stern glitzert hell.",
-            question:"Wie glitzert der Stern?",
-            options:[
-              {id:"a", text:"Hell.", correct:true, hintKey:"hell"},
-              {id:"b", text:"Dunkel.", correct:false},
-              {id:"c", text:"Gar nicht.", correct:false}
-            ],
-            help:"Das letzte Wort beschreibt das Glitzern."
-          },
-          3:{
-            text:"Fips findet einen Stein. Auf dem Stein ist ein Stern. Der Stern glitzert hell. Fips hebt den Stein hoch.",
-            question:"Was macht Fips mit dem Stein?",
-            options:[
-              {id:"a", text:"Er hebt ihn hoch.", correct:true, hintKey:"hebt"},
-              {id:"b", text:"Er wirft ihn weg.", correct:false},
-              {id:"c", text:"Er isst ihn.", correct:false}
-            ],
-            help:"Das Verb zeigt die Handlung."
-          }
-        }
-      },
-      {
-        id:"N5",
-        name:"Boss-Tor",
-        scene:"Boss-Tor",
-        focusKey:"CAUSE",
-        hotspots:[
-          {id:"gate", label:"Tor"},
-          {id:"lock", label:"Schloss"},
-          {id:"apple", label:"Apfel"},
-          {id:"star", label:"Stern"}
-        ],
-        cardsByLevel:{
-          1:{
-            text:"Vor Fips ist ein großes Tor. Das Tor ist zu. Fips braucht einen Schlüssel.",
-            question:"Warum geht das Tor nicht auf?",
-            options:[
-              {id:"a", text:"Weil das Tor zu ist.", correct:true, hintKey:"zu"},
-              {id:"b", text:"Weil Fips fliegt.", correct:false},
-              {id:"c", text:"Weil es regnet.", correct:false}
-            ],
-            help:"Ursache steht als Aussage im Text."
-          },
-          2:{
-            text:"Vor Fips ist ein großes Tor. Das Tor ist zu. Fips braucht einen Schlüssel. Ohne Schlüssel bleibt es zu.",
-            question:"Was braucht Fips, damit es aufgeht?",
-            options:[
-              {id:"a", text:"Einen Schlüssel.", correct:true, hintKey:"Schlüssel"},
-              {id:"b", text:"Einen Ball.", correct:false},
-              {id:"c", text:"Eine Leiter.", correct:false}
-            ],
-            help:"Suche das Wort braucht."
-          },
-          3:{
-            text:"Vor Fips ist ein großes Tor. Das Tor ist zu. Fips braucht einen Schlüssel. Ohne Schlüssel bleibt es zu. Fips sucht weiter im Funkelwald.",
-            question:"Was macht Fips am Ende?",
-            options:[
-              {id:"a", text:"Er sucht weiter.", correct:true, hintKey:"sucht"},
-              {id:"b", text:"Er schläft.", correct:false},
-              {id:"c", text:"Er schwimmt.", correct:false}
-            ],
-            help:"Letzter Satz, letztes Verb."
-          }
-        }
-      }
-    ]
-  };
-
-  const NODE_BY_ID = Object.fromEntries(CHAPTER.nodes.map(n=>[n.id,n]));
-
-  /* ---------------------------
-     State
-  --------------------------- */
-  let state = loadState();
-
-  /* ---------------------------
-     UI refs
-  --------------------------- */
-  const ui = {
-    // top buttons
-    btnAdventure: $("btnAdventure"),
-    btnDiagnose: $("btnDiagnose"),
-    btnReset: $("btnReset"),
-
-    // left
-    chapterName: $("chapterName"),
-    nodeList: $("nodeList"),
-
-    // kpis
-    kpiStars: $("kpiStars"),
-    kpiStreak: $("kpiStreak"),
-    kpiLevel: $("kpiLevel"),
-    kpiFocus: $("kpiFocus"),
-    kpiProgress: $("kpiProgress"),
-
-    // guide
-    avatar: $("avatar"),
-    guideName: $("guideName"),
-    guideMsg: $("guideMsg"),
-
-    // adventure
-    viewAdventure: $("viewAdventure"),
-    questTitle: $("questTitle"),
-    chipNode: $("chipNode"),
-    chipStatus: $("chipStatus"),
-    chipMode: $("chipMode"),
-
-    sceneHost: $("sceneHost"),
-    hotTip: $("hotTip"),
-    sceneHint: $("sceneHint"),
-
-    readText: $("readText"),
-    qTitle: $("qTitle"),
-    answers: $("answers"),
-    btnReadAgain: $("btnReadAgain"),
-    btnHelp: $("btnHelp"),
-    triesBadge: $("triesBadge"),
-    secretBadge: $("secretBadge"),
-    statusLine: $("statusLine"),
-
-    // diagnose
-    viewDiagnose: $("viewDiagnose"),
-    dDone: $("dDone"),
-    dAcc: $("dAcc"),
-    dTime: $("dTime"),
-    dSummary: $("dSummary"),
-    dStrengths: $("dStrengths"),
-    dFocus: $("dFocus"),
-    dPatterns: $("dPatterns"),
-
-    // reward
-    reward: $("reward"),
-    rewardText: $("rewardText"),
-  };
-
-  /* ---------------------------
-     Runtime: current rendered card (derived)
-  --------------------------- */
-  let currentCard = null; // {nodeId, level, text, question, options[], help, focusKey, scene, hotspots}
-  let answered = false;
-  let lastHighlightKey = ""; // for help/highlight
-  let secretFoundThisCard = false;
-
-  /* ---------------------------
-     Scene rendering (STABIL)
-  --------------------------- */
-  function onHotspot(hotId, hotspots){
-    if(!hotId) return;
-
-    // Geheimfunke: 1 pro Karte möglich
-    if(!secretFoundThisCard){
-      // Wenn Hotspot zur Szene passt, geben wir einen Geheimfunken.
-      // (MVP-Regel: erster Tap zählt.)
-      secretFoundThisCard = true;
-      state.secret += 1;
-      saveState();
-      ui.secretBadge.textContent = `Geheimfunke: ${secretFoundThisCard ? 1 : 0} / 1`;
-      setGuideMsg("Geheimfunke gefunden. Sehr gut.");
-      ui.statusLine.className = "statusLine good";
-      ui.statusLine.textContent = "Geheimfunke eingesammelt. Jetzt den Text lesen und antworten.";
-    } else {
-      setGuideMsg("Du hast schon einen Geheimfunken auf dieser Karte.");
-    }
-
-    // Visual ping (kurz) durch Statusline
-    ui.statusLine.className = "statusLine neutral";
-    ui.statusLine.textContent = "Entdeckt. Lies jetzt den Text genau.";
-  }
-
-  function makeSceneSVG(sceneName, hotspots){
-    const rect = (id,x,y,w,h)=>`
-      <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14"
-        fill="rgba(255,255,255,0)" stroke="rgba(255,255,255,0)"
-        pointer-events="all" data-hot="${id}"></rect>
-    `;
-
-    const maps = [];
-    if(sceneName==="Waldweg"){
-      maps.push(rect("bird", 160, 90, 120, 90));
-      maps.push(rect("tree", 110, 70, 200, 240));
-    }
-    if(sceneName==="Holzbrücke"){
-      maps.push(rect("bridge", 290, 185, 320, 140));
-      maps.push(rect("wood", 290, 185, 320, 140));
-    }
-    if(sceneName==="Apfelbaum"){
-      maps.push(rect("apple", 650, 135, 120, 140));
-      maps.push(rect("grass", 520, 240, 360, 105));
-    }
-    if(sceneName==="Sternstein"){
-      maps.push(rect("stone", 340, 200, 260, 140));
-      maps.push(rect("star", 390, 175, 160, 130));
-    }
-    if(sceneName.startsWith("Boss")){
-      maps.push(rect("gate", 360, 80, 220, 240));
-      maps.push(rect("lock", 470, 170, 120, 130));
-      maps.push(rect("apple", 650, 135, 120, 140));
-      maps.push(rect("star", 390, 175, 160, 130));
-    }
-
-    const svg = `
-    <svg viewBox="0 0 900 360" width="100%" height="240" style="display:block;">
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="rgba(46,227,255,.20)"/>
-          <stop offset="100%" stop-color="rgba(123,77,255,.14)"/>
-        </linearGradient>
-        <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="rgba(124,255,92,.18)"/>
-          <stop offset="100%" stop-color="rgba(0,0,0,.08)"/>
-        </linearGradient>
-        <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="6" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      <rect x="0" y="0" width="900" height="360" fill="url(#sky)"/>
-
-      <!-- Funkel-Partikel -->
-      ${Array.from({length:24}).map((_,i)=>{
-        const x = rand(40,860), y = rand(30,220), r = rand(2,4);
-        const a = (Math.random()*0.35+0.18).toFixed(2);
-        return `<circle cx="${x}" cy="${y}" r="${r}" fill="rgba(255,210,77,${a})" filter="url(#softGlow)"/>`;
-      }).join("")}
-
-      <path d="M0,250 C120,220 240,270 360,250 C520,225 640,290 900,255 L900,360 L0,360 Z" fill="url(#ground)"/>
-
-      <!-- Bäume -->
-      <g opacity=".95">
-        <g transform="translate(120,80)">
-          <rect x="46" y="130" width="34" height="90" rx="10" fill="rgba(120,80,40,.55)"/>
-          <circle cx="64" cy="120" r="68" fill="rgba(40,255,198,.18)" filter="url(#softGlow)"/>
-          <circle cx="40" cy="115" r="44" fill="rgba(124,255,92,.16)"/>
-          <circle cx="86" cy="110" r="46" fill="rgba(46,227,255,.10)"/>
-        </g>
-        <g transform="translate(610,75)">
-          <rect x="46" y="130" width="34" height="90" rx="10" fill="rgba(120,80,40,.52)"/>
-          <circle cx="64" cy="120" r="70" fill="rgba(255,63,169,.12)" filter="url(#softGlow)"/>
-          <circle cx="40" cy="115" r="44" fill="rgba(124,255,92,.14)"/>
-          <circle cx="88" cy="112" r="48" fill="rgba(255,210,77,.10)"/>
-        </g>
-      </g>
-
-      <!-- Pfad -->
-      <path d="M430,360 C430,300 480,292 520,280 C600,255 590,230 540,210 C495,190 430,185 380,175 C310,160 250,150 220,120"
-            fill="none" stroke="rgba(255,255,255,.12)" stroke-width="18" stroke-linecap="round"/>
-      <path d="M430,360 C430,300 480,292 520,280 C600,255 590,230 540,210 C495,190 430,185 380,175 C310,160 250,150 220,120"
-            fill="none" stroke="rgba(255,210,77,.16)" stroke-width="6" stroke-linecap="round" filter="url(#softGlow)"/>
-
-      <!-- Scene objects -->
-      ${sceneName==="Waldweg" ? `
-        <g transform="translate(210,118)">
-          <path d="M0,18 Q16,0 34,18 Q20,22 34,34 Q16,28 0,34 Q10,26 0,18 Z"
-                fill="rgba(255,255,255,.20)" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
-          <circle cx="18" cy="18" r="3" fill="rgba(255,210,77,.95)"/>
-        </g>` : ``}
-
-      ${sceneName==="Holzbrücke" ? `
-        <g transform="translate(450,240)">
-          <rect x="-150" y="-14" width="300" height="28" rx="14" fill="rgba(120,80,40,.40)" stroke="rgba(255,255,255,.14)"/>
-          ${Array.from({length:11}).map((_,i)=>`<rect x="${-140+i*28}" y="-10" width="18" height="20" rx="6" fill="rgba(255,255,255,.06)"/>`).join("")}
-          <path d="M-165,-20 Q0,-58 165,-20" fill="none" stroke="rgba(255,210,77,.16)" stroke-width="7" stroke-linecap="round" filter="url(#softGlow)"/>
-        </g>` : ``}
-
-      ${sceneName==="Apfelbaum" ? `
-        <g transform="translate(700,182)">
-          <circle cx="0" cy="0" r="24" fill="rgba(124,255,92,.26)" stroke="rgba(255,255,255,.16)" stroke-width="2"/>
-          <path d="M-3,-22 Q0,-38 16,-36" fill="none" stroke="rgba(120,80,40,.55)" stroke-width="4" stroke-linecap="round"/>
-          <path d="M14,-36 Q34,-38 34,-20 Q18,-20 14,-36 Z" fill="rgba(40,255,198,.18)"/>
-        </g>` : ``}
-
-      ${sceneName==="Sternstein" ? `
-        <g transform="translate(460,268)">
-          <path d="M-90,0 Q-70,-68 0,-66 Q70,-68 90,0 Q45,52 0,47 Q-45,52 -90,0 Z"
-                fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.14)" stroke-width="2"/>
-          <path d="M0,-46 L12,-14 L46,-12 L18,10 L28,44 L0,24 L-28,44 L-18,10 L-46,-12 L-12,-14 Z"
-                fill="rgba(255,210,77,.24)" filter="url(#softGlow)"/>
-        </g>` : ``}
-
-      ${sceneName.startsWith("Boss") ? `
-        <g transform="translate(450,200)">
-          <rect x="-105" y="-100" width="210" height="185" rx="22" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.16)" stroke-width="2"/>
-          <rect x="-82" y="-78" width="164" height="140" rx="18" fill="rgba(0,0,0,.18)" stroke="rgba(255,255,255,.10)"/>
-          <circle cx="58" cy="-4" r="9" fill="rgba(255,210,77,.55)" filter="url(#softGlow)"/>
-        </g>` : ``}
-
-      <!-- Hotspots -->
-      <g style="cursor:pointer;">
-        ${maps.join("")}
-      </g>
-
-      <rect x="10" y="10" width="880" height="340" rx="18" fill="none" stroke="rgba(255,255,255,.10)"/>
-    </svg>`;
-
-    const container = document.createElement("div");
-    container.innerHTML = svg;
-
-    const svgEl = container.querySelector("svg");
-    svgEl.addEventListener("click", (e)=>{
-      const hot = e.target && e.target.getAttribute && e.target.getAttribute("data-hot");
-      if(!hot) return;
-      onHotspot(hot, hotspots || []);
-    });
-
-    return container;
-  }
-
-  function renderScene(sceneName, hotspots){
-    ui.sceneHost.innerHTML = "";
-    ui.sceneHost.style.minHeight = "240px";
-    ui.sceneHost.appendChild(makeSceneSVG(sceneName, hotspots));
-
-    const list = (hotspots||[]).map(h => `<span class="badge">${h.label}</span>`).join("");
-    ui.hotTip.innerHTML = list ? list : `<span class="badge">Entdecken</span>`;
-  }
-
-  /* ---------------------------
-     Card selection + rendering
-  --------------------------- */
-  function getFocusLabel(node){
-    return FOCUS[node.focusKey] || "Lesen";
-  }
-
-  function buildCard(nodeId){
-    const node = NODE_BY_ID[nodeId];
-    const level = clamp(state.level,1,3);
-    const c = node.cardsByLevel[level];
-
-    // Wichtig: Antwort-Reihenfolge mischen
-    const optionsShuffled = shuffle(c.options);
-
-    return {
-      nodeId,
-      nodeName: node.name,
-      scene: node.scene,
-      focusKey: node.focusKey,
-      focusLabel: getFocusLabel(node),
-      hotspots: node.hotspots || [],
-      level,
-      text: c.text,
-      question: c.question,
-      options: optionsShuffled,
-      help: c.help,
-    };
-  }
-
-  function highlightText(text, key){
+  function highlight(text,key){
     if(!key) return escapeHtml(text);
-
-    // markiere erstes Vorkommen (case-insensitive)
-    const re = new RegExp(`(${escapeRegExp(key)})`, "i");
-    const safe = escapeHtml(text);
-    // Wir können nicht direkt im escaped string sauber matchen.
-    // Deshalb machen wir es auf dem original und bauen neu:
-    const m = text.match(re);
-    if(!m) return escapeHtml(text);
-
-    const idx = text.toLowerCase().indexOf(key.toLowerCase());
-    if(idx < 0) return escapeHtml(text);
-
-    const a = text.slice(0, idx);
-    const b = text.slice(idx, idx + key.length);
-    const c = text.slice(idx + key.length);
+    const idx=text.toLowerCase().indexOf(String(key).toLowerCase());
+    if(idx<0) return escapeHtml(text);
+    const a=text.slice(0,idx), b=text.slice(idx,idx+key.length), c=text.slice(idx+key.length);
     return `${escapeHtml(a)}<span class="hl">${escapeHtml(b)}</span>${escapeHtml(c)}`;
   }
 
-  function escapeHtml(s){
-    return String(s)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-  function escapeRegExp(s){
-    return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  function setStatus(kind, txt){
+    ui.status.className="statusLine "+kind;
+    ui.status.textContent=txt;
   }
 
-  function setGuideMsg(msg){
-    ui.guideMsg.textContent = msg;
+  function setGuide(txt){
+    ui.gMsg.textContent=txt;
   }
 
-  function setStatus(kind, text){
-    ui.statusLine.className = "statusLine " + kind;
-    ui.statusLine.textContent = text;
-  }
-
-  function renderAnswers(){
-    ui.answers.innerHTML = "";
-    currentCard.options.forEach(opt=>{
-      const b = document.createElement("button");
-      b.className = "ans";
-      b.type = "button";
-      b.textContent = opt.text;
-      b.addEventListener("click", ()=>onAnswer(opt.id));
-      ui.answers.appendChild(b);
-    });
-  }
-
-  function renderCard(){
-    answered = false;
-    secretFoundThisCard = false;
-    lastHighlightKey = "";
-
-    currentCard = buildCard(state.currentNode);
-
-    // header / chips
-    ui.questTitle.textContent = `Quest: ${currentCard.nodeName}`;
-    ui.chipNode.textContent = `Knoten: ${currentCard.nodeId}`;
-    ui.chipStatus.textContent = `Status: ${state.done.includes(currentCard.nodeId) ? "erledigt" : "offen"}`;
-    ui.chipMode.textContent = "Modus: Quest";
-
-    // focus
-    ui.kpiFocus.textContent = currentCard.focusLabel;
-
-    // scene
-    renderScene(currentCard.scene, currentCard.hotspots);
-
-    // read text (groß, ohne Highlight zu Beginn)
-    ui.readText.innerHTML = escapeHtml(currentCard.text);
-
-    // question
-    ui.qTitle.textContent = currentCard.question;
-
-    // answers
-    renderAnswers();
-
-    // tries + secret
-    state.tries = 0;
-    ui.triesBadge.textContent = `Versuche: ${state.tries}`;
-    ui.secretBadge.textContent = `Geheimfunke: ${secretFoundThisCard ? 1 : 0} / 1`;
-
-    // status line
-    setGuideMsg("Lies den Text. Dann beantworte die Frage.");
-    setStatus("neutral", "Text im Fokus.");
-
-    // timer
-    state.lastStartTs = now();
-    saveState();
-  }
-
-  /* ---------------------------
-     Progress + Unlock logic
-  --------------------------- */
-  function nextNodeIdAfter(nodeId){
-    const idx = CHAPTER.nodes.findIndex(n=>n.id===nodeId);
-    if(idx < 0) return null;
-    return CHAPTER.nodes[idx+1]?.id || null;
-  }
-
-  function unlockNextIfPossible(){
-    const next = nextNodeIdAfter(state.currentNode);
-    if(!next) return;
-    if(state.unlocked.includes(next)) return;
-    state.unlocked.push(next);
-  }
-
-  function markDone(nodeId){
-    if(!state.done.includes(nodeId)){
-      state.done.push(nodeId);
-    }
-    // unlock next node
-    const next = nextNodeIdAfter(nodeId);
-    if(next && !state.unlocked.includes(next)){
-      state.unlocked.push(next);
-    }
-  }
-
-  function isChapterComplete(){
-    return state.done.length >= CHAPTER.nodes.length;
-  }
-
-  /* ---------------------------
-     Adaptive leveling (simple + robust)
-  --------------------------- */
-  function adaptAfterAnswer(correct){
-    if(correct){
-      state.streak += 1;
-      // 3 richtig -> level up
-      if(state.streak >= 3){
-        if(state.level < 3){
-          state.level += 1;
-          setGuideMsg("Level hoch. Du wirst stärker.");
-        }
-        state.streak = 0;
-      }
-    } else {
-      state.streak = 0;
-      // 2 Fehlversuche in dieser Karte -> Hilfen stärker
-      // (wir steuern das über Highlight + Hilfe-Text)
-    }
-  }
-
-  /* ---------------------------
-     Reward animation (riesiger Stern)
-  --------------------------- */
-  function showReward(text){
-    ui.rewardText.textContent = text;
+  function showReward(txt){
+    ui.rewardText.textContent=txt;
     ui.reward.classList.add("show");
     setTimeout(()=>ui.reward.classList.remove("show"), 950);
   }
 
-  /* ---------------------------
-     Answer handling (FIX: kein Feststecken)
-  --------------------------- */
-  function onAnswer(optionId){
+  function renderCard(){
+    answered=false;
+    tries=0;
+    secretFound=false;
+    lastHint="";
+
+    ui.readText.innerHTML=escapeHtml(CARD.text);
+    ui.question.textContent=CARD.question;
+
+    ui.answers.innerHTML="";
+    const opts=shuffle(CARD.options);
+    opts.forEach(opt=>{
+      const b=document.createElement("button");
+      b.type="button";
+      b.className="ans";
+      b.textContent=opt.text;
+      b.addEventListener("click", ()=>onAnswer(opt, b));
+      ui.answers.appendChild(b);
+    });
+
+    ui.tries.textContent=String(tries);
+    ui.secret.textContent=`${secretFound?1:0}/1`;
+
+    setGuide("Tippe in die Szene. Dann lies das Questlog. Dann antworte.");
+    setStatus("neutral","Tippe in die Szene oder lies den Text. Dann antworte.");
+
+    renderKpis();
+  }
+
+  function adapt(correct){
+    if(correct){
+      state.streak += 1;
+      if(state.streak >= 3){
+        state.level = Math.min(3, state.level+1);
+        state.streak = 0;
+        setGuide("Level hoch. Du wirst stärker.");
+      }
+    } else {
+      state.streak = 0;
+    }
+  }
+
+  function onAnswer(opt, btn){
     if(answered) return;
 
-    const opt = currentCard.options.find(o=>o.id===optionId);
-    if(!opt) return;
-
-    state.tries += 1;
-    ui.triesBadge.textContent = `Versuche: ${state.tries}`;
-
-    const ms = Math.max(1, now() - (state.lastStartTs || now()));
-
-    // UI feedback on clicked button
-    const buttons = Array.from(ui.answers.querySelectorAll(".ans"));
-    const clickedIdx = currentCard.options.findIndex(o=>o.id===optionId);
-    const clickedBtn = buttons[clickedIdx];
+    tries += 1;
+    ui.tries.textContent=String(tries);
 
     if(opt.correct){
-      answered = true;
+      answered=true;
+      btn.classList.add("correct");
 
-      // mark UI
-      if(clickedBtn) clickedBtn.classList.add("correct");
-
-      // stars
       state.stars += 1;
+      adapt(true);
+      save();
+      renderKpis();
 
-      // log
-      state.logs.push({
-        ts: now(),
-        node: currentCard.nodeId,
-        focus: currentCard.focusKey,
-        correct: true,
-        ms: ms,
-        wrongOptionId: null
-      });
-
-      // progress
-      markDone(currentCard.nodeId);
-
-      adaptAfterAnswer(true);
-
-      // reward
       showReward("Stern erhalten");
-      setStatus("good", "Richtig. Weiter geht’s.");
+      setGuide("Richtig. Stark.");
+      setStatus("good","Richtig. Du bekommst einen Stern.");
 
-      // next move: automatisch zum nächsten offenen/unlocked
-      const next = nextNodeIdAfter(currentCard.nodeId);
-      saveState();
-      renderAllKpis();
-      renderLeftNav();
-
-      if(next){
-        // Auto-advance nur, wenn freigeschaltet
-        state.currentNode = next;
-        saveState();
-        // kurzer Delay, damit Feedback sichtbar ist
-        setTimeout(()=>renderCard(), 520);
-      } else {
-        // Kapitel fertig
-        setGuideMsg("Kapitel abgeschlossen. Diagnose zeigt die Auswertung.");
-        setStatus("good", "Kapitel abgeschlossen. Öffne Diagnose.");
-      }
+      // MVP: nach kurzer Zeit “weiter” simulieren
+      setTimeout(()=>{
+        setGuide("Kapitel abgeschlossen. Öffne Diagnose (kommt als nächster Schritt).");
+        setStatus("good","Kapitel abgeschlossen. Für jetzt: Reset oder Play erneut.");
+      }, 650);
 
       return;
     }
 
-    // wrong
-    if(clickedBtn) clickedBtn.classList.add("wrong");
-    setStatus("bad", "Noch nicht. Lies den Text nochmal und suche das passende Wort.");
-    setGuideMsg("Nochmal lesen. Such das Wort, das zur Frage passt.");
+    btn.classList.add("wrong");
+    adapt(false);
+    save();
+    renderKpis();
 
-    // log wrong
-    state.logs.push({
-      ts: now(),
-      node: currentCard.nodeId,
-      focus: currentCard.focusKey,
-      correct: false,
-      ms: ms,
-      wrongOptionId: optionId
-    });
+    setGuide("Ups. Lies nochmal. Such das Wort im Text.");
+    setStatus("bad","Noch nicht. Lies nochmal. Dann antworte.");
 
-    adaptAfterAnswer(false);
-
-    // Hilfe-Mechanik: Highlight auf Hinweiswort der richtigen Antwort (ab 2 Fehlversuchen)
-    if(state.tries >= 2){
-      const right = currentCard.options.find(o=>o.correct);
-      if(right && right.hintKey){
-        lastHighlightKey = right.hintKey;
-        ui.readText.innerHTML = highlightText(currentCard.text, lastHighlightKey);
-        setStatus("neutral", `Tipp: Suche im Text nach dem markierten Wort.`);
+    // ab 2 Fehlversuchen: highlight Hinweiswort
+    if(tries >= 2){
+      const right=CARD.options.find(o=>o.correct);
+      if(right?.hintKey){
+        lastHint = right.hintKey;
+        ui.readText.innerHTML = highlight(CARD.text, lastHint);
+        setStatus("neutral","Tipp: Das passende Wort ist im Text markiert.");
       }
     }
-
-    // Wichtig: NICHT answered=true setzen → Kind kann weiter klicken.
-    // (Dein Bug war: state/answered wurde so gesetzt, dass nichts mehr geht.)
-    saveState();
-    renderAllKpis();
   }
 
-  /* ---------------------------
-     Read again + help
-  --------------------------- */
-  ui.btnReadAgain.addEventListener("click", ()=>{
-    ui.readText.innerHTML = lastHighlightKey ? highlightText(currentCard.text, lastHighlightKey) : escapeHtml(currentCard.text);
-    setStatus("neutral", "Nochmal lesen. Dann antworten.");
+  /* ====== Scene Hotspots ====== */
+  const hotText={
+    gate:"Das ist das Boss-Tor. Es wirkt schwer.",
+    lock:"Das Schloss glitzert. Vielleicht brauchst du einen Schlüssel.",
+    apple:"Ein Apfel? Der lenkt ab. Fokus behalten.",
+    star:"Ein Sternfunke. Sammle ihn."
+  };
+
+  function showTip(x,y, txt){
+    ui.tip.textContent=txt;
+    ui.tip.style.left = x+"px";
+    ui.tip.style.top  = y+"px";
+    ui.tip.classList.add("show");
+    clearTimeout(showTip._t);
+    showTip._t=setTimeout(()=>ui.tip.classList.remove("show"), 1200);
+  }
+
+  // Klick-Handling in SVG Hotspots
+  ui.scene.addEventListener("click",(e)=>{
+    const t=e.target;
+    const hot=t && t.getAttribute && t.getAttribute("data-hot");
+    if(!hot) return;
+
+    const rect=ui.scene.getBoundingClientRect();
+    const x = (e.clientX - rect.left) + 12;
+    const y = (e.clientY - rect.top) - 6;
+
+    showTip(x,y, hotText[hot] || "Entdeckt.");
+
+    // Geheimfunke: erster Hotspot-Klick pro Karte
+    if(!secretFound){
+      secretFound=true;
+      state.secretTotal += 1;
+      save();
+      ui.secret.textContent=`1/1`;
+      setGuide("Geheimfunke gefunden. Jetzt Quest lösen.");
+      setStatus("good","Geheimfunke eingesammelt. Jetzt lesen und antworten.");
+      spawnParticles(rect, e.clientX-rect.left, e.clientY-rect.top);
+    }
   });
 
+  function spawnParticles(rect, sx, sy){
+    // kleine Funken an der Klickstelle (CSS)
+    for(let i=0;i<10;i++){
+      const p=document.createElement("div");
+      p.className="particle";
+      const dx = (Math.random()*18-9);
+      const dy = (Math.random()*10-5);
+      p.style.left = (sx+dx)+"px";
+      p.style.top  = (sy+dy)+"px";
+      p.style.animationDelay = (Math.random()*0.15)+"s";
+      p.style.background = `rgba(255,210,77,${0.55+Math.random()*0.35})`;
+      ui.scene.appendChild(p);
+      setTimeout(()=>p.remove(), 1600);
+    }
+  }
+
+  /* ====== Controls ====== */
+  ui.btnRead.addEventListener("click", ()=>{
+    ui.readText.innerHTML = lastHint ? highlight(CARD.text,lastHint) : escapeHtml(CARD.text);
+    setStatus("neutral","Nochmal lesen. Dann antworten.");
+  });
   ui.btnHelp.addEventListener("click", ()=>{
-    // Hilfe: ab 1 Klick highlight das Hint-Key der korrekten Option
-    const right = currentCard.options.find(o=>o.correct);
-    if(right && right.hintKey){
-      lastHighlightKey = right.hintKey;
-      ui.readText.innerHTML = highlightText(currentCard.text, lastHighlightKey);
-      setGuideMsg(currentCard.help || "Suche das passende Wort im Text.");
-      setStatus("neutral", "Hilfe aktiv. Lies den markierten Teil.");
-    } else {
-      setGuideMsg(currentCard.help || "Lies den Text langsam. Dann entscheide.");
-      setStatus("neutral", "Hilfe aktiv.");
+    const right=CARD.options.find(o=>o.correct);
+    if(right?.hintKey){
+      lastHint = right.hintKey;
+      ui.readText.innerHTML = highlight(CARD.text,lastHint);
     }
+    setGuide(CARD.help);
+    setStatus("neutral","Hilfe aktiv. Lies den markierten Teil.");
   });
 
-  /* ---------------------------
-     Left nav render
-  --------------------------- */
-  function renderLeftNav(){
-    ui.chapterName.textContent = `Kapitel: ${CHAPTER.name}`;
-    ui.nodeList.innerHTML = "";
+  ui.btnReset.addEventListener("click", reset);
+  ui.btnPlay.addEventListener("click", renderCard);
 
-    CHAPTER.nodes.forEach((n, idx)=>{
-      const done = state.done.includes(n.id);
-      const unlocked = state.unlocked.includes(n.id);
-      const isCurrent = state.currentNode === n.id;
-
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "nodeBtn";
-      btn.setAttribute("aria-disabled", unlocked ? "false" : "true");
-
-      const left = document.createElement("div");
-      left.className = "nodeLeft";
-      left.innerHTML = `
-        <div class="small">${idx+1}</div>
-        <div class="name">${n.name}</div>
-      `;
-
-      const st = document.createElement("div");
-      st.className = "nodeState " + (done ? "done" : (unlocked ? "ready" : "lock"));
-      st.textContent = done ? "erledigt" : (unlocked ? (isCurrent ? "bereit" : "offen") : "gesperrt");
-
-      btn.appendChild(left);
-      btn.appendChild(st);
-
-      if(!unlocked){
-        btn.addEventListener("click", ()=>{
-          setGuideMsg("Dieser Knoten ist noch gesperrt.");
-          setStatus("neutral", "Erst den vorherigen Knoten erledigen.");
-        });
-      } else {
-        btn.addEventListener("click", ()=>{
-          state.currentNode = n.id;
-          saveState();
-          renderAllKpis();
-          renderLeftNav();
-          renderCard();
-        });
-      }
-
-      ui.nodeList.appendChild(btn);
-    });
-  }
-
-  /* ---------------------------
-     KPIs render
-  --------------------------- */
-  function renderAllKpis(){
-    ui.kpiStars.textContent = String(state.stars);
-    ui.kpiStreak.textContent = String(state.streak);
-    ui.kpiLevel.textContent = String(state.level);
-    ui.kpiProgress.textContent = `${state.done.length} / ${CHAPTER.nodes.length}`;
-    ui.avatar.textContent = "F";
-    ui.guideName.textContent = state.monsterName;
-  }
-
-  /* ---------------------------
-     Diagnose
-  --------------------------- */
-  function computeDiagnosis(){
-    const logs = state.logs.slice();
-    const done = state.done.length;
-    const total = logs.length;
-    const correct = logs.filter(x=>x.correct).length;
-    const acc = total ? Math.round((correct/total)*100) : 0;
-
-    const avgMs = logs.length ? Math.round(logs.reduce((a,b)=>a+b.ms,0)/logs.length) : 0;
-    const avgS = Math.round(avgMs/100)/10; // 1 decimal
-
-    // Fehlmuster nach focusKey bei falschen
-    const wrong = logs.filter(x=>!x.correct);
-    const wrongByFocus = {};
-    wrong.forEach(w=>{
-      wrongByFocus[w.focus] = (wrongByFocus[w.focus]||0)+1;
-    });
-
-    // Stärken nach focusKey bei richtigen
-    const correctByFocus = {};
-    logs.filter(x=>x.correct).forEach(w=>{
-      correctByFocus[w.focus] = (correctByFocus[w.focus]||0)+1;
-    });
-
-    // Sort
-    const patterns = Object.entries(wrongByFocus).sort((a,b)=>b[1]-a[1]).slice(0,5);
-    const strengths = Object.entries(correctByFocus).sort((a,b)=>b[1]-a[1]).slice(0,3);
-
-    // Fokus-Empfehlung: höchstes Fehlmuster
-    const focusPick = patterns[0]?.[0] || null;
-
-    // Text output
-    return {done, acc, avgS, patterns, strengths, focusPick};
-  }
-
-  function renderDiagnosis(){
-    const d = computeDiagnosis();
-    ui.dDone.textContent = String(d.done);
-    ui.dAcc.textContent = `${d.acc}%`;
-    ui.dTime.textContent = `${d.avgS}s`;
-
-    ui.dStrengths.innerHTML = "";
-    if(d.strengths.length === 0){
-      ui.dStrengths.innerHTML = `<div class="li"><span>Noch keine Stärken.</span><small>Spiele weiter</small></div>`;
-    } else {
-      d.strengths.forEach(([k,v])=>{
-        ui.dStrengths.appendChild(li(`${FOCUS[k]||k}`, `${v}x`));
-      });
-    }
-
-    ui.dPatterns.innerHTML = "";
-    if(d.patterns.length === 0){
-      ui.dPatterns.innerHTML = `<div class="li"><span>Keine Fehlmuster sichtbar.</span><small>Stabil</small></div>`;
-    } else {
-      d.patterns.forEach(([k,v])=>{
-        ui.dPatterns.appendChild(li(`${FOCUS[k]||k}`, `${v}x`));
-      });
-    }
-
-    ui.dFocus.innerHTML = "";
-    if(!d.focusPick){
-      ui.dFocus.innerHTML = `<div class="li"><span>Fokus: weiter spielen</span><small>Empfehlung</small></div>`;
-    } else {
-      ui.dFocus.appendChild(li(`Fokus: ${FOCUS[d.focusPick]||d.focusPick}`, "nächste Woche"));
-      ui.dFocus.appendChild(li("Mission", "8 Minuten pro Tag"));
-    }
-
-    // Summary
-    const s = [];
-    if(d.done === 0){
-      ui.dSummary.textContent = "Noch keine Daten. Spiele ein paar Karten und öffne dann Diagnose.";
-    } else {
-      s.push(`Abgeschlossen: ${d.done}/${CHAPTER.nodes.length}.`);
-      s.push(`Trefferquote: ${d.acc}%.`);
-      if(d.focusPick) s.push(`Fokus: ${FOCUS[d.focusPick]||d.focusPick}.`);
-      ui.dSummary.textContent = s.join(" ");
-    }
-  }
-
-  function li(left, right){
-    const el = document.createElement("div");
-    el.className = "li";
-    el.innerHTML = `<span>${escapeHtml(left)}</span><small>${escapeHtml(right)}</small>`;
-    return el;
-  }
-
-  /* ---------------------------
-     View switching
-  --------------------------- */
-  function showAdventure(){
-    ui.viewAdventure.classList.remove("hide");
-    ui.viewDiagnose.classList.remove("show");
-    ui.viewDiagnose.classList.add("hide");
-    ui.btnAdventure.classList.add("primary");
-    ui.btnDiagnose.classList.remove("primary");
-  }
-  function showDiagnose(){
-    ui.viewAdventure.classList.add("hide");
-    ui.viewDiagnose.classList.remove("hide");
-    ui.viewDiagnose.classList.add("show");
-    ui.btnDiagnose.classList.add("primary");
-    ui.btnAdventure.classList.remove("primary");
-    renderDiagnosis();
-  }
-
-  ui.btnAdventure.addEventListener("click", showAdventure);
-  ui.btnDiagnose.addEventListener("click", showDiagnose);
-  ui.btnReset.addEventListener("click", resetState);
-
-  /* ---------------------------
-     Boot hardening
-  --------------------------- */
-  function hardenState(){
-    // sicherstellen, dass currentNode unlocked ist
-    if(!state.unlocked.includes(state.currentNode)){
-      state.currentNode = state.unlocked[0] || "N1";
-    }
-    // wenn currentNode done ist und es gibt next unlocked -> optional weiterschieben
-    saveState();
-  }
-
-  /* ---------------------------
-     Init
-  --------------------------- */
-  hardenState();
-  renderAllKpis();
-  renderLeftNav();
   renderCard();
-  showAdventure();
-
 })();
 </script>
 </body>
