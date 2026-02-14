@@ -15,7 +15,7 @@
       --panel2: rgba(18,22,44,.42);
 
       --stroke: rgba(255,255,255,.12);
-      --stroke2: rgba(255,255,255,.20);
+      --stroke2: rgba(255,255,255,.18);
 
       --text:#eaf0ff;
       --muted:#b9c2e8;
@@ -24,12 +24,12 @@
       --bad:#ff6b6b;
 
       --gold:#ffd36a;
-      --gold2:#fff1b2;
       --blue:#6fd0ff;
       --pink:#ff4fa3;
 
       --shadow: 0 18px 40px rgba(0,0,0,.45);
       --radius: 22px;
+      --radius2: 16px;
 
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     }
@@ -54,27 +54,40 @@
       top: 0;
       z-index: 50;
       backdrop-filter: blur(12px);
-      background: linear-gradient(180deg, rgba(8,10,24,.82), rgba(8,10,24,.40));
+      background: linear-gradient(180deg, rgba(8,10,24,.82), rgba(8,10,24,.38));
       border-bottom: 1px solid var(--stroke);
-      padding: 14px 16px;
+      padding: 12px 14px;
     }
     .topbar-inner{
-      max-width: 1440px;
+      max-width: 1480px;
       margin:0 auto;
       display:flex;
-      gap: 12px;
+      gap: 10px;
       align-items:center;
       justify-content: space-between;
       flex-wrap: wrap;
     }
-    .brand{ display:flex; align-items:center; gap:12px; min-width: 260px; }
-    .brand .dot{
-      width: 12px; height: 12px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--pink), var(--gold));
-      box-shadow: 0 0 22px rgba(255,79,163,.45);
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      min-width: 280px;
     }
-    .brand .title{ font-weight: 1000; letter-spacing: .2px; line-height: 1.1; font-size: 16px; }
-    .brand .sub{ font-size: 12px; color: var(--muted); opacity: .95; margin-top: 3px; }
+    .brand .dot{
+      width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+      box-shadow: 0 0 18px rgba(255,79,163,.45);
+    }
+    .brand .title{
+      font-weight: 1000;
+      letter-spacing: .2px;
+      line-height: 1.1;
+      font-size: 16px;
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted);
+      opacity: .95;
+      margin-top: 2px;
+    }
 
     .hud{
       display:flex;
@@ -92,29 +105,29 @@
       border-radius: 999px;
       background: rgba(255,255,255,.07);
       border: 1px solid var(--stroke);
-      box-shadow: 0 12px 34px rgba(0,0,0,.28);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
       white-space: nowrap;
       position: relative;
       overflow:hidden;
-      min-height: 46px;
+      transform-origin:center;
     }
     .pill b{ font-weight: 1000; }
-    .tiny{ font-size: 12px; color: var(--muted); opacity:.95; }
-    .sep{ opacity:.25; }
     .icon{
       width: 30px; height: 30px; object-fit: contain;
-      filter: drop-shadow(0 0 16px rgba(255,255,255,.14));
+      filter: drop-shadow(0 0 14px rgba(255,255,255,.12));
       transform-origin:center;
     }
 
-    .hearts{ display:flex; gap:8px; align-items:center; }
+    .hearts{ display:flex; gap:7px; align-items:center; }
     .hearts .heart{
       width: 30px; height: 30px; opacity: .98;
-      filter: drop-shadow(0 0 16px rgba(255,79,163,.26));
+      filter: drop-shadow(0 0 14px rgba(255,79,163,.26));
       transform-origin:center;
     }
     .hearts .heart.off{ opacity: .20; filter:none; }
 
+    .sep{ opacity:.25; }
+    .tiny{ font-size: 12px; color: var(--muted); opacity:.95; }
     .btn{
       appearance:none;
       border: 1px solid var(--stroke);
@@ -125,19 +138,18 @@
       font-weight: 1000;
       cursor:pointer;
       transition: transform .05s ease, background .2s ease, border-color .2s ease;
-      min-height: 46px;
     }
     .btn:hover{ background: rgba(255,255,255,.11); border-color: var(--stroke2); }
     .btn:active{ transform: translateY(1px); }
     .btn.primary{
       background: linear-gradient(135deg, rgba(255,79,163,.92), rgba(255,211,106,.88));
-      border-color: rgba(255,255,255,.22);
+      border-color: rgba(255,255,255,.18);
       color: #1a1022;
-      box-shadow: 0 16px 40px rgba(255,79,163,.20);
+      box-shadow: 0 14px 35px rgba(255,79,163,.18);
     }
 
     .xp{
-      min-width: 360px;
+      min-width: 340px;
       max-width: 560px;
       flex: 1;
       display:flex;
@@ -149,15 +161,14 @@
       border: 1px solid var(--stroke);
       position:relative;
       overflow:hidden;
-      min-height: 46px;
     }
     .xp small{ color: var(--muted); font-weight:1000; }
     .xpbar{
       flex: 1;
       height: 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.11);
-      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.10);
       overflow:hidden;
     }
     .xpbar > div{
@@ -171,7 +182,7 @@
 
     /* Layout */
     .wrap{
-      max-width: 1440px;
+      max-width: 1480px;
       margin: 0 auto;
       padding: 16px 14px 26px;
       display:grid;
@@ -179,7 +190,7 @@
       grid-template-columns: 400px 1fr 360px;
       align-items:start;
     }
-    @media (max-width: 1280px){
+    @media (max-width: 1200px){
       .wrap{ grid-template-columns: 380px 1fr; }
       .right{ display:none; }
     }
@@ -189,7 +200,7 @@
     }
 
     .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -216,11 +227,12 @@
     /* Pergament */
     .parchment{
       background:
-        radial-gradient(900px 360px at 20% 20%, rgba(255,240,205,.22), transparent 55%),
-        radial-gradient(800px 340px at 80% 35%, rgba(255,220,150,.18), transparent 60%),
+        radial-gradient(800px 340px at 20% 20%, rgba(255,240,205,.22), transparent 55%),
+        radial-gradient(700px 320px at 80% 35%, rgba(255,220,150,.18), transparent 60%),
         linear-gradient(180deg, rgba(255,235,190,.16), rgba(255,235,190,.08));
       border: 1px solid rgba(255,255,255,.14);
     }
+    .parchment .bd{ padding: 16px 16px 16px; }
     .paper{
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,.16);
@@ -230,11 +242,26 @@
         linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06));
       padding: 14px 14px;
       box-shadow: 0 12px 26px rgba(0,0,0,.25) inset;
-      min-height: 210px;
+      min-height: 190px;
     }
-    .paper .label{ font-size: 12px; color: rgba(255,255,255,.85); letter-spacing: .2px; font-weight: 1000; opacity: .95; }
-    .paper .text{ margin-top: 10px; font-size: 22px; line-height: 1.35; font-weight: 1000; letter-spacing: .1px; text-shadow: 0 2px 18px rgba(0,0,0,.25); }
-    @media (max-width: 560px){ .paper .text{ font-size: 18px; } }
+    .paper .label{
+      font-size: 12px;
+      color: rgba(255,255,255,.85);
+      letter-spacing: .2px;
+      font-weight: 1000;
+      opacity: .95;
+    }
+    .paper .text{
+      margin-top: 10px;
+      font-size: 22px;
+      line-height: 1.35;
+      font-weight: 1000;
+      letter-spacing: .1px;
+      text-shadow: 0 2px 18px rgba(0,0,0,.25);
+    }
+    @media (max-width: 560px){
+      .paper .text{ font-size: 18px; }
+    }
 
     .q{
       margin-top: 14px;
@@ -247,9 +274,17 @@
       display:flex; align-items:flex-start; justify-content:space-between; gap: 10px;
       margin-bottom: 10px;
     }
-    .q .qt h3{ margin:0; font-size: 16px; font-weight: 1000; line-height: 1.15; }
-    .subline{ margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.25; }
-
+    .q .qt h3{
+      margin:0;
+      font-size: 16px;
+      font-weight: 1000;
+    }
+    .qmeta{
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+      text-align:right;
+    }
     .answers{ display:grid; gap: 10px; }
     .ans{
       display:flex;
@@ -259,7 +294,7 @@
       padding: 12px 12px;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.05);
       cursor:pointer;
       user-select:none;
       font-weight: 1000;
@@ -267,10 +302,10 @@
       position:relative;
       overflow:hidden;
     }
-    .ans:hover{ border-color: rgba(255,255,255,.24); background: rgba(255,255,255,.10); }
+    .ans:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
     .ans:active{ transform: translateY(1px); }
-    .ans.correct{ border-color: rgba(69,212,131,.60); background: rgba(69,212,131,.14); }
-    .ans.wrong{ border-color: rgba(255,107,107,.60); background: rgba(255,107,107,.14); }
+    .ans.correct{ border-color: rgba(69,212,131,.55); background: rgba(69,212,131,.12); }
+    .ans.wrong{ border-color: rgba(255,107,107,.55); background: rgba(255,107,107,.12); }
 
     .foot{
       margin-top: 12px;
@@ -281,25 +316,29 @@
       flex-wrap: wrap;
     }
     .row{ display:flex; gap: 10px; align-items:center; flex-wrap:wrap; }
-    .statusline{ font-size: 13px; color: var(--muted); }
+    .statusline{
+      font-size: 13px;
+      color: var(--muted);
+    }
     .statusline .good{ color: var(--good); font-weight: 1000; }
     .statusline .bad{ color: var(--bad); font-weight: 1000; }
 
-    /* Right side */
+    /* Right */
     .right{
       display:flex;
       flex-direction:column;
       gap: 14px;
       position: sticky;
-      top: 86px;
+      top: 80px;
     }
-    @media (max-width: 980px){ .right{ position: static; } }
-
+    @media (max-width: 980px){
+      .right{ position: static; }
+    }
     .mini{ display:flex; gap: 12px; align-items:flex-start; }
     .avatar{
-      width: 72px; height: 72px;
-      border-radius: 20px;
-      background: rgba(255,255,255,.07);
+      width: 64px; height: 64px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.14);
       display:grid; place-items:center;
       overflow:hidden;
@@ -311,7 +350,7 @@
       border: 1px solid rgba(255,255,255,.14);
       border-radius: 16px;
       padding: 10px 12px;
-      min-height: 72px;
+      min-height: 64px;
     }
     .speech .name{ font-weight: 1000; }
     .speech .line{ margin-top: 4px; color: var(--muted); font-size: 13px; line-height:1.35; }
@@ -325,21 +364,21 @@
       padding: 10px 12px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.05);
       cursor:pointer;
       user-select:none;
     }
-    .node:hover{ border-color: rgba(255,255,255,.24); background: rgba(255,255,255,.10); }
+    .node:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
     .node.locked{ opacity:.5; cursor:not-allowed; }
-    .node.active{ outline: 2px solid rgba(111,208,255,.38); }
+    .node.active{ outline: 2px solid rgba(111,208,255,.35); }
     .node .left{ display:flex; gap:10px; align-items:center; }
     .badge{
-      width: 32px; height: 32px;
-      border-radius: 12px;
+      width: 30px; height: 30px;
+      border-radius: 11px;
       display:grid; place-items:center;
       font-weight: 1000;
       background: rgba(111,208,255,.12);
-      border: 1px solid rgba(111,208,255,.22);
+      border: 1px solid rgba(111,208,255,.20);
     }
 
     /* Scene */
@@ -354,15 +393,12 @@
     }
     .sceneImg{
       width: 100%;
-      height: min(66vh, 680px);
+      height: min(66vh, 660px);
       object-fit: cover;
       display:block;
       transform: scale(1.01);
     }
-    .overlay{
-      position:absolute; inset:0;
-      z-index: 3;
-    }
+    .overlay{ position:absolute; inset:0; z-index: 3; }
 
     /* Hotspots */
     .hotspot{
@@ -373,7 +409,7 @@
       touch-action: manipulation;
       transition: transform .08s ease, filter .2s ease, opacity .2s ease;
     }
-    .hotspot:hover{ transform: translate(-50%,-50%) scale(1.05); filter: drop-shadow(0 0 18px rgba(255,211,106,.22)); }
+    .hotspot:hover{ transform: translate(-50%,-50%) scale(1.04); filter: drop-shadow(0 0 18px rgba(255,211,106,.22)); }
     .hotspot:active{ transform: translate(-50%,-50%) scale(.99); }
     .hotspot img{
       width: var(--w, 120px);
@@ -381,64 +417,25 @@
       display:block;
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
       pointer-events:none;
+      transition: filter .25s ease, opacity .25s ease;
     }
     .hotspot.small img{ width: var(--w, 120px); }
     .hotspot.tiny img{ width: var(--w, 70px); }
 
-    /* Laterne: leuchten per class */
-    .hotspot.lanternLit img{
-      filter:
-        drop-shadow(0 0 10px rgba(255,211,106,.55))
-        drop-shadow(0 0 22px rgba(255,211,106,.28))
-        drop-shadow(0 10px 18px rgba(0,0,0,.35));
-      animation: lanternPulse 1.4s ease-in-out infinite;
-    }
-    @keyframes lanternPulse{
-      0%,100%{ transform: translateY(0) scale(1); }
-      50%{ transform: translateY(-1px) scale(1.02); }
-    }
-
-    /* Fips IM Bild (sehr groß + Mood-Wechsel) */
-    .fipsInScene{
+    /* Fips MAIN (sehr groß im Bild, links unten) */
+    .fipsMain{
       position:absolute;
-      z-index: 8;
-      transform: translate(-50%,-50%);
-      display:none;
-      pointer-events:none;
-      filter:
-        drop-shadow(0 18px 26px rgba(0,0,0,.42))
-        drop-shadow(0 0 18px rgba(111,208,255,.18));
-    }
-    .fipsInScene.show{ display:block; animation: fipsPop .28s ease; }
-    @keyframes fipsPop{
-      from{ transform: translate(-50%,-50%) scale(.80); opacity:0; }
-      to{ transform: translate(-50%,-50%) scale(1); opacity:1; }
-    }
-    .fipsInScene img{
-      width: 300px;
-      height: auto;
-      transform-origin: center;
-      animation: fipsIdle 1.6s ease-in-out infinite;
-    }
-    @keyframes fipsIdle{
-      0%,100%{ transform: translateY(0) scale(1); }
-      50%{ transform: translateY(-7px) scale(1.02); }
-    }
-
-    /* Fips big unten links */
-    .fipsBig{
-      position:absolute;
-      left: 16px;
-      bottom: 16px;
-      z-index: 7;
+      left: 18px;
+      bottom: 14px;
+      z-index: 6;
       display:flex;
       align-items:flex-end;
-      gap: 12px;
+      gap: 14px;
       pointer-events:none;
     }
-    .fipsBig .frame{
-      width: 150px;
-      height: 150px;
+    .fipsMain .frame{
+      width: 210px;
+      height: 210px;
       border-radius: 30px;
       background: rgba(0,0,0,.18);
       border: 1px solid rgba(255,255,255,.16);
@@ -446,24 +443,41 @@
       overflow:hidden;
       display:grid;
       place-items:center;
+      position: relative;
     }
-    .fipsBig .frame img{
+    .fipsMain .frame img{
       width: 100%;
       height: 100%;
       object-fit: contain;
       transform-origin:center;
     }
-    .fipsBig .bubble{
+    .fipsMain .bookTag{
+      position:absolute;
+      right: 10px;
+      bottom: 10px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.16);
+      font-weight: 1000;
+      font-size: 12px;
+      color: rgba(255,255,255,.92);
+      display:none;
+      backdrop-filter: blur(8px);
+    }
+    .fipsMain .bookTag.show{ display:inline-flex; }
+
+    .fipsMain .bubble{
       max-width: 520px;
       border-radius: 18px;
-      background: rgba(8,10,24,.62);
+      background: rgba(8,10,24,.60);
       border: 1px solid rgba(255,255,255,.14);
       backdrop-filter: blur(10px);
       padding: 10px 12px;
       box-shadow: 0 18px 40px rgba(0,0,0,.35);
     }
-    .fipsBig .bubble b{ font-weight:1000; }
-    .fipsBig .bubble .line{ color: var(--muted); margin-top:4px; font-size: 13px; line-height:1.35; }
+    .fipsMain .bubble b{ font-weight:1000; }
+    .fipsMain .bubble .line{ color: var(--muted); margin-top:4px; font-size: 13px; line-height:1.35; }
 
     /* Boss HUD */
     .bossHud{
@@ -471,13 +485,13 @@
       left: 50%;
       top: 14px;
       transform: translateX(-50%);
-      z-index: 9;
+      z-index: 7;
       display:none;
       gap: 10px;
       align-items:center;
-      padding: 12px 14px;
+      padding: 10px 12px;
       border-radius: 999px;
-      background: rgba(0,0,0,.30);
+      background: rgba(0,0,0,.28);
       border: 1px solid rgba(255,255,255,.14);
       backdrop-filter: blur(10px);
       box-shadow: 0 18px 40px rgba(0,0,0,.35);
@@ -485,8 +499,8 @@
     .bossHud.show{ display:flex; }
     .bossName{ font-weight:1000; }
     .bossBar{
-      width: 240px;
-      height: 14px;
+      width: 220px;
+      height: 12px;
       border-radius: 999px;
       background: rgba(255,255,255,.10);
       border: 1px solid rgba(255,255,255,.14);
@@ -501,11 +515,11 @@
       transition: width .28s ease;
     }
 
-    /* Gate overlay */
+    /* Gate opening overlay */
     .gateOpen{
       position:absolute;
       inset:0;
-      z-index: 12;
+      z-index: 8;
       display:none;
       place-items:center;
       background: radial-gradient(900px 500px at 50% 40%, rgba(255,211,106,.18), rgba(0,0,0,.55));
@@ -531,7 +545,7 @@
       right: 14px;
       bottom: 14px;
       z-index: 80;
-      max-width: 480px;
+      max-width: 460px;
       padding: 12px 14px;
       border-radius: 16px;
       background: rgba(10,12,28,.92);
@@ -543,14 +557,20 @@
     @keyframes pop{ from{ transform: translateY(6px); opacity:.0;} to{ transform: translateY(0); opacity:1;} }
     .toast b{ font-weight: 1000; }
 
-    /* Pickup fly */
+    /* Pickup animation (Icon fliegt zum HUD) */
     .fly{
       position: fixed;
       z-index: 90;
-      width: 48px; height: 48px;
+      width: 46px; height: 46px;
       pointer-events:none;
       filter: drop-shadow(0 0 18px rgba(255,211,106,.35));
       transform: translate(-50%, -50%) scale(1);
+      animation: flyTo .65s ease-in forwards;
+    }
+    @keyframes flyTo{
+      0%{ opacity:1; transform: translate(-50%,-50%) scale(1); }
+      70%{ opacity:1; transform: translate(-50%,-50%) scale(.9); }
+      100%{ opacity:0; transform: translate(-50%,-50%) scale(.6); }
     }
     .sparkBurst{
       position: absolute;
@@ -566,6 +586,7 @@
       to{ opacity:0; transform: scale(1.35); }
     }
 
+    /* HUD pulse on change */
     .pulse{ animation: hudPulse .35s ease; }
     @keyframes hudPulse{
       0%{ transform: scale(1); }
@@ -580,73 +601,51 @@
       100%{ transform: rotate(0deg) scale(1); }
     }
 
-    /* ✅ KINDLICHER MEGA-STAR (verschwindet zuverlässig) */
-    .megaStar{
+    /* Reward Star (groß, niedlich, verschwindet sicher) */
+    .rewardStar{
       position:absolute;
-      inset:0;
-      z-index: 20;
+      left:50%;
+      top:46%;
+      transform: translate(-50%,-50%);
+      z-index: 12;
+      width: min(62vh, 520px);
+      height: min(62vh, 520px);
       pointer-events:none;
-      display:none;
-      place-items:center;
-      background: radial-gradient(900px 520px at 50% 45%, rgba(255,211,106,.14), rgba(0,0,0,.22));
-      backdrop-filter: blur(1px);
-    }
-    .megaStar.show{ display:grid; }
-
-    /* Animation wird per JS jedes Mal NEU gestartet (kein Hängen) */
-    .megaStar .wrapStar{
-      width: min(520px, 72vw);
-      aspect-ratio: 1/1;
-      position: relative;
-      filter:
-        drop-shadow(0 0 22px rgba(255,211,106,.22))
-        drop-shadow(0 28px 70px rgba(0,0,0,.55));
-    }
-
-    .megaStar .burst{
-      position:absolute;
-      inset:-14%;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 32% 35%, rgba(255,255,255,.40), transparent 26%),
-        radial-gradient(circle at 72% 45%, rgba(255,255,255,.30), transparent 24%),
-        radial-gradient(circle at 52% 72%, rgba(255,255,255,.22), transparent 28%),
-        radial-gradient(circle, rgba(255,211,106,.18), transparent 62%);
-      opacity:.95;
-    }
-
-    .megaStar svg{ width:100%; height:100%; display:block; }
-
-    /* ✅ Bonus: kleiner Smile auf dem Stern */
-    .megaStar .face{
-      position:absolute;
-      inset:0;
       display:grid;
       place-items:center;
-      transform: translateY(3%);
-      pointer-events:none;
+      animation: rewardPop 1.05s ease forwards;
+      filter: drop-shadow(0 28px 60px rgba(0,0,0,.45));
     }
-    .megaStar .face .eyes{
-      display:flex;
-      gap: 70px;
-      margin-bottom: 10px;
+    @keyframes rewardPop{
+      0%{ opacity:0; transform: translate(-50%,-50%) scale(.55) rotate(-6deg); }
+      25%{ opacity:1; transform: translate(-50%,-50%) scale(1.03) rotate(4deg); }
+      70%{ opacity:1; transform: translate(-50%,-50%) scale(1.00) rotate(0deg); }
+      100%{ opacity:0; transform: translate(-50%,-50%) scale(.92) rotate(0deg); }
     }
-    .megaStar .face .eye{
-      width: 18px; height: 18px;
+    .rewardStar svg{
+      width: 100%;
+      height: 100%;
+    }
+    .rewardStar .face{
+      position:absolute;
+      width: 42%;
+      height: 42%;
+      display:grid;
+      place-items:center;
+    }
+    .rewardStar .face .cap{
+      font-weight:1000;
+      font-size: 14px;
+      color: rgba(10,12,28,.75);
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.6);
+      padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(25,18,35,.70);
-      box-shadow: 0 0 0 4px rgba(255,255,255,.24) inset;
-    }
-    .megaStar .face .mouth{
-      width: 70px;
-      height: 36px;
-      border-bottom: 10px solid rgba(25,18,35,.62);
-      border-radius: 0 0 90px 90px;
-      opacity: .95;
-      filter: drop-shadow(0 2px 10px rgba(0,0,0,.18));
+      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+      backdrop-filter: blur(8px);
     }
 
-    /* Water splash */
+    /* Water world splash */
     .splash{
       position: fixed;
       inset: 0;
@@ -669,14 +668,14 @@
     }
     .splash img{
       width:100%;
-      height: 340px;
+      height: 320px;
       object-fit: cover;
       display:block;
     }
     .splash .content{
       padding: 14px 16px 16px;
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       justify-content:space-between;
       gap:12px;
       flex-wrap:wrap;
@@ -684,49 +683,40 @@
     .splash h3{ margin:0; font-size: 18px; font-weight:1000; }
     .splash p{ margin:6px 0 0; color: var(--muted); line-height:1.35; }
 
-    /* ✅ Abschluss-Report (Boss-Tor) */
-    .report{
-      position: fixed;
-      inset: 0;
-      z-index: 140;
-      display:none;
-      place-items:center;
-      background: rgba(0,0,0,.55);
-      backdrop-filter: blur(8px);
-    }
-    .report.show{ display:grid; animation: fadeIn .25s ease; }
-    .report .card{
-      width: min(780px, 92%);
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(8,10,24,.78);
-      box-shadow: 0 30px 90px rgba(0,0,0,.65);
-      padding: 16px 16px 18px;
-    }
-    .report h3{ margin:0; font-size: 20px; font-weight:1000; }
-    .report p{ margin:8px 0 0; color: var(--muted); }
     .reportGrid{
-      margin-top: 14px;
+      margin-top: 10px;
       display:grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
       gap: 10px;
-      grid-template-columns: repeat(3, minmax(0,1fr));
     }
-    @media (max-width: 720px){
-      .reportGrid{ grid-template-columns: 1fr; }
+    @media (max-width: 820px){
+      .reportGrid{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }
     }
-    .stat{
-      border-radius: 18px;
+    .rep{
+      border-radius: 16px;
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
-      padding: 12px 12px;
+      padding: 10px 12px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
+      gap: 10px;
     }
-    .stat .left{ display:flex; align-items:center; gap: 10px; }
-    .stat img{ width: 34px; height: 34px; object-fit: contain; }
-    .stat b{ font-weight:1000; font-size: 18px; }
+    .rep .k{ color: var(--muted); font-weight: 1000; font-size: 12px; }
+    .rep .v{ font-weight: 1000; }
+
+    /* Lantern glow when aktiv */
+    .glowLantern{
+      filter:
+        drop-shadow(0 0 22px rgba(255,211,106,.35))
+        drop-shadow(0 0 44px rgba(255,211,106,.18))
+        brightness(1.08);
+      animation: lanternPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes lanternPulse{
+      0%,100%{ filter: drop-shadow(0 0 18px rgba(255,211,106,.28)) brightness(1.05); }
+      50%{ filter: drop-shadow(0 0 28px rgba(255,211,106,.42)) brightness(1.12); }
+    }
   </style>
 </head>
 
@@ -747,30 +737,28 @@
           <div class="hearts" id="hearts"></div>
         </div>
 
-        <div class="pill" id="pillStars" title="Sterne (Sammelobjekt)">
+        <div class="pill" id="pillStars" title="Sterne">
           <img class="icon" src="assets/ui/icons/stern.png" alt="Stern" />
           <span><b id="starsVal">0</b></span>
           <span class="sep">|</span>
           <span class="tiny">Sterne</span>
         </div>
 
-        <!-- ✅ NEU: Apfel Counter -->
-        <div class="pill" id="pillApples" title="Äpfel (Sammelobjekt)">
+        <div class="pill" id="pillApples" title="Äpfel">
           <img class="icon" src="assets/ui/interactables/Apfel.png" alt="Apfel" />
           <span><b id="applesVal">0</b></span>
           <span class="sep">|</span>
           <span class="tiny">Äpfel</span>
         </div>
 
-        <!-- ✅ NEU: Laterne Counter -->
-        <div class="pill" id="pillLanterns" title="Laternen (Sammelobjekt)">
+        <div class="pill" id="pillLanterns" title="Laternen">
           <img class="icon" src="assets/ui/interactables/Laterne.png" alt="Laterne" />
           <span><b id="lanternsVal">0</b></span>
           <span class="sep">|</span>
           <span class="tiny">Laternen</span>
         </div>
 
-        <div class="pill" id="pillSparks" title="Geheimfunken (versteckt)">
+        <div class="pill" id="pillSparks" title="Geheimfunken">
           <img class="icon" src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke" />
           <span><b id="sparksVal">0</b></span>
           <span class="sep">|</span>
@@ -813,9 +801,12 @@
           <div class="qt">
             <div>
               <h3 id="question">–</h3>
-              <div class="subline" id="qProgress">–</div>
+              <div class="tiny" id="goalLine" style="margin-top:6px">Sammelziel: –</div>
             </div>
-            <span class="tiny">Erst lesen, dann antworten.</span>
+            <div class="qmeta">
+              <span class="tiny">Erst lesen, dann antworten.</span>
+              <span class="tiny" id="qProgress">Frage 1/3</span>
+            </div>
           </div>
 
           <div class="answers" id="answers"></div>
@@ -836,40 +827,6 @@
       <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
       <div class="overlay" id="overlay"></div>
 
-      <!-- ✅ Kinder-MegaStar -->
-      <div class="megaStar" id="megaStar" aria-hidden="true">
-        <div class="wrapStar" id="megaStarWrap">
-          <div class="burst"></div>
-          <svg viewBox="0 0 100 100" aria-hidden="true">
-            <defs>
-              <linearGradient id="kidStar" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="rgba(255,245,200,1)"/>
-                <stop offset="0.55" stop-color="rgba(255,211,106,1)"/>
-                <stop offset="1" stop-color="rgba(255,79,163,.92)"/>
-              </linearGradient>
-              <radialGradient id="shine" cx="42%" cy="34%" r="70%">
-                <stop offset="0" stop-color="rgba(255,255,255,.90)"/>
-                <stop offset="0.35" stop-color="rgba(255,255,255,.25)"/>
-                <stop offset="1" stop-color="rgba(255,255,255,0)"/>
-              </radialGradient>
-            </defs>
-            <path d="M50 6 L62 36 L94 38 L69 58 L77 90 L50 73 L23 90 L31 58 L6 38 L38 36 Z"
-                  fill="url(#kidStar)" stroke="rgba(255,255,255,.60)" stroke-width="1.3" />
-            <circle cx="44" cy="36" r="22" fill="url(#shine)" />
-          </svg>
-
-          <div class="face">
-            <div>
-              <div class="eyes">
-                <div class="eye"></div>
-                <div class="eye"></div>
-              </div>
-              <div class="mouth"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Boss HUD -->
       <div class="bossHud" id="bossHud">
         <span class="bossName" id="bossName">Boss</span>
@@ -877,19 +834,15 @@
         <span class="tiny"><b id="bossHPText">3</b>/3</span>
       </div>
 
-      <!-- ✅ Fips im Bild -->
-      <div class="fipsInScene" id="fipsInScene">
-        <img id="fipsInSceneImg" src="assets/chars/fips/idle.png" alt="Fips" />
-      </div>
-
-      <!-- Fips unten links -->
-      <div class="fipsBig">
+      <!-- Fips MAIN -->
+      <div class="fipsMain" id="fipsMain">
         <div class="frame">
-          <img id="fipsBigImg" src="assets/chars/fips/idle.png" alt="Fips" />
+          <img id="fipsMainImg" src="assets/chars/fips/idle.png" alt="Fips" />
+          <span class="bookTag" id="bookTag">Buch</span>
         </div>
         <div class="bubble">
           <b>Fips</b>
-          <div class="line" id="fipsBigLine">Tippe Dinge im Bild an. Sammle Sterne, Äpfel, Laternen. Dann beantworte die Fragen.</div>
+          <div class="line" id="fipsMainLine">Tippe Dinge im Bild an. Sammle Sterne, Äpfel, Laternen. Dann lies das Pergament.</div>
         </div>
       </div>
 
@@ -897,7 +850,7 @@
       <div class="gateOpen" id="gateOpen">
         <div class="card">
           <h3>Das Tor öffnet sich</h3>
-          <p>Du hast alles erfüllt: Fragen + Sammelziel. Gleich kommt dein Sammel-Bericht.</p>
+          <p>Du hast den Boss besiegt. Als Nächstes geht es in die Wasserwelt.</p>
         </div>
       </div>
     </div>
@@ -907,17 +860,14 @@
       <div class="panel">
         <div class="hd">
           <h2>Guide</h2>
-          <span class="tiny">Fips</span>
+          <span class="tiny">Fips der Funkenkobold</span>
         </div>
         <div class="bd">
           <div class="mini">
             <div class="avatar"><img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" /></div>
             <div class="speech">
               <div class="name">Fips</div>
-              <div class="line" id="fipsLine">
-                Sammle Dinge im Bild: Sterne, Äpfel, Laternen. Dann lies. Pro Szene gibt es mehrere Fragen.
-                Nächste Szene erst nach: richtige Antworten + Sammelziel.
-              </div>
+              <div class="line" id="fipsLine">Sammle Dinge, lies, beantworte 3 Fragen. Bonus: Finde den Geheimfunken.</div>
             </div>
           </div>
         </div>
@@ -931,7 +881,7 @@
         <div class="bd">
           <div class="pathlist" id="pathList"></div>
           <div style="height:10px"></div>
-          <div class="tiny" id="unlockHint">Fortschritt: Fragen + Sammeln. Erst dann wird freigeschaltet.</div>
+          <div class="tiny" id="unlockHint">Freischaltung: 3 richtige Antworten + Sammelziel erfüllen.</div>
         </div>
       </div>
     </div>
@@ -939,99 +889,20 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- Water splash -->
+  <!-- Water world splash -->
   <div class="splash" id="splash">
     <div class="box">
       <img src="assets/scenes/wasserwelt.png" alt="Wasserwelt" />
       <div class="content">
         <div>
           <h3>Kapitel 2: Wasserwelt</h3>
-          <p>Funkelwald ist geschafft. Als Nächstes wartet eine Wasserwelt.</p>
+          <p>Funkelwald ist geschafft. Hier ist der Abschlussbericht. Als nächstes wartet die Wasserwelt.</p>
+
+          <div class="reportGrid" id="reportGrid"></div>
         </div>
         <div class="row">
           <button class="btn primary" id="closeSplashBtn">Schließen</button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ✅ Abschluss-Report -->
-  <div class="report" id="report">
-    <div class="card">
-      <h3>Dein Sammel-Bericht</h3>
-      <p>Du hast im Funkelwald gesammelt und gelesen. Das ist dein Ergebnis.</p>
-
-      <div class="reportGrid">
-        <div class="stat">
-          <div class="left">
-            <img src="assets/ui/icons/stern.png" alt="Sterne">
-            <div>
-              <div class="tiny">Sterne</div>
-              <b id="repStars">0</b>
-            </div>
-          </div>
-          <div class="tiny">gesamt</div>
-        </div>
-
-        <div class="stat">
-          <div class="left">
-            <img src="assets/ui/interactables/Apfel.png" alt="Äpfel">
-            <div>
-              <div class="tiny">Äpfel</div>
-              <b id="repApples">0</b>
-            </div>
-          </div>
-          <div class="tiny">gesamt</div>
-        </div>
-
-        <div class="stat">
-          <div class="left">
-            <img src="assets/ui/interactables/Laterne.png" alt="Laternen">
-            <div>
-              <div class="tiny">Laternen</div>
-              <b id="repLanterns">0</b>
-            </div>
-          </div>
-          <div class="tiny">gesamt</div>
-        </div>
-
-        <div class="stat">
-          <div class="left">
-            <img src="assets/ui/icons/geheimfunke.png" alt="Funken">
-            <div>
-              <div class="tiny">Geheimfunken</div>
-              <b id="repSparks">0</b>
-            </div>
-          </div>
-          <div class="tiny">gesamt</div>
-        </div>
-
-        <div class="stat">
-          <div class="left">
-            <img src="assets/chars/fips/happy.png" alt="XP">
-            <div>
-              <div class="tiny">Stufe</div>
-              <b id="repLevel">1</b>
-            </div>
-          </div>
-          <div class="tiny">erreicht</div>
-        </div>
-
-        <div class="stat">
-          <div class="left">
-            <img src="assets/chars/fips/excited.png" alt="Serie">
-            <div>
-              <div class="tiny">Serie</div>
-              <b id="repStreak">0</b>
-            </div>
-          </div>
-          <div class="tiny">aktuell</div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-      <div class="row" style="justify-content:flex-end;">
-        <button class="btn primary" id="closeReportBtn">Weiter</button>
       </div>
     </div>
   </div>
@@ -1060,8 +931,6 @@
       herz:  "assets/ui/icons/herz.png",
       stern: "assets/ui/icons/stern.png",
       spark: "assets/ui/icons/geheimfunke.png",
-      apple: "assets/ui/interactables/Apfel.png",
-      lantern:"assets/ui/interactables/Laterne.png",
     },
     fips: {
       idle:     "assets/chars/fips/idle.png",
@@ -1069,29 +938,25 @@
       excited:  "assets/chars/fips/excited.png",
       thinking: "assets/chars/fips/thinking.png",
       sad:      "assets/chars/fips/sad.png",
-      book:     "assets/chars/fips/book.png" // optional, fallback wenn nicht da
     }
   };
 
   // ------------------------------------------------------------
-  // Nodes
-  // ✅ Apfel/Laterne sind jetzt "collect_apple" und "collect_lantern"
-  //    => werden nach oben geflogen + verschwinden (once:true)
+  // Content / Nodes (jetzt: 3 Fragen pro Szene + Sammelziel)
+  // Sammelziel pro Szene: 1 Stern, 1 Apfel, 1 Laterne (kannst du je Szene anpassen)
   // ------------------------------------------------------------
   const NODES = [
     {
       id:"N1", key:"waldweg", title:"Waldweg",
       bg: ASSETS.scenes.waldweg,
-      req: { minStars: 1, minSparks: 0 },
       sparkHotspot: { x: 14, y: 78, r: 7 },
-      fipsInScene: { x: 18, y: 78 },
-      lanternId: "lan1",
+      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star1", type:"collect_star",   img:ASSETS.interact.Stern,   x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
         { id:"lan1",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true, points: 1, label:"Laterne" },
         { id:"ap1",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 86, y: 40, size:"small", once:true, points: 1, label:"Apfel" }
       ],
-      steps: [
+      readSteps: [
         {
           text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
           question: "Wo steht Fips?",
@@ -1099,8 +964,7 @@
             { t:"Am Waldweg.", correct:true },
             { t:"Im Wasser.", correct:false },
             { t:"Auf dem Dach.", correct:false }
-          ],
-          onCorrect: { showFips:true, fipsMood:"happy" }
+          ]
         },
         {
           text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
@@ -1109,35 +973,30 @@
             { t:"Die Laterne.", correct:true },
             { t:"Ein Auto.", correct:false },
             { t:"Ein Schuh.", correct:false }
-          ],
-          onCorrect: { lanternLit:true, fipsMood:"excited" }
+          ]
         },
         {
           text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
           question: "Was tut Fips?",
           answers: [
-            { t:"Er bleibt ruhig und liest.", correct:true },
-            { t:"Er rennt weg.", correct:false },
-            { t:"Er schreit laut.", correct:false }
-          ],
-          onCorrect: { fipsBook:true, fipsMood:"book" }
+            { t:"Er liest.", correct:true },
+            { t:"Er rennt.", correct:false },
+            { t:"Er schläft.", correct:false }
+          ]
         }
       ]
     },
-
     {
       id:"N2", key:"holzbruecke", title:"Holzbrücke",
       bg: ASSETS.scenes.holzbruecke,
-      req: { minStars: 1, minSparks: 0 },
       sparkHotspot: { x: 82, y: 63, r: 7 },
-      fipsInScene: { x: 20, y: 80 },
-      lanternId: "lan2",
+      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star2", type:"collect_star",   img:ASSETS.interact.Stern,   x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
         { id:"lan2",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true, points: 1, label:"Laterne" },
         { id:"ap2",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 80, y: 78, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
-      steps: [
+      readSteps: [
         {
           text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
           question: "Was ist vor Fips?",
@@ -1145,8 +1004,16 @@
             { t:"Eine Holzbrücke.", correct:true },
             { t:"Ein Auto.", correct:false },
             { t:"Ein Flugzeug.", correct:false }
-          ],
-          onCorrect: { showFips:true, fipsMood:"happy" }
+          ]
+        },
+        {
+          text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
+          question: "Was macht die Brücke?",
+          answers: [
+            { t:"Sie knarrt leise.", correct:true },
+            { t:"Sie fliegt.", correct:false },
+            { t:"Sie schläft.", correct:false }
+          ]
         },
         {
           text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
@@ -1154,36 +1021,22 @@
           answers: [
             { t:"Langsam.", correct:true },
             { t:"Rückwärts.", correct:false },
-            { t:"Auf einem Skateboard.", correct:false }
-          ],
-          onCorrect: { lanternLit:true, fipsMood:"excited" }
-        },
-        {
-          text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
-          question: "Was macht die Brücke?",
-          answers: [
-            { t:"Sie knarrt leise.", correct:true },
-            { t:"Sie singt.", correct:false },
-            { t:"Sie fliegt.", correct:false }
-          ],
-          onCorrect: { fipsBook:true, fipsMood:"book" }
+            { t:"Unsichtbar.", correct:false }
+          ]
         }
       ]
     },
-
     {
       id:"N3", key:"apfelbaum", title:"Apfelbaum",
       bg: ASSETS.scenes.apfelbaum,
-      req: { minStars: 1, minSparks: 0 },
       sparkHotspot: { x: 50, y: 18, r: 7 },
-      fipsInScene: { x: 22, y: 80 },
-      lanternId: "lan3",
+      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star3", type:"collect_star",   img:ASSETS.interact.Stern,   x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan3",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny",  once:true, points: 1, label:"Laterne" },
-        { id:"ap3",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 78, y: 40, size:"small", once:true, points: 1, label:"Apfel" }
+        { id:"ap3",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 78, y: 40, size:"small", once:true, points: 1, label:"Apfel" },
+        { id:"lan3",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny",  once:true, points: 1, label:"Laterne" }
       ],
-      steps: [
+      readSteps: [
         {
           text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
           question: "Was sieht Fips?",
@@ -1191,92 +1044,82 @@
             { t:"Einen Apfelbaum.", correct:true },
             { t:"Einen Fernseher.", correct:false },
             { t:"Eine Rakete.", correct:false }
-          ],
-          onCorrect: { showFips:true, fipsMood:"happy" }
+          ]
         },
         {
           text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
           question: "Was hängt am Ast?",
           answers: [
             { t:"Ein Apfel.", correct:true },
-            { t:"Ein Helm.", correct:false },
-            { t:"Eine Glocke.", correct:false }
-          ],
-          onCorrect: { lanternLit:true, fipsMood:"excited" }
+            { t:"Ein Hut.", correct:false },
+            { t:"Ein Ball.", correct:false }
+          ]
         },
         {
           text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
           question: "Was macht Fips?",
           answers: [
             { t:"Er lächelt.", correct:true },
-            { t:"Er weint.", correct:false },
-            { t:"Er stampft.", correct:false }
-          ],
-          onCorrect: { fipsBook:true, fipsMood:"book" }
+            { t:"Er bellt.", correct:false },
+            { t:"Er schwimmt.", correct:false }
+          ]
         }
       ]
     },
-
     {
       id:"N4", key:"sternstein", title:"Sternstein",
       bg: ASSETS.scenes.sternstein,
-      req: { minStars: 1, minSparks: 0 },
       sparkHotspot: { x: 18, y: 34, r: 7 },
-      fipsInScene: { x: 20, y: 80 },
-      lanternId: "lan4",
+      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star4", type:"collect_star",   img:ASSETS.interact.Stern,   x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
         { id:"lan4",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true, points: 1, label:"Laterne" },
         { id:"ap4",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 86, y: 84, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
-      steps: [
+      readSteps: [
         {
           text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
           question: "Was findet Fips?",
           answers: [
             { t:"Einen Sternstein.", correct:true },
-            { t:"Einen Regenschirm.", correct:false },
-            { t:"Einen Ball.", correct:false }
-          ],
-          onCorrect: { showFips:true, fipsMood:"happy" }
+            { t:"Einen Stuhl.", correct:false },
+            { t:"Einen Steinpilz.", correct:false }
+          ]
         },
         {
           text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
           question: "Was glitzert?",
           answers: [
             { t:"Der Stein.", correct:true },
-            { t:"Der Stuhl.", correct:false },
-            { t:"Der Schuh.", correct:false }
-          ],
-          onCorrect: { lanternLit:true, fipsMood:"excited" }
+            { t:"Der Schuh.", correct:false },
+            { t:"Der Stuhl.", correct:false }
+          ]
         },
         {
           text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
           question: "Was macht Fips?",
           answers: [
-            { t:"Er tippt den Stein an.", correct:true },
-            { t:"Er wirft den Stein weg.", correct:false },
-            { t:"Er schläft.", correct:false }
-          ],
-          onCorrect: { fipsBook:true, fipsMood:"book" }
+            { t:"Er tippt ihn an.", correct:true },
+            { t:"Er wirft ihn weg.", correct:false },
+            { t:"Er versteckt sich.", correct:false }
+          ]
         }
       ]
     },
 
+    // Boss-Tor: 3 Treffer + Sammelziel (hier streng: muss auch Sammeln erfüllen)
     {
       id:"N5", key:"bosstor", title:"Boss-Tor",
       bg: ASSETS.scenes.bosstor,
-      req: { minStars: 2, minSparks: 0 },
       sparkHotspot: { x: 90, y: 20, r: 7 },
-      boss: { name: "Torwächter", hpMax: 3 },
-      fipsInScene: { x: 22, y: 82 },
-      lanternId: "lan5",
+      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star5", type:"collect_star",   img:ASSETS.interact.Stern,   x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
         { id:"lan5",  type:"collect_lantern",img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true, points: 1, label:"Laterne" },
         { id:"ap5",   type:"collect_apple",  img:ASSETS.interact.Apfel,   x: 84, y: 74, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
-      steps: [
+      boss: { name: "Torwächter", hpMax: 3 },
+      readBoss: [
         {
           text: ["Vor Fips ist ein großes Tor.","Fips braucht einen Schlüssel.","Das Tor bleibt zu."].join("<br>"),
           question: "Was braucht Fips?",
@@ -1284,8 +1127,7 @@
             { t:"Den Schlüssel.", correct:true },
             { t:"Einen Ball.", correct:false },
             { t:"Eine Leiter.", correct:false }
-          ],
-          onCorrect: { showFips:true, fipsMood:"happy" }
+          ]
         },
         {
           text: ["Fips bleibt ruhig.","Fips liest den Text.","Fips denkt nach."].join("<br>"),
@@ -1294,8 +1136,7 @@
             { t:"Er liest den Text.", correct:true },
             { t:"Er schläft.", correct:false },
             { t:"Er fliegt.", correct:false }
-          ],
-          onCorrect: { lanternLit:true, fipsMood:"excited" }
+          ]
         },
         {
           text: ["Ein Funken glitzert.","Fips bleibt aufmerksam.","Das Tor wartet."].join("<br>"),
@@ -1304,8 +1145,7 @@
             { t:"Ein Funken.", correct:true },
             { t:"Ein Auto.", correct:false },
             { t:"Ein Baum.", correct:false }
-          ],
-          onCorrect: { fipsBook:true, fipsMood:"book" }
+          ]
         }
       ]
     }
@@ -1314,18 +1154,17 @@
   // ------------------------------------------------------------
   // Storage
   // ------------------------------------------------------------
-  const STORAGE_KEY = "leselabyrinth_funkelwald_v4_collect_apples_lanterns_megastar_fix";
+  const STORAGE_KEY = "leselabyrinth_funkelwald_v3_3fragen_sammeln_report";
 
   const defaultState = () => ({
     nodeIndex: 0,
-    unlocked: NODES.map((_,i)=> i===0),
-    completed: NODES.map(()=> false),
+    unlocked: [true, false, false, false, false],
+    completed: [false, false, false, false, false],
 
     stars: 0,
     apples: 0,
     lanterns: 0,
     sparks: 0,
-
     streak: 0,
     level: 1,
     xp: 0,
@@ -1336,16 +1175,16 @@
 
     scene: NODES.map(n => ({
       tries: 0,
+      answered: false,
       perfect: true,
       sparkFound: false,
       collected: {},
-      stepIndex: 0,
-      bossHP: n.boss ? n.boss.hpMax : 0,
 
-      // visuals
-      _showFipsInScene:false,
-      _lanternLit:false,
-      _fipsMood:"idle"
+      qIndex: 0,
+      correctSteps: [false,false,false],
+
+      bossHP: n.boss ? n.boss.hpMax : 0,
+      bossStep: 0
     }))
   });
 
@@ -1377,18 +1216,17 @@
     sceneTitle: document.getElementById("sceneTitle"),
     readText: document.getElementById("readText"),
     question: document.getElementById("question"),
-    qProgress: document.getElementById("qProgress"),
     answers: document.getElementById("answers"),
     reReadBtn: document.getElementById("reReadBtn"),
     nextBtn: document.getElementById("nextBtn"),
     statusLine: document.getElementById("statusLine"),
+    goalLine: document.getElementById("goalLine"),
+    qProgress: document.getElementById("qProgress"),
 
+    sceneWrap: document.getElementById("sceneWrap"),
     sceneImg: document.getElementById("sceneImg"),
     overlay: document.getElementById("overlay"),
     gateOpen: document.getElementById("gateOpen"),
-
-    megaStar: document.getElementById("megaStar"),
-    megaStarWrap: document.getElementById("megaStarWrap"),
 
     bossHud: document.getElementById("bossHud"),
     bossName: document.getElementById("bossName"),
@@ -1397,11 +1235,9 @@
 
     fipsAvatar: document.getElementById("fipsAvatar"),
     fipsLine: document.getElementById("fipsLine"),
-    fipsBigImg: document.getElementById("fipsBigImg"),
-    fipsBigLine: document.getElementById("fipsBigLine"),
-
-    fipsInScene: document.getElementById("fipsInScene"),
-    fipsInSceneImg: document.getElementById("fipsInSceneImg"),
+    fipsMainImg: document.getElementById("fipsMainImg"),
+    fipsMainLine: document.getElementById("fipsMainLine"),
+    bookTag: document.getElementById("bookTag"),
 
     pathList: document.getElementById("pathList"),
     chapterStatus: document.getElementById("chapterStatus"),
@@ -1411,7 +1247,6 @@
     applesVal: document.getElementById("applesVal"),
     lanternsVal: document.getElementById("lanternsVal"),
     sparksVal: document.getElementById("sparksVal"),
-
     streakVal: document.getElementById("streakVal"),
     levelVal: document.getElementById("levelVal"),
     focusVal: document.getElementById("focusVal"),
@@ -1433,79 +1268,37 @@
 
     splash: document.getElementById("splash"),
     closeSplashBtn: document.getElementById("closeSplashBtn"),
-
-    report: document.getElementById("report"),
-    repStars: document.getElementById("repStars"),
-    repApples: document.getElementById("repApples"),
-    repLanterns: document.getElementById("repLanterns"),
-    repSparks: document.getElementById("repSparks"),
-    repLevel: document.getElementById("repLevel"),
-    repStreak: document.getElementById("repStreak"),
-    closeReportBtn: document.getElementById("closeReportBtn"),
+    reportGrid: document.getElementById("reportGrid"),
   };
 
   // ------------------------------------------------------------
   // Helpers
   // ------------------------------------------------------------
   const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
-  function toast(html, ms=2400){
+
+  function toast(html, ms=2200){
     el.toast.innerHTML = html;
     el.toast.classList.add("show");
     clearTimeout(toast._t);
     toast._t = setTimeout(()=>el.toast.classList.remove("show"), ms);
   }
+
+  function setFips(mood, line){
+    const src = ASSETS.fips[mood] || ASSETS.fips.idle;
+    el.fipsAvatar.src = src;
+    el.fipsMainImg.src = src;
+    el.fipsLine.textContent = line;
+    el.fipsMainLine.textContent = line;
+
+    el.fipsMainImg.classList.remove("wiggle");
+    void el.fipsMainImg.offsetWidth;
+    el.fipsMainImg.classList.add("wiggle");
+  }
+
   function pulse(pill){
     pill.classList.remove("pulse");
     void pill.offsetWidth;
     pill.classList.add("pulse");
-  }
-  function safeSetImg(imgEl, src, fallback){
-    imgEl.onerror = () => { imgEl.onerror = null; imgEl.src = fallback; };
-    imgEl.src = src;
-  }
-
-  // ✅ Fix: MegaStar darf nie hängen bleiben
-  // - wir starten Animation neu durch DOM-Reflow
-  // - und zwingen danach ein hard-hide per Timeout
-  function showMegaStar(){
-    clearTimeout(showMegaStar._t);
-    el.megaStar.classList.remove("show");
-
-    // restart animation reliably
-    void el.megaStar.offsetWidth;
-    el.megaStar.classList.add("show");
-
-    // zusätzlich: Wrap bekommt einmalige Animation via WebAnimations API
-    try{
-      el.megaStarWrap.animate([
-        { transform:"scale(.30) rotate(-18deg)", opacity:0 },
-        { transform:"scale(1.05) rotate(8deg)", opacity:1, offset:0.28 },
-        { transform:"scale(.98) rotate(-4deg)", opacity:1, offset:0.55 },
-        { transform:"scale(1.02) rotate(0deg)", opacity:0 }
-      ], { duration: 720, easing:"ease-out", fill:"forwards" });
-    }catch(e){}
-
-    // hard hide (wichtig!)
-    showMegaStar._t = setTimeout(() => {
-      el.megaStar.classList.remove("show");
-    }, 760);
-  }
-
-  function setFips(mood, line){
-    const src = ASSETS.fips[mood] || ASSETS.fips.idle;
-    safeSetImg(el.fipsAvatar, src, ASSETS.fips.idle);
-    safeSetImg(el.fipsBigImg, src, ASSETS.fips.idle);
-    el.fipsLine.textContent = line;
-    el.fipsBigLine.textContent = line;
-    el.fipsBigImg.classList.remove("wiggle");
-    void el.fipsBigImg.offsetWidth;
-    el.fipsBigImg.classList.add("wiggle");
-  }
-
-  function setFipsInSceneMood(i, mood){
-    const src = ASSETS.fips[mood] || ASSETS.fips.idle;
-    safeSetImg(el.fipsInSceneImg, src, ASSETS.fips.idle);
-    state.scene[i]._fipsMood = mood;
   }
 
   function gainXP(amount){
@@ -1520,30 +1313,31 @@
     pulse(el.pillXP);
   }
 
-  function resetScene(i){
-    const n = NODES[i];
-    const s = state.scene[i];
-    s.tries = 0;
-    s.perfect = true;
-    s.collected = {};
-    s.sparkFound = false;
-    s.stepIndex = 0;
-    s.bossHP = n.boss ? n.boss.hpMax : 0;
-    s._showFipsInScene = false;
-    s._lanternLit = false;
-    s._fipsMood = "idle";
-    state.completed[i] = false;
-  }
-
   function loseHeart(){
     state.hearts = clamp(state.hearts - 1, 0, state.heartsMax);
     pulse(el.pillHearts);
+
     if(state.hearts === 0){
-      toast(`<b>Keine Herzen mehr.</b> Szene startet neu.`);
-      resetScene(state.nodeIndex);
+      toast(`<b>Oh nein.</b> Keine Herzen mehr. Die Szene startet neu.`);
+      const i = state.nodeIndex;
+      const s = state.scene[i];
+
+      s.tries = 0;
+      s.answered = false;
+      s.perfect = true;
+      s.collected = {};
+      s.sparkFound = false;
+      s.qIndex = 0;
+      s.correctSteps = [false,false,false];
+
+      if(NODES[i].boss){
+        s.bossHP = NODES[i].boss.hpMax;
+        s.bossStep = 0;
+      }
+
       state.hearts = state.heartsMax;
       state.streak = 0;
-      setFips("sad", "Nochmal. Du schaffst das.");
+      setFips("sad", "Nochmal. Lies und sammle.");
     }
   }
 
@@ -1557,60 +1351,135 @@
     img.className = "fly";
     img.style.left = fromClientX + "px";
     img.style.top = fromClientY + "px";
-    document.body.appendChild(img);
 
+    document.body.appendChild(img);
     img.animate([
       { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
-      { transform: `translate(${(tx-fromClientX)}px, ${(ty-fromClientY)}px) scale(.62)`, opacity: 0 }
+      { transform: `translate(${(tx-fromClientX)}px, ${(ty-fromClientY)}px) scale(.65)`, opacity: 0 }
     ], { duration: 650, easing: "ease-in", fill: "forwards" });
 
-    setTimeout(()=>img.remove(), 720);
+    setTimeout(()=>img.remove(), 700);
   }
 
   function burstAtHotspot(hsEl){
     const b = document.createElement("div");
     b.className = "sparkBurst";
     hsEl.appendChild(b);
-    setTimeout(()=>b.remove(), 520);
+    setTimeout(()=>b.remove(), 500);
   }
 
-  function countCollectedInScene(i, typePrefix){
+  function removeAnyRewardStar(){
+    const old = el.sceneWrap.querySelector(".rewardStar");
+    if(old) old.remove();
+  }
+
+  function showRewardStar(labelText){
+    removeAnyRewardStar();
+
+    const wrap = document.createElement("div");
+    wrap.className = "rewardStar";
+    wrap.innerHTML = `
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="gStar" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffe9a8"/>
+            <stop offset="0.55" stop-color="#ffd36a"/>
+            <stop offset="1" stop-color="#ff8ec6"/>
+          </linearGradient>
+          <radialGradient id="gGlow" cx="50%" cy="35%" r="70%">
+            <stop offset="0" stop-color="rgba(255,255,255,.95)"/>
+            <stop offset="0.55" stop-color="rgba(255,255,255,.35)"/>
+            <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+        </defs>
+
+        <circle cx="100" cy="95" r="72" fill="url(#gGlow)" opacity="0.85"></circle>
+
+        <path fill="url(#gStar)" stroke="rgba(255,255,255,.65)" stroke-width="4"
+          d="M100 16
+             L122 70
+             L180 74
+             L136 112
+             L150 168
+             L100 136
+             L50 168
+             L64 112
+             L20 74
+             L78 70
+             Z" />
+        <path fill="rgba(255,255,255,.18)"
+          d="M100 24 L118 70 L168 73 L130 104 L142 154 L100 128 L58 154 L70 104 L32 73 L82 70 Z"/>
+        <circle cx="78" cy="92" r="6.5" fill="rgba(10,12,28,.65)"></circle>
+        <circle cx="122" cy="92" r="6.5" fill="rgba(10,12,28,.65)"></circle>
+        <path d="M78 118 C92 132, 108 132, 122 118" fill="none" stroke="rgba(10,12,28,.65)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <div class="face"><div class="cap">${labelText || "Super!"}</div></div>
+    `;
+
+    wrap.addEventListener("animationend", () => wrap.remove(), { once:true });
+    el.sceneWrap.appendChild(wrap);
+
+    // Safety: falls animationend nicht feuert
+    setTimeout(() => { if(wrap.isConnected) wrap.remove(); }, 1400);
+  }
+
+  function goalsForNode(node){
+    const g = node.goals || {stars:0,apples:0,lanterns:0};
+    return {
+      stars: g.stars || 0,
+      apples: g.apples || 0,
+      lanterns: g.lanterns || 0
+    };
+  }
+
+  function collectedCountsInNode(i){
     const s = state.scene[i];
-    const node = NODES[i];
-    let c = 0;
-    for(const it of node.interactables){
-      if(it.type === typePrefix && s.collected[it.id]) c += (it.points || 1);
+    let stars=0, apples=0, lanterns=0;
+    for(const key in s.collected){
+      if(!s.collected[key]) continue;
+      if(key.startsWith("star")) stars++;
+      if(key.startsWith("ap")) apples++;
+      if(key.startsWith("lan")) lanterns++;
     }
-    return c;
+    return { stars, apples, lanterns };
   }
-  function meetsSceneRequirements(i){
+
+  function isGoalMet(i){
     const node = NODES[i];
+    const g = goalsForNode(node);
+    const c = collectedCountsInNode(i);
+    return c.stars >= g.stars && c.apples >= g.apples && c.lanterns >= g.lanterns;
+  }
+
+  function allQuestionsCorrect(i){
     const s = state.scene[i];
+    // Boss-node zählt nicht über correctSteps, sondern über Boss-HP
+    return s.correctSteps.every(Boolean);
+  }
 
-    const stepsDone = s.stepIndex >= node.steps.length;
-
-    const starsInScene   = countCollectedInScene(i, "collect_star");
-    const sparksInScene  = s.sparkFound ? 1 : 0;
-
-    const reqStarsOk  = (node.req?.minStars ?? 0) <= starsInScene;
-    const reqSparksOk = (node.req?.minSparks ?? 0) <= sparksInScene;
-
-    const bossOk = node.boss ? (s.bossHP <= 0) : true;
-
-    return stepsDone && reqStarsOk && reqSparksOk && bossOk;
+  function canUnlockNext(i){
+    const node = NODES[i];
+    if(node.boss){
+      // Boss: Boss besiegt + Sammelziel erfüllt
+      const s = state.scene[i];
+      return s.bossHP === 0 && isGoalMet(i);
+    }
+    return allQuestionsCorrect(i) && isGoalMet(i);
   }
 
   function markCompleted(i){
     state.completed[i] = true;
+    state.scene[i].answered = true;
 
+    // Bonus: perfekt
     if(state.scene[i].perfect){
-      state.stars += 1; // Bonusstern global
+      state.stars += 1;  // Bonus Stern
       pulse(el.pillStars);
       gainXP(35);
       toast(`<b>Perfekt!</b> Bonus erhalten.`);
       setFips("happy", "Perfekt gelesen.");
     }else{
-      gainXP(22);
+      gainXP(20);
       setFips("happy", "Richtig. Weiter.");
     }
 
@@ -1627,72 +1496,25 @@
           saveState();
           renderAll();
         }
-      }, 950);
+      }, 900);
     }
-  }
-
-  function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-  function loadState(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return defaultState();
-      const parsed = JSON.parse(raw);
-      const d = defaultState();
-      return {
-        ...d,
-        ...parsed,
-        scene: (parsed.scene && parsed.scene.length === NODES.length) ? parsed.scene : d.scene
-      };
-    }catch(e){
-      return defaultState();
-    }
-  }
-
-  function defaultState(){
-    return ({
-      nodeIndex: 0,
-      unlocked: NODES.map((_,i)=> i===0),
-      completed: NODES.map(()=> false),
-      stars: 0,
-      apples: 0,
-      lanterns: 0,
-      sparks: 0,
-      streak: 0,
-      level: 1,
-      xp: 0,
-      xpNeed: 100,
-      heartsMax: 3,
-      hearts: 3,
-      focus: "W-Frage",
-      scene: NODES.map(n => ({
-        tries: 0,
-        perfect: true,
-        sparkFound: false,
-        collected: {},
-        stepIndex: 0,
-        bossHP: n.boss ? n.boss.hpMax : 0,
-        _showFipsInScene:false,
-        _lanternLit:false,
-        _fipsMood:"idle"
-      }))
-    });
   }
 
   // ------------------------------------------------------------
-  // Render
+  // Render HUD
   // ------------------------------------------------------------
   function renderHUD(){
     el.starsVal.textContent = state.stars;
     el.applesVal.textContent = state.apples;
     el.lanternsVal.textContent = state.lanterns;
     el.sparksVal.textContent = state.sparks;
-
     el.streakVal.textContent = state.streak;
     el.levelVal.textContent = state.level;
     el.focusVal.textContent = state.focus;
 
     el.xpVal.textContent = state.xp;
     el.xpNeed.textContent = state.xpNeed;
+
     const pct = clamp((state.xp / state.xpNeed) * 100, 0, 100);
     el.xpBar.style.width = pct.toFixed(1) + "%";
 
@@ -1706,6 +1528,9 @@
     }
   }
 
+  // ------------------------------------------------------------
+  // Render Path
+  // ------------------------------------------------------------
   function renderPath(){
     el.pathList.innerHTML = "";
     const done = state.completed.filter(Boolean).length;
@@ -1714,26 +1539,16 @@
     NODES.forEach((n, i) => {
       const unlocked = state.unlocked[i];
       const completed = state.completed[i];
-      const s = state.scene[i];
-
-      const stepsTotal = n.steps.length;
-      const stepsDone = clamp(s.stepIndex, 0, stepsTotal);
-
-      const starsScene = countCollectedInScene(i, "collect_star");
-      const reqStars = n.req?.minStars ?? 0;
-
-      const meta = completed
-        ? "erledigt"
-        : (unlocked ? `Fragen ${stepsDone}/${stepsTotal} · Sterne ${starsScene}/${reqStars}` : "gesperrt");
 
       const btn = document.createElement("div");
       btn.className = "node" + (unlocked ? "" : " locked") + (i===state.nodeIndex ? " active" : "");
+      const extra = completed ? "erledigt" : (unlocked ? "bereit" : "gesperrt");
       btn.innerHTML = `
         <div class="left">
           <div class="badge">${i+1}</div>
           <div>
             <div style="font-weight:1000; line-height:1.05;">${n.title}</div>
-            <div class="tiny" style="margin-top:2px;">${meta}</div>
+            <div class="tiny" style="margin-top:2px;">${extra}</div>
           </div>
         </div>
         <div class="tiny">${completed ? "✓" : (unlocked ? "→" : "🔒")}</div>
@@ -1748,6 +1563,9 @@
     });
   }
 
+  // ------------------------------------------------------------
+  // Boss UI
+  // ------------------------------------------------------------
   function renderBossUI(node, sceneState){
     if(node.boss){
       el.bossHud.classList.add("show");
@@ -1761,67 +1579,70 @@
     }
   }
 
+  // ------------------------------------------------------------
+  // Render Scene
+  // ------------------------------------------------------------
   function renderScene(){
-    // ✅ Fix: MegaStar immer sicher aus (bei Szenenwechsel / Fragewechsel)
-    el.megaStar.classList.remove("show");
-    clearTimeout(showMegaStar._t);
+    removeAnyRewardStar();
 
     const i = state.nodeIndex;
     const node = NODES[i];
     const s = state.scene[i];
 
     el.sceneTitle.textContent = node.title;
+
     el.sceneImg.src = node.bg;
     el.overlay.innerHTML = "";
     el.gateOpen.classList.remove("show");
 
+    // Boss handling
     renderBossUI(node, s);
 
-    // Fips im Bild position
-    el.fipsInScene.style.left = (node.fipsInScene?.x ?? 18) + "%";
-    el.fipsInScene.style.top  = (node.fipsInScene?.y ?? 78) + "%";
+    // Pergament + Frage
+    if(node.boss){
+      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
+      const pack = node.readBoss[step];
+      el.readText.innerHTML = pack.text;
+      el.question.textContent = pack.question;
+      renderAnswers(pack.answers);
+      el.qProgress.textContent = `Bossfrage ${step+1}/3`;
+    } else {
+      const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
+      const pack = node.readSteps[qi];
+      el.readText.innerHTML = pack.text;
+      el.question.textContent = pack.question;
+      renderAnswers(pack.answers);
+      el.qProgress.textContent = `Frage ${qi+1}/3`;
+    }
 
-    // Step pack
-    const stepsTotal = node.steps.length;
-    const stepIdx = clamp(s.stepIndex, 0, stepsTotal-1);
-    const step = node.steps[stepIdx];
+    const g = goalsForNode(node);
+    const c = collectedCountsInNode(i);
+    el.goalLine.textContent = `Sammelziel: Sterne ${c.stars}/${g.stars} · Äpfel ${c.apples}/${g.apples} · Laternen ${c.lanterns}/${g.lanterns}`;
 
-    el.readText.innerHTML = step.text;
-    el.question.textContent = step.question;
+    // Next Button: nur wenn Szene komplett erfüllt
+    el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
 
-    // progress
-    const starsInScene = countCollectedInScene(i, "collect_star");
-    const reqStars = node.req?.minStars ?? 0;
-    const sparksInScene = s.sparkFound ? 1 : 0;
-    const reqSparks = node.req?.minSparks ?? 0;
-    el.qProgress.textContent =
-      `Frage ${stepIdx+1}/${stepsTotal} · Sterne ${starsInScene}/${reqStars}` +
-      (reqSparks > 0 ? ` · Funken ${sparksInScene}/${reqSparks}` : "");
-
-    renderAnswers(step.answers);
-
-    // Interactables (✅ once:true => verschwinden nach einsammeln)
+    // Interactables
     node.interactables.forEach(it => {
       if(it.once && s.collected[it.id]) return;
 
       const hs = document.createElement("div");
       hs.className = "hotspot " + (it.size || "");
-      hs.dataset.id = it.id;
-
       hs.style.left = it.x + "%";
       hs.style.top  = it.y + "%";
       hs.style.setProperty("--w", it.size==="tiny" ? "70px" : "120px");
       hs.title = "Tippe: " + (it.label || "Interaktion");
 
-      // Laterne leuchtet nach Trigger
-      if(it.id === node.lanternId && s._lanternLit){
-        hs.classList.add("lanternLit");
-      }
-
       const img = document.createElement("img");
       img.src = it.img;
       img.alt = it.label || "Interaktion";
       hs.appendChild(img);
+
+      // Laterne: Wenn Sammelziel Laterne bereits erfüllt, soll sie nicht mehr da sein (once=true macht das)
+      // Glow: wenn Laternen gesammelt wurden, kann eine aktive Laterne stärker wirken (optional)
+      if(it.type === "collect_lantern" && (s.correctSteps[1] || s.collected[it.id])){
+        img.classList.add("glowLantern");
+      }
 
       hs.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -1831,7 +1652,7 @@
       el.overlay.appendChild(hs);
     });
 
-    // Secret spark (invisible)
+    // Secret spark hotspot (invisible)
     const sp = node.sparkHotspot;
     if(sp && !s.sparkFound){
       const hs = document.createElement("div");
@@ -1847,8 +1668,8 @@
         s.sparkFound = true;
         state.sparks += 1;
         pulse(el.pillSparks);
-        gainXP(16);
-        toast(`<b>Geheimfunke!</b> Verstecktes gefunden.`);
+        gainXP(15);
+        toast(`<b>Geheimfunke!</b> Etwas Verstecktes gefunden.`);
         setFips("excited", "Geheimfunke gefunden.");
         saveState();
         renderAll();
@@ -1856,16 +1677,8 @@
       el.overlay.appendChild(hs);
     }
 
-    // Fips in scene show + mood
-    if(s._showFipsInScene){
-      el.fipsInScene.classList.add("show");
-    }else{
-      el.fipsInScene.classList.remove("show");
-    }
-    setFipsInSceneMood(i, s._fipsMood || "idle");
-
-    // next button
-    el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
+    // Fips-Buch-Effekt: nach 3. richtiger Frage anzeigen (als Status)
+    el.bookTag.classList.toggle("show", s.correctSteps[2] === true && !node.boss);
   }
 
   function renderAnswers(list){
@@ -1879,29 +1692,21 @@
     });
 
     const i = state.nodeIndex;
-    const node = NODES[i];
-    const starsInScene = countCollectedInScene(i, "collect_star");
-    const reqStars = node.req?.minStars ?? 0;
-    const missingStars = Math.max(0, reqStars - starsInScene);
-
-    const base = state.completed[i] ? "erledigt" : "offen";
-    el.statusLine.innerHTML = `Status: <span class="tiny">${base}</span>` +
-      (missingStars > 0 && !state.completed[i] ? ` · <span class="bad">Sammelziel fehlt: ${missingStars} Stern(e)</span>` : "");
+    const ok = state.completed[i] ? "erledigt" : "offen";
+    el.statusLine.innerHTML = `Status: <span class="tiny">${ok}</span>`;
   }
 
   // ------------------------------------------------------------
-  // Interact logic
+  // Interact (Sammeln: Stern, Apfel, Laterne)
   // ------------------------------------------------------------
   function onInteract(it, hsEl, cx, cy){
     const i = state.nodeIndex;
+    const node = NODES[i];
     const s = state.scene[i];
 
-    // ✅ verschwinden (once:true)
-    if(it.once){
-      s.collected[it.id] = true;
-      hsEl.style.pointerEvents = "none";
-      hsEl.style.opacity = "0";
-    }
+    if(state.completed[i]) return;
+
+    if(it.once) s.collected[it.id] = true;
 
     burstAtHotspot(hsEl);
 
@@ -1909,152 +1714,199 @@
       state.stars += (it.points || 1);
       pulse(el.pillStars);
       gainXP(10);
-      toast(`<b>Stern eingesammelt!</b> +${it.points||1} · +10 XP`);
+      toast(`<b>Stern eingesammelt!</b> +${it.points||1} Stern · +10 XP`);
       setFips("happy", "Stern eingesammelt.");
+
       flyToHUD(cx, cy, ASSETS.icons.stern, el.pillStars);
 
     } else if(it.type === "collect_apple"){
       state.apples += (it.points || 1);
       pulse(el.pillApples);
       gainXP(8);
-      toast(`<b>Apfel eingesammelt!</b> +${it.points||1} · +8 XP`);
+      toast(`<b>Apfel eingesammelt!</b> +${it.points||1} Apfel · +8 XP`);
       setFips("happy", "Apfel eingesammelt.");
-      flyToHUD(cx, cy, ASSETS.icons.apple, el.pillApples);
+
+      flyToHUD(cx, cy, ASSETS.interact.Apfel, el.pillApples);
 
     } else if(it.type === "collect_lantern"){
       state.lanterns += (it.points || 1);
       pulse(el.pillLanterns);
       gainXP(8);
-      toast(`<b>Laterne eingesammelt!</b> +${it.points||1} · +8 XP`);
+      toast(`<b>Laterne eingesammelt!</b> +${it.points||1} Laterne · +8 XP`);
       setFips("happy", "Laterne eingesammelt.");
-      flyToHUD(cx, cy, ASSETS.icons.lantern, el.pillLanterns);
+
+      flyToHUD(cx, cy, ASSETS.interact.Laterne, el.pillLanterns);
+
+    } else if(it.type === "trap"){
+      s.perfect = false;
+      s.tries += 1;
+      state.streak = 0;
+      loseHeart();
+      toast(`<b>Fehler.</b> ${it.say || "Nicht richtig."}`);
+      setFips("thinking", "Nochmal lesen. Dann antworten.");
 
     } else {
-      // fallback
       gainXP(5);
       toast(`<b>Hinweis:</b> ${it.say || "Interessant."}`);
       setFips("idle", it.say || "Weiter.");
     }
 
+    // Wenn once=true, soll es sofort verschwinden: renderAll sorgt dafür (weil collected=true)
     saveState();
     renderAll();
   }
 
   // ------------------------------------------------------------
-  // Answer logic
+  // Answer (3 Fragen pro Szene) + Belohnungsstern groß (verschwindet sicher)
   // ------------------------------------------------------------
   function onAnswer(idx){
     const i = state.nodeIndex;
     const node = NODES[i];
     const s = state.scene[i];
-    if(state.completed[i]) return;
 
-    // ✅ Fix: MegaStar darf vor neuer Antwort nicht hängen
-    el.megaStar.classList.remove("show");
-    clearTimeout(showMegaStar._t);
+    if(state.completed[i]) return;
 
     const cards = [...el.answers.querySelectorAll(".ans")];
     cards.forEach(c => c.classList.remove("correct","wrong"));
 
     s.tries += 1;
 
-    const stepsTotal = node.steps.length;
-    const stepIdx = clamp(s.stepIndex, 0, stepsTotal-1);
-    const step = node.steps[stepIdx];
-    const chosen = step.answers[idx];
+    let answers, chosen;
+
+    if(node.boss){
+      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
+      answers = node.readBoss[step].answers;
+      chosen = answers[idx];
+    }else{
+      const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
+      answers = node.readSteps[qi].answers;
+      chosen = answers[idx];
+    }
 
     if(chosen && chosen.correct){
       cards[idx].classList.add("correct");
 
-      // ✅ Kindlicher Reward, verschwindet zuverlässig
-      showMegaStar();
+      // Großer Belohnungsstern (nicht kleben, verschwindet)
+      showRewardStar("Richtig!");
 
-      // Boss HP
+      // Fips reagiert stärker
+      setFips("excited", "Richtig.");
+
       if(node.boss){
+        // Boss: richtig = Boss HP -1
         s.bossHP = clamp(s.bossHP - 1, 0, node.boss.hpMax);
-        toast(`<b>Treffer!</b> Der Boss verliert Leben.`);
-        setFips("excited", "Richtig. Boss verliert Leben.");
+        renderBossUI(node, s);
         gainXP(18);
-      }else{
-        toast(`<b>Richtig!</b>`);
-        setFips("happy", "Richtig.");
-        gainXP(14);
-      }
 
-      // Step triggers
-      if(step.onCorrect?.showFips) s._showFipsInScene = true;
-      if(step.onCorrect?.lanternLit) s._lanternLit = true;
+        s.bossStep = clamp(s.bossStep + 1, 0, node.readBoss.length - 1);
 
-      const mood = step.onCorrect?.fipsMood;
-      if(mood) s._fipsMood = mood;
+        if(s.bossHP === 0){
+          // Boss besiegt, aber Szene erst komplett, wenn Sammelziel erfüllt
+          el.statusLine.innerHTML = `Status: <span class="good">Boss besiegt.</span>`;
 
-      // next question
-      s.stepIndex += 1;
+          if(isGoalMet(i)){
+            markCompleted(i);
 
-      // finished?
-      if(meetsSceneRequirements(i)){
-        markCompleted(i);
-        el.statusLine.innerHTML = `Status: <span class="good">Szene geschafft.</span>`;
-        saveState();
-        renderAll();
-
-        // Boss end => Gate + Report + Splash
-        if(node.boss){
-          el.gateOpen.classList.add("show");
-
-          setTimeout(() => {
-            el.gateOpen.classList.remove("show");
-            openReport();
-          }, 1100);
+            el.gateOpen.classList.add("show");
+            setTimeout(() => {
+              el.gateOpen.classList.remove("show");
+              openReportAndSplash();
+            }, 1200);
+          }else{
+            toast(`<b>Boss besiegt!</b> Sammelziel fehlt noch.`);
+            setFips("thinking", "Boss besiegt. Jetzt Sammelziel erfüllen.");
+          }
         }else{
-          autoAdvance();
+          el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span> Noch ${s.bossHP} Treffer.`;
         }
-        return;
+
+      } else {
+        // Normal: Frage korrekt -> nächste Frage
+        const qi = clamp(s.qIndex, 0, 2);
+        s.correctSteps[qi] = true;
+
+        // Szenen-Story-Effekte:
+        // Q1 korrekt: Fips "steht da" (Mood happy)
+        // Q2 korrekt: Laternen-Glow wird sichtbar (im renderScene via glowLantern)
+        // Q3 korrekt: Buch-Tag erscheint
+        if(qi === 0) setFips("happy", "Richtig. Weiter zur nächsten Frage.");
+        if(qi === 1) setFips("happy", "Richtig. Die Laterne wirkt stärker.");
+        if(qi === 2) setFips("happy", "Richtig. Lesen geschafft.");
+
+        gainXP(16);
+
+        // advance question index, aber maximal 2
+        s.qIndex = clamp(s.qIndex + 1, 0, 2);
+
+        // Wenn alle 3 Fragen korrekt: check Sammelziel -> erst dann erledigt
+        if(allQuestionsCorrect(i)){
+          if(isGoalMet(i)){
+            markCompleted(i);
+            el.statusLine.innerHTML = `Status: <span class="good">Erledigt.</span>`;
+            toast(`<b>Szene erledigt!</b>`);
+          }else{
+            el.statusLine.innerHTML = `Status: <span class="good">Alle Fragen richtig.</span> Sammelziel fehlt.`;
+            toast(`<b>Alle Fragen richtig!</b> Jetzt Sammelziel erfüllen.`);
+            setFips("thinking", "Jetzt Sammelziel erfüllen.");
+          }
+        }else{
+          el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
+        }
       }
 
       saveState();
       renderAll();
 
+      // Auto-Weiter nur wenn wirklich erledigt
+      if(state.completed[i]){
+        autoAdvance();
+      }
+
     } else {
       cards[idx].classList.add("wrong");
       s.perfect = false;
       state.streak = 0;
+
       loseHeart();
+
       el.statusLine.innerHTML = `Status: <span class="bad">Falsch.</span> Lies nochmal.`;
       toast(`<b>Falsch.</b> Lies nochmal und suche das passende Wort.`);
-      setFips("thinking", "Nochmal lesen. Du findest die Antwort.");
+      setFips("thinking", "Nochmal lesen.");
 
-      // Mood im Bild traurig/denkend
-      s._fipsMood = "thinking";
       saveState();
       renderAll();
     }
   }
 
   // ------------------------------------------------------------
-  // Report (Boss-Tor)
+  // Abschlussbericht + Splash
   // ------------------------------------------------------------
-  function openReport(){
-    el.repStars.textContent = state.stars;
-    el.repApples.textContent = state.apples;
-    el.repLanterns.textContent = state.lanterns;
-    el.repSparks.textContent = state.sparks;
-    el.repLevel.textContent = state.level;
-    el.repStreak.textContent = state.streak;
-    el.report.classList.add("show");
-  }
+  function openReportAndSplash(){
+    // Report füllen
+    const items = [
+      ["Sterne", state.stars],
+      ["Äpfel", state.apples],
+      ["Laternen", state.lanterns],
+      ["Funken", state.sparks],
+      ["Stufe", state.level],
+      ["XP", `${state.xp}/${state.xpNeed}`],
+      ["Serie", state.streak],
+      ["Herzen", `${state.hearts}/${state.heartsMax}`],
+    ];
 
-  el.closeReportBtn.addEventListener("click", () => {
-    el.report.classList.remove("show");
+    el.reportGrid.innerHTML = items.map(([k,v]) => `
+      <div class="rep"><div class="k">${k}</div><div class="v">${v}</div></div>
+    `).join("");
+
     el.splash.classList.add("show");
-  });
+  }
 
   // ------------------------------------------------------------
   // Buttons
   // ------------------------------------------------------------
   el.reReadBtn.addEventListener("click", () => {
-    toast(`<b>Nochmal lesen:</b> Lies das Pergament und suche das Schlüsselwort.`, 2800);
-    setFips("thinking", "Lies das Pergament. Such das Schlüsselwort.");
+    toast(`<b>Nochmal lesen:</b> Lies das Pergament und suche das Schlüsselwort.`, 2600);
+    setFips("thinking", "Lies das Pergament. Dann antworten.");
   });
 
   el.nextBtn.addEventListener("click", () => {
@@ -2077,19 +1929,18 @@
 
   el.helpBtn.addEventListener("click", () => {
     toast(`<b>So funktioniert es:</b><br>
-      1) Tippe auf Dinge im Bild und sammle (Sterne/Äpfel/Laternen).<br>
+      1) Tippe Dinge im Bild an (Stern, Apfel, Laterne).<br>
       2) Lies das Pergament.<br>
-      3) Beantworte mehrere Fragen pro Szene.<br>
-      4) Nächste Szene erst nach: richtige Antworten + Sammelziel.<br>
-      Bonus: Finde den Geheimfunken (versteckt).`, 5200);
-    setFips("idle", "Sammle Dinge im Bild. Dann lies. Dann antworte.");
+      3) Beantworte 3 Fragen pro Szene.<br>
+      4) Nächste Szene erst: 3 richtige Antworten + Sammelziel.<br>
+      Bonus: Finde den Geheimfunken.`, 5200);
+    setFips("idle", "Sammle zuerst. Dann lies. Dann antworte.");
   });
 
   el.closeSplashBtn.addEventListener("click", () => {
     el.splash.classList.remove("show");
   });
 
-  // keyboard
   window.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
     if(k === "h") el.helpBtn.click();
@@ -2097,17 +1948,20 @@
   });
 
   // ------------------------------------------------------------
-  // Init + RenderAll
+  // Render All
   // ------------------------------------------------------------
   function renderAll(){
     renderHUD();
     renderPath();
     renderScene();
+
+    // Next button: nur wenn completed + unlocked next
+    const i = state.nodeIndex;
+    el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
   }
 
-  // load already initialized state
-  state = loadState();
-  setFips("idle", "Tippe Dinge im Bild an. Sammle Sterne, Äpfel, Laternen. Dann beantworte die Fragen.");
+  // Initial
+  setFips("idle", "Sammle Sterne, Äpfel, Laternen. Dann lies das Pergament.");
   renderAll();
   saveState();
 })();
