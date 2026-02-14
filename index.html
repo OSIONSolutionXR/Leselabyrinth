@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Leselabyrinth – OSION Solution XR</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#111a33;
+      --card2:#0f1730;
+      --txt:#eaf0ff;
+      --muted:#aab6da;
+      --good:#43e08b;
+      --bad:#ff5a7a;
+      --accent1:#ff2d55; /* OSION-ish */
+      --accent2:#7a3cff; /* OSION-ish */
+      --stroke:rgba(255,255,255,.10);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: radial-gradient(1200px 700px at 10% 10%, rgba(122,60,255,.25), transparent 60%),
+                  radial-gradient(1200px 700px at 90% 20%, rgba(255,45,85,.22), transparent 60%),
+                  var(--bg);
+      color:var(--txt);
+    }
+    header{
+      position:sticky; top:0; z-index:5;
+      padding:14px 16px;
+      border-bottom:1px solid var(--stroke);
+      background:rgba(11,16,32,.85);
+      backdrop-filter: blur(10px);
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+    }
+    .brand{
+      display:flex; flex-direction:column; line-height:1.1;
+    }
+    .brand b{
+      font-size:14px; letter-spacing:.8px;
+      background: linear-gradient(90deg,var(--accent1),var(--accent2));
+      -webkit-background-clip:text; background-clip:text;
+      color:transparent;
+    }
+    .brand span{ font-size:12px; color:var(--muted); }
+    .top-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+    button{
+      appearance:none; border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      color:var(--txt);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    button:hover{ border-color:rgba(255,255,255,.18) }
+    button.primary{
+      border:none;
+      background: linear-gradient(90deg, rgba(255,45,85,.95), rgba(122,60,255,.95));
+    }
+    main{ padding:16px; max-width:1100px; margin:0 auto; }
+    .grid{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns:1fr; }
+    }
+    .panel{
+      background: rgba(17,26,51,.78);
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      padding:14px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.30);
+    }
+    .panel h2{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+    }
+    .muted{ color:var(--muted); font-size:13px; }
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      font-size:12px;
+      color:var(--muted);
+      margin:6px 6px 0 0;
+    }
+    .monster{
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .avatar{
+      width:64px; height:64px; border-radius:18px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 50%),
+        linear-gradient(135deg, rgba(255,45,85,.65), rgba(122,60,255,.55));
+      border:1px solid var(--stroke);
+      display:flex; align-items:center; justify-content:center;
+      font-size:30px;
+    }
+    .speech{
+      flex:1;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background: rgba(15,23,48,.55);
+      font-size:14px;
+      line-height:1.35;
+    }
+    .map{
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    .node{
+      padding:12px 10px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background: rgba(15,23,48,.55);
+      min-height:66px;
+      display:flex; flex-direction:column; gap:6px;
+      cursor:pointer;
+    }
+    .node.locked{ opacity:.45; cursor:not-allowed; }
+    .node.done{
+      border-color: rgba(67,224,139,.35);
+      background: rgba(67,224,139,.10);
+    }
+    .node small{ color:var(--muted); }
+    .node b{ font-size:13px; }
+    .card{
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--stroke);
+      background: rgba(15,23,48,.55);
+    }
+    .scene{
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      padding:14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .scene .img{
+      width:90px; height:70px; border-radius:14px;
+      border:1px solid var(--stroke);
+      background:
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,.15), transparent 60%),
+        linear-gradient(135deg, rgba(122,60,255,.28), rgba(255,45,85,.18));
+      display:flex; align-items:center; justify-content:center;
+      font-size:28px;
+      flex:0 0 auto;
+    }
+    .text{
+      font-size:16px;
+      line-height:1.45;
+      margin:10px 0 12px;
+    }
+    .question{
+      font-weight:800;
+      margin:10px 0 8px;
+    }
+    .answers{
+      display:grid;
+      gap:10px;
+    }
+    .answers button{
+      width:100%;
+      text-align:left;
+      padding:12px 12px;
+      border-radius:16px;
+    }
+    .helpers{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;
+    }
+    .helpers button{ font-size:12px; padding:8px 10px; border-radius:999px; }
+    .statusbar{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;
+    }
+    .stat{
+      flex:1;
+      min-width:160px;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+    }
+    .stat b{ display:block; font-size:13px; }
+    .stat span{ color:var(--muted); font-size:12px; }
+    .good{ color:var(--good); }
+    .bad{ color:var(--bad); }
+    .hr{ height:1px; background:var(--stroke); margin:12px 0; }
+    .table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+      color:var(--txt);
+    }
+    .table td, .table th{
+      border-bottom:1px solid var(--stroke);
+      padding:8px 6px;
+      text-align:left;
+    }
+    .table th{ color:var(--muted); font-weight:700; }
+    .note{
+      padding:12px;
+      border-radius:16px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+    .hidden{ display:none !important; }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:12px;
+      border:1px solid var(--stroke);
+      padding:2px 6px;
+      border-radius:8px;
+      background: rgba(0,0,0,.18);
+      color:var(--muted);
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <b>OSION Solution XR</b>
+    <span>Leselabyrinth · MVP · Adventure + Adaptiv + Diagnose</span>
+  </div>
+  <div class="top-actions">
+    <button id="btnPlay" class="primary">Adventure</button>
+    <button id="btnDash">Diagnose</button>
+    <button id="btnReset">Reset</button>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <!-- LEFT -->
+    <section class="panel">
+      <h2>Guide</h2>
+      <div class="monster">
+        <div class="avatar" id="monsterAvatar">👾</div>
+        <div class="speech" id="monsterSpeech"></div>
+      </div>
+
+      <div class="statusbar">
+        <div class="stat">
+          <b>Stufe</b>
+          <span id="uiLevel"></span>
+        </div>
+        <div class="stat">
+          <b>Sterne</b>
+          <span id="uiStars"></span>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <h2>Kapitel: Der Wald</h2>
+      <div class="muted">Tippe einen Knoten an. Neue Knoten werden durch richtige Antworten freigeschaltet.</div>
+      <div class="map" id="map"></div>
+
+      <div class="hr"></div>
+      <div class="note">
+        Daten bleiben im Browser (LocalStorage). Keine Accounts. Kein Server. Ideal für GitHub Pages.
+      </div>
+    </section>
+
+    <!-- RIGHT -->
+    <section class="panel" id="viewPlay">
+      <h2>Lesekarte</h2>
+      <div class="card" id="card"></div>
+    </section>
+
+    <section class="panel hidden" id="viewDash">
+      <h2>Diagnose-Dashboard</h2>
+
+      <div class="statusbar">
+        <div class="stat">
+          <b>Abgeschlossen</b>
+          <span id="dDone"></span>
+        </div>
+        <div class="stat">
+          <b>Trefferquote</b>
+          <span id="dAcc"></span>
+        </div>
+        <div class="stat">
+          <b>Ø Zeit / Aufgabe</b>
+          <span id="dTime"></span>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <h2>Fehlmuster (Top)</h2>
+      <table class="table">
+        <thead><tr><th>Kategorie</th><th>Anzahl</th><th>Beispiel</th></tr></thead>
+        <tbody id="dPatterns"></tbody>
+      </table>
+
+      <div class="hr"></div>
+
+      <h2>Stärken & Fokus</h2>
+      <div class="note" id="dCoach"></div>
+    </section>
+  </div>
+</main>
+
+<script>
+/** =========================
+ *  KONFIG / VARIABLEN
+ *  ========================= */
+const APP = {
+  BRAND: "OSION Solution XR",
+  APP_NAME: "Leselabyrinth",
+  CHAPTER_ID: "wald_v1",
+  MONSTER_NAME: "Momo",        // <- austauschbar
+  MONSTER_STYLE: "knuffig",    // <- austauschbar
+  LEVEL_MIN: 1,
+  LEVEL_MAX: 3,
+  TARGET_STREAK_UP: 3,
+  TARGET_MISTAKES_HOLD: 2
+};
+
+// Hilfen pro Level (automatisch + optional per Button)
+const HELP_RULES = {
+  1: { syllables: true, hintButton: true, rereadButton: true },
+  2: { syllables: false, hintButton: true, rereadButton: true },
+  3: { syllables: false, hintButton: false, rereadButton: true }
+};
+
+const STORE_KEY = "leselabyrinth_state_v1";
+
+/** =========================
+ *  CONTENT IM CODE (KEINE JSON-DATEIEN)
+ *  Jede Karte: 1 Mikro-Szene + 1 Aufgabe
+ *  difficulty: 1..3
+ *  focus: Kategorie für Diagnose
+ *  ========================= */
+const CARDS = [
+  {
+    id:"n1",
+    chapter: APP.CHAPTER_ID,
+    nodeTitle:"Start am Waldweg",
+    emoji:"🌲",
+    textByLevel:{
+      1:["Momo geht in den Wald.","Ein Vogel singt."],
+      2:["Momo geht in den Wald.","Ein kleiner Vogel singt laut."],
+      3:["Momo geht in den Wald.","Ein kleiner Vogel singt laut im Baum."]
+    },
+    questionByLevel:{
+      1:"Wo geht Momo hin?",
+      2:"Wo geht Momo hin?",
+      3:"Wo geht Momo hin?"
+    },
+    answersByLevel:{
+      1:["In den Wald.","In die Stadt.","Ins Meer."],
+      2:["In den Wald.","In die Stadt.","Ins Meer."],
+      3:["In den Wald.","In die Stadt.","Ins Meer."]
+    },
+    correctIndex:0,
+    hint:"Im Satz steht: „… in den Wald.“",
+    focus:"W-Frage"
+  },
+  {
+    id:"n2",
+    chapter: APP.CHAPTER_ID,
+    nodeTitle:"Die Holzbrücke",
+    emoji:"🌉",
+    textByLevel:{
+      1:["Vor Momo ist eine Brücke.","Sie ist aus Holz."],
+      2:["Vor Momo ist eine kleine Brücke.","Sie ist aus Holz."],
+      3:["Vor Momo ist eine kleine Brücke.","Sie ist aus Holz und wackelt leicht."]
+    },
+    questionByLevel:{
+      1:"Woraus ist die Brücke?",
+      2:"Woraus ist die Brücke?",
+      3:"Woraus ist die Brücke?"
+    },
+    answersByLevel:{
+      1:["Aus Holz.","Aus Eis.","Aus Papier."],
+      2:["Aus Holz.","Aus Eis.","Aus Papier."],
+      3:["Aus Holz.","Aus Eis.","Aus Papier."]
+    },
+    correctIndex:0,
+    hint:"Lies den zweiten Satz. Da steht das Material.",
+    focus:"Detail"
+  },
+  {
+    id:"n3",
+    chapter: APP.CHAPTER_ID,
+    nodeTitle:"Der Apfelbaum",
+    emoji:"🍏",
+    textByLevel:{
+      1:["Ein Apfel fällt runter.","Momo schaut."],
+      2:["Ein grüner Apfel fällt runter.","Momo schaut nach oben."],
+      3:["Ein grüner Apfel fällt runter.","Momo schaut nach oben und lacht."]
+    },
+    questionByLevel:{
+      1:"Welche Farbe hat der Apfel?",
+      2:"Welche Farbe hat der Apfel?",
+      3:"Welche Farbe hat der Apfel?"
+    },
+    answersByLevel:{
+      1:["Grün.","Blau.","Schwarz."],
+      2:["Grün.","Blau.","Schwarz."],
+      3:["Grün.","Blau.","Schwarz."]
+    },
+    correctIndex:0,
+    hint:"Der Apfel ist „grün“.",
+    focus:"Wortverwechslung"
+  },
+  {
+    id:"n4",
+    chapter: APP.CHAPTER_ID,
+    nodeTitle:"Der Schlüsselstein",
+    emoji:"🪨",
+    textByLevel:{
+      1:["Momo findet einen Stein.","Darauf ist ein Zeichen."],
+      2:["Momo findet einen Stein.","Darauf ist ein Stern-Zeichen."],
+      3:["Momo findet einen Stein.","Darauf ist ein Stern-Zeichen und es glitzert."]
+    },
+    questionByLevel:{
+      1:"Was ist auf dem Stein?",
+      2:"Was ist auf dem Stein?",
+      3:"Was ist auf dem Stein?"
+    },
+    answersByLevel:{
+      1:["Ein Stern.","Ein Auto.","Ein Haus."],
+      2:["Ein Stern.","Ein Auto.","Ein Haus."],
+      3:["Ein Stern.","Ein Auto.","Ein Haus."]
+    },
+    correctIndex:0,
+    hint:"Im zweiten Satz steht das Zeichen.",
+    focus:"Satzverständnis"
+  },
+  {
+    id:"n5",
+    chapter: APP.CHAPTER_ID,
+    nodeTitle:"Die Boss-Tür",
+    emoji:"🚪",
+    textByLevel:{
+      1:["Vor Momo ist eine Tür.","Sie ist zu."],
+      2:["Vor Momo ist eine große Tür.","Sie ist zu und sehr schwer."],
+      3:["Vor Momo ist eine große Tür.","Sie ist zu und sehr schwer.","Momo braucht den Schlüssel."]
+    },
+    questionByLevel:{
+      1:"Was braucht Momo?",
+      2:"Was braucht Momo?",
+      3:"Was braucht Momo?"
+    },
+    answersByLevel:{
+      1:["Den Schlüssel.","Eine Leiter.","Einen Ball."],
+      2:["Den Schlüssel.","Eine Leiter.","Einen Ball."],
+      3:["Den Schlüssel.","Eine Leiter.","Einen Ball."]
+    },
+    correctIndex:0,
+    hint:"Im letzten Satz steht es direkt.",
+    focus:"Ursache/Wirkung"
+  }
+];
+
+/** =========================
+ *  MAP-LOGIK (Knoten + Wege + Sidepaths)
+ *  nodes: Reihenfolge + Unlock-Regeln
+ *  sidepaths: humorvolle Umwege bei Fehlern
+ *  ========================= */
+const MAP = {
+  chapterId: APP.CHAPTER_ID,
+  nodes: [
+    { id:"n1", unlockFrom:null },
+    { id:"n2", unlockFrom:"n1" },
+    { id:"n3", unlockFrom:"n2" },
+    { id:"n4", unlockFrom:"n3" },
+    { id:"n5", unlockFrom:"n4" }
+  ],
+  sidepaths: [
+    "Quatsch-Tunnel",
+    "Monster-Kicherweg",
+    "Sackgasse mit Konfetti",
+    "Rutschbahn zurück zum Satz"
+  ]
+};
+
+/** =========================
+ *  STATE + LOGGING
+ *  ========================= */
+const defaultState = () => ({
+  level: 1,
+  stars: 0,
+  currentNodeId: "n1",
+  done: {}, // nodeId:true
+  streakCorrect: 0,
+  streakWrong: 0,
+  // logs: pro Versuch
+  logs: [] // {ts,nodeId,level,correct,timeMs,focus,chosenIndex,correctIndex}
+});
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return defaultState();
+    const s = JSON.parse(raw);
+    return { ...defaultState(), ...s };
+  }catch(e){
+    return defaultState();
+  }
+}
+function saveState(){
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+
+/** =========================
+ *  UI HELPERS
+ *  ========================= */
+const $ = (id) => document.getElementById(id);
+
+function setMonster(text, mood="neutral"){
+  const face = mood==="good" ? "😄" : mood==="bad" ? "😅" : "🙂";
+  $("monsterAvatar").textContent = "👾";
+  $("monsterSpeech").innerHTML = `
+    <div style="font-weight:900;margin-bottom:4px;">${APP.MONSTER_NAME} ${face}</div>
+    <div>${text}</div>
+  `;
+}
+
+function getCard(nodeId){
+  return CARDS.find(c => c.id === nodeId);
+}
+
+function isUnlocked(nodeId){
+  const node = MAP.nodes.find(n => n.id===nodeId);
+  if(!node) return false;
+  if(node.unlockFrom===null) return true;
+  return !!state.done[node.unlockFrom];
+}
+
+function renderTopStats(){
+  $("uiLevel").innerHTML = `<span class="pill">Stufe <b style="color:var(--txt)">${state.level}</b></span>
+    <span class="pill">Hilfen: ${helpSummary(state.level)}</span>`;
+  $("uiStars").innerHTML = `<span class="pill"><b style="color:var(--good)">${state.stars}</b> Sterne</span>
+    <span class="pill">Abgeschlossen: <b style="color:var(--txt)">${Object.keys(state.done).length}</b></span>`;
+}
+
+function helpSummary(level){
+  const h = HELP_RULES[level];
+  const parts = [];
+  if(h.syllables) parts.push("Silben");
+  if(h.hintButton) parts.push("Hinweis");
+  if(h.rereadButton) parts.push("Nochmal lesen");
+  return parts.length ? parts.join(" · ") : "keine";
+}
+
+function renderMap(){
+  const wrap = $("map");
+  wrap.innerHTML = "";
+  MAP.nodes.forEach(n=>{
+    const card = getCard(n.id);
+    const unlocked = isUnlocked(n.id);
+    const done = !!state.done[n.id];
+    const el = document.createElement("div");
+    el.className = "node" + (unlocked ? "" : " locked") + (done ? " done":"");
+    el.innerHTML = `
+      <small>${card?.emoji ?? "🗺️"} Knoten</small>
+      <b>${card?.nodeTitle ?? n.id}</b>
+      <small>${done ? "✓ erledigt" : unlocked ? "bereit" : "gesperrt"}</small>
+    `;
+    el.onclick = () => {
+      if(!unlocked) return;
+      state.currentNodeId = n.id;
+      saveState();
+      renderAll();
+    };
+    wrap.appendChild(el);
+  });
+}
+
+let cardStartTs = null;
+
+function syllabifySimple(word){
+  // Simple Demo: trennt nur bei Vokalgruppen grob. Für echte Silbentrennung später ersetzen.
+  return word.replace(/([aeiouäöüy]{1,2})([^aeiouäöüy])/gi, "$1-$2");
+}
+
+function applySyllablesToText(lines){
+  // nur für Level 1 Demo: markiert längere Wörter
+  return lines.map(line=>{
+    return line.split(" ").map(w=>{
+      const clean = w.replace(/[.,!?]/g,"");
+      if(clean.length >= 7){
+        const s = syllabifySimple(clean);
+        return line.includes(clean) ? w.replace(clean, `<span class="pill" style="margin:0;border-radius:10px">${s}</span>`) : w;
+      }
+      return w;
+    }).join(" ");
+  });
+}
+
+function renderCard(){
+  const nodeId = state.currentNodeId;
+  const c = getCard(nodeId);
+  if(!c){
+    $("card").innerHTML = `<div class="note">Keine Karte gefunden: ${nodeId}</div>`;
+    return;
+  }
+
+  const level = state.level;
+  let lines = c.textByLevel[level] || c.textByLevel[1];
+  const question = c.questionByLevel[level] || c.questionByLevel[1];
+  const answers = c.answersByLevel[level] || c.answersByLevel[1];
+
+  const helps = HELP_RULES[level];
+  let renderedLines = lines;
+  if(helps.syllables) renderedLines = applySyllablesToText(lines);
+
+  const done = !!state.done[nodeId];
+
+  $("card").innerHTML = `
+    <div class="scene">
+      <div>
+        <div class="muted">Szene</div>
+        <div style="font-weight:900;font-size:16px;margin-top:2px">${c.nodeTitle}</div>
+      </div>
+      <div class="img" title="Platzhalter-Bild (später austauschbar)">${c.emoji}</div>
+    </div>
+
+    <div class="text" id="cardText">${renderedLines.map(x=>`<div>${x}</div>`).join("")}</div>
+
+    <div class="question">${question}</div>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="helpers">
+      ${helps.rereadButton ? `<button id="btnReread">Nochmal lesen</button>` : ""}
+      ${helps.hintButton ? `<button id="btnHint">Hinweis</button>` : ""}
+      <span class="pill">Fokus: <b style="color:var(--txt)">${c.focus}</b></span>
+      <span class="pill">${done ? "<span class='good'>✓ erledigt</span>" : "noch offen"}</span>
+    </div>
+
+    <div class="hr"></div>
+    <div class="note" id="feedback">Wähle eine Antwort. ${APP.MONSTER_NAME} begleitet dich.</div>
+  `;
+
+  const ansWrap = $("answers");
+  answers.forEach((txt, idx)=>{
+    const b = document.createElement("button");
+    b.textContent = txt;
+    b.onclick = () => submitAnswer(idx);
+    ansWrap.appendChild(b);
+  });
+
+  if(helps.rereadButton){
+    $("btnReread").onclick = () => {
+      setMonster(`Lies den Text noch einmal. Du findest die Lösung im Satz.`, "neutral");
+      $("feedback").innerHTML = `Nochmal lesen aktiviert. Nimm dir Zeit.`;
+    };
+  }
+  if(helps.hintButton){
+    $("btnHint").onclick = () => {
+      setMonster(`Tipp: ${c.hint}`, "neutral");
+      $("feedback").innerHTML = `<span class="pill">Hinweis</span> ${c.hint}`;
+    };
+  }
+
+  cardStartTs = performance.now();
+}
+
+function nextUnlockedNode(){
+  // Nächster Knoten in Reihenfolge, der freigeschaltet ist und nicht erledigt
+  for(const n of MAP.nodes){
+    if(isUnlocked(n.id) && !state.done[n.id]) return n.id;
+  }
+  // sonst: erster freigeschalteter
+  for(const n of MAP.nodes){
+    if(isUnlocked(n.id)) return n.id;
+  }
+  return MAP.nodes[0]?.id ?? "n1";
+}
+
+/** =========================
+ *  ADAPTIVE REGELN (If/Else)
+ *  - 3 richtig in Folge: Level +1
+ *  - 2 falsch in Folge: Level halten, Hilfen aktiv (hier automatisch über HELP_RULES)
+ *  - wiederholt gleiche Fokus-Kategorie falsch: später Mini-Training einblendbar
+ *  ========================= */
+function adaptAfterAnswer(correct){
+  if(correct){
+    state.streakCorrect += 1;
+    state.streakWrong = 0;
+
+    if(state.streakCorrect >= APP.TARGET_STREAK_UP && state.level < APP.LEVEL_MAX){
+      state.level += 1;
+      state.streakCorrect = 0;
+      setMonster(`Stark! Du steigst auf Stufe ${state.level}.`, "good");
+    }
+  }else{
+    state.streakWrong += 1;
+    state.streakCorrect = 0;
+
+    if(state.streakWrong >= APP.TARGET_MISTAKES_HOLD){
+      // Level halten, Hilfen bleiben/werden aktiviert über HELP_RULES auf dem Level
+      const side = MAP.sidepaths[Math.floor(Math.random()*MAP.sidepaths.length)];
+      setMonster(`Oh! Das war der ${side}. Lies den Satz noch einmal.`, "bad");
+    }
+  }
+}
+
+function submitAnswer(chosenIndex){
+  const nodeId = state.currentNodeId;
+  const c = getCard(nodeId);
+  const timeMs = Math.max(1, Math.round(performance.now() - (cardStartTs ?? performance.now())));
+
+  const correct = chosenIndex === c.correctIndex;
+
+  // log
+  state.logs.push({
+    ts: Date.now(),
+    nodeId,
+    level: state.level,
+    correct,
+    timeMs,
+    focus: c.focus,
+    chosenIndex,
+    correctIndex: c.correctIndex
+  });
+
+  if(correct){
+    state.stars += 1;
+    state.done[nodeId] = true;
+
+    setMonster(`Yes! Tor geöffnet. Weiter geht’s!`, "good");
+    $("feedback").innerHTML = `<span class="good">Richtig.</span> Du bekommst 1 Stern.`;
+
+    adaptAfterAnswer(true);
+
+    // weiter zum nächsten Knoten
+    state.currentNodeId = nextUnlockedNode();
+  }else{
+    adaptAfterAnswer(false);
+    $("feedback").innerHTML = `<span class="bad">Noch nicht.</span> Tipp: ${c.hint}`;
+  }
+
+  saveState();
+  renderAll();
+}
+
+/** =========================
+ *  DIAGNOSE
+ *  ========================= */
+function renderDashboard(){
+  const logs = state.logs;
+  const doneCount = Object.keys(state.done).length;
+
+  const total = logs.length;
+  const correct = logs.filter(x=>x.correct).length;
+  const acc = total ? Math.round((correct/total)*100) : 0;
+
+  const avgTime = total ? Math.round(logs.reduce((a,b)=>a+b.timeMs,0)/total) : 0;
+
+  $("dDone").textContent = `${doneCount} Knoten`;
+  $("dAcc").innerHTML = `${acc}% ${acc>=80 ? "<span class='good'>(stark)</span>" : acc>=60 ? "(solide)" : "<span class='bad'>(Fokus nötig)</span>"}`;
+  $("dTime").textContent = `${Math.round(avgTime/1000)} s`;
+
+  // patterns
+  const wrong = logs.filter(x=>!x.correct);
+  const byFocus = {};
+  wrong.forEach(x=>{
+    byFocus[x.focus] = byFocus[x.focus] || { count:0, exampleNodeId:x.nodeId };
+    byFocus[x.focus].count++;
+  });
+
+  const rows = Object.entries(byFocus)
+    .sort((a,b)=>b[1].count - a[1].count)
+    .slice(0,5);
+
+  const tbody = $("dPatterns");
+  tbody.innerHTML = "";
+  if(rows.length===0){
+    tbody.innerHTML = `<tr><td colspan="3" class="muted">Noch keine Fehlmuster. Weiter spielen.</td></tr>`;
+  }else{
+    rows.forEach(([focus, data])=>{
+      const card = getCard(data.exampleNodeId);
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${focus}</td>
+        <td>${data.count}</td>
+        <td>${card ? card.nodeTitle : data.exampleNodeId}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // strengths & focus
+  const strengths = [];
+  if(acc >= 80) strengths.push("Leseverständnis wirkt stabil (hohe Trefferquote).");
+  if(avgTime && avgTime < 6000) strengths.push("Sichere Entscheidungen (niedrige Antwortzeit).");
+  if(doneCount >= 3) strengths.push("Gute Ausdauer (mehrere Karten erledigt).");
+  if(strengths.length===0) strengths.push("Startphase: Daten sammeln, dann werden Stärken präziser.");
+
+  const focus = rows.length ? rows[0][0] : "Aufmerksamkeit";
+  const mission = acc >= 80 ? "8 Minuten pro Tag, Stufe halten und Tempo stabilisieren." :
+                 acc >= 60 ? "8 Minuten pro Tag, Hinweis nur bei Bedarf nutzen." :
+                             "8 Minuten pro Tag, erst Text, dann Frage. Hinweis aktiv nutzen.";
+
+  $("dCoach").innerHTML = `
+    <div style="font-weight:900;margin-bottom:6px">Stärken</div>
+    <ul style="margin:0 0 10px 18px;color:var(--txt)">
+      ${strengths.slice(0,3).map(s=>`<li>${s}</li>`).join("")}
+    </ul>
+    <div style="font-weight:900;margin:10px 0 6px">Fokus</div>
+    <div class="pill">Top-Fokus: <b style="color:var(--txt)">${focus}</b></div>
+    <div style="margin-top:10px;font-weight:900">Empfohlene Mission</div>
+    <div style="margin-top:6px;color:var(--muted)">${mission}</div>
+  `;
+}
+
+/** =========================
+ *  VIEW SWITCHING
+ *  ========================= */
+function showPlay(){
+  $("viewPlay").classList.remove("hidden");
+  $("viewDash").classList.add("hidden");
+  $("btnPlay").classList.add("primary");
+  $("btnDash").classList.remove("primary");
+}
+function showDash(){
+  $("viewDash").classList.remove("hidden");
+  $("viewPlay").classList.add("hidden");
+  $("btnDash").classList.add("primary");
+  $("btnPlay").classList.remove("primary");
+  renderDashboard();
+}
+
+function renderAll(){
+  renderTopStats();
+  renderMap();
+  renderCard();
+
+  // Monster-Defaulttext
+  setMonster(`Willkommen im Wald. Lies den Text, beantworte die Frage, öffne das Tor.`, "neutral");
+}
+
+$("btnPlay").onclick = () => showPlay();
+$("btnDash").onclick = () => showDash();
+
+$("btnReset").onclick = () => {
+  const ok = confirm("Alles zurücksetzen? Sterne, Fortschritt und Diagnose werden gelöscht.");
+  if(!ok) return;
+  state = defaultState();
+  saveState();
+  showPlay();
+  renderAll();
+};
+
+showPlay();
+renderAll();
+</script>
+</body>
+</html>
