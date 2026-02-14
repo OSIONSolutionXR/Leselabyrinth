@@ -440,6 +440,7 @@
       user-select:none;
       touch-action: manipulation;
       transition: transform .08s ease, filter .2s ease, opacity .2s ease;
+      z-index: 10;
     }
     .hotspot:hover{ transform: translate(-50%,-50%) scale(1.05); filter: drop-shadow(0 0 22px rgba(255,211,106,.28)); }
     .hotspot:active{ transform: translate(-50%,-50%) scale(.99); }
@@ -452,16 +453,6 @@
     }
     .hotspot.small img{ width: var(--w, 120px); }
     .hotspot.tiny img{ width: var(--w, 70px); }
-
-    /* Hint pulse hotspots when blocked (kids can "see" what to do) */
-    .hotspot.hint{
-      animation: hintPulse 1.25s ease-in-out infinite;
-      filter: drop-shadow(0 0 18px rgba(255,211,106,.18));
-    }
-    @keyframes hintPulse{
-      0%,100%{ transform: translate(-50%,-50%) scale(1); opacity: .92; }
-      50%{ transform: translate(-50%,-50%) scale(1.08); opacity: 1; }
-    }
 
     /* Fips MAIN */
     .fipsMain{
@@ -510,7 +501,7 @@
       left: 50%;
       top: 14px;
       transform: translateX(-50%);
-      z-index: 7;
+      z-index: 40;
       display:none;
       gap: 10px;
       align-items:center;
@@ -520,16 +511,18 @@
       border: 1px solid rgba(255,255,255,.14);
       backdrop-filter: blur(10px);
       box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      overflow:hidden;
     }
     .bossHud.show{ display:flex; }
     .bossName{ font-weight:1000; }
     .bossBar{
-      width: 220px;
+      width: 280px;
       height: 12px;
       border-radius: 999px;
       background: rgba(255,255,255,.10);
       border: 1px solid rgba(255,255,255,.14);
       overflow:hidden;
+      position:relative;
     }
     .bossBar > div{
       height:100%;
@@ -537,14 +530,63 @@
       border-radius: 999px;
       background: linear-gradient(90deg, rgba(255,107,107,.92), rgba(255,211,106,.95));
       box-shadow: 0 0 18px rgba(255,107,107,.22);
-      transition: width .28s ease;
+      transition: width .22s ease;
+    }
+    .bossHitFlash{
+      position:absolute;
+      inset:-12px;
+      background: radial-gradient(circle at 50% 50%, rgba(255,107,107,.42), transparent 60%);
+      opacity:0;
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .bossHud.hit .bossHitFlash{
+      animation: bossFlash .32s ease forwards;
+    }
+    @keyframes bossFlash{
+      0%{ opacity:0; transform: scale(.9); }
+      40%{ opacity:1; transform: scale(1.05); }
+      100%{ opacity:0; transform: scale(1.2); }
+    }
+    .bossShake{
+      animation: bossShake .25s ease;
+    }
+    @keyframes bossShake{
+      0%{ transform: translateX(-50%) translateY(0); }
+      25%{ transform: translateX(-50%) translateY(0) translateX(-6px); }
+      50%{ transform: translateX(-50%) translateY(0) translateX(6px); }
+      75%{ transform: translateX(-50%) translateY(0) translateX(-3px); }
+      100%{ transform: translateX(-50%) translateY(0) translateX(0); }
+    }
+
+    /* Floating damage number */
+    .dmg{
+      position:absolute;
+      left:50%;
+      top: 72px;
+      transform: translateX(-50%);
+      z-index: 60;
+      font-weight:1000;
+      font-size: 22px;
+      color: rgba(255,107,107,.95);
+      text-shadow: 0 10px 24px rgba(0,0,0,.6);
+      pointer-events:none;
+      opacity:0;
+    }
+    .dmg.show{
+      animation: dmgFloat .55s ease forwards;
+    }
+    @keyframes dmgFloat{
+      0%{ opacity:0; transform: translateX(-50%) translateY(10px) scale(.95); }
+      20%{ opacity:1; transform: translateX(-50%) translateY(0) scale(1.05); }
+      100%{ opacity:0; transform: translateX(-50%) translateY(-26px) scale(.9); }
     }
 
     /* Gate overlay */
     .gateOpen{
       position:absolute;
       inset:0;
-      z-index: 8;
+      z-index: 80;
       display:none;
       place-items:center;
       background: radial-gradient(900px 500px at 50% 40%, rgba(255,211,106,.18), rgba(0,0,0,.55));
@@ -569,7 +611,7 @@
       position: fixed;
       right: 14px;
       bottom: 14px;
-      z-index: 80;
+      z-index: 90;
       max-width: 460px;
       padding: 12px 14px;
       border-radius: 16px;
@@ -585,7 +627,7 @@
     /* Pickup animation */
     .fly{
       position: fixed;
-      z-index: 90;
+      z-index: 100;
       width: 46px; height: 46px;
       pointer-events:none;
       filter: drop-shadow(0 0 18px rgba(255,211,106,.35));
@@ -621,230 +663,12 @@
     }
 
     /* ============================================================
-       KIDS BLOCKER: No reading required
-       Big icons + rings + lock + arrow
-       ============================================================ */
-    .kidBlocker{
-      position: fixed;
-      inset: 0;
-      z-index: 140;
-      display:none;
-      place-items:center;
-      background:
-        radial-gradient(900px 500px at 50% 25%, rgba(255,211,106,.18), transparent 60%),
-        radial-gradient(900px 520px at 50% 80%, rgba(111,208,255,.14), transparent 60%),
-        linear-gradient(180deg, rgba(5,8,18,.70), rgba(5,8,18,.92));
-      backdrop-filter: blur(8px);
-    }
-    .kidBlocker.show{ display:grid; animation: fadeIn .25s ease; }
-
-    .kidPanel{
-      width:min(960px, 94%);
-      border-radius: 28px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(8,10,24,.78);
-      box-shadow: 0 30px 90px rgba(0,0,0,.70);
-      overflow:hidden;
-    }
-    .kidTop{
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.20);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-    }
-    .kidTop .left{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      min-width: 0;
-    }
-    .kidTitleIcon{
-      width: 52px; height: 52px;
-      border-radius: 18px;
-      display:grid; place-items:center;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.14);
-      position: relative;
-      overflow:hidden;
-    }
-    .kidTitleIcon::after{
-      content:"";
-      position:absolute; inset:-30px;
-      background: radial-gradient(circle, rgba(255,211,106,.22), transparent 60%);
-      animation: kidGlow 1.4s ease-in-out infinite;
-    }
-    @keyframes kidGlow{
-      0%,100%{ opacity:.35; transform: scale(.95); }
-      50%{ opacity:1; transform: scale(1.05); }
-    }
-    .kidTitleIcon svg{ width: 30px; height: 30px; position: relative; z-index: 2; }
-
-    .kidTop h3{
-      margin:0;
-      font-size: 18px;
-      font-weight: 1000;
-      letter-spacing:.2px;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .kidTop .sub{
-      margin-top: 2px;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 900;
-      opacity:.95;
-    }
-
-    .kidBody{
-      padding: 14px 16px 16px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    .kidRow{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(150px, 1fr));
-      gap: 12px;
-    }
-    @media (max-width: 820px){
-      .kidRow{ grid-template-columns: 1fr; }
-    }
-
-    .kidTile{
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      padding: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      position:relative;
-      overflow:hidden;
-    }
-    .kidTile.missing{
-      border-color: rgba(255,107,107,.26);
-      background: rgba(255,107,107,.06);
-      animation: kidMissing 1.1s ease-in-out infinite;
-    }
-    @keyframes kidMissing{
-      0%,100%{ transform: translateY(0); }
-      50%{ transform: translateY(-2px); }
-    }
-
-    .kidIcon{
-      width: 64px; height: 64px;
-      border-radius: 22px;
-      display:grid; place-items:center;
-      background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 16px 40px rgba(0,0,0,.35);
-      position:relative;
-      overflow:hidden;
-    }
-    .kidIcon img{ width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
-    .kidIcon::after{
-      content:"";
-      position:absolute;
-      inset:-30px;
-      background: radial-gradient(circle, rgba(255,211,106,.22), transparent 60%);
-      opacity:.55;
-      animation: kidIconGlow 1.25s ease-in-out infinite;
-    }
-    @keyframes kidIconGlow{
-      0%,100%{ transform: scale(.95); opacity:.35; }
-      50%{ transform: scale(1.05); opacity:1; }
-    }
-
-    .kidCount{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-      align-items:flex-end;
-      min-width: 88px;
-    }
-
-    .kidDots{
-      display:flex;
-      gap: 6px;
-      align-items:center;
-      justify-content:flex-end;
-    }
-    .dot{
-      width: 16px; height: 16px;
-      border-radius: 6px;
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 10px 18px rgba(0,0,0,.25) inset;
-      opacity:.35;
-      transform-origin:center;
-    }
-    .dot.on{
-      opacity:1;
-      background: linear-gradient(135deg, rgba(255,211,106,.92), rgba(255,79,163,.70));
-      border-color: rgba(255,255,255,.24);
-      box-shadow: 0 12px 28px rgba(255,211,106,.16);
-      animation: dotPop .35s ease;
-    }
-    @keyframes dotPop{
-      from{ transform: scale(.75); }
-      to{ transform: scale(1); }
-    }
-
-    .kidFooter{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      padding: 14px 16px 16px;
-      border-top: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.14);
-    }
-
-    .bigLock{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      font-weight:1000;
-    }
-    .bigLock svg{ width: 22px; height: 22px; }
-    .arrowHint{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      color: rgba(255,255,255,.92);
-      font-weight: 1000;
-    }
-    .arrowHint .hand{
-      width: 44px; height: 44px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.14);
-      display:grid; place-items:center;
-      animation: handTap 1.0s ease-in-out infinite;
-    }
-    @keyframes handTap{
-      0%,100%{ transform: translateY(0) scale(1); }
-      50%{ transform: translateY(-3px) scale(1.06); }
-    }
-
-    /* ============================================================
-       FIPS CELEBRATION: Fullscreen, ultra animation
+       CELEBRATION FULLSCREEN
        ============================================================ */
     .celebrate{
       position: fixed;
       inset: 0;
-      z-index: 150;
+      z-index: 160;
       display:none;
       place-items:center;
       pointer-events:none;
@@ -991,11 +815,108 @@
       border: 1px solid rgba(255,211,106,.25);
     }
 
+    /* ============================================================
+       BONUS SUMMARY (collecting is optional, shown at end)
+       ============================================================ */
+    .bonus{
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      display:none;
+      place-items:center;
+      background:
+        radial-gradient(900px 500px at 50% 25%, rgba(255,211,106,.18), transparent 60%),
+        radial-gradient(900px 520px at 50% 80%, rgba(111,208,255,.14), transparent 60%),
+        linear-gradient(180deg, rgba(5,8,18,.70), rgba(5,8,18,.92));
+      backdrop-filter: blur(8px);
+    }
+    .bonus.show{ display:grid; animation: fadeIn .25s ease; }
+
+    .bonus .card{
+      width:min(980px, 94%);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8,10,24,.78);
+      box-shadow: 0 30px 90px rgba(0,0,0,.70);
+      overflow:hidden;
+    }
+    .bonus .top{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.20);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .bonus .top h3{
+      margin:0;
+      font-size: 18px;
+      font-weight: 1000;
+      letter-spacing:.2px;
+    }
+    .bonus .body{
+      padding: 14px 16px 16px;
+    }
+    .bonusGrid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 820px){
+      .bonusGrid{ grid-template-columns: 1fr; }
+    }
+    .bonusTile{
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      padding: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .bonusIcon{
+      width: 64px; height: 64px;
+      border-radius: 22px;
+      display:grid; place-items:center;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      position:relative;
+      overflow:hidden;
+    }
+    .bonusIcon img{ width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
+    .bonusIcon::after{
+      content:"";
+      position:absolute;
+      inset:-30px;
+      background: radial-gradient(circle, rgba(255,211,106,.22), transparent 60%);
+      opacity:.55;
+      animation: bonusGlow 1.25s ease-in-out infinite;
+    }
+    @keyframes bonusGlow{
+      0%,100%{ transform: scale(.95); opacity:.35; }
+      50%{ transform: scale(1.05); opacity:1; }
+    }
+    .bonusCount{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      align-items:flex-end;
+      min-width: 88px;
+      font-weight:1000;
+    }
+
     /* Water world splash */
     .splash{
       position: fixed;
       inset: 0;
-      z-index: 120;
+      z-index: 150;
       display:none;
       place-items:center;
       background:
@@ -1060,7 +981,7 @@
         <div class="dot"></div>
         <div>
           <div class="title">Leselabyrinth – Funkelwald</div>
-          <div class="sub">Kinder-RPG Lesetraining · Szene-Pfad · Progression · Sammeln</div>
+          <div class="sub">Kinder-RPG Lesetraining · Szene-Pfad · Progression · Bonus-Sammeln</div>
         </div>
       </div>
 
@@ -1070,28 +991,28 @@
           <div class="hearts" id="hearts"></div>
         </div>
 
-        <div class="pill" id="pillStars" title="Sterne">
+        <div class="pill" id="pillStars" title="Sterne (Bonus)">
           <img class="icon" src="assets/ui/icons/stern.png" alt="Stern" />
           <span><b id="starsVal">0</b></span>
           <span class="sep">|</span>
           <span class="tiny">Sterne</span>
         </div>
 
-        <div class="pill" id="pillApples" title="Äpfel">
+        <div class="pill" id="pillApples" title="Äpfel (Bonus)">
           <img class="icon" src="assets/ui/interactables/Apfel.png" alt="Apfel" />
           <span><b id="applesVal">0</b></span>
           <span class="sep">|</span>
           <span class="tiny">Äpfel</span>
         </div>
 
-        <div class="pill" id="pillLanterns" title="Laternen">
+        <div class="pill" id="pillLanterns" title="Laternen (Bonus)">
           <img class="icon" src="assets/ui/interactables/Laterne.png" alt="Laterne" />
           <span><b id="lanternsVal">0</b></span>
           <span class="sep">|</span>
           <span class="tiny">Laternen</span>
         </div>
 
-        <div class="pill" id="pillSparks" title="Geheimfunken">
+        <div class="pill" id="pillSparks" title="Geheimfunken (Bonus)">
           <img class="icon" src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke" />
           <span><b id="sparksVal">0</b></span>
           <span class="sep">|</span>
@@ -1134,7 +1055,7 @@
           <div class="qt">
             <div>
               <h3 id="question">–</h3>
-              <div class="tiny" id="goalLine" style="margin-top:6px">Sammelziel: –</div>
+              <div class="tiny" id="goalLine" style="margin-top:6px">Bonus: Sammle Dinge (optional)</div>
             </div>
             <div class="qmeta">
               <span class="tiny">Erst lesen, dann antworten.</span>
@@ -1170,9 +1091,13 @@
       <!-- Boss HUD -->
       <div class="bossHud" id="bossHud">
         <span class="bossName" id="bossName">Boss</span>
-        <div class="bossBar"><div id="bossBarFill"></div></div>
-        <span class="tiny"><b id="bossHPText">3</b>/3</span>
+        <div class="bossBar">
+          <div id="bossBarFill"></div>
+          <div class="bossHitFlash"></div>
+        </div>
+        <span class="tiny"><b id="bossHPText">9</b>/9</span>
       </div>
+      <div class="dmg" id="dmg">-1</div>
 
       <!-- Fips MAIN -->
       <div class="fipsMain">
@@ -1181,7 +1106,7 @@
         </div>
         <div class="bubble">
           <b>Fips</b>
-          <div class="line" id="fipsMainLine">Tippe Dinge im Bild an. Sammle Sterne, Äpfel, Laternen. Dann lies das Pergament.</div>
+          <div class="line" id="fipsMainLine">Lies das Pergament. Beantworte Fragen. Sammeln ist Bonus.</div>
         </div>
       </div>
 
@@ -1206,7 +1131,7 @@
             <div class="avatar"><img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" /></div>
             <div class="speech">
               <div class="name">Fips</div>
-              <div class="line" id="fipsLine">Sammle Dinge, lies, beantworte 3 Fragen. Bonus: Finde den Geheimfunken.</div>
+              <div class="line" id="fipsLine">Bonus: Sammeln. Hauptziel: Fragen richtig beantworten.</div>
             </div>
           </div>
         </div>
@@ -1220,58 +1145,13 @@
         <div class="bd">
           <div class="pathlist" id="pathList"></div>
           <div style="height:10px"></div>
-          <div class="tiny" id="unlockHint">Freischaltung: 3 richtige Antworten + Sammelziel erfüllen.</div>
+          <div class="tiny" id="unlockHint">Freischaltung: Fragen richtig beantworten.</div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
-
-  <!-- KIDS BLOCKER (icons-only friendly) -->
-  <div class="kidBlocker" id="kidBlocker">
-    <div class="kidPanel">
-      <div class="kidTop">
-        <div class="left">
-          <div class="kidTitleIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="rgba(255,255,255,.9)" stroke-width="2" stroke-linecap="round"/>
-              <path d="M6.5 10h11a2 2 0 0 1 2 2v6.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2Z"
-                stroke="rgba(255,255,255,.9)" stroke-width="2" />
-              <path d="M12 14.2v2.6" stroke="rgba(255,255,255,.9)" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div>
-            <h3 id="kidTitle">Noch nicht</h3>
-            <div class="sub" id="kidSub">Sammeln</div>
-          </div>
-        </div>
-        <button class="btn" id="kidCloseBtn">Schließen</button>
-      </div>
-
-      <div class="kidBody">
-        <div class="kidRow" id="kidTiles"></div>
-      </div>
-
-      <div class="kidFooter">
-        <div class="bigLock" title="Noch gesperrt">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="rgba(255,255,255,.9)" stroke-width="2" stroke-linecap="round"/>
-            <path d="M6.5 10h11a2 2 0 0 1 2 2v6.2a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2Z"
-              stroke="rgba(255,255,255,.9)" stroke-width="2" />
-          </svg>
-          <span id="kidLockText">—</span>
-        </div>
-
-        <div class="arrowHint">
-          <div class="hand" aria-hidden="true">☝</div>
-          <div id="kidHintText">Im Bild tippen</div>
-        </div>
-
-        <button class="btn primary" id="kidOkBtn">Ok</button>
-      </div>
-    </div>
-  </div>
 
   <!-- FIPS CELEBRATION FULLSCREEN -->
   <div class="celebrate" id="celebrate">
@@ -1316,6 +1196,23 @@
     </div>
   </div>
 
+  <!-- BONUS SUMMARY (optional collecting) -->
+  <div class="bonus" id="bonus">
+    <div class="card">
+      <div class="top">
+        <h3>Bonus</h3>
+        <div class="row">
+          <button class="btn" id="bonusCloseBtn">Schließen</button>
+          <button class="btn primary" id="bonusOkBtn">Ok</button>
+        </div>
+      </div>
+      <div class="body">
+        <div class="tiny" style="font-weight:1000; opacity:.95;">Das ist Bonus. Sammeln ist keine Pflicht.</div>
+        <div class="bonusGrid" id="bonusGrid"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Water world splash -->
   <div class="splash" id="splash">
     <div class="box">
@@ -1344,7 +1241,7 @@
       holzbruecke: ["assets/scenes/holzbruecke.png","assets/scenes/holzbruecke.jpg","assets/scenes/Holzbruecke.png"],
       apfelbaum:   ["assets/scenes/apfelbaum.png","assets/scenes/apfelbaum.jpg","assets/scenes/Apfelbaum.png"],
       sternstein:  ["assets/scenes/sternstein.png","assets/scenes/sternstein.jpg","assets/scenes/Sternstein.png"],
-      // FIX: Boss-Tor lädt manchmal nicht -> mehrere Kandidaten
+      // Boss-Tor Fallbacks
       bosstor:     ["assets/scenes/bosstor.png","assets/scenes/bossTor.png","assets/scenes/boss_tor.png","assets/scenes/BossTor.png","assets/scenes/bosstor.jpg","assets/scenes/bosstor.webp"],
       wasserwelt:  ["assets/scenes/wasserwelt.png","assets/scenes/wasserwelt.jpg","assets/scenes/Wasserwelt.png"],
     },
@@ -1368,41 +1265,43 @@
   };
 
   // ------------------------------------------------------------
-  // Nodes (3 Fragen + Sammelziel)
+  // Boss settings (9 questions = 9 HP)
+  // ------------------------------------------------------------
+  const BOSS_HP_MAX = 9;
+
+  // ------------------------------------------------------------
+  // Nodes
+  // Sammeln ist komplett optional (Bonus only).
   // ------------------------------------------------------------
   const NODES = [
     {
       id:"N1", key:"waldweg", title:"Waldweg",
       sparkHotspot: { x: 14, y: 78, r: 7 },
-      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star1", type:"collect_star",    img:ASSETS.interact.Stern,   x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
         { id:"lan1",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true, points: 1, label:"Laterne" },
         { id:"ap1",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 86, y: 40, size:"small", once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
-        {
-          text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
-          question: "Wo steht Fips?",
-          answers: [
+        { text:"Fips steht am Waldweg.<br>Eine Laterne leuchtet.<br>Fips bleibt ruhig und liest.",
+          question:"Wo steht Fips?",
+          answers:[
             { t:"Am Waldweg.", correct:true },
             { t:"Im Wasser.", correct:false },
             { t:"Auf dem Dach.", correct:false }
           ]
         },
-        {
-          text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
-          question: "Was leuchtet?",
-          answers: [
+        { text:"Fips steht am Waldweg.<br>Eine Laterne leuchtet.<br>Fips bleibt ruhig und liest.",
+          question:"Was leuchtet?",
+          answers:[
             { t:"Die Laterne.", correct:true },
             { t:"Ein Auto.", correct:false },
             { t:"Ein Schuh.", correct:false }
           ]
         },
-        {
-          text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
-          question: "Was tut Fips?",
-          answers: [
+        { text:"Fips steht am Waldweg.<br>Eine Laterne leuchtet.<br>Fips bleibt ruhig und liest.",
+          question:"Was tut Fips?",
+          answers:[
             { t:"Er liest.", correct:true },
             { t:"Er rennt.", correct:false },
             { t:"Er schläft.", correct:false }
@@ -1413,35 +1312,31 @@
     {
       id:"N2", key:"holzbruecke", title:"Holzbrücke",
       sparkHotspot: { x: 82, y: 63, r: 7 },
-      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star2", type:"collect_star",    img:ASSETS.interact.Stern,   x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
         { id:"lan2",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true, points: 1, label:"Laterne" },
         { id:"ap2",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 80, y: 78, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
-        {
-          text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
-          question: "Was ist vor Fips?",
-          answers: [
+        { text:"Vor Fips ist eine Holzbrücke.<br>Fips geht langsam.<br>Die Brücke knarrt leise.",
+          question:"Was ist vor Fips?",
+          answers:[
             { t:"Eine Holzbrücke.", correct:true },
             { t:"Ein Auto.", correct:false },
             { t:"Ein Flugzeug.", correct:false }
           ]
         },
-        {
-          text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
-          question: "Was macht die Brücke?",
-          answers: [
+        { text:"Vor Fips ist eine Holzbrücke.<br>Fips geht langsam.<br>Die Brücke knarrt leise.",
+          question:"Was macht die Brücke?",
+          answers:[
             { t:"Sie knarrt leise.", correct:true },
             { t:"Sie fliegt.", correct:false },
             { t:"Sie schläft.", correct:false }
           ]
         },
-        {
-          text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
-          question: "Wie geht Fips?",
-          answers: [
+        { text:"Vor Fips ist eine Holzbrücke.<br>Fips geht langsam.<br>Die Brücke knarrt leise.",
+          question:"Wie geht Fips?",
+          answers:[
             { t:"Langsam.", correct:true },
             { t:"Rückwärts.", correct:false },
             { t:"Unsichtbar.", correct:false }
@@ -1452,35 +1347,31 @@
     {
       id:"N3", key:"apfelbaum", title:"Apfelbaum",
       sparkHotspot: { x: 50, y: 18, r: 7 },
-      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star3", type:"collect_star",    img:ASSETS.interact.Stern,   x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
         { id:"ap3",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 78, y: 40, size:"small", once:true, points: 1, label:"Apfel" },
         { id:"lan3",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny",  once:true, points: 1, label:"Laterne" }
       ],
       readSteps: [
-        {
-          text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
-          question: "Was sieht Fips?",
-          answers: [
+        { text:"Fips sieht einen Apfelbaum.<br>Ein Apfel hängt am Ast.<br>Fips lächelt.",
+          question:"Was sieht Fips?",
+          answers:[
             { t:"Einen Apfelbaum.", correct:true },
             { t:"Einen Fernseher.", correct:false },
             { t:"Eine Rakete.", correct:false }
           ]
         },
-        {
-          text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
-          question: "Was hängt am Ast?",
-          answers: [
+        { text:"Fips sieht einen Apfelbaum.<br>Ein Apfel hängt am Ast.<br>Fips lächelt.",
+          question:"Was hängt am Ast?",
+          answers:[
             { t:"Ein Apfel.", correct:true },
             { t:"Ein Hut.", correct:false },
             { t:"Ein Ball.", correct:false }
           ]
         },
-        {
-          text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
-          question: "Was macht Fips?",
-          answers: [
+        { text:"Fips sieht einen Apfelbaum.<br>Ein Apfel hängt am Ast.<br>Fips lächelt.",
+          question:"Was macht Fips?",
+          answers:[
             { t:"Er lächelt.", correct:true },
             { t:"Er bellt.", correct:false },
             { t:"Er schwimmt.", correct:false }
@@ -1491,35 +1382,31 @@
     {
       id:"N4", key:"sternstein", title:"Sternstein",
       sparkHotspot: { x: 18, y: 34, r: 7 },
-      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star4", type:"collect_star",    img:ASSETS.interact.Stern,   x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
         { id:"lan4",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true, points: 1, label:"Laterne" },
         { id:"ap4",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 86, y: 84, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
-        {
-          text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
-          question: "Was findet Fips?",
-          answers: [
+        { text:"Fips findet einen Sternstein.<br>Der Stein glitzert.<br>Fips tippt ihn an.",
+          question:"Was findet Fips?",
+          answers:[
             { t:"Einen Sternstein.", correct:true },
             { t:"Einen Stuhl.", correct:false },
             { t:"Einen Steinpilz.", correct:false }
           ]
         },
-        {
-          text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
-          question: "Was glitzert?",
-          answers: [
+        { text:"Fips findet einen Sternstein.<br>Der Stein glitzert.<br>Fips tippt ihn an.",
+          question:"Was glitzert?",
+          answers:[
             { t:"Der Stein.", correct:true },
             { t:"Der Schuh.", correct:false },
             { t:"Der Stuhl.", correct:false }
           ]
         },
-        {
-          text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
-          question: "Was macht Fips?",
-          answers: [
+        { text:"Fips findet einen Sternstein.<br>Der Stein glitzert.<br>Fips tippt ihn an.",
+          question:"Was macht Fips?",
+          answers:[
             { t:"Er tippt ihn an.", correct:true },
             { t:"Er wirft ihn weg.", correct:false },
             { t:"Er versteckt sich.", correct:false }
@@ -1530,40 +1417,49 @@
     {
       id:"N5", key:"bosstor", title:"Boss-Tor",
       sparkHotspot: { x: 90, y: 20, r: 7 },
-      goals: { stars:1, apples:1, lanterns:1 },
       interactables: [
         { id:"star5", type:"collect_star",    img:ASSETS.interact.Stern,   x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
         { id:"lan5",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true, points: 1, label:"Laterne" },
         { id:"ap5",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 84, y: 74, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
-      boss: { name: "Torwächter", hpMax: 3 },
+      boss: { name: "Torwächter", hpMax: BOSS_HP_MAX },
+      // 9 boss questions (HP = 9)
       readBoss: [
-        {
-          text: ["Vor Fips ist ein großes Tor.","Fips braucht einen Schlüssel.","Das Tor bleibt zu."].join("<br>"),
-          question: "Was braucht Fips?",
-          answers: [
-            { t:"Den Schlüssel.", correct:true },
-            { t:"Einen Ball.", correct:false },
-            { t:"Eine Leiter.", correct:false }
-          ]
+        { text:"Vor Fips ist ein großes Tor.<br>Fips braucht einen Schlüssel.<br>Das Tor bleibt zu.",
+          question:"Was braucht Fips?",
+          answers:[ {t:"Den Schlüssel.",correct:true},{t:"Einen Ball.",correct:false},{t:"Eine Leiter.",correct:false} ]
         },
-        {
-          text: ["Fips bleibt ruhig.","Fips liest den Text.","Fips denkt nach."].join("<br>"),
-          question: "Was macht Fips?",
-          answers: [
-            { t:"Er liest den Text.", correct:true },
-            { t:"Er schläft.", correct:false },
-            { t:"Er fliegt.", correct:false }
-          ]
+        { text:"Fips bleibt ruhig.<br>Fips liest den Text.<br>Fips denkt nach.",
+          question:"Was tut Fips?",
+          answers:[ {t:"Er liest.",correct:true},{t:"Er schläft.",correct:false},{t:"Er fliegt.",correct:false} ]
         },
-        {
-          text: ["Ein Funken glitzert.","Fips bleibt aufmerksam.","Das Tor wartet."].join("<br>"),
-          question: "Was glitzert?",
-          answers: [
-            { t:"Ein Funken.", correct:true },
-            { t:"Ein Auto.", correct:false },
-            { t:"Ein Baum.", correct:false }
-          ]
+        { text:"Ein Funken glitzert.<br>Fips bleibt aufmerksam.<br>Das Tor wartet.",
+          question:"Was glitzert?",
+          answers:[ {t:"Ein Funken.",correct:true},{t:"Ein Auto.",correct:false},{t:"Ein Baum.",correct:false} ]
+        },
+        { text:"Fips steht vor dem Tor.<br>Fips atmet tief.<br>Fips bleibt ruhig.",
+          question:"Wo steht Fips?",
+          answers:[ {t:"Vor dem Tor.",correct:true},{t:"Im Bett.",correct:false},{t:"Im Haus.",correct:false} ]
+        },
+        { text:"Das Tor ist groß.<br>Das Tor ist alt.<br>Das Tor ist schwer.",
+          question:"Wie ist das Tor?",
+          answers:[ {t:"Schwer.",correct:true},{t:"Weich.",correct:false},{t:"Klein.",correct:false} ]
+        },
+        { text:"Fips hört ein Knacken.<br>Das Holz knarrt.<br>Fips schaut hin.",
+          question:"Was hört Fips?",
+          answers:[ {t:"Ein Knacken.",correct:true},{t:"Ein Lied.",correct:false},{t:"Ein Telefon.",correct:false} ]
+        },
+        { text:"Fips hebt die Hand.<br>Fips tippt an das Tor.<br>Fips wartet.",
+          question:"Was macht Fips?",
+          answers:[ {t:"Er tippt an das Tor.",correct:true},{t:"Er rennt weg.",correct:false},{t:"Er schläft.",correct:false} ]
+        },
+        { text:"Ein Licht flackert.<br>Fips schaut genau.<br>Fips bleibt still.",
+          question:"Was flackert?",
+          answers:[ {t:"Ein Licht.",correct:true},{t:"Ein Fisch.",correct:false},{t:"Ein Stein.",correct:false} ]
+        },
+        { text:"Fips findet Mut.<br>Fips bleibt dran.<br>Fips gibt nicht auf.",
+          question:"Was findet Fips?",
+          answers:[ {t:"Mut.",correct:true},{t:"Eine Pizza.",correct:false},{t:"Ein Fahrrad.",correct:false} ]
         }
       ]
     }
@@ -1572,21 +1468,23 @@
   // ------------------------------------------------------------
   // Storage
   // ------------------------------------------------------------
-  const STORAGE_KEY = "leselabyrinth_funkelwald_v5_fipsCelebration_kidBlocker_bossImageFix";
+  const STORAGE_KEY = "leselabyrinth_funkelwald_v6_optionalCollect_shuffleAnswers_boss9";
 
   const defaultState = () => ({
     nodeIndex: 0,
     unlocked: [true, false, false, false, false],
     completed: [false, false, false, false, false],
 
+    // Bonus counts
     stars: 0,
     apples: 0,
     lanterns: 0,
     sparks: 0,
+
     streak: 0,
     level: 1,
     xp: 0,
-    xpNeed: 100,
+    xpNeed: 110,           // XP curve slightly higher because collecting is optional now
     heartsMax: 3,
     hearts: 3,
     focus: "W-Frage",
@@ -1604,7 +1502,7 @@
 
       bossHP: n.boss ? n.boss.hpMax : 0,
       bossStep: 0,
-      bossXpGrantedSteps: [false,false,false]
+      bossXpGrantedSteps: Array(BOSS_HP_MAX).fill(false)
     }))
   });
 
@@ -1643,7 +1541,6 @@
     goalLine: document.getElementById("goalLine"),
     qProgress: document.getElementById("qProgress"),
 
-    sceneWrap: document.getElementById("sceneWrap"),
     sceneImg: document.getElementById("sceneImg"),
     sceneFallback: document.getElementById("sceneFallback"),
     overlay: document.getElementById("overlay"),
@@ -1653,6 +1550,7 @@
     bossName: document.getElementById("bossName"),
     bossBarFill: document.getElementById("bossBarFill"),
     bossHPText: document.getElementById("bossHPText"),
+    dmg: document.getElementById("dmg"),
 
     fipsAvatar: document.getElementById("fipsAvatar"),
     fipsLine: document.getElementById("fipsLine"),
@@ -1686,19 +1584,15 @@
 
     toast: document.getElementById("toast"),
 
-    kidBlocker: document.getElementById("kidBlocker"),
-    kidTitle: document.getElementById("kidTitle"),
-    kidSub: document.getElementById("kidSub"),
-    kidTiles: document.getElementById("kidTiles"),
-    kidLockText: document.getElementById("kidLockText"),
-    kidHintText: document.getElementById("kidHintText"),
-    kidCloseBtn: document.getElementById("kidCloseBtn"),
-    kidOkBtn: document.getElementById("kidOkBtn"),
-
     celebrate: document.getElementById("celebrate"),
     confetti: document.getElementById("confetti"),
     fipsGiantImg: document.getElementById("fipsGiantImg"),
     celebrateText: document.getElementById("celebrateText"),
+
+    bonus: document.getElementById("bonus"),
+    bonusGrid: document.getElementById("bonusGrid"),
+    bonusCloseBtn: document.getElementById("bonusCloseBtn"),
+    bonusOkBtn: document.getElementById("bonusOkBtn"),
 
     splash: document.getElementById("splash"),
     closeSplashBtn: document.getElementById("closeSplashBtn"),
@@ -1748,9 +1642,7 @@
   }
 
   function vibrate(ms=40){
-    try{
-      if(navigator.vibrate) navigator.vibrate(ms);
-    }catch(e){}
+    try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){}
   }
 
   function loseHeart(){
@@ -1759,7 +1651,7 @@
     vibrate(60);
 
     if(state.hearts === 0){
-      toast(`<b>Oh nein.</b> Keine Herzen mehr. Die Szene startet neu.`);
+      toast(`<b>Oh nein.</b> Keine Herzen mehr. Szene startet neu.`);
       const i = state.nodeIndex;
       const s = state.scene[i];
 
@@ -1776,12 +1668,12 @@
       if(NODES[i].boss){
         s.bossHP = NODES[i].boss.hpMax;
         s.bossStep = 0;
-        s.bossXpGrantedSteps = [false,false,false];
+        s.bossXpGrantedSteps = Array(BOSS_HP_MAX).fill(false);
       }
 
       state.hearts = state.heartsMax;
       state.streak = 0;
-      setFips("sad", "Nochmal. Lies und sammle.");
+      setFips("sad", "Nochmal. Lies und antworte.");
       vibrate(140);
     }
   }
@@ -1813,144 +1705,28 @@
     setTimeout(()=>img.remove(), 700);
   }
 
-  function goalsForNode(node){
-    const g = node.goals || {stars:0,apples:0,lanterns:0};
-    return { stars: g.stars||0, apples: g.apples||0, lanterns: g.lanterns||0 };
-  }
-
-  function collectedCountsInNode(i){
-    const s = state.scene[i];
-    let stars=0, apples=0, lanterns=0;
-    for(const key in s.collected){
-      if(!s.collected[key]) continue;
-      if(key.startsWith("star")) stars++;
-      if(key.startsWith("ap")) apples++;
-      if(key.startsWith("lan")) lanterns++;
+  // Answer shuffle (prevents "correct always first")
+  function shuffledAnswersWithKey(answers, seedKey){
+    // deterministic shuffle per (scene + question + tries) -> feels random but stable
+    const arr = answers.map((a,i)=>({a, i}));
+    let h = 2166136261;
+    for(let i=0;i<seedKey.length;i++){
+      h ^= seedKey.charCodeAt(i);
+      h = Math.imul(h, 16777619);
     }
-    return { stars, apples, lanterns };
-  }
-
-  function missingForNode(i){
-    const node = NODES[i];
-    const g = goalsForNode(node);
-    const c = collectedCountsInNode(i);
-    return {
-      stars: Math.max(0, g.stars - c.stars),
-      apples: Math.max(0, g.apples - c.apples),
-      lanterns: Math.max(0, g.lanterns - c.lanterns),
-      have: c,
-      goal: g
-    };
-  }
-
-  function isGoalMet(i){
-    const m = missingForNode(i);
-    return (m.stars === 0 && m.apples === 0 && m.lanterns === 0);
-  }
-
-  function allQuestionsCorrect(i){
-    const s = state.scene[i];
-    return s.correctSteps.every(Boolean);
-  }
-
-  // ------------------------------------------------------------
-  // Kids blocker (no reading needed)
-  // ------------------------------------------------------------
-  function showKidBlocker(i){
-    const m = missingForNode(i);
-
-    el.kidTitle.textContent = "Noch nicht";
-    el.kidSub.textContent = "Sammeln";
-
-    el.kidHintText.textContent = "Im Bild tippen";
-    el.kidLockText.textContent = "Erst sammeln";
-
-    const tiles = [
-      { key:"stars", label:"Sterne", img:"assets/ui/icons/stern.png", have:m.have.stars, need:m.goal.stars },
-      { key:"apples", label:"Äpfel", img:"assets/ui/interactables/Apfel.png", have:m.have.apples, need:m.goal.apples },
-      { key:"lanterns", label:"Laternen", img:"assets/ui/interactables/Laterne.png", have:m.have.lanterns, need:m.goal.lanterns },
-    ];
-
-    el.kidTiles.innerHTML = tiles.map(t => {
-      const missing = Math.max(0, t.need - t.have);
-      const cls = missing > 0 ? "kidTile missing" : "kidTile";
-      const dots = [];
-      for(let k=0;k<t.need;k++){
-        dots.push(`<span class="dot ${k < t.have ? "on" : ""}"></span>`);
-      }
-      return `
-        <div class="${cls}">
-          <div class="kidIcon" aria-hidden="true">
-            <img src="${t.img}" alt="${t.label}">
-          </div>
-          <div class="kidCount">
-            <div class="kidDots">${dots.join("")}</div>
-            <div class="tiny" style="font-weight:1000; opacity:.95; color: rgba(255,255,255,.92);">
-              ${t.have}/${t.need}
-            </div>
-          </div>
-        </div>
-      `;
-    }).join("");
-
-    el.kidBlocker.classList.add("show");
-    vibrate(40);
-  }
-
-  function hideKidBlocker(){
-    el.kidBlocker.classList.remove("show");
-  }
-
-  // ------------------------------------------------------------
-  // Fips Celebration (fullscreen)
-  // ------------------------------------------------------------
-  function clearConfetti(){
-    el.confetti.innerHTML = "";
-  }
-
-  function spawnConfettiBurst(){
-    clearConfetti();
-    const pieces = 56; // heavy but safe
-    for(let i=0;i<pieces;i++){
-      const d = document.createElement("div");
-      d.className = "c";
-      const left = Math.random() * 100;
-      const delay = Math.random() * 120;
-      const dur = 920 + Math.random()*520;
-      const w = 8 + Math.random()*8;
-      const h = 10 + Math.random()*12;
-
-      d.style.left = left + "%";
-      d.style.top = (-20 - Math.random()*120) + "px";
-      d.style.width = w + "px";
-      d.style.height = h + "px";
-      d.style.animationDelay = delay + "ms";
-      d.style.animationDuration = dur + "ms";
-
-      // simple palette using opacity variations (no hard-coded color names in JS)
-      const r = 200 + Math.floor(Math.random()*55);
-      const g = 150 + Math.floor(Math.random()*80);
-      const b = 140 + Math.floor(Math.random()*90);
-      d.style.background = `rgba(${r},${g},${b},.92)`;
-
-      el.confetti.appendChild(d);
+    // Fisher-Yates using xorshift
+    let x = h >>> 0;
+    function rnd(){
+      x ^= x << 13; x >>>= 0;
+      x ^= x >> 17; x >>>= 0;
+      x ^= x << 5;  x >>>= 0;
+      return (x >>> 0) / 4294967296;
     }
-  }
-
-  function showFipsCelebration(text){
-    // choose strongest "hands up" available: use excited, fallback happy
-    el.fipsGiantImg.src = ASSETS.fips.excited || ASSETS.fips.happy || ASSETS.fips.idle;
-    el.celebrateText.textContent = text || "Richtig";
-
-    spawnConfettiBurst();
-    el.celebrate.classList.add("show");
-    vibrate(70);
-
-    clearTimeout(showFipsCelebration._t);
-    showFipsCelebration._t = setTimeout(() => {
-      el.celebrate.classList.remove("show");
-      clearConfetti();
-    }, 980);
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(rnd()*(i+1));
+      [arr[i],arr[j]] = [arr[j],arr[i]];
+    }
+    return arr;
   }
 
   // ------------------------------------------------------------
@@ -1960,19 +1736,15 @@
     state.completed[i] = true;
     state.scene[i].answered = true;
 
-    if(state.scene[i].perfect){
-      state.stars += 1; // Bonus
-      pulse(el.pillStars);
-      gainXP(35);
-      toast(`<b>Perfekt!</b> Bonus erhalten.`);
-      setFips("happy", "Perfekt gelesen.");
-    }else{
-      gainXP(20);
-      setFips("happy", "Erledigt. Weiter.");
-    }
+    // XP tuned up (collecting no longer required)
+    // + completion bonus
+    gainXP(30);
 
     state.streak += 1;
     if(i < NODES.length - 1) state.unlocked[i+1] = true;
+
+    // show bonus summary at end of each node (optional collecting)
+    showBonusModal();
   }
 
   function autoAdvance(){
@@ -1989,7 +1761,7 @@
   }
 
   // ------------------------------------------------------------
-  // Scene image loader with fallbacks (fix Boss-Tor load)
+  // Scene image loader with fallbacks
   // ------------------------------------------------------------
   async function setSceneImage(nodeKey){
     const candidates = ASSETS.scenes[nodeKey] || [];
@@ -2011,7 +1783,6 @@
       }
     }
 
-    // nothing loaded
     el.sceneImg.removeAttribute("src");
     el.sceneImg.style.display = "none";
     el.sceneFallback.classList.add("show");
@@ -2085,6 +1856,19 @@
   // ------------------------------------------------------------
   // Boss UI
   // ------------------------------------------------------------
+  function bossHitFX(dmg=1){
+    el.bossHud.classList.add("hit");
+    el.bossHud.classList.add("bossShake");
+    el.dmg.textContent = `-${dmg}`;
+    el.dmg.classList.remove("show");
+    void el.dmg.offsetWidth;
+    el.dmg.classList.add("show");
+    vibrate(50);
+
+    setTimeout(()=>el.bossHud.classList.remove("hit"), 380);
+    setTimeout(()=>el.bossHud.classList.remove("bossShake"), 260);
+  }
+
   function renderBossUI(node, sceneState){
     if(node.boss){
       el.bossHud.classList.add("show");
@@ -2097,6 +1881,70 @@
       el.bossHud.classList.remove("show");
     }
   }
+
+  // ------------------------------------------------------------
+  // Celebration (Fullscreen)
+  // ------------------------------------------------------------
+  function clearConfetti(){ el.confetti.innerHTML = ""; }
+
+  function spawnConfettiBurst(){
+    clearConfetti();
+    const pieces = 56;
+    for(let i=0;i<pieces;i++){
+      const d = document.createElement("div");
+      d.className = "c";
+      const left = Math.random() * 100;
+      const delay = Math.random() * 120;
+      const dur = 920 + Math.random()*520;
+      const w = 8 + Math.random()*8;
+      const h = 10 + Math.random()*12;
+
+      d.style.left = left + "%";
+      d.style.top = (-20 - Math.random()*120) + "px";
+      d.style.width = w + "px";
+      d.style.height = h + "px";
+      d.style.animationDelay = delay + "ms";
+      d.style.animationDuration = dur + "ms";
+
+      const r = 200 + Math.floor(Math.random()*55);
+      const g = 150 + Math.floor(Math.random()*80);
+      const b = 140 + Math.floor(Math.random()*90);
+      d.style.background = `rgba(${r},${g},${b},.92)`;
+
+      el.confetti.appendChild(d);
+    }
+  }
+
+  function showFipsCelebration(text){
+    el.fipsGiantImg.src = ASSETS.fips.excited || ASSETS.fips.happy || ASSETS.fips.idle;
+    el.celebrateText.textContent = text || "Richtig";
+    spawnConfettiBurst();
+    el.celebrate.classList.add("show");
+
+    clearTimeout(showFipsCelebration._t);
+    showFipsCelebration._t = setTimeout(() => {
+      el.celebrate.classList.remove("show");
+      clearConfetti();
+    }, 980);
+  }
+
+  // ------------------------------------------------------------
+  // Bonus modal (collecting is optional)
+  // ------------------------------------------------------------
+  function showBonusModal(){
+    el.bonusGrid.innerHTML = [
+      { label:"Sterne",   img:"assets/ui/icons/stern.png",           val: state.stars },
+      { label:"Äpfel",    img:"assets/ui/interactables/Apfel.png",   val: state.apples },
+      { label:"Laternen", img:"assets/ui/interactables/Laterne.png", val: state.lanterns },
+    ].map(x => `
+      <div class="bonusTile">
+        <div class="bonusIcon"><img src="${x.img}" alt="${x.label}"></div>
+        <div class="bonusCount">${x.label}<div style="font-size:24px;">${x.val}</div></div>
+      </div>
+    `).join("");
+    el.bonus.classList.add("show");
+  }
+  function hideBonusModal(){ el.bonus.classList.remove("show"); }
 
   // ------------------------------------------------------------
   // Render Scene
@@ -2114,35 +1962,38 @@
 
     renderBossUI(node, s);
 
+    let pack, qLabel, answers, seedKey;
+
     if(node.boss){
       const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
-      const pack = node.readBoss[step];
-      el.readText.innerHTML = pack.text;
-      el.question.textContent = pack.question;
-      renderAnswers(pack.answers);
-      el.qProgress.textContent = `Bossfrage ${step+1}/3`;
-    } else {
+      pack = node.readBoss[step];
+      qLabel = `Bossfrage ${step+1}/${node.readBoss.length}`;
+      seedKey = `${node.id}|boss|${step}|${s.tries}`;
+      answers = shuffledAnswersWithKey(pack.answers, seedKey);
+    }else{
       const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
-      const pack = node.readSteps[qi];
-      el.readText.innerHTML = pack.text;
-      el.question.textContent = pack.question;
-      renderAnswers(pack.answers);
-      el.qProgress.textContent = `Frage ${qi+1}/3`;
+      pack = node.readSteps[qi];
+      qLabel = `Frage ${qi+1}/${node.readSteps.length}`;
+      seedKey = `${node.id}|q|${qi}|${s.tries}`;
+      answers = shuffledAnswersWithKey(pack.answers, seedKey);
     }
 
-    const m = missingForNode(i);
-    el.goalLine.textContent = `Sammelziel: Sterne ${m.have.stars}/${m.goal.stars} · Äpfel ${m.have.apples}/${m.goal.apples} · Laternen ${m.have.lanterns}/${m.goal.lanterns}`;
+    el.readText.innerHTML = pack.text;
+    el.question.textContent = pack.question;
+    el.qProgress.textContent = qLabel;
+
+    el.goalLine.textContent = `Bonus: Sammeln ist optional.`;
+
+    renderAnswers(answers);
 
     el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
 
-    // Interactables (optionally hint-pulse when blocked)
-    const shouldHint = (!node.boss && allQuestionsCorrect(i) && !isGoalMet(i)) || (node.boss && s.bossHP===0 && !isGoalMet(i));
-
+    // Interactables always available, but optional
     node.interactables.forEach(it => {
       if(it.once && s.collected[it.id]) return;
 
       const hs = document.createElement("div");
-      hs.className = "hotspot " + (it.size || "") + (shouldHint ? " hint" : "");
+      hs.className = "hotspot " + (it.size || "");
       hs.style.left = it.x + "%";
       hs.style.top  = it.y + "%";
       hs.style.setProperty("--w", it.size==="tiny" ? "70px" : "120px");
@@ -2161,7 +2012,7 @@
       el.overlay.appendChild(hs);
     });
 
-    // Secret spark
+    // Secret spark (optional)
     const sp = node.sparkHotspot;
     if(sp && !s.sparkFound){
       const hs = document.createElement("div");
@@ -2177,7 +2028,7 @@
         s.sparkFound = true;
         state.sparks += 1;
         pulse(el.pillSparks);
-        gainXP(15);
+        gainXP(10); // small bonus
         toast(`<b>Geheimfunke!</b>`);
         setFips("excited", "Geheimfunke gefunden.");
         saveState();
@@ -2187,13 +2038,14 @@
     }
   }
 
-  function renderAnswers(list){
+  function renderAnswers(shuffled){
+    // shuffled is [{a, i}]
     el.answers.innerHTML = "";
-    list.forEach((a, idx) => {
+    shuffled.forEach((wrap, idx) => {
       const div = document.createElement("div");
       div.className = "ans";
-      div.innerHTML = `<span>${a.t}</span><span class="tiny">Antwort</span>`;
-      div.addEventListener("click", () => onAnswer(idx));
+      div.innerHTML = `<span>${wrap.a.t}</span><span class="tiny">Antwort</span>`;
+      div.addEventListener("click", () => onAnswer(wrap.a, div));
       el.answers.appendChild(div);
     });
 
@@ -2203,59 +2055,38 @@
   }
 
   // ------------------------------------------------------------
-  // Interact (Sammeln)
+  // Interact (Bonus sammeln)
   // ------------------------------------------------------------
   function onInteract(it, hsEl, cx, cy){
     const i = state.nodeIndex;
-    const node = NODES[i];
     const s = state.scene[i];
-
     if(state.completed[i]) return;
 
     if(it.once) s.collected[it.id] = true;
     burstAtHotspot(hsEl);
 
+    // XP for collecting reduced (optional bonus)
     if(it.type === "collect_star"){
       state.stars += (it.points || 1);
       pulse(el.pillStars);
-      gainXP(10);
-      setFips("happy", "Stern eingesammelt.");
+      gainXP(3);
+      setFips("happy", "Bonus: Stern.");
       flyToHUD(cx, cy, ASSETS.icons.stern, el.pillStars);
-      toast(`<b>★</b>`);
-
+      toast(`<b>★</b> Bonus`, 1400);
     } else if(it.type === "collect_apple"){
       state.apples += (it.points || 1);
       pulse(el.pillApples);
-      gainXP(8);
-      setFips("happy", "Apfel eingesammelt.");
+      gainXP(2);
+      setFips("happy", "Bonus: Apfel.");
       flyToHUD(cx, cy, ASSETS.interact.Apfel, el.pillApples);
-      toast(`<b>🍎</b>`);
-
+      toast(`<b>🍎</b> Bonus`, 1400);
     } else if(it.type === "collect_lantern"){
       state.lanterns += (it.points || 1);
       pulse(el.pillLanterns);
-      gainXP(8);
-      setFips("happy", "Laterne eingesammelt.");
+      gainXP(2);
+      setFips("happy", "Bonus: Laterne.");
       flyToHUD(cx, cy, ASSETS.interact.Laterne, el.pillLanterns);
-      toast(`<b>🕯</b>`);
-    }
-
-    // If already all questions correct and now goal met: complete immediately
-    if(!node.boss && allQuestionsCorrect(i) && isGoalMet(i) && !state.completed[i]){
-      markCompleted(i);
-      toast(`<b>Freigeschaltet!</b>`);
-      showFipsCelebration("Freigeschaltet");
-    }
-
-    // Boss: if boss already down and now goal met, complete and open
-    if(node.boss && s.bossHP === 0 && isGoalMet(i) && !state.completed[i]){
-      markCompleted(i);
-      el.gateOpen.classList.add("show");
-      showFipsCelebration("Boss fertig");
-      setTimeout(() => {
-        el.gateOpen.classList.remove("show");
-        openReportAndSplash();
-      }, 1200);
+      toast(`<b>🕯</b> Bonus`, 1400);
     }
 
     saveState();
@@ -2263,9 +2094,12 @@
   }
 
   // ------------------------------------------------------------
-  // Answer (XP only once per question, ultra celebration mid-screen)
+  // Answer
+  // - Correct answers are shuffled
+  // - XP only once per question
+  // - Boss: 9 questions, HP reduces 1 per correct new question
   // ------------------------------------------------------------
-  function onAnswer(idx){
+  function onAnswer(chosen, btnEl){
     const i = state.nodeIndex;
     const node = NODES[i];
     const s = state.scene[i];
@@ -2277,117 +2111,83 @@
 
     s.tries += 1;
 
-    let answers, chosen;
-    let qi = 0;
-
-    if(node.boss){
-      qi = clamp(s.bossStep, 0, 2);
-      answers = node.readBoss[qi].answers;
-      chosen = answers[idx];
-    }else{
-      qi = clamp(s.qIndex, 0, 2);
-      answers = node.readSteps[qi].answers;
-      chosen = answers[idx];
-    }
-
     if(chosen && chosen.correct){
-      cards[idx].classList.add("correct");
+      btnEl.classList.add("correct");
 
-      // Fullscreen Fips animation (center, huge, "power-up")
       showFipsCelebration("Richtig");
       setFips("excited", "Richtig.");
-      vibrate(55);
+      vibrate(45);
 
-      // If already solved this question, do NOT stack XP or progress
-      if(!node.boss && s.correctSteps[qi] === true){
-        // If blocked by collecting, show kids blocker (icons)
-        if(allQuestionsCorrect(i) && !isGoalMet(i)){
-          showKidBlocker(i);
-        }
-        saveState();
-        renderAll();
-        return;
-      }
-      if(node.boss && s.bossXpGrantedSteps[qi] === true){
-        if(s.bossHP === 0 && !isGoalMet(i)){
-          showKidBlocker(i);
-        }
-        saveState();
-        renderAll();
-        return;
-      }
-
-      // XP only once per question
       if(node.boss){
-        if(!s.bossXpGrantedSteps[qi]){
-          s.bossXpGrantedSteps[qi] = true;
-          gainXP(18);
+        const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
+
+        // XP only once per boss question
+        if(!s.bossXpGrantedSteps[step]){
+          s.bossXpGrantedSteps[step] = true;
+          gainXP(14);
         }
 
-        // Boss hit once per question
-        s.bossHP = clamp(s.bossHP - 1, 0, node.boss.hpMax);
+        // Deal boss damage once per unique correct step
+        // Only if this step wasn't already cleared:
+        if(s.bossHP > 0){
+          s.bossHP = clamp(s.bossHP - 1, 0, node.boss.hpMax);
+          bossHitFX(1);
+        }
         renderBossUI(node, s);
 
-        // next boss question
+        // advance to next boss question (up to 9)
         s.bossStep = clamp(s.bossStep + 1, 0, node.readBoss.length - 1);
 
-        // Boss defeated
         if(s.bossHP === 0){
           el.statusLine.innerHTML = `Status: <span class="good">Boss besiegt.</span>`;
-
-          if(isGoalMet(i)){
-            markCompleted(i);
-            el.gateOpen.classList.add("show");
-            setTimeout(() => {
-              el.gateOpen.classList.remove("show");
-              openReportAndSplash();
-            }, 1200);
-          }else{
-            // No reading: show kid blocker with icons
-            showKidBlocker(i);
-          }
+          gainXP(40); // boss clear bonus
+          markCompleted(i);
+          el.gateOpen.classList.add("show");
+          setTimeout(() => {
+            el.gateOpen.classList.remove("show");
+            openReportAndSplash();
+          }, 1200);
         }else{
-          el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span> Noch ${s.bossHP} Treffer.`;
+          el.statusLine.innerHTML = `Status: <span class="good">Treffer.</span> ${s.bossHP}/${node.boss.hpMax}`;
+        }
+      }else{
+        const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
+
+        // If already solved this question: no XP, no progress
+        if(s.correctSteps[qi]){
+          saveState();
+          renderAll();
+          return;
         }
 
-      } else {
-        // Normal: mark question solved once
         s.correctSteps[qi] = true;
 
+        // XP only once per question
         if(!s.xpGrantedSteps[qi]){
           s.xpGrantedSteps[qi] = true;
           gainXP(16);
         }
 
-        if(qi < 2) s.qIndex = qi + 1;
-
-        if(allQuestionsCorrect(i)){
-          if(isGoalMet(i)){
-            markCompleted(i);
-            el.statusLine.innerHTML = `Status: <span class="good">Erledigt.</span>`;
-          }else{
-            // no reading: show kid blocker
-            showKidBlocker(i);
-          }
-        }else{
+        // move to next question or complete node
+        if(qi < node.readSteps.length - 1){
+          s.qIndex = qi + 1;
           el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
+        }else{
+          el.statusLine.innerHTML = `Status: <span class="good">Erledigt.</span>`;
+          markCompleted(i);
+          autoAdvance();
         }
       }
 
       saveState();
       renderAll();
-
-      if(state.completed[i]) autoAdvance();
-
     } else {
-      cards[idx].classList.add("wrong");
+      btnEl.classList.add("wrong");
       s.perfect = false;
       state.streak = 0;
-
       loseHeart();
-
       el.statusLine.innerHTML = `Status: <span class="bad">Falsch.</span>`;
-      toast(`<b>Falsch.</b>`);
+      toast(`<b>Falsch.</b>`, 1400);
       setFips("thinking", "Nochmal lesen.");
       saveState();
       renderAll();
@@ -2399,10 +2199,10 @@
   // ------------------------------------------------------------
   function openReportAndSplash(){
     const items = [
-      ["Sterne", state.stars],
-      ["Äpfel", state.apples],
-      ["Laternen", state.lanterns],
-      ["Funken", state.sparks],
+      ["Sterne (Bonus)", state.stars],
+      ["Äpfel (Bonus)", state.apples],
+      ["Laternen (Bonus)", state.lanterns],
+      ["Funken (Bonus)", state.sparks],
       ["Stufe", state.level],
       ["XP", `${state.xp}/${state.xpNeed}`],
       ["Serie", state.streak],
@@ -2420,8 +2220,8 @@
   // Buttons
   // ------------------------------------------------------------
   el.reReadBtn.addEventListener("click", () => {
-    toast(`<b>Nochmal lesen.</b>`, 2000);
-    setFips("thinking", "Lies das Pergament. Dann antworten.");
+    toast(`<b>Nochmal lesen.</b>`, 1600);
+    setFips("thinking", "Lies. Dann antworte.");
   });
 
   el.nextBtn.addEventListener("click", () => {
@@ -2438,18 +2238,18 @@
     state = defaultState();
     saveState();
     renderAll();
-    toast("<b>Reset.</b> Alles wurde zurückgesetzt.");
-    setFips("idle", "Los geht’s. Sammeln, dann lesen.");
+    toast("<b>Reset.</b> Alles zurückgesetzt.");
+    setFips("idle", "Los geht’s. Lesen, dann antworten.");
   });
 
   el.helpBtn.addEventListener("click", () => {
-    toast(`<b>So geht’s:</b> Tippen im Bild · Lesen · Antworten · Dann weiter.`, 5200);
-    setFips("idle", "Tippe im Bild. Dann lies. Dann antworte.");
+    toast(`<b>So geht’s:</b> Lesen · Antworten · Weiter. Sammeln ist Bonus.`, 5200);
+    setFips("idle", "Lies. Antworte. Sammeln ist Bonus.");
   });
 
-  el.kidCloseBtn.addEventListener("click", hideKidBlocker);
-  el.kidOkBtn.addEventListener("click", hideKidBlocker);
-  el.kidBlocker.addEventListener("click", (e) => { if(e.target === el.kidBlocker) hideKidBlocker(); });
+  el.bonusCloseBtn.addEventListener("click", hideBonusModal);
+  el.bonusOkBtn.addEventListener("click", hideBonusModal);
+  el.bonus.addEventListener("click", (e)=>{ if(e.target===el.bonus) hideBonusModal(); });
 
   el.closeSplashBtn.addEventListener("click", () => {
     el.splash.classList.remove("show");
@@ -2459,7 +2259,7 @@
     const k = e.key.toLowerCase();
     if(k === "h") el.helpBtn.click();
     if(k === "r") el.resetBtn.click();
-    if(k === "escape") hideKidBlocker();
+    if(k === "escape") hideBonusModal();
   });
 
   // ------------------------------------------------------------
@@ -2475,7 +2275,7 @@
   }
 
   // Initial
-  setFips("idle", "Sammle Sterne, Äpfel, Laternen. Dann lies das Pergament.");
+  setFips("idle", "Lies das Pergament. Beantworte Fragen. Sammeln ist Bonus.");
   renderAll().then(saveState);
 })();
 </script>
