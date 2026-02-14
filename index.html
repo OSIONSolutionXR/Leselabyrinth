@@ -15,7 +15,7 @@
       --panel2: rgba(18,22,44,.42);
 
       --stroke: rgba(255,255,255,.12);
-      --stroke2: rgba(255,255,255,.18);
+      --stroke2: rgba(255,255,255,.20);
 
       --text:#eaf0ff;
       --muted:#b9c2e8;
@@ -24,6 +24,7 @@
       --bad:#ff6b6b;
 
       --gold:#ffd36a;
+      --gold2:#fff1b2;
       --blue:#6fd0ff;
       --pink:#ff4fa3;
 
@@ -48,44 +49,45 @@
       overflow-x:hidden;
     }
 
-    /* Top HUD */
+    /* Top HUD (größer + klarer) */
     .topbar{
       position: sticky;
       top: 0;
       z-index: 50;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(180deg, rgba(8,10,24,.78), rgba(8,10,24,.38));
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(8,10,24,.82), rgba(8,10,24,.40));
       border-bottom: 1px solid var(--stroke);
-      padding: 12px 14px;
+      padding: 14px 16px;
     }
     .topbar-inner{
-      max-width: 1400px;
+      max-width: 1440px;
       margin:0 auto;
       display:flex;
-      gap: 10px;
+      gap: 12px;
       align-items:center;
       justify-content: space-between;
       flex-wrap: wrap;
     }
     .brand{
-      display:flex; align-items:center; gap:10px;
-      min-width: 240px;
+      display:flex; align-items:center; gap:12px;
+      min-width: 260px;
     }
     .brand .dot{
-      width: 10px; height: 10px; border-radius: 50%;
+      width: 12px; height: 12px; border-radius: 50%;
       background: linear-gradient(135deg, var(--pink), var(--gold));
-      box-shadow: 0 0 18px rgba(255,79,163,.45);
+      box-shadow: 0 0 22px rgba(255,79,163,.45);
     }
     .brand .title{
-      font-weight: 900;
+      font-weight: 1000;
       letter-spacing: .2px;
       line-height: 1.1;
+      font-size: 16px;
     }
     .brand .sub{
       font-size: 12px;
       color: var(--muted);
       opacity: .95;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .hud{
@@ -100,73 +102,77 @@
       display:flex;
       gap: 10px;
       align-items:center;
-      padding: 10px 12px;
+      padding: 12px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.07);
       border: 1px solid var(--stroke);
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      box-shadow: 0 12px 34px rgba(0,0,0,.28);
       white-space: nowrap;
       position: relative;
       overflow:hidden;
+      min-height: 46px;
     }
     .pill b{ font-weight: 1000; }
+    .tiny{ font-size: 12px; color: var(--muted); opacity:.95; }
+    .sep{ opacity:.25; }
+
     .icon{
-      width: 26px; height: 26px; object-fit: contain;
-      filter: drop-shadow(0 0 14px rgba(255,255,255,.12));
+      width: 30px; height: 30px; object-fit: contain;
+      filter: drop-shadow(0 0 16px rgba(255,255,255,.14));
       transform-origin:center;
     }
 
-    .hearts{ display:flex; gap:7px; align-items:center; }
+    .hearts{ display:flex; gap:8px; align-items:center; }
     .hearts .heart{
-      width: 26px; height: 26px; opacity: .98;
-      filter: drop-shadow(0 0 14px rgba(255,79,163,.26));
+      width: 30px; height: 30px; opacity: .98;
+      filter: drop-shadow(0 0 16px rgba(255,79,163,.26));
       transform-origin:center;
     }
     .hearts .heart.off{ opacity: .20; filter:none; }
 
-    .sep{ opacity:.25; }
-    .tiny{ font-size: 12px; color: var(--muted); opacity:.95; }
     .btn{
       appearance:none;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.07);
       color: var(--text);
       border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 900;
+      padding: 12px 16px;
+      font-weight: 1000;
       cursor:pointer;
       transition: transform .05s ease, background .2s ease, border-color .2s ease;
+      min-height: 46px;
     }
-    .btn:hover{ background: rgba(255,255,255,.10); border-color: var(--stroke2); }
+    .btn:hover{ background: rgba(255,255,255,.11); border-color: var(--stroke2); }
     .btn:active{ transform: translateY(1px); }
     .btn.primary{
       background: linear-gradient(135deg, rgba(255,79,163,.92), rgba(255,211,106,.88));
-      border-color: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.22);
       color: #1a1022;
-      box-shadow: 0 14px 35px rgba(255,79,163,.18);
+      box-shadow: 0 16px 40px rgba(255,79,163,.20);
     }
 
     .xp{
-      min-width: 320px;
-      max-width: 520px;
+      min-width: 360px;
+      max-width: 560px;
       flex: 1;
       display:flex;
       align-items:center;
       gap: 10px;
-      padding: 10px 12px;
+      padding: 12px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.07);
       border: 1px solid var(--stroke);
       position:relative;
       overflow:hidden;
+      min-height: 46px;
     }
-    .xp small{ color: var(--muted); font-weight:900; }
+    .xp small{ color: var(--muted); font-weight:1000; }
     .xpbar{
       flex: 1;
-      height: 12px;
+      height: 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.11);
+      border: 1px solid rgba(255,255,255,.12);
       overflow:hidden;
     }
     .xpbar > div{
@@ -178,18 +184,18 @@
       transition: width .35s ease;
     }
 
-    /* Layout: 3-spaltig (links Pergament), Mitte Szene, rechts Guide+Kapitel */
+    /* Layout */
     .wrap{
-      max-width: 1400px;
+      max-width: 1440px;
       margin: 0 auto;
       padding: 16px 14px 26px;
       display:grid;
       gap: 14px;
-      grid-template-columns: 380px 1fr 340px;
+      grid-template-columns: 400px 1fr 360px;
       align-items:start;
     }
-    @media (max-width: 1200px){
-      .wrap{ grid-template-columns: 360px 1fr; }
+    @media (max-width: 1280px){
+      .wrap{ grid-template-columns: 380px 1fr; }
       .right{ display:none; }
     }
     @media (max-width: 980px){
@@ -198,7 +204,7 @@
     }
 
     .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -225,13 +231,10 @@
     /* Pergament */
     .parchment{
       background:
-        radial-gradient(800px 340px at 20% 20%, rgba(255,240,205,.22), transparent 55%),
-        radial-gradient(700px 320px at 80% 35%, rgba(255,220,150,.18), transparent 60%),
+        radial-gradient(900px 360px at 20% 20%, rgba(255,240,205,.22), transparent 55%),
+        radial-gradient(800px 340px at 80% 35%, rgba(255,220,150,.18), transparent 60%),
         linear-gradient(180deg, rgba(255,235,190,.16), rgba(255,235,190,.08));
       border: 1px solid rgba(255,255,255,.14);
-    }
-    .parchment .bd{
-      padding: 16px 16px 16px;
     }
     .paper{
       border-radius: 18px;
@@ -242,7 +245,7 @@
         linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06));
       padding: 14px 14px;
       box-shadow: 0 12px 26px rgba(0,0,0,.25) inset;
-      min-height: 190px;
+      min-height: 210px;
     }
     .paper .label{
       font-size: 12px;
@@ -271,14 +274,22 @@
       padding: 12px 12px;
     }
     .q .qt{
-      display:flex; align-items:center; justify-content:space-between; gap: 10px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap: 10px;
       margin-bottom: 10px;
     }
     .q .qt h3{
       margin:0;
       font-size: 16px;
       font-weight: 1000;
+      line-height: 1.15;
     }
+    .subline{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
     .answers{
       display:grid;
       gap: 10px;
@@ -291,7 +302,7 @@
       padding: 12px 12px;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
+      background: rgba(255,255,255,.06);
       cursor:pointer;
       user-select:none;
       font-weight: 1000;
@@ -299,10 +310,10 @@
       position:relative;
       overflow:hidden;
     }
-    .ans:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
+    .ans:hover{ border-color: rgba(255,255,255,.24); background: rgba(255,255,255,.10); }
     .ans:active{ transform: translateY(1px); }
-    .ans.correct{ border-color: rgba(69,212,131,.55); background: rgba(69,212,131,.12); }
-    .ans.wrong{ border-color: rgba(255,107,107,.55); background: rgba(255,107,107,.12); }
+    .ans.correct{ border-color: rgba(69,212,131,.60); background: rgba(69,212,131,.14); }
+    .ans.wrong{ border-color: rgba(255,107,107,.60); background: rgba(255,107,107,.14); }
 
     .foot{
       margin-top: 12px;
@@ -320,13 +331,13 @@
     .statusline .good{ color: var(--good); font-weight: 1000; }
     .statusline .bad{ color: var(--bad); font-weight: 1000; }
 
-    /* Right side (Guide + Kapitel) */
+    /* Right side */
     .right{
       display:flex;
       flex-direction:column;
       gap: 14px;
       position: sticky;
-      top: 80px;
+      top: 86px;
     }
     @media (max-width: 980px){
       .right{ position: static; }
@@ -336,9 +347,9 @@
       display:flex; gap: 12px; align-items:flex-start;
     }
     .avatar{
-      width: 64px; height: 64px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.06);
+      width: 72px; height: 72px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.07);
       border: 1px solid rgba(255,255,255,.14);
       display:grid; place-items:center;
       overflow:hidden;
@@ -350,7 +361,7 @@
       border: 1px solid rgba(255,255,255,.14);
       border-radius: 16px;
       padding: 10px 12px;
-      min-height: 64px;
+      min-height: 72px;
     }
     .speech .name{ font-weight: 1000; }
     .speech .line{ margin-top: 4px; color: var(--muted); font-size: 13px; line-height:1.35; }
@@ -368,21 +379,21 @@
       padding: 10px 12px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
+      background: rgba(255,255,255,.06);
       cursor:pointer;
       user-select:none;
     }
-    .node:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
+    .node:hover{ border-color: rgba(255,255,255,.24); background: rgba(255,255,255,.10); }
     .node.locked{ opacity:.5; cursor:not-allowed; }
-    .node.active{ outline: 2px solid rgba(111,208,255,.35); }
+    .node.active{ outline: 2px solid rgba(111,208,255,.38); }
     .node .left{ display:flex; gap:10px; align-items:center; }
     .badge{
-      width: 30px; height: 30px;
-      border-radius: 11px;
+      width: 32px; height: 32px;
+      border-radius: 12px;
       display:grid; place-items:center;
       font-weight: 1000;
       background: rgba(111,208,255,.12);
-      border: 1px solid rgba(111,208,255,.20);
+      border: 1px solid rgba(111,208,255,.22);
     }
 
     /* Scene */
@@ -392,12 +403,12 @@
       overflow:hidden;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.16);
-      min-height: 520px;
+      min-height: 560px;
       box-shadow: var(--shadow);
     }
     .sceneImg{
       width: 100%;
-      height: min(64vh, 620px);
+      height: min(66vh, 680px);
       object-fit: cover;
       display:block;
       transform: scale(1.01);
@@ -416,33 +427,75 @@
       touch-action: manipulation;
       transition: transform .08s ease, filter .2s ease, opacity .2s ease;
     }
-    .hotspot:hover{ transform: translate(-50%,-50%) scale(1.04); filter: drop-shadow(0 0 18px rgba(255,211,106,.22)); }
+    .hotspot:hover{ transform: translate(-50%,-50%) scale(1.05); filter: drop-shadow(0 0 18px rgba(255,211,106,.22)); }
     .hotspot:active{ transform: translate(-50%,-50%) scale(.99); }
     .hotspot img{
-      width: var(--w, 110px);
+      width: var(--w, 120px);
       height: auto;
       display:block;
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
       pointer-events:none;
     }
-    .hotspot.small img{ width: var(--w, 110px); }
-    .hotspot.tiny img{ width: var(--w, 60px); }
+    .hotspot.small img{ width: var(--w, 120px); }
+    .hotspot.tiny img{ width: var(--w, 70px); }
 
-    /* Fips big (unten links im Main-Bild) */
+    /* Laterne: leuchten per class */
+    .hotspot.lanternLit img{
+      filter:
+        drop-shadow(0 0 10px rgba(255,211,106,.55))
+        drop-shadow(0 0 22px rgba(255,211,106,.28))
+        drop-shadow(0 10px 18px rgba(0,0,0,.35));
+      animation: lanternPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes lanternPulse{
+      0%,100%{ transform: translateY(0) scale(1); }
+      50%{ transform: translateY(-1px) scale(1.02); }
+    }
+
+    /* Fips IM Bild (groß + cool) */
+    .fipsInScene{
+      position:absolute;
+      z-index: 6;
+      left: 18%;
+      top: 78%;
+      transform: translate(-50%,-50%);
+      display:none;
+      pointer-events:none;
+      filter:
+        drop-shadow(0 18px 26px rgba(0,0,0,.42))
+        drop-shadow(0 0 18px rgba(111,208,255,.18));
+    }
+    .fipsInScene.show{ display:block; animation: fipsPop .28s ease; }
+    @keyframes fipsPop{
+      from{ transform: translate(-50%,-50%) scale(.80); opacity:0; }
+      to{ transform: translate(-50%,-50%) scale(1); opacity:1; }
+    }
+    .fipsInScene img{
+      width: 240px;   /* << deutlich größer */
+      height: auto;
+      transform-origin: center;
+      animation: fipsIdle 1.6s ease-in-out infinite;
+    }
+    @keyframes fipsIdle{
+      0%,100%{ transform: translateY(0) scale(1); }
+      50%{ transform: translateY(-6px) scale(1.02); }
+    }
+
+    /* Fips big unten links (noch größer) */
     .fipsBig{
       position:absolute;
-      left: 18px;
-      bottom: 18px;
-      z-index: 6;
+      left: 16px;
+      bottom: 16px;
+      z-index: 7;
       display:flex;
       align-items:flex-end;
       gap: 12px;
       pointer-events:none;
     }
     .fipsBig .frame{
-      width: 120px;
-      height: 120px;
-      border-radius: 26px;
+      width: 150px;
+      height: 150px;
+      border-radius: 30px;
       background: rgba(0,0,0,.18);
       border: 1px solid rgba(255,255,255,.16);
       box-shadow: 0 18px 40px rgba(0,0,0,.35);
@@ -457,9 +510,9 @@
       transform-origin:center;
     }
     .fipsBig .bubble{
-      max-width: 420px;
+      max-width: 520px;
       border-radius: 18px;
-      background: rgba(8,10,24,.60);
+      background: rgba(8,10,24,.62);
       border: 1px solid rgba(255,255,255,.14);
       backdrop-filter: blur(10px);
       padding: 10px 12px;
@@ -468,7 +521,7 @@
     .fipsBig .bubble b{ font-weight:1000; }
     .fipsBig .bubble .line{ color: var(--muted); margin-top:4px; font-size: 13px; line-height:1.35; }
 
-    /* Boss HUD (nur in Boss-Tor) */
+    /* Boss HUD */
     .bossHud{
       position:absolute;
       left: 50%;
@@ -478,9 +531,9 @@
       display:none;
       gap: 10px;
       align-items:center;
-      padding: 10px 12px;
+      padding: 12px 14px;
       border-radius: 999px;
-      background: rgba(0,0,0,.28);
+      background: rgba(0,0,0,.30);
       border: 1px solid rgba(255,255,255,.14);
       backdrop-filter: blur(10px);
       box-shadow: 0 18px 40px rgba(0,0,0,.35);
@@ -488,8 +541,8 @@
     .bossHud.show{ display:flex; }
     .bossName{ font-weight:1000; }
     .bossBar{
-      width: 220px;
-      height: 12px;
+      width: 240px;
+      height: 14px;
       border-radius: 999px;
       background: rgba(255,255,255,.10);
       border: 1px solid rgba(255,255,255,.14);
@@ -508,7 +561,7 @@
     .gateOpen{
       position:absolute;
       inset:0;
-      z-index: 8;
+      z-index: 12;
       display:none;
       place-items:center;
       background: radial-gradient(900px 500px at 50% 40%, rgba(255,211,106,.18), rgba(0,0,0,.55));
@@ -534,7 +587,7 @@
       right: 14px;
       bottom: 14px;
       z-index: 80;
-      max-width: 440px;
+      max-width: 480px;
       padding: 12px 14px;
       border-radius: 16px;
       background: rgba(10,12,28,.92);
@@ -550,17 +603,12 @@
     .fly{
       position: fixed;
       z-index: 90;
-      width: 44px; height: 44px;
+      width: 48px; height: 48px;
       pointer-events:none;
       filter: drop-shadow(0 0 18px rgba(255,211,106,.35));
       transform: translate(-50%, -50%) scale(1);
-      animation: flyTo .65s ease-in forwards;
     }
-    @keyframes flyTo{
-      0%{ opacity:1; transform: translate(-50%,-50%) scale(1); }
-      70%{ opacity:1; transform: translate(-50%,-50%) scale(.9); }
-      100%{ opacity:0; transform: translate(-50%,-50%) scale(.6); }
-    }
+
     .sparkBurst{
       position: absolute;
       inset: -26px;
@@ -576,22 +624,71 @@
     }
 
     /* HUD pulse on change */
-    .pulse{
-      animation: hudPulse .35s ease;
-    }
+    .pulse{ animation: hudPulse .35s ease; }
     @keyframes hudPulse{
       0%{ transform: scale(1); }
       45%{ transform: scale(1.06); }
       100%{ transform: scale(1); }
     }
-    .wiggle{
-      animation: wiggle .45s ease;
-    }
+    .wiggle{ animation: wiggle .45s ease; }
     @keyframes wiggle{
       0%{ transform: rotate(0deg) scale(1); }
       30%{ transform: rotate(-6deg) scale(1.06); }
       60%{ transform: rotate(6deg) scale(1.06); }
       100%{ transform: rotate(0deg) scale(1); }
+    }
+
+    /* MEGA STAR Reward (richtig beantwortet) */
+    .megaStar{
+      position:absolute;
+      inset:0;
+      z-index: 20;
+      pointer-events:none;
+      display:none;
+      place-items:center;
+      background: radial-gradient(900px 520px at 50% 45%, rgba(255,211,106,.16), rgba(0,0,0,.25));
+      backdrop-filter: blur(1px);
+    }
+    .megaStar.show{ display:grid; animation: megaFade .70s ease; }
+    @keyframes megaFade{
+      0%{ opacity:0; }
+      12%{ opacity:1; }
+      100%{ opacity:0; }
+    }
+
+    .megaStar .starWrap{
+      width: min(520px, 70vw);
+      aspect-ratio: 1/1;
+      position: relative;
+      filter:
+        drop-shadow(0 0 28px rgba(255,211,106,.28))
+        drop-shadow(0 30px 80px rgba(0,0,0,.55));
+      animation: megaPop .70s ease;
+    }
+    @keyframes megaPop{
+      0%{ transform: scale(.30) rotate(-18deg); opacity:0; }
+      22%{ transform: scale(1.04) rotate(6deg); opacity:1; }
+      45%{ transform: scale(.98) rotate(-3deg); opacity:1; }
+      100%{ transform: scale(1.02) rotate(0deg); opacity:.0; }
+    }
+
+    /* Stern als SVG-Look (rein in CSS) */
+    .megaStar svg{ width:100%; height:100%; display:block; }
+    .sparkles{
+      position:absolute;
+      inset:-14%;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 35%, rgba(255,255,255,.38), transparent 26%),
+        radial-gradient(circle at 70% 45%, rgba(255,255,255,.26), transparent 24%),
+        radial-gradient(circle at 52% 70%, rgba(255,255,255,.22), transparent 28%);
+      animation: sparkleSpin .70s ease;
+      opacity:.95;
+    }
+    @keyframes sparkleSpin{
+      0%{ transform: rotate(0deg) scale(.85); opacity:0; }
+      30%{ transform: rotate(24deg) scale(1.02); opacity:1; }
+      100%{ transform: rotate(42deg) scale(1.06); opacity:0; }
     }
 
     /* Water world splash */
@@ -608,7 +705,7 @@
     }
     .splash.show{ display:grid; animation: fadeIn .35s ease; }
     .splash .box{
-      width:min(880px, 94%);
+      width:min(920px, 94%);
       border-radius: 24px;
       overflow:hidden;
       border: 1px solid rgba(255,255,255,.16);
@@ -617,7 +714,7 @@
     }
     .splash img{
       width:100%;
-      height: 320px;
+      height: 340px;
       object-fit: cover;
       display:block;
     }
@@ -641,7 +738,7 @@
         <div class="dot"></div>
         <div>
           <div class="title">Leselabyrinth – Funkelwald</div>
-          <div class="sub">Kinder-RPG Lesetraining · Szene-Pfad · Progression</div>
+          <div class="sub">Kinder-RPG Lesetraining · Szene-Pfad · Progression · Sammeln</div>
         </div>
       </div>
 
@@ -651,14 +748,14 @@
           <div class="hearts" id="hearts"></div>
         </div>
 
-        <div class="pill" id="pillStars" title="Sterne">
+        <div class="pill" id="pillStars" title="Sterne (Sammelobjekt)">
           <img class="icon" src="assets/ui/icons/stern.png" alt="Stern" />
           <span><b id="starsVal">0</b></span>
           <span class="sep">|</span>
           <span class="tiny">Sterne</span>
         </div>
 
-        <div class="pill" id="pillSparks" title="Geheimfunken">
+        <div class="pill" id="pillSparks" title="Geheimfunken (versteckt)">
           <img class="icon" src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke" />
           <span><b id="sparksVal">0</b></span>
           <span class="sep">|</span>
@@ -699,7 +796,10 @@
 
         <div class="q">
           <div class="qt">
-            <h3 id="question">–</h3>
+            <div>
+              <h3 id="question">–</h3>
+              <div class="subline" id="qProgress">–</div>
+            </div>
             <span class="tiny">Erst lesen, dann antworten.</span>
           </div>
 
@@ -721,6 +821,30 @@
       <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
       <div class="overlay" id="overlay"></div>
 
+      <!-- MEGA STAR reward overlay -->
+      <div class="megaStar" id="megaStar">
+        <div class="starWrap">
+          <div class="sparkles"></div>
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="rgba(255,211,106,1)"/>
+                <stop offset="0.55" stop-color="rgba(255,241,178,1)"/>
+                <stop offset="1" stop-color="rgba(255,79,163,.95)"/>
+              </linearGradient>
+              <radialGradient id="g2" cx="45%" cy="35%" r="70%">
+                <stop offset="0" stop-color="rgba(255,255,255,.85)"/>
+                <stop offset="0.35" stop-color="rgba(255,255,255,.25)"/>
+                <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+              </radialGradient>
+            </defs>
+            <path d="M50 6 L62 36 L94 38 L69 58 L77 90 L50 73 L23 90 L31 58 L6 38 L38 36 Z"
+                  fill="url(#g1)" stroke="rgba(255,255,255,.45)" stroke-width="1.2" />
+            <circle cx="44" cy="36" r="22" fill="url(#g2)" />
+          </svg>
+        </div>
+      </div>
+
       <!-- Boss HUD -->
       <div class="bossHud" id="bossHud">
         <span class="bossName" id="bossName">Boss</span>
@@ -728,14 +852,19 @@
         <span class="tiny"><b id="bossHPText">3</b>/3</span>
       </div>
 
-      <!-- Fips big bottom-left -->
+      <!-- Fips IM Bild -->
+      <div class="fipsInScene" id="fipsInScene">
+        <img id="fipsInSceneImg" src="assets/chars/fips/idle.png" alt="Fips" />
+      </div>
+
+      <!-- Fips unten links -->
       <div class="fipsBig">
         <div class="frame">
           <img id="fipsBigImg" src="assets/chars/fips/idle.png" alt="Fips" />
         </div>
         <div class="bubble">
           <b>Fips</b>
-          <div class="line" id="fipsBigLine">Tippe Dinge im Bild an. Dann lies das Pergament.</div>
+          <div class="line" id="fipsBigLine">Tippe Dinge im Bild an. Sammle Sterne. Dann beantworte die Fragen.</div>
         </div>
       </div>
 
@@ -743,7 +872,7 @@
       <div class="gateOpen" id="gateOpen">
         <div class="card">
           <h3>Das Tor öffnet sich</h3>
-          <p>Du hast den Boss besiegt. Als Nächstes geht es in die Wasserwelt.</p>
+          <p>Du hast alles erfüllt: Fragen + Sammelziel. Als Nächstes geht es in die Wasserwelt.</p>
         </div>
       </div>
     </div>
@@ -760,7 +889,10 @@
             <div class="avatar"><img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" /></div>
             <div class="speech">
               <div class="name">Fips</div>
-              <div class="line" id="fipsLine">Sammle Dinge, lies, antworte. Bonus: Finde den Geheimfunken.</div>
+              <div class="line" id="fipsLine">
+                Sammle Dinge im Bild (Sterne, Geheimfunken). Dann lies. Pro Szene gibt es mehrere Fragen.
+                Nächste Szene erst nach: richtige Antworten + Sammelziel.
+              </div>
             </div>
           </div>
         </div>
@@ -774,7 +906,7 @@
         <div class="bd">
           <div class="pathlist" id="pathList"></div>
           <div style="height:10px"></div>
-          <div class="tiny" id="unlockHint">Nächster Knoten wird nach richtiger Antwort freigeschaltet.</div>
+          <div class="tiny" id="unlockHint">Fortschritt: Fragen + Sammeln. Erst dann schaltet der nächste Knoten frei.</div>
         </div>
       </div>
     </div>
@@ -789,7 +921,7 @@
       <div class="content">
         <div>
           <h3>Kapitel 2: Wasserwelt</h3>
-          <p>Funkelwald ist geschafft. Als nächstes wartet eine Wasserwelt auf dich. Das bauen wir als nächstes aus.</p>
+          <p>Funkelwald ist geschafft. Als Nächstes wartet eine Wasserwelt. Das ist das nächste Ausbaukapitel.</p>
         </div>
         <div class="row">
           <button class="btn primary" id="closeSplashBtn">Schließen</button>
@@ -801,7 +933,7 @@
 <script>
 (() => {
   // ------------------------------------------------------------
-  // Assets (achte auf exakte Pfade/Namen aus deinem Repo)
+  // Assets
   // ------------------------------------------------------------
   const ASSETS = {
     scenes: {
@@ -829,114 +961,246 @@
       excited:  "assets/chars/fips/excited.png",
       thinking: "assets/chars/fips/thinking.png",
       sad:      "assets/chars/fips/sad.png",
+      book:     "assets/chars/fips/book.png" // optional (falls nicht vorhanden -> Fallback)
     }
   };
 
   // ------------------------------------------------------------
-  // 5 weitere Dinge (jetzt drin):
-  // 1) Bild im Main-Bild groß + Fips groß unten links (mit Mood-Wechsel)
-  // 2) Gegenstände aufheben -> Animation (Sparkburst + Icon fliegt zum HUD)
-  // 3) Nach richtiger Antwort Auto-Weiter zur nächsten Szene (Timer)
-  // 4) Pergament-Optik links, Guide rechts (Layout-Umstellung)
-  // 5) HUD größer + animiert, 3 Herzen korrekt sichtbar
-  // ------------------------------------------------------------
-
-  // ------------------------------------------------------------
   // Content / Nodes
+  // WICHTIG: Pro Szene mehrere Fragen (hier: 3).
+  // Zusätzlich: Sammelziel pro Szene (minStars).
   // ------------------------------------------------------------
   const NODES = [
     {
       id:"N1", key:"waldweg", title:"Waldweg",
       bg: ASSETS.scenes.waldweg,
-      sparkHotspot: { x: 14, y: 78, r: 7 }, // geheim (unsichtbar)
+
+      // Sammelregel: mindestens 1 Stern (oder Geheimfunke) pro Szene, sonst keine Freischaltung
+      req: { minStars: 1, minSparks: 0 },
+
+      // geheim (unsichtbar)
+      sparkHotspot: { x: 14, y: 78, r: 7 },
+
+      // Gegenstände im Bild
       interactables: [
-        { id:"star1", type:"collect_star", img:ASSETS.interact.Stern, x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan1",  type:"lore",         img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true, say:"Die Laterne flackert: Lies genau, dann findest du die Antwort." },
-        { id:"ap1",   type:"trap",         img:ASSETS.interact.Apfel, x: 86, y: 40, size:"small", once:true, say:"Ablenkung. Erst lesen, dann tippen." }
+        { id:"star1", type:"collect_star", img:ASSETS.interact.Stern,   x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lan1",  type:"lore",         img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:false, label:"Laterne",
+          say:"Laternen können Hinweise geben. Der Text entscheidet." },
+        { id:"ap1",   type:"trap",         img:ASSETS.interact.Apfel,   x: 86, y: 40, size:"small", once:false, label:"Apfel",
+          say:"Ablenkung. Erst lesen, dann antworten." }
       ],
-      read: {
-        text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
-        question: "Wo steht Fips?",
-        answers: [
-          { t:"Am Waldweg.", correct:true },
-          { t:"Im Wasser.", correct:false },
-          { t:"Auf dem Dach.", correct:false }
-        ]
-      }
+
+      // Fips im Bild: erst nach Frage 1 anzeigen (Fips steht am Wegesrand)
+      fipsInScene: { x: 18, y: 78 },
+
+      // Laterne leuchtet erst nach Frage 2
+      lanternId: "lan1",
+
+      // 3 Fragen, passend zum Text
+      steps: [
+        {
+          text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
+          question: "Wo steht Fips?",
+          answers: [
+            { t:"Am Waldweg.", correct:true },
+            { t:"Im Wasser.", correct:false },
+            { t:"Auf dem Dach.", correct:false }
+          ],
+          onCorrect: { showFips:true }
+        },
+        {
+          text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
+          question: "Was leuchtet?",
+          answers: [
+            { t:"Die Laterne.", correct:true },
+            { t:"Ein Auto.", correct:false },
+            { t:"Ein Schuh.", correct:false }
+          ],
+          onCorrect: { lanternLit:true }
+        },
+        {
+          text: ["Fips steht am Waldweg.","Eine Laterne leuchtet.","Fips bleibt ruhig und liest."].join("<br>"),
+          question: "Was tut Fips?",
+          answers: [
+            { t:"Er bleibt ruhig und liest.", correct:true },
+            { t:"Er rennt weg.", correct:false },
+            { t:"Er schreit laut.", correct:false }
+          ],
+          onCorrect: { fipsBook:true }
+        }
+      ]
     },
+
     {
       id:"N2", key:"holzbruecke", title:"Holzbrücke",
       bg: ASSETS.scenes.holzbruecke,
+      req: { minStars: 1, minSparks: 0 },
       sparkHotspot: { x: 82, y: 63, r: 7 },
+
       interactables: [
-        { id:"star2", type:"collect_star", img:ASSETS.interact.Stern, x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan2",  type:"lore",         img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true, say:"Schritt für Schritt. Lies den Text." },
-        { id:"ap2",   type:"trap",         img:ASSETS.interact.Apfel, x: 80, y: 78, size:"tiny", once:true, say:"Das war nicht die richtige Sache." }
+        { id:"star2", type:"collect_star", img:ASSETS.interact.Stern,   x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lan2",  type:"lore",         img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:false, label:"Laterne",
+          say:"Schritt für Schritt. Lies den Text." },
+        { id:"ap2",   type:"trap",         img:ASSETS.interact.Apfel,   x: 80, y: 78, size:"tiny",  once:false, label:"Apfel",
+          say:"Das war Ablenkung." }
       ],
-      read: {
-        text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
-        question: "Was ist vor Fips?",
-        answers: [
-          { t:"Eine Holzbrücke.", correct:true },
-          { t:"Ein Auto.", correct:false },
-          { t:"Ein Flugzeug.", correct:false }
-        ]
-      }
+      fipsInScene: { x: 20, y: 80 },
+      lanternId: "lan2",
+      steps: [
+        {
+          text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
+          question: "Was ist vor Fips?",
+          answers: [
+            { t:"Eine Holzbrücke.", correct:true },
+            { t:"Ein Auto.", correct:false },
+            { t:"Ein Flugzeug.", correct:false }
+          ],
+          onCorrect: { showFips:true }
+        },
+        {
+          text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
+          question: "Wie geht Fips?",
+          answers: [
+            { t:"Langsam.", correct:true },
+            { t:"Rückwärts.", correct:false },
+            { t:"Auf einem Skateboard.", correct:false }
+          ],
+          onCorrect: { lanternLit:true }
+        },
+        {
+          text: ["Vor Fips ist eine Holzbrücke.","Fips geht langsam.","Die Brücke knarrt leise."].join("<br>"),
+          question: "Was macht die Brücke?",
+          answers: [
+            { t:"Sie knarrt leise.", correct:true },
+            { t:"Sie singt.", correct:false },
+            { t:"Sie fliegt.", correct:false }
+          ],
+          onCorrect: { fipsBook:true }
+        }
+      ]
     },
+
     {
       id:"N3", key:"apfelbaum", title:"Apfelbaum",
       bg: ASSETS.scenes.apfelbaum,
+      req: { minStars: 1, minSparks: 0 },
       sparkHotspot: { x: 50, y: 18, r: 7 },
+
       interactables: [
-        { id:"star3", type:"collect_star", img:ASSETS.interact.Stern, x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"ap3",   type:"lore",         img:ASSETS.interact.Apfel, x: 78, y: 40, size:"small", once:true, say:"Der Apfelbaum ist freundlich. Aber die Antwort steht im Text." },
-        { id:"lan3",  type:"lore",         img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny", once:true, say:"Das wichtigste Wort ist im Text." }
+        { id:"star3", type:"collect_star", img:ASSETS.interact.Stern,   x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"ap3",   type:"lore",         img:ASSETS.interact.Apfel,   x: 78, y: 40, size:"small", once:false, label:"Apfel",
+          say:"Der Apfel ist nett. Die Antwort steht im Text." },
+        { id:"lan3",  type:"lore",         img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny",  once:false, label:"Laterne",
+          say:"Such das Schlüsselwort." }
       ],
-      read: {
-        text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
-        question: "Was sieht Fips?",
-        answers: [
-          { t:"Einen Apfelbaum.", correct:true },
-          { t:"Einen Fernseher.", correct:false },
-          { t:"Eine Rakete.", correct:false }
-        ]
-      }
+      fipsInScene: { x: 22, y: 80 },
+      lanternId: "lan3",
+      steps: [
+        {
+          text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
+          question: "Was sieht Fips?",
+          answers: [
+            { t:"Einen Apfelbaum.", correct:true },
+            { t:"Einen Fernseher.", correct:false },
+            { t:"Eine Rakete.", correct:false }
+          ],
+          onCorrect: { showFips:true }
+        },
+        {
+          text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
+          question: "Was hängt am Ast?",
+          answers: [
+            { t:"Ein Apfel.", correct:true },
+            { t:"Ein Helm.", correct:false },
+            { t:"Eine Glocke.", correct:false }
+          ],
+          onCorrect: { lanternLit:true }
+        },
+        {
+          text: ["Fips sieht einen Apfelbaum.","Ein Apfel hängt am Ast.","Fips lächelt."].join("<br>"),
+          question: "Was macht Fips?",
+          answers: [
+            { t:"Er lächelt.", correct:true },
+            { t:"Er weint.", correct:false },
+            { t:"Er stampft.", correct:false }
+          ],
+          onCorrect: { fipsBook:true }
+        }
+      ]
     },
+
     {
       id:"N4", key:"sternstein", title:"Sternstein",
       bg: ASSETS.scenes.sternstein,
+      req: { minStars: 1, minSparks: 0 },
       sparkHotspot: { x: 18, y: 34, r: 7 },
+
       interactables: [
-        { id:"star4", type:"collect_star", img:ASSETS.interact.Stern, x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan4",  type:"lore",         img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true, say:"Hier ist es magisch. Lies den Text." },
-        { id:"ap4",   type:"trap",         img:ASSETS.interact.Apfel, x: 86, y: 84, size:"tiny", once:true, say:"Der Apfel ist hier nicht wichtig." }
+        { id:"star4", type:"collect_star", img:ASSETS.interact.Stern,   x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lan4",  type:"lore",         img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:false, label:"Laterne",
+          say:"Hier ist es magisch. Lies den Text." },
+        { id:"ap4",   type:"trap",         img:ASSETS.interact.Apfel,   x: 86, y: 84, size:"tiny",  once:false, label:"Apfel",
+          say:"Das ist nicht das Ziel." }
       ],
-      read: {
-        text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
-        question: "Was glitzert?",
-        answers: [
-          { t:"Der Stein.", correct:true },
-          { t:"Der Schuh.", correct:false },
-          { t:"Der Stuhl.", correct:false }
-        ]
-      }
+      fipsInScene: { x: 20, y: 80 },
+      lanternId: "lan4",
+      steps: [
+        {
+          text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
+          question: "Was findet Fips?",
+          answers: [
+            { t:"Einen Sternstein.", correct:true },
+            { t:"Einen Regenschirm.", correct:false },
+            { t:"Einen Ball.", correct:false }
+          ],
+          onCorrect: { showFips:true }
+        },
+        {
+          text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
+          question: "Was glitzert?",
+          answers: [
+            { t:"Der Stein.", correct:true },
+            { t:"Der Stuhl.", correct:false },
+            { t:"Der Schuh.", correct:false }
+          ],
+          onCorrect: { lanternLit:true }
+        },
+        {
+          text: ["Fips findet einen Sternstein.","Der Stein glitzert.","Fips tippt ihn an."].join("<br>"),
+          question: "Was macht Fips?",
+          answers: [
+            { t:"Er tippt den Stein an.", correct:true },
+            { t:"Er wirft den Stein weg.", correct:false },
+            { t:"Er schläft.", correct:false }
+          ],
+          onCorrect: { fipsBook:true }
+        }
+      ]
     },
 
-    // Boss-Tor: 3 Fragen, Boss HP sinkt bei richtiger Antwort.
+    // Boss-Tor: Tor öffnet sich NUR wenn:
+    // - Boss HP auf 0 (3 richtige Antworten)
+    // - und Sammelziel erfüllt (minStars)
     {
       id:"N5", key:"bosstor", title:"Boss-Tor",
       bg: ASSETS.scenes.bosstor,
+
+      // Boss-Tor verlangt mehr Sammeln (Skalierungseffekt)
+      req: { minStars: 2, minSparks: 0 },
+
       sparkHotspot: { x: 90, y: 20, r: 7 },
       interactables: [
-        { id:"star5", type:"collect_star", img:ASSETS.interact.Stern, x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan5",  type:"lore",         img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true, say:"Boss-Regel: 3 richtige Antworten. Dann öffnet sich das Tor." },
-        { id:"ap5",   type:"trap",         img:ASSETS.interact.Apfel, x: 84, y: 74, size:"tiny", once:true, say:"Ablenkung. Boss-Fokus!" }
+        { id:"star5", type:"collect_star", img:ASSETS.interact.Stern,   x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
+        { id:"lan5",  type:"lore",         img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:false, label:"Laterne",
+          say:"Boss-Regel: 3 richtige Antworten. Sammelziel muss auch erfüllt sein." },
+        { id:"ap5",   type:"trap",         img:ASSETS.interact.Apfel,   x: 84, y: 74, size:"tiny",  once:false, label:"Apfel",
+          say:"Ablenkung. Boss-Fokus!" }
       ],
-      boss: {
-        name: "Torwächter",
-        hpMax: 3
-      },
-      readBoss: [
+      boss: { name: "Torwächter", hpMax: 3 },
+      fipsInScene: { x: 22, y: 82 },
+      lanternId: "lan5",
+
+      steps: [
         {
           text: ["Vor Fips ist ein großes Tor.","Fips braucht einen Schlüssel.","Das Tor bleibt zu."].join("<br>"),
           question: "Was braucht Fips?",
@@ -944,7 +1208,8 @@
             { t:"Den Schlüssel.", correct:true },
             { t:"Einen Ball.", correct:false },
             { t:"Eine Leiter.", correct:false }
-          ]
+          ],
+          onCorrect: { showFips:true }
         },
         {
           text: ["Fips bleibt ruhig.","Fips liest den Text.","Fips denkt nach."].join("<br>"),
@@ -953,7 +1218,8 @@
             { t:"Er liest den Text.", correct:true },
             { t:"Er schläft.", correct:false },
             { t:"Er fliegt.", correct:false }
-          ]
+          ],
+          onCorrect: { lanternLit:true }
         },
         {
           text: ["Ein Funken glitzert.","Fips bleibt aufmerksam.","Das Tor wartet."].join("<br>"),
@@ -962,7 +1228,8 @@
             { t:"Ein Funken.", correct:true },
             { t:"Ein Auto.", correct:false },
             { t:"Ein Baum.", correct:false }
-          ]
+          ],
+          onCorrect: { fipsBook:true }
         }
       ]
     }
@@ -971,12 +1238,12 @@
   // ------------------------------------------------------------
   // Storage
   // ------------------------------------------------------------
-  const STORAGE_KEY = "leselabyrinth_funkelwald_v2_layout_parchment_boss";
+  const STORAGE_KEY = "leselabyrinth_funkelwald_v3_multistep_collect_gate";
 
   const defaultState = () => ({
     nodeIndex: 0,
-    unlocked: [true, false, false, false, false],
-    completed: [false, false, false, false, false],
+    unlocked: NODES.map((_,i)=> i===0),
+    completed: NODES.map(()=> false),
 
     stars: 0,
     sparks: 0,
@@ -988,16 +1255,15 @@
     hearts: 3,
     focus: "W-Frage",
 
-    // per node
+    // pro Szene
     scene: NODES.map(n => ({
       tries: 0,
-      answered: false,
       perfect: true,
       sparkFound: false,
-      collected: {},
-      // boss
-      bossHP: n.boss ? n.boss.hpMax : 0,
-      bossStep: 0
+      collected: {},        // {id:true}
+      stepIndex: 0,         // 0..steps-1
+      // Boss
+      bossHP: n.boss ? n.boss.hpMax : 0
     }))
   });
 
@@ -1030,6 +1296,7 @@
     sceneTitle: document.getElementById("sceneTitle"),
     readText: document.getElementById("readText"),
     question: document.getElementById("question"),
+    qProgress: document.getElementById("qProgress"),
     answers: document.getElementById("answers"),
     reReadBtn: document.getElementById("reReadBtn"),
     nextBtn: document.getElementById("nextBtn"),
@@ -1040,6 +1307,7 @@
     sceneImg: document.getElementById("sceneImg"),
     overlay: document.getElementById("overlay"),
     gateOpen: document.getElementById("gateOpen"),
+    megaStar: document.getElementById("megaStar"),
 
     // boss
     bossHud: document.getElementById("bossHud"),
@@ -1052,6 +1320,8 @@
     fipsLine: document.getElementById("fipsLine"),
     fipsBigImg: document.getElementById("fipsBigImg"),
     fipsBigLine: document.getElementById("fipsBigLine"),
+    fipsInScene: document.getElementById("fipsInScene"),
+    fipsInSceneImg: document.getElementById("fipsInSceneImg"),
 
     // right
     pathList: document.getElementById("pathList"),
@@ -1090,23 +1360,11 @@
   // ------------------------------------------------------------
   const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
 
-  function toast(html, ms=2200){
+  function toast(html, ms=2400){
     el.toast.innerHTML = html;
     el.toast.classList.add("show");
     clearTimeout(toast._t);
     toast._t = setTimeout(()=>el.toast.classList.remove("show"), ms);
-  }
-
-  function setFips(mood, line){
-    const src = ASSETS.fips[mood] || ASSETS.fips.idle;
-    el.fipsAvatar.src = src;
-    el.fipsBigImg.src = src;
-    el.fipsLine.textContent = line;
-    el.fipsBigLine.textContent = line;
-    // kleines wiggle bei Mood-Change
-    el.fipsBigImg.classList.remove("wiggle");
-    void el.fipsBigImg.offsetWidth;
-    el.fipsBigImg.classList.add("wiggle");
   }
 
   function pulse(pill){
@@ -1115,16 +1373,39 @@
     pill.classList.add("pulse");
   }
 
+  function safeSetImg(imgEl, src, fallback){
+    imgEl.onerror = () => { imgEl.onerror = null; imgEl.src = fallback; };
+    imgEl.src = src;
+  }
+
+  function setFips(mood, line){
+    const src = ASSETS.fips[mood] || ASSETS.fips.idle;
+    safeSetImg(el.fipsAvatar, src, ASSETS.fips.idle);
+    safeSetImg(el.fipsBigImg, src, ASSETS.fips.idle);
+
+    el.fipsLine.textContent = line;
+    el.fipsBigLine.textContent = line;
+
+    el.fipsBigImg.classList.remove("wiggle");
+    void el.fipsBigImg.offsetWidth;
+    el.fipsBigImg.classList.add("wiggle");
+  }
+
+  function showMegaStar(){
+    el.megaStar.classList.remove("show");
+    void el.megaStar.offsetWidth;
+    el.megaStar.classList.add("show");
+  }
+
   function gainXP(amount){
     state.xp += amount;
 
-    // Level up loop
     while(state.xp >= state.xpNeed){
       state.xp -= state.xpNeed;
       state.level += 1;
       state.xpNeed = Math.round(state.xpNeed * 1.18 + 10);
       toast(`<b>Level Up!</b> Stufe ${state.level} erreicht.`);
-      setFips("excited", `Wow. Stufe ${state.level}. Weiter.`);
+      setFips("excited", `Stufe ${state.level}. Weiter.`);
     }
     pulse(el.pillXP);
   }
@@ -1134,25 +1415,83 @@
     pulse(el.pillHearts);
 
     if(state.hearts === 0){
-      toast(`<b>Oh nein.</b> Keine Herzen mehr. Die Szene startet neu.`);
-      // Szene reset (nur diese)
+      toast(`<b>Keine Herzen mehr.</b> Szene startet neu.`);
       const i = state.nodeIndex;
-      const s = state.scene[i];
-      s.tries = 0;
-      s.answered = false;
-      s.perfect = true;
-      s.collected = {};
-      s.sparkFound = false;
-
-      // boss reset
-      if(NODES[i].boss){
-        s.bossHP = NODES[i].boss.hpMax;
-        s.bossStep = 0;
-      }
-
+      resetScene(i);
       state.hearts = state.heartsMax;
       state.streak = 0;
-      setFips("sad", "Das war schwer. Wir schaffen das zusammen.");
+      setFips("sad", "Nochmal. Du schaffst das.");
+    }
+  }
+
+  function resetScene(i){
+    const n = NODES[i];
+    const s = state.scene[i];
+    s.tries = 0;
+    s.perfect = true;
+    s.collected = {};
+    s.sparkFound = false;
+    s.stepIndex = 0;
+    s.bossHP = n.boss ? n.boss.hpMax : 0;
+    state.completed[i] = false;
+  }
+
+  function countCollectedStarsInScene(i){
+    const s = state.scene[i];
+    const node = NODES[i];
+    let c = 0;
+    for(const it of node.interactables){
+      if(it.type === "collect_star" && s.collected[it.id]) c += (it.points || 1);
+    }
+    return c;
+  }
+
+  function meetsSceneRequirements(i){
+    const node = NODES[i];
+    const s = state.scene[i];
+    const stepsDone = s.stepIndex >= node.steps.length;
+    const starsInScene = countCollectedStarsInScene(i);
+    const sparksInScene = s.sparkFound ? 1 : 0;
+
+    const reqStarsOk = (node.req?.minStars ?? 0) <= starsInScene;
+    const reqSparksOk = (node.req?.minSparks ?? 0) <= sparksInScene;
+
+    // Boss: zusätzlich HP==0
+    const bossOk = node.boss ? (s.bossHP <= 0) : true;
+
+    return stepsDone && reqStarsOk && reqSparksOk && bossOk;
+  }
+
+  function markCompleted(i){
+    state.completed[i] = true;
+
+    // Bonus: perfekt
+    if(state.scene[i].perfect){
+      state.stars += 1;  // Bonusstern global
+      pulse(el.pillStars);
+      gainXP(35);
+      toast(`<b>Perfekt!</b> Bonus erhalten.`);
+      setFips("happy", "Perfekt gelesen.");
+    }else{
+      gainXP(22);
+      setFips("happy", "Richtig. Weiter.");
+    }
+
+    state.streak += 1;
+
+    if(i < NODES.length - 1) state.unlocked[i+1] = true;
+  }
+
+  function autoAdvance(){
+    const i = state.nodeIndex;
+    if(i < NODES.length - 1 && state.unlocked[i+1]){
+      setTimeout(() => {
+        if(state.nodeIndex === i && state.completed[i]){
+          state.nodeIndex = i+1;
+          saveState();
+          renderAll();
+        }
+      }, 950);
     }
   }
 
@@ -1167,14 +1506,13 @@
     img.style.left = fromClientX + "px";
     img.style.top = fromClientY + "px";
 
-    // trick: animate by updating keyframes with CSS variables not used -> do with Web Animations
     document.body.appendChild(img);
     img.animate([
       { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
-      { transform: `translate(${(tx-fromClientX)}px, ${(ty-fromClientY)}px) scale(.65)`, opacity: 0 }
+      { transform: `translate(${(tx-fromClientX)}px, ${(ty-fromClientY)}px) scale(.62)`, opacity: 0 }
     ], { duration: 650, easing: "ease-in", fill: "forwards" });
 
-    setTimeout(()=>img.remove(), 700);
+    setTimeout(()=>img.remove(), 720);
   }
 
   function burstAtHotspot(hsEl){
@@ -1182,44 +1520,6 @@
     b.className = "sparkBurst";
     hsEl.appendChild(b);
     setTimeout(()=>b.remove(), 500);
-  }
-
-  function markCompleted(i){
-    state.completed[i] = true;
-    state.scene[i].answered = true;
-
-    // Bonus: perfekt (keine Fehler)
-    if(state.scene[i].perfect){
-      state.stars += 1;  // Bonus Stern
-      pulse(el.pillStars);
-      gainXP(35);
-      toast(`<b>Perfekt!</b> Bonus erhalten.`);
-      setFips("happy", "Perfekt gelesen. Stark.");
-    }else{
-      gainXP(20);
-      setFips("happy", "Richtig. Weiter geht’s.");
-    }
-
-    // Serie
-    state.streak += 1;
-
-    // unlock next
-    if(i < NODES.length - 1) state.unlocked[i+1] = true;
-  }
-
-  function autoAdvance(){
-    // 3) Auto-Weiter nach richtiger Antwort
-    const i = state.nodeIndex;
-    if(i < NODES.length - 1 && state.unlocked[i+1]){
-      setTimeout(() => {
-        // nur wenn wir immer noch in der Szene sind und erledigt
-        if(state.nodeIndex === i && state.completed[i]){
-          state.nodeIndex = i+1;
-          saveState();
-          renderAll();
-        }
-      }, 900);
-    }
   }
 
   // ------------------------------------------------------------
@@ -1238,7 +1538,6 @@
     const pct = clamp((state.xp / state.xpNeed) * 100, 0, 100);
     el.xpBar.style.width = pct.toFixed(1) + "%";
 
-    // hearts (immer 3)
     el.hearts.innerHTML = "";
     for(let i=0;i<state.heartsMax;i++){
       const img = document.createElement("img");
@@ -1260,6 +1559,15 @@
     NODES.forEach((n, i) => {
       const unlocked = state.unlocked[i];
       const completed = state.completed[i];
+      const s = state.scene[i];
+      const stepsTotal = n.steps.length;
+      const stepsDone = clamp(s.stepIndex, 0, stepsTotal);
+      const starsScene = countCollectedStarsInScene(i);
+      const reqStars = n.req?.minStars ?? 0;
+
+      const meta = completed
+        ? "erledigt"
+        : (unlocked ? `Fragen ${stepsDone}/${stepsTotal} · Sterne ${starsScene}/${reqStars}` : "gesperrt");
 
       const btn = document.createElement("div");
       btn.className = "node" + (unlocked ? "" : " locked") + (i===state.nodeIndex ? " active" : "");
@@ -1268,7 +1576,7 @@
           <div class="badge">${i+1}</div>
           <div>
             <div style="font-weight:1000; line-height:1.05;">${n.title}</div>
-            <div class="tiny" style="margin-top:2px;">${completed ? "erledigt" : (unlocked ? "bereit" : "gesperrt")}</div>
+            <div class="tiny" style="margin-top:2px;">${meta}</div>
           </div>
         </div>
         <div class="tiny">${completed ? "✓" : (unlocked ? "→" : "🔒")}</div>
@@ -1308,26 +1616,41 @@
     const s = state.scene[i];
 
     el.sceneTitle.textContent = node.title;
-
     el.sceneImg.src = node.bg;
     el.overlay.innerHTML = "";
     el.gateOpen.classList.remove("show");
 
-    // Boss handling
+    // Boss
     renderBossUI(node, s);
 
-    // Reading content
-    if(node.boss){
-      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
-      const pack = node.readBoss[step];
-      el.readText.innerHTML = pack.text;
-      el.question.textContent = pack.question;
-      renderAnswers(pack.answers);
-    } else {
-      el.readText.innerHTML = node.read.text;
-      el.question.textContent = node.read.question;
-      renderAnswers(node.read.answers);
+    // Fips in scene positioning
+    if(node.fipsInScene){
+      el.fipsInScene.style.left = node.fipsInScene.x + "%";
+      el.fipsInScene.style.top  = node.fipsInScene.y + "%";
+    }else{
+      el.fipsInScene.style.left = "18%";
+      el.fipsInScene.style.top  = "78%";
     }
+
+    // Step content
+    const stepsTotal = node.steps.length;
+    const stepIdx = clamp(s.stepIndex, 0, stepsTotal-1);
+    const step = node.steps[stepIdx];
+
+    el.readText.innerHTML = step.text;
+    el.question.textContent = step.question;
+
+    // Progress line (Fragen + Sammelziel)
+    const starsInScene = countCollectedStarsInScene(i);
+    const reqStars = node.req?.minStars ?? 0;
+    const sparksInScene = s.sparkFound ? 1 : 0;
+    const reqSparks = node.req?.minSparks ?? 0;
+
+    el.qProgress.textContent =
+      `Frage ${stepIdx+1}/${stepsTotal} · Sterne ${starsInScene}/${reqStars}` +
+      (reqSparks > 0 ? ` · Funken ${sparksInScene}/${reqSparks}` : "");
+
+    renderAnswers(step.answers);
 
     // next button
     el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
@@ -1338,10 +1661,19 @@
 
       const hs = document.createElement("div");
       hs.className = "hotspot " + (it.size || "");
+      hs.dataset.id = it.id;
+      hs.dataset.type = it.type;
+
       hs.style.left = it.x + "%";
       hs.style.top  = it.y + "%";
-      hs.style.setProperty("--w", it.size==="tiny" ? "60px" : "110px");
+      hs.style.setProperty("--w", it.size==="tiny" ? "70px" : "120px");
       hs.title = "Tippe: " + (it.label || "Interaktion");
+
+      // Laterne: leuchten je nach Fortschritt
+      if(it.id === node.lanternId){
+        const lanternLit = !!s._lanternLit;
+        if(lanternLit) hs.classList.add("lanternLit");
+      }
 
       const img = document.createElement("img");
       img.src = it.img;
@@ -1356,7 +1688,7 @@
       el.overlay.appendChild(hs);
     });
 
-    // Secret spark hotspot (invisible)
+    // Secret spark hotspot (unsichtbar)
     const sp = node.sparkHotspot;
     if(sp && !s.sparkFound){
       const hs = document.createElement("div");
@@ -1372,14 +1704,25 @@
         s.sparkFound = true;
         state.sparks += 1;
         pulse(el.pillSparks);
-        gainXP(15);
-        toast(`<b>Geheimfunke!</b> Du hast etwas Verstecktes gefunden.`);
-        setFips("excited", "Geheimfunke gefunden. Stark.");
+        gainXP(16);
+        toast(`<b>Geheimfunke!</b> Verstecktes gefunden.`);
+        setFips("excited", "Geheimfunke gefunden.");
         saveState();
         renderAll();
       });
       el.overlay.appendChild(hs);
     }
+
+    // Fips im Bild: abhängig vom Fortschritt / Trigger
+    if(s._showFipsInScene){
+      el.fipsInScene.classList.add("show");
+    }else{
+      el.fipsInScene.classList.remove("show");
+    }
+
+    // Fips Sprite im Bild: optional Buch-Sprite
+    const inSceneMood = s._fipsBook ? "book" : "idle";
+    safeSetImg(el.fipsInSceneImg, ASSETS.fips[inSceneMood] || ASSETS.fips.idle, ASSETS.fips.idle);
   }
 
   function renderAnswers(list){
@@ -1392,7 +1735,17 @@
       el.answers.appendChild(div);
     });
 
-    el.statusLine.innerHTML = `Status: <span class="tiny">${state.completed[state.nodeIndex] ? "erledigt" : "offen"}</span>`;
+    const i = state.nodeIndex;
+    const node = NODES[i];
+    const s = state.scene[i];
+
+    const starsInScene = countCollectedStarsInScene(i);
+    const reqStars = node.req?.minStars ?? 0;
+    const missingStars = Math.max(0, reqStars - starsInScene);
+
+    const base = state.completed[i] ? "erledigt" : "offen";
+    el.statusLine.innerHTML = `Status: <span class="tiny">${base}</span>` +
+      (missingStars > 0 && !state.completed[i] ? ` · <span class="bad">Sammelziel fehlt: ${missingStars} Stern(e)</span>` : "");
   }
 
   // ------------------------------------------------------------
@@ -1412,9 +1765,8 @@
       pulse(el.pillStars);
       gainXP(10);
       toast(`<b>Stern eingesammelt!</b> +${it.points||1} Stern · +10 XP`);
-      setFips("happy", "Stern eingesammelt. Weiter.");
+      setFips("happy", "Stern eingesammelt.");
 
-      // 2) Animation: Icon fliegt zum HUD
       flyToHUD(cx, cy, ASSETS.icons.stern, el.pillStars);
 
     } else if(it.type === "trap"){
@@ -1450,77 +1802,76 @@
 
     s.tries += 1;
 
-    // Determine correct in current context
-    let answers, chosen;
-    if(node.boss){
-      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
-      answers = node.readBoss[step].answers;
-      chosen = answers[idx];
-    }else{
-      answers = node.read.answers;
-      chosen = answers[idx];
-    }
+    const stepsTotal = node.steps.length;
+    const stepIdx = clamp(s.stepIndex, 0, stepsTotal-1);
+    const step = node.steps[stepIdx];
+    const chosen = step.answers[idx];
 
     if(chosen && chosen.correct){
       cards[idx].classList.add("correct");
 
+      // MEGA Star Reward pro richtiger Antwort
+      showMegaStar();
+
+      // Boss: HP runter pro richtig
       if(node.boss){
-        // Boss: richtig = Boss HP -1, next boss question
         s.bossHP = clamp(s.bossHP - 1, 0, node.boss.hpMax);
         renderBossUI(node, s);
-
         toast(`<b>Treffer!</b> Der Boss verliert Leben.`);
         setFips("excited", "Richtig. Boss verliert Leben.");
-
-        // boss hp tick animation -> pulse XP as reward
         gainXP(18);
+      } else {
+        toast(`<b>Richtig!</b>`);
+        setFips("happy", "Richtig.");
+        gainXP(14);
+      }
 
-        // advance boss step
-        s.bossStep = clamp(s.bossStep + 1, 0, node.readBoss.length - 1);
+      // Step-Trigger (Fips/Laterne/Buch)
+      if(step.onCorrect?.showFips){
+        s._showFipsInScene = true;
+      }
+      if(step.onCorrect?.lanternLit){
+        s._lanternLit = true;
+      }
+      if(step.onCorrect?.fipsBook){
+        s._fipsBook = true;
+      }
 
-        // Boss defeated
-        if(s.bossHP === 0){
-          // mark node complete
-          markCompleted(i);
+      // Weiter zur nächsten Frage
+      s.stepIndex += 1;
 
-          el.statusLine.innerHTML = `Status: <span class="good">Boss besiegt.</span>`;
+      // Szene fertig, wenn: alle Fragen beantwortet + Sammelziel erfüllt (+ Boss HP 0 falls Boss)
+      if(meetsSceneRequirements(i)){
+        markCompleted(i);
 
-          // Gate animation overlay
+        el.statusLine.innerHTML = `Status: <span class="good">Szene geschafft.</span>`;
+
+        // Boss-Tor: Tor öffnen + Wasserwelt
+        if(node.boss){
           el.gateOpen.classList.add("show");
-
-          // show waterworld splash after a short beat
           setTimeout(() => {
             el.gateOpen.classList.remove("show");
             el.splash.classList.add("show");
           }, 1200);
-
-        }else{
-          // continue boss fight: render next question/text
-          el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span> Noch ${s.bossHP} Treffer.`;
         }
 
-      } else {
-        // Normal node: complete
-        markCompleted(i);
-
-        el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
-        toast(`<b>Richtig!</b> Szene erledigt.`);
+        saveState();
+        renderAll();
+        autoAdvance();
+        return;
       }
+
+      // Noch nicht fertig -> nächste Frage rendern
+      el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
 
       saveState();
       renderAll();
-
-      // 3) Auto-Weiter (nur wenn nicht Boss-Ende)
-      if(!node.boss || (node.boss && state.completed[i])){
-        autoAdvance();
-      }
 
     } else {
       cards[idx].classList.add("wrong");
       s.perfect = false;
       state.streak = 0;
 
-      // boss wrong: heart loss too
       loseHeart();
 
       el.statusLine.innerHTML = `Status: <span class="bad">Falsch.</span> Lies nochmal.`;
@@ -1536,7 +1887,7 @@
   // Buttons
   // ------------------------------------------------------------
   el.reReadBtn.addEventListener("click", () => {
-    toast(`<b>Nochmal lesen:</b> Lies das Pergament und suche das Schlüsselwort.`, 2600);
+    toast(`<b>Nochmal lesen:</b> Lies das Pergament und suche das Schlüsselwort.`, 2800);
     setFips("thinking", "Lies das Pergament. Such das Schlüsselwort.");
   });
 
@@ -1555,24 +1906,23 @@
     saveState();
     renderAll();
     toast("<b>Reset.</b> Alles wurde zurückgesetzt.");
-    setFips("idle", "Los geht’s. Tippe Dinge im Bild an.");
+    setFips("idle", "Los geht’s. Sammle Sterne. Dann beantworte die Fragen.");
   });
 
   el.helpBtn.addEventListener("click", () => {
     toast(`<b>So funktioniert es:</b><br>
-      1) Tippe auf Dinge im Bild (Stern, Laterne, Apfel).<br>
+      1) Tippe auf Dinge im Bild und sammle Sterne.<br>
       2) Lies das Pergament.<br>
-      3) Beantworte die Frage.<br>
-      Bonus: Finde den Geheimfunken (versteckt).`, 4200);
-    setFips("idle", "Tippe Dinge im Bild an. Dann lies das Pergament.");
+      3) Beantworte pro Szene mehrere Fragen.<br>
+      4) Nächste Szene erst nach: richtige Antworten + Sammelziel.<br>
+      Bonus: Finde den Geheimfunken (versteckt).`, 5200);
+    setFips("idle", "Sammle Dinge im Bild. Dann lies. Dann antworte.");
   });
 
-  // Splash close
   el.closeSplashBtn.addEventListener("click", () => {
     el.splash.classList.remove("show");
   });
 
-  // keyboard (optional)
   window.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
     if(k === "h") el.helpBtn.click();
@@ -1586,10 +1936,14 @@
     renderHUD();
     renderPath();
     renderScene();
+
+    // Next button state
+    const i = state.nodeIndex;
+    el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
   }
 
   // Initial
-  setFips("idle", "Tippe Dinge im Bild an. Dann lies das Pergament.");
+  setFips("idle", "Tippe Dinge im Bild an. Sammle Sterne. Dann beantworte die Fragen.");
   renderAll();
   saveState();
 })();
