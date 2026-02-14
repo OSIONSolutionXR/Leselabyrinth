@@ -4,39 +4,49 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Leselabyrinth – OSION Solution XR</title>
+
   <style>
     :root{
       --bg:#0b1020;
-      --card:#111a33;
-      --card2:#0f1730;
+      --panel:rgba(17,26,51,.78);
+      --panel2:rgba(15,23,48,.62);
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(255,255,255,.16);
+
       --txt:#eaf0ff;
       --muted:#aab6da;
+
       --good:#43e08b;
       --bad:#ff5a7a;
-      --accent1:#ff2d55; /* OSION-ish */
-      --accent2:#7a3cff; /* OSION-ish */
-      --stroke:rgba(255,255,255,.10);
+
+      --accent1:#ff2d55;
+      --accent2:#7a3cff;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.30);
+      --radius:18px;
+      --radius2:16px;
     }
-    *{box-sizing:border-box}
+
+    *{ box-sizing:border-box }
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background: radial-gradient(1200px 700px at 10% 10%, rgba(122,60,255,.25), transparent 60%),
-                  radial-gradient(1200px 700px at 90% 20%, rgba(255,45,85,.22), transparent 60%),
-                  var(--bg);
       color:var(--txt);
+      background:
+        radial-gradient(1200px 700px at 12% 10%, rgba(122,60,255,.25), transparent 60%),
+        radial-gradient(1200px 700px at 90% 18%, rgba(255,45,85,.22), transparent 60%),
+        var(--bg);
     }
+
     header{
-      position:sticky; top:0; z-index:5;
+      position:sticky; top:0; z-index:10;
       padding:14px 16px;
       border-bottom:1px solid var(--stroke);
       background:rgba(11,16,32,.85);
       backdrop-filter: blur(10px);
       display:flex; gap:12px; align-items:center; justify-content:space-between;
     }
-    .brand{
-      display:flex; flex-direction:column; line-height:1.1;
-    }
+    .brand{ display:flex; flex-direction:column; line-height:1.12; }
     .brand b{
       font-size:14px; letter-spacing:.8px;
       background: linear-gradient(90deg,var(--accent1),var(--accent2));
@@ -44,104 +54,193 @@
       color:transparent;
     }
     .brand span{ font-size:12px; color:var(--muted); }
-    .top-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+
+    .top-actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
     button{
-      appearance:none; border:1px solid var(--stroke);
+      appearance:none;
+      border:1px solid var(--stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       color:var(--txt);
       padding:10px 12px;
       border-radius:12px;
       cursor:pointer;
-      font-weight:600;
+      font-weight:700;
     }
-    button:hover{ border-color:rgba(255,255,255,.18) }
+    button:hover{ border-color:rgba(255,255,255,.20) }
     button.primary{
       border:none;
       background: linear-gradient(90deg, rgba(255,45,85,.95), rgba(122,60,255,.95));
     }
-    main{ padding:16px; max-width:1100px; margin:0 auto; }
-    .grid{
+
+    main{
+      padding:16px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    .panel{
+      background: var(--panel);
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      padding:14px;
+      box-shadow: var(--shadow);
+    }
+
+    /* --- Layout: Guide oben (schmal), Content unten --- */
+    .layout{
       display:grid;
-      grid-template-columns: 360px 1fr;
+      grid-template-rows: auto 1fr;
       gap:14px;
     }
+
+    /* --- Top Guide Bar --- */
+    .guidebar{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1.4fr;
+      gap:12px;
+      align-items:stretch;
+    }
     @media (max-width: 980px){
-      .grid{ grid-template-columns:1fr; }
+      .guidebar{ grid-template-columns: 1fr; }
     }
-    .panel{
-      background: rgba(17,26,51,.78);
+
+    .box{
       border:1px solid var(--stroke);
-      border-radius:18px;
-      padding:14px;
-      box-shadow: 0 18px 60px rgba(0,0,0,.30);
+      border-radius: var(--radius);
+      background: rgba(15,23,48,.55);
+      padding:12px;
     }
-    .panel h2{
-      margin:0 0 10px;
-      font-size:16px;
-      letter-spacing:.2px;
+
+    .guide{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
     }
-    .muted{ color:var(--muted); font-size:13px; }
+    .avatar{
+      width:54px; height:54px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.20), transparent 50%),
+        linear-gradient(135deg, rgba(255,45,85,.65), rgba(122,60,255,.55));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      letter-spacing:.5px;
+      color:rgba(255,255,255,.92);
+      flex:0 0 auto;
+    }
+    .speech{
+      flex:1;
+      padding:10px 12px;
+      border-radius: var(--radius2);
+      border:1px solid var(--stroke);
+      background: rgba(17,26,51,.60);
+      line-height:1.35;
+      font-size:13.5px;
+      min-height:54px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .stat{
+      border:1px solid var(--stroke);
+      border-radius: var(--radius2);
+      background: rgba(17,26,51,.35);
+      padding:10px 12px;
+      min-height:54px;
+    }
+    .stat b{ display:block; font-size:12.5px; letter-spacing:.2px; }
+    .stat span{ color:var(--muted); font-size:12px; }
+
+    /* Map: horizontal scroll (kein Überlappen) */
+    .mapwrap{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .maphead{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .maphead b{ font-size:13px; }
+    .maphead span{ font-size:12px; color:var(--muted); }
+
+    .map{
+      display:flex;
+      gap:10px;
+      overflow:auto;
+      padding-bottom:6px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .node{
+      min-width: 170px;
+      border:1px solid var(--stroke);
+      border-radius: var(--radius2);
+      background: rgba(17,26,51,.30);
+      padding:10px 12px;
+      cursor:pointer;
+      flex:0 0 auto;
+    }
+    .node:hover{ border-color:rgba(255,255,255,.20) }
+    .node.locked{ opacity:.45; cursor:not-allowed; }
+    .node.done{
+      border-color: rgba(67,224,139,.35);
+      background: rgba(67,224,139,.10);
+    }
+    .node small{ color:var(--muted); display:block; margin-bottom:4px; }
+    .node b{ display:block; font-size:13px; }
+
     .pill{
-      display:inline-flex; gap:8px; align-items:center;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
       padding:6px 10px;
       border-radius:999px;
       border:1px solid var(--stroke);
       background: rgba(255,255,255,.04);
       font-size:12px;
       color:var(--muted);
-      margin:6px 6px 0 0;
+      white-space:nowrap;
     }
-    .monster{
-      display:flex; gap:12px; align-items:flex-start;
-    }
-    .avatar{
-      width:64px; height:64px; border-radius:18px;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 50%),
-        linear-gradient(135deg, rgba(255,45,85,.65), rgba(122,60,255,.55));
-      border:1px solid var(--stroke);
-      display:flex; align-items:center; justify-content:center;
-      font-size:30px;
-    }
-    .speech{
-      flex:1;
-      padding:10px 12px;
-      border-radius:16px;
-      border:1px solid var(--stroke);
-      background: rgba(15,23,48,.55);
-      font-size:14px;
-      line-height:1.35;
-    }
-    .map{
+
+    /* --- Bottom Content --- */
+    .content{
       display:grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+
+    .titleRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
       gap:10px;
-      margin-top:12px;
+      flex-wrap:wrap;
     }
-    .node{
-      padding:12px 10px;
-      border-radius:16px;
-      border:1px solid var(--stroke);
-      background: rgba(15,23,48,.55);
-      min-height:66px;
-      display:flex; flex-direction:column; gap:6px;
-      cursor:pointer;
+    .titleRow h2{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.2px;
     }
-    .node.locked{ opacity:.45; cursor:not-allowed; }
-    .node.done{
-      border-color: rgba(67,224,139,.35);
-      background: rgba(67,224,139,.10);
-    }
-    .node small{ color:var(--muted); }
-    .node b{ font-size:13px; }
+
     .card{
-      padding:14px;
-      border-radius:18px;
       border:1px solid var(--stroke);
+      border-radius: var(--radius);
       background: rgba(15,23,48,.55);
+      padding:14px;
     }
+
+    /* Szene Kopf */
     .scene{
-      border-radius:16px;
+      border-radius: var(--radius);
       border:1px solid var(--stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       padding:14px;
@@ -151,25 +250,56 @@
       gap:12px;
       margin-bottom:12px;
     }
-    .scene .img{
-      width:90px; height:70px; border-radius:14px;
-      border:1px solid var(--stroke);
+    .scene .meta{ display:flex; flex-direction:column; gap:2px; }
+    .scene .meta small{ color:var(--muted); }
+    .scene .meta b{ font-size:16px; }
+
+    /* Lesetext: deutlich hervorgehoben */
+    .readingBox{
+      border-radius: var(--radius);
+      border:1px solid var(--stroke2);
       background:
-        radial-gradient(circle at 25% 25%, rgba(255,255,255,.15), transparent 60%),
-        linear-gradient(135deg, rgba(122,60,255,.28), rgba(255,45,85,.18));
-      display:flex; align-items:center; justify-content:center;
-      font-size:28px;
-      flex:0 0 auto;
+        radial-gradient(900px 200px at 0% 0%, rgba(122,60,255,.20), transparent 55%),
+        radial-gradient(900px 200px at 100% 0%, rgba(255,45,85,.18), transparent 55%),
+        rgba(255,255,255,.035);
+      padding:16px 16px;
+      margin:12px 0 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.20) inset;
+    }
+    .readingLabel{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .readingLabel b{
+      font-size:12.5px;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.85);
+    }
+    .readingHint{
+      color:var(--muted);
+      font-size:12px;
     }
     .text{
-      font-size:16px;
-      line-height:1.45;
-      margin:10px 0 12px;
+      font-size:20px;          /* wichtiger Punkt: groß */
+      line-height:1.75;        /* leicht lesbar */
+      font-weight:800;         /* klare Betonung */
+      letter-spacing:.15px;
     }
+    @media (max-width: 520px){
+      .text{ font-size:18px; }
+    }
+
     .question{
-      font-weight:800;
-      margin:10px 0 8px;
+      font-weight:900;
+      margin:10px 0 10px;
+      font-size:16px;
     }
+
     .answers{
       display:grid;
       gap:10px;
@@ -177,29 +307,44 @@
     .answers button{
       width:100%;
       text-align:left;
-      padding:12px 12px;
-      border-radius:16px;
+      padding:14px 14px;
+      border-radius: 16px;
+      font-size:14px;
     }
+
     .helpers{
-      display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+      align-items:center;
     }
-    .helpers button{ font-size:12px; padding:8px 10px; border-radius:999px; }
-    .statusbar{
-      display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;
+    .helpers button{
+      font-size:12px;
+      padding:9px 10px;
+      border-radius:999px;
     }
-    .stat{
-      flex:1;
-      min-width:160px;
-      padding:10px 12px;
-      border-radius:16px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-    }
-    .stat b{ display:block; font-size:13px; }
-    .stat span{ color:var(--muted); font-size:12px; }
-    .good{ color:var(--good); }
-    .bad{ color:var(--bad); }
+
     .hr{ height:1px; background:var(--stroke); margin:12px 0; }
+
+    .feedback{
+      padding:12px;
+      border-radius: var(--radius);
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+
+    .hidden{ display:none !important; }
+
+    /* Diagnose */
+    .dashgrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
     .table{
       width:100%;
       border-collapse:collapse;
@@ -211,33 +356,18 @@
       padding:8px 6px;
       text-align:left;
     }
-    .table th{ color:var(--muted); font-weight:700; }
-    .note{
-      padding:12px;
-      border-radius:16px;
-      border:1px dashed rgba(255,255,255,.18);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
-    }
-    .hidden{ display:none !important; }
-    .kbd{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size:12px;
-      border:1px solid var(--stroke);
-      padding:2px 6px;
-      border-radius:8px;
-      background: rgba(0,0,0,.18);
-      color:var(--muted);
-    }
+    .table th{ color:var(--muted); font-weight:800; }
+
+    .good{ color:var(--good); font-weight:900; }
+    .bad{ color:var(--bad); font-weight:900; }
   </style>
 </head>
+
 <body>
 <header>
   <div class="brand">
     <b>OSION Solution XR</b>
-    <span>Leselabyrinth · MVP · Adventure + Adaptiv + Diagnose</span>
+    <span>Leselabyrinth · MVP · Adventure + AdaptiV + Diagnose</span>
   </div>
   <div class="top-actions">
     <button id="btnPlay" class="primary">Adventure</button>
@@ -247,237 +377,254 @@
 </header>
 
 <main>
-  <div class="grid">
-    <!-- LEFT -->
+  <div class="layout">
+
+    <!-- TOP: Guidebar -->
     <section class="panel">
-      <h2>Guide</h2>
-      <div class="monster">
-        <div class="avatar" id="monsterAvatar">👾</div>
-        <div class="speech" id="monsterSpeech"></div>
-      </div>
+      <div class="guidebar">
 
-      <div class="statusbar">
-        <div class="stat">
-          <b>Stufe</b>
-          <span id="uiLevel"></span>
+        <div class="box">
+          <div class="guide">
+            <div class="avatar" id="monsterAvatar">M</div>
+            <div class="speech" id="monsterSpeech"></div>
+          </div>
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <span class="pill" id="uiHelp"></span>
+            <span class="pill" id="uiProgress"></span>
+          </div>
         </div>
-        <div class="stat">
-          <b>Sterne</b>
-          <span id="uiStars"></span>
+
+        <div class="box">
+          <div class="stats">
+            <div class="stat">
+              <b>Stufe</b>
+              <span id="uiLevel"></span>
+            </div>
+            <div class="stat">
+              <b>Sterne</b>
+              <span id="uiStars"></span>
+            </div>
+            <div class="stat">
+              <b>Serie</b>
+              <span id="uiStreak"></span>
+            </div>
+            <div class="stat">
+              <b>Status</b>
+              <span id="uiStatus"></span>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="hr"></div>
+        <div class="box">
+          <div class="mapwrap">
+            <div class="maphead">
+              <b>Kapitel: Der Wald</b>
+              <span>Tippe einen Knoten an. Neue Knoten werden freigeschaltet.</span>
+            </div>
+            <div class="map" id="map"></div>
+          </div>
+        </div>
 
-      <h2>Kapitel: Der Wald</h2>
-      <div class="muted">Tippe einen Knoten an. Neue Knoten werden durch richtige Antworten freigeschaltet.</div>
-      <div class="map" id="map"></div>
-
-      <div class="hr"></div>
-      <div class="note">
-        Daten bleiben im Browser (LocalStorage). Keine Accounts. Kein Server. Ideal für GitHub Pages.
       </div>
     </section>
 
-    <!-- RIGHT -->
-    <section class="panel" id="viewPlay">
-      <h2>Lesekarte</h2>
-      <div class="card" id="card"></div>
-    </section>
+    <!-- BOTTOM: Content -->
+    <section class="panel">
+      <div class="content">
 
-    <section class="panel hidden" id="viewDash">
-      <h2>Diagnose-Dashboard</h2>
+        <!-- PLAY VIEW -->
+        <div id="viewPlay">
+          <div class="titleRow">
+            <h2>Lesekarte</h2>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span class="pill" id="uiFocus"></span>
+              <span class="pill" id="uiNodeState"></span>
+            </div>
+          </div>
 
-      <div class="statusbar">
-        <div class="stat">
-          <b>Abgeschlossen</b>
-          <span id="dDone"></span>
+          <div class="card" id="card"></div>
         </div>
-        <div class="stat">
-          <b>Trefferquote</b>
-          <span id="dAcc"></span>
+
+        <!-- COMPLETE VIEW -->
+        <div id="viewComplete" class="hidden">
+          <div class="titleRow">
+            <h2>Kapitel abgeschlossen</h2>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span class="pill"><span class="good">Stark</span></span>
+              <span class="pill" id="completeStars"></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="feedback" id="completeText"></div>
+            <div class="hr"></div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button id="btnGoDash">Diagnose öffnen</button>
+              <button id="btnReplay" class="primary">Kapitel neu spielen</button>
+            </div>
+          </div>
         </div>
-        <div class="stat">
-          <b>Ø Zeit / Aufgabe</b>
-          <span id="dTime"></span>
+
+        <!-- DASH VIEW -->
+        <div id="viewDash" class="hidden">
+          <div class="titleRow">
+            <h2>Diagnose-Dashboard</h2>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span class="pill" id="dDone"></span>
+              <span class="pill" id="dAcc"></span>
+              <span class="pill" id="dTime"></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="dashgrid">
+              <div>
+                <b style="display:block;margin-bottom:8px;">Fehlmuster (Top)</b>
+                <table class="table">
+                  <thead><tr><th>Kategorie</th><th>Anzahl</th><th>Beispiel</th></tr></thead>
+                  <tbody id="dPatterns"></tbody>
+                </table>
+              </div>
+
+              <div>
+                <div class="hr"></div>
+                <b style="display:block;margin-bottom:8px;">Stärken & Fokus</b>
+                <div class="feedback" id="dCoach"></div>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
-
-      <div class="hr"></div>
-
-      <h2>Fehlmuster (Top)</h2>
-      <table class="table">
-        <thead><tr><th>Kategorie</th><th>Anzahl</th><th>Beispiel</th></tr></thead>
-        <tbody id="dPatterns"></tbody>
-      </table>
-
-      <div class="hr"></div>
-
-      <h2>Stärken & Fokus</h2>
-      <div class="note" id="dCoach"></div>
     </section>
+
   </div>
 </main>
 
 <script>
 /** =========================
- *  KONFIG / VARIABLEN
+ *  KONFIG
  *  ========================= */
 const APP = {
   BRAND: "OSION Solution XR",
   APP_NAME: "Leselabyrinth",
   CHAPTER_ID: "wald_v1",
-  MONSTER_NAME: "Momo",        // <- austauschbar
-  MONSTER_STYLE: "knuffig",    // <- austauschbar
+  MONSTER_NAME: "Momo",
   LEVEL_MIN: 1,
   LEVEL_MAX: 3,
   TARGET_STREAK_UP: 3,
   TARGET_MISTAKES_HOLD: 2
 };
 
-// Hilfen pro Level (automatisch + optional per Button)
 const HELP_RULES = {
   1: { syllables: true, hintButton: true, rereadButton: true },
   2: { syllables: false, hintButton: true, rereadButton: true },
   3: { syllables: false, hintButton: false, rereadButton: true }
 };
 
-const STORE_KEY = "leselabyrinth_state_v1";
+const STORE_KEY = "leselabyrinth_state_v2";
 
 /** =========================
- *  CONTENT IM CODE (KEINE JSON-DATEIEN)
- *  Jede Karte: 1 Mikro-Szene + 1 Aufgabe
- *  difficulty: 1..3
- *  focus: Kategorie für Diagnose
+ *  CONTENT IM CODE
  *  ========================= */
 const CARDS = [
   {
     id:"n1",
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Start am Waldweg",
-    emoji:"🌲",
     textByLevel:{
       1:["Momo geht in den Wald.","Ein Vogel singt."],
       2:["Momo geht in den Wald.","Ein kleiner Vogel singt laut."],
       3:["Momo geht in den Wald.","Ein kleiner Vogel singt laut im Baum."]
     },
-    questionByLevel:{
-      1:"Wo geht Momo hin?",
-      2:"Wo geht Momo hin?",
-      3:"Wo geht Momo hin?"
-    },
+    questionByLevel:{ 1:"Wo geht Momo hin?", 2:"Wo geht Momo hin?", 3:"Wo geht Momo hin?" },
     answersByLevel:{
       1:["In den Wald.","In die Stadt.","Ins Meer."],
       2:["In den Wald.","In die Stadt.","Ins Meer."],
       3:["In den Wald.","In die Stadt.","Ins Meer."]
     },
     correctIndex:0,
-    hint:"Im Satz steht: „… in den Wald.“",
+    hint:"Im Satz steht: in den Wald.",
     focus:"W-Frage"
   },
   {
     id:"n2",
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Die Holzbrücke",
-    emoji:"🌉",
     textByLevel:{
       1:["Vor Momo ist eine Brücke.","Sie ist aus Holz."],
       2:["Vor Momo ist eine kleine Brücke.","Sie ist aus Holz."],
       3:["Vor Momo ist eine kleine Brücke.","Sie ist aus Holz und wackelt leicht."]
     },
-    questionByLevel:{
-      1:"Woraus ist die Brücke?",
-      2:"Woraus ist die Brücke?",
-      3:"Woraus ist die Brücke?"
-    },
+    questionByLevel:{ 1:"Woraus ist die Brücke?", 2:"Woraus ist die Brücke?", 3:"Woraus ist die Brücke?" },
     answersByLevel:{
       1:["Aus Holz.","Aus Eis.","Aus Papier."],
       2:["Aus Holz.","Aus Eis.","Aus Papier."],
       3:["Aus Holz.","Aus Eis.","Aus Papier."]
     },
     correctIndex:0,
-    hint:"Lies den zweiten Satz. Da steht das Material.",
+    hint:"Lies den zweiten Satz: aus Holz.",
     focus:"Detail"
   },
   {
     id:"n3",
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Der Apfelbaum",
-    emoji:"🍏",
     textByLevel:{
       1:["Ein Apfel fällt runter.","Momo schaut."],
       2:["Ein grüner Apfel fällt runter.","Momo schaut nach oben."],
       3:["Ein grüner Apfel fällt runter.","Momo schaut nach oben und lacht."]
     },
-    questionByLevel:{
-      1:"Welche Farbe hat der Apfel?",
-      2:"Welche Farbe hat der Apfel?",
-      3:"Welche Farbe hat der Apfel?"
-    },
+    questionByLevel:{ 1:"Welche Farbe hat der Apfel?", 2:"Welche Farbe hat der Apfel?", 3:"Welche Farbe hat der Apfel?" },
     answersByLevel:{
       1:["Grün.","Blau.","Schwarz."],
       2:["Grün.","Blau.","Schwarz."],
       3:["Grün.","Blau.","Schwarz."]
     },
     correctIndex:0,
-    hint:"Der Apfel ist „grün“.",
+    hint:"Im Satz steht: grüner Apfel.",
     focus:"Wortverwechslung"
   },
   {
     id:"n4",
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Der Schlüsselstein",
-    emoji:"🪨",
     textByLevel:{
       1:["Momo findet einen Stein.","Darauf ist ein Zeichen."],
       2:["Momo findet einen Stein.","Darauf ist ein Stern-Zeichen."],
       3:["Momo findet einen Stein.","Darauf ist ein Stern-Zeichen und es glitzert."]
     },
-    questionByLevel:{
-      1:"Was ist auf dem Stein?",
-      2:"Was ist auf dem Stein?",
-      3:"Was ist auf dem Stein?"
-    },
+    questionByLevel:{ 1:"Was ist auf dem Stein?", 2:"Was ist auf dem Stein?", 3:"Was ist auf dem Stein?" },
     answersByLevel:{
       1:["Ein Stern.","Ein Auto.","Ein Haus."],
       2:["Ein Stern.","Ein Auto.","Ein Haus."],
       3:["Ein Stern.","Ein Auto.","Ein Haus."]
     },
     correctIndex:0,
-    hint:"Im zweiten Satz steht das Zeichen.",
+    hint:"Im Satz steht: Stern-Zeichen.",
     focus:"Satzverständnis"
   },
   {
     id:"n5",
     chapter: APP.CHAPTER_ID,
     nodeTitle:"Die Boss-Tür",
-    emoji:"🚪",
     textByLevel:{
       1:["Vor Momo ist eine Tür.","Sie ist zu."],
       2:["Vor Momo ist eine große Tür.","Sie ist zu und sehr schwer."],
       3:["Vor Momo ist eine große Tür.","Sie ist zu und sehr schwer.","Momo braucht den Schlüssel."]
     },
-    questionByLevel:{
-      1:"Was braucht Momo?",
-      2:"Was braucht Momo?",
-      3:"Was braucht Momo?"
-    },
+    questionByLevel:{ 1:"Was braucht Momo?", 2:"Was braucht Momo?", 3:"Was braucht Momo?" },
     answersByLevel:{
       1:["Den Schlüssel.","Eine Leiter.","Einen Ball."],
       2:["Den Schlüssel.","Eine Leiter.","Einen Ball."],
       3:["Den Schlüssel.","Eine Leiter.","Einen Ball."]
     },
     correctIndex:0,
-    hint:"Im letzten Satz steht es direkt.",
+    hint:"Im letzten Satz steht: braucht den Schlüssel.",
     focus:"Ursache/Wirkung"
   }
 ];
 
-/** =========================
- *  MAP-LOGIK (Knoten + Wege + Sidepaths)
- *  nodes: Reihenfolge + Unlock-Regeln
- *  sidepaths: humorvolle Umwege bei Fehlern
- *  ========================= */
 const MAP = {
   chapterId: APP.CHAPTER_ID,
   nodes: [
@@ -489,24 +636,24 @@ const MAP = {
   ],
   sidepaths: [
     "Quatsch-Tunnel",
-    "Monster-Kicherweg",
-    "Sackgasse mit Konfetti",
-    "Rutschbahn zurück zum Satz"
+    "Kicherweg",
+    "Sackgasse",
+    "Rutschweg zurück zum Satz"
   ]
 };
 
 /** =========================
- *  STATE + LOGGING
+ *  STATE
  *  ========================= */
 const defaultState = () => ({
   level: 1,
   stars: 0,
   currentNodeId: "n1",
-  done: {}, // nodeId:true
+  done: {},
   streakCorrect: 0,
   streakWrong: 0,
-  // logs: pro Versuch
-  logs: [] // {ts,nodeId,level,correct,timeMs,focus,chosenIndex,correctIndex}
+  chapterComplete: false,
+  logs: []
 });
 
 function loadState(){
@@ -519,29 +666,14 @@ function loadState(){
     return defaultState();
   }
 }
-function saveState(){
-  localStorage.setItem(STORE_KEY, JSON.stringify(state));
-}
-
+function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 let state = loadState();
 
 /** =========================
- *  UI HELPERS
+ *  Helpers
  *  ========================= */
 const $ = (id) => document.getElementById(id);
-
-function setMonster(text, mood="neutral"){
-  const face = mood==="good" ? "😄" : mood==="bad" ? "😅" : "🙂";
-  $("monsterAvatar").textContent = "👾";
-  $("monsterSpeech").innerHTML = `
-    <div style="font-weight:900;margin-bottom:4px;">${APP.MONSTER_NAME} ${face}</div>
-    <div>${text}</div>
-  `;
-}
-
-function getCard(nodeId){
-  return CARDS.find(c => c.id === nodeId);
-}
+function getCard(nodeId){ return CARDS.find(c => c.id === nodeId); }
 
 function isUnlocked(nodeId){
   const node = MAP.nodes.find(n => n.id===nodeId);
@@ -550,11 +682,8 @@ function isUnlocked(nodeId){
   return !!state.done[node.unlockFrom];
 }
 
-function renderTopStats(){
-  $("uiLevel").innerHTML = `<span class="pill">Stufe <b style="color:var(--txt)">${state.level}</b></span>
-    <span class="pill">Hilfen: ${helpSummary(state.level)}</span>`;
-  $("uiStars").innerHTML = `<span class="pill"><b style="color:var(--good)">${state.stars}</b> Sterne</span>
-    <span class="pill">Abgeschlossen: <b style="color:var(--txt)">${Object.keys(state.done).length}</b></span>`;
+function allNodesDone(){
+  return MAP.nodes.every(n => !!state.done[n.id]);
 }
 
 function helpSummary(level){
@@ -566,6 +695,40 @@ function helpSummary(level){
   return parts.length ? parts.join(" · ") : "keine";
 }
 
+function setMonster(text, mood="neutral"){
+  // Avatar bewusst schlicht. Kein UI-Overkill.
+  $("monsterAvatar").textContent = (APP.MONSTER_NAME || "M").slice(0,1).toUpperCase();
+  const prefix =
+    mood==="good" ? "Top. " :
+    mood==="bad"  ? "Stopp. " :
+                    "";
+  $("monsterSpeech").innerHTML = `<b>${APP.MONSTER_NAME}</b><br>${prefix}${text}`;
+}
+
+/** =========================
+ *  Rendering
+ *  ========================= */
+function renderTop(){
+  $("uiLevel").textContent = `Stufe ${state.level}`;
+  $("uiStars").textContent = `${state.stars} Sterne`;
+
+  const streakText =
+    state.streakCorrect > 0 ? `${state.streakCorrect} richtig in Folge` :
+    state.streakWrong > 0   ? `${state.streakWrong} falsch in Folge` :
+                              "keine Serie";
+  $("uiStreak").textContent = streakText;
+
+  $("uiHelp").textContent = `Hilfen: ${helpSummary(state.level)}`;
+  $("uiProgress").textContent = `Abgeschlossen: ${Object.keys(state.done).length} / ${MAP.nodes.length}`;
+
+  $("uiStatus").textContent = state.chapterComplete ? "Kapitel abgeschlossen" : "läuft";
+
+  const c = getCard(state.currentNodeId);
+  $("uiFocus").textContent = c ? `Fokus: ${c.focus}` : "Fokus: -";
+  const nodeDone = state.currentNodeId ? !!state.done[state.currentNodeId] : false;
+  $("uiNodeState").textContent = nodeDone ? "Status: erledigt" : "Status: offen";
+}
+
 function renderMap(){
   const wrap = $("map");
   wrap.innerHTML = "";
@@ -573,49 +736,52 @@ function renderMap(){
     const card = getCard(n.id);
     const unlocked = isUnlocked(n.id);
     const done = !!state.done[n.id];
+
     const el = document.createElement("div");
     el.className = "node" + (unlocked ? "" : " locked") + (done ? " done":"");
     el.innerHTML = `
-      <small>${card?.emoji ?? "🗺️"} Knoten</small>
+      <small>${done ? "erledigt" : unlocked ? "bereit" : "gesperrt"}</small>
       <b>${card?.nodeTitle ?? n.id}</b>
-      <small>${done ? "✓ erledigt" : unlocked ? "bereit" : "gesperrt"}</small>
     `;
     el.onclick = () => {
-      if(!unlocked) return;
+      if(!unlocked || state.chapterComplete) return;
       state.currentNodeId = n.id;
       saveState();
+      showPlay();
       renderAll();
     };
     wrap.appendChild(el);
   });
 }
 
-let cardStartTs = null;
-
+/** -------------------------
+ *  Lesetext: Silben Demo
+ *  (Platzhalter. Für echte Silbentrennung später ersetzen)
+ *  ------------------------- */
 function syllabifySimple(word){
-  // Simple Demo: trennt nur bei Vokalgruppen grob. Für echte Silbentrennung später ersetzen.
   return word.replace(/([aeiouäöüy]{1,2})([^aeiouäöüy])/gi, "$1-$2");
 }
-
 function applySyllablesToText(lines){
-  // nur für Level 1 Demo: markiert längere Wörter
   return lines.map(line=>{
     return line.split(" ").map(w=>{
       const clean = w.replace(/[.,!?]/g,"");
       if(clean.length >= 7){
         const s = syllabifySimple(clean);
-        return line.includes(clean) ? w.replace(clean, `<span class="pill" style="margin:0;border-radius:10px">${s}</span>`) : w;
+        return w.replace(clean, s);
       }
       return w;
     }).join(" ");
   });
 }
 
+let cardStartTs = null;
+
 function renderCard(){
   const nodeId = state.currentNodeId;
   const c = getCard(nodeId);
-  if(!c){
-    $("card").innerHTML = `<div class="note">Keine Karte gefunden: ${nodeId}</div>`;
+
+  if(state.chapterComplete || !c){
+    $("card").innerHTML = `<div class="feedback">Kein aktiver Knoten. Öffne die Diagnose oder starte neu.</div>`;
     return;
   }
 
@@ -628,18 +794,24 @@ function renderCard(){
   let renderedLines = lines;
   if(helps.syllables) renderedLines = applySyllablesToText(lines);
 
-  const done = !!state.done[nodeId];
-
   $("card").innerHTML = `
     <div class="scene">
-      <div>
-        <div class="muted">Szene</div>
-        <div style="font-weight:900;font-size:16px;margin-top:2px">${c.nodeTitle}</div>
+      <div class="meta">
+        <small>Szene</small>
+        <b>${c.nodeTitle}</b>
       </div>
-      <div class="img" title="Platzhalter-Bild (später austauschbar)">${c.emoji}</div>
+      <div class="pill">Knoten: ${c.id.toUpperCase()}</div>
     </div>
 
-    <div class="text" id="cardText">${renderedLines.map(x=>`<div>${x}</div>`).join("")}</div>
+    <div class="readingBox" id="readingBox">
+      <div class="readingLabel">
+        <b>Lesetext</b>
+        <div class="readingHint">Lies zuerst den Text. Dann beantworte die Frage.</div>
+      </div>
+      <div class="text" id="cardText">
+        ${renderedLines.map(x=>`<div>${x}</div>`).join("")}
+      </div>
+    </div>
 
     <div class="question">${question}</div>
 
@@ -649,11 +821,10 @@ function renderCard(){
       ${helps.rereadButton ? `<button id="btnReread">Nochmal lesen</button>` : ""}
       ${helps.hintButton ? `<button id="btnHint">Hinweis</button>` : ""}
       <span class="pill">Fokus: <b style="color:var(--txt)">${c.focus}</b></span>
-      <span class="pill">${done ? "<span class='good'>✓ erledigt</span>" : "noch offen"}</span>
     </div>
 
     <div class="hr"></div>
-    <div class="note" id="feedback">Wähle eine Antwort. ${APP.MONSTER_NAME} begleitet dich.</div>
+    <div class="feedback" id="feedback">Wähle eine Antwort.</div>
   `;
 
   const ansWrap = $("answers");
@@ -666,37 +837,26 @@ function renderCard(){
 
   if(helps.rereadButton){
     $("btnReread").onclick = () => {
-      setMonster(`Lies den Text noch einmal. Du findest die Lösung im Satz.`, "neutral");
-      $("feedback").innerHTML = `Nochmal lesen aktiviert. Nimm dir Zeit.`;
+      setMonster("Lies den Text noch einmal. Die Lösung steht im Satz.");
+      $("feedback").textContent = "Nochmal lesen aktiviert.";
+      // Lesetext optisch kurz anheben
+      const box = $("readingBox");
+      box.style.borderColor = "rgba(255,255,255,.28)";
+      setTimeout(()=> box.style.borderColor = "var(--stroke2)", 450);
     };
   }
   if(helps.hintButton){
     $("btnHint").onclick = () => {
-      setMonster(`Tipp: ${c.hint}`, "neutral");
-      $("feedback").innerHTML = `<span class="pill">Hinweis</span> ${c.hint}`;
+      setMonster(`Tipp: ${c.hint}`);
+      $("feedback").textContent = `Hinweis: ${c.hint}`;
     };
   }
 
   cardStartTs = performance.now();
 }
 
-function nextUnlockedNode(){
-  // Nächster Knoten in Reihenfolge, der freigeschaltet ist und nicht erledigt
-  for(const n of MAP.nodes){
-    if(isUnlocked(n.id) && !state.done[n.id]) return n.id;
-  }
-  // sonst: erster freigeschalteter
-  for(const n of MAP.nodes){
-    if(isUnlocked(n.id)) return n.id;
-  }
-  return MAP.nodes[0]?.id ?? "n1";
-}
-
 /** =========================
- *  ADAPTIVE REGELN (If/Else)
- *  - 3 richtig in Folge: Level +1
- *  - 2 falsch in Folge: Level halten, Hilfen aktiv (hier automatisch über HELP_RULES)
- *  - wiederholt gleiche Fokus-Kategorie falsch: später Mini-Training einblendbar
+ *  Adaptive Regeln
  *  ========================= */
 function adaptAfterAnswer(correct){
   if(correct){
@@ -706,28 +866,37 @@ function adaptAfterAnswer(correct){
     if(state.streakCorrect >= APP.TARGET_STREAK_UP && state.level < APP.LEVEL_MAX){
       state.level += 1;
       state.streakCorrect = 0;
-      setMonster(`Stark! Du steigst auf Stufe ${state.level}.`, "good");
+      setMonster(`Stufe erhöht: ${state.level}.`);
+    } else {
+      setMonster("Richtig. Weiter.");
     }
   }else{
     state.streakWrong += 1;
     state.streakCorrect = 0;
 
-    if(state.streakWrong >= APP.TARGET_MISTAKES_HOLD){
-      // Level halten, Hilfen bleiben/werden aktiviert über HELP_RULES auf dem Level
-      const side = MAP.sidepaths[Math.floor(Math.random()*MAP.sidepaths.length)];
-      setMonster(`Oh! Das war der ${side}. Lies den Satz noch einmal.`, "bad");
-    }
+    const side = MAP.sidepaths[Math.floor(Math.random()*MAP.sidepaths.length)];
+    setMonster(`Das war der ${side}. Lies den Satz noch einmal.`, "bad");
   }
+}
+
+/** =========================
+ *  Submit + Kapitel-Ende Fix
+ *  ========================= */
+function nextUnlockedUndoneNode(){
+  for(const n of MAP.nodes){
+    if(isUnlocked(n.id) && !state.done[n.id]) return n.id;
+  }
+  return null;
 }
 
 function submitAnswer(chosenIndex){
   const nodeId = state.currentNodeId;
   const c = getCard(nodeId);
-  const timeMs = Math.max(1, Math.round(performance.now() - (cardStartTs ?? performance.now())));
+  if(!c || state.chapterComplete) return;
 
+  const timeMs = Math.max(1, Math.round(performance.now() - (cardStartTs ?? performance.now())));
   const correct = chosenIndex === c.correctIndex;
 
-  // log
   state.logs.push({
     ts: Date.now(),
     nodeId,
@@ -743,14 +912,21 @@ function submitAnswer(chosenIndex){
     state.stars += 1;
     state.done[nodeId] = true;
 
-    setMonster(`Yes! Tor geöffnet. Weiter geht’s!`, "good");
-    $("feedback").innerHTML = `<span class="good">Richtig.</span> Du bekommst 1 Stern.`;
-
     adaptAfterAnswer(true);
 
-    // weiter zum nächsten Knoten
-    state.currentNodeId = nextUnlockedNode();
-  }else{
+    if(allNodesDone()){
+      // FIX: Kein Zurück auf Karte 1, sondern Abschluss-Screen
+      state.chapterComplete = true;
+      state.currentNodeId = null;
+      saveState();
+      showComplete();
+      renderAll();
+      return;
+    }
+
+    state.currentNodeId = nextUnlockedUndoneNode();
+    $("feedback").innerHTML = `<span class="good">Richtig.</span> 1 Stern.`;
+  } else {
     adaptAfterAnswer(false);
     $("feedback").innerHTML = `<span class="bad">Noch nicht.</span> Tipp: ${c.hint}`;
   }
@@ -760,7 +936,7 @@ function submitAnswer(chosenIndex){
 }
 
 /** =========================
- *  DIAGNOSE
+ *  Diagnose
  *  ========================= */
 function renderDashboard(){
   const logs = state.logs;
@@ -772,11 +948,10 @@ function renderDashboard(){
 
   const avgTime = total ? Math.round(logs.reduce((a,b)=>a+b.timeMs,0)/total) : 0;
 
-  $("dDone").textContent = `${doneCount} Knoten`;
-  $("dAcc").innerHTML = `${acc}% ${acc>=80 ? "<span class='good'>(stark)</span>" : acc>=60 ? "(solide)" : "<span class='bad'>(Fokus nötig)</span>"}`;
-  $("dTime").textContent = `${Math.round(avgTime/1000)} s`;
+  $("dDone").textContent = `Abgeschlossen: ${doneCount} / ${MAP.nodes.length}`;
+  $("dAcc").innerHTML = `Trefferquote: ${acc}%`;
+  $("dTime").textContent = `Ø Zeit: ${Math.round(avgTime/1000)} s`;
 
-  // patterns
   const wrong = logs.filter(x=>!x.correct);
   const byFocus = {};
   wrong.forEach(x=>{
@@ -791,7 +966,7 @@ function renderDashboard(){
   const tbody = $("dPatterns");
   tbody.innerHTML = "";
   if(rows.length===0){
-    tbody.innerHTML = `<tr><td colspan="3" class="muted">Noch keine Fehlmuster. Weiter spielen.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3" style="color:var(--muted)">Noch keine Fehlmuster.</td></tr>`;
   }else{
     rows.forEach(([focus, data])=>{
       const card = getCard(data.exampleNodeId);
@@ -805,68 +980,119 @@ function renderDashboard(){
     });
   }
 
-  // strengths & focus
   const strengths = [];
-  if(acc >= 80) strengths.push("Leseverständnis wirkt stabil (hohe Trefferquote).");
-  if(avgTime && avgTime < 6000) strengths.push("Sichere Entscheidungen (niedrige Antwortzeit).");
-  if(doneCount >= 3) strengths.push("Gute Ausdauer (mehrere Karten erledigt).");
-  if(strengths.length===0) strengths.push("Startphase: Daten sammeln, dann werden Stärken präziser.");
+  if(acc >= 80) strengths.push("Trefferquote ist hoch.");
+  if(avgTime && avgTime < 6000) strengths.push("Entscheidungen wirken sicher (Tempo).");
+  if(doneCount >= 3) strengths.push("Gute Ausdauer.");
+
+  if(strengths.length===0) strengths.push("Startphase: weiter spielen, dann wird die Diagnose präziser.");
 
   const focus = rows.length ? rows[0][0] : "Aufmerksamkeit";
-  const mission = acc >= 80 ? "8 Minuten pro Tag, Stufe halten und Tempo stabilisieren." :
-                 acc >= 60 ? "8 Minuten pro Tag, Hinweis nur bei Bedarf nutzen." :
-                             "8 Minuten pro Tag, erst Text, dann Frage. Hinweis aktiv nutzen.";
+  const mission = acc >= 80 ? "8 Minuten pro Tag. Schwierigkeit stabil halten." :
+                 acc >= 60 ? "8 Minuten pro Tag. Hinweis nur bei Bedarf." :
+                             "8 Minuten pro Tag. Text zuerst, dann Frage. Hinweis nutzen.";
 
   $("dCoach").innerHTML = `
-    <div style="font-weight:900;margin-bottom:6px">Stärken</div>
-    <ul style="margin:0 0 10px 18px;color:var(--txt)">
+    <b>Stärken</b>
+    <ul style="margin:6px 0 12px 18px;">
       ${strengths.slice(0,3).map(s=>`<li>${s}</li>`).join("")}
     </ul>
-    <div style="font-weight:900;margin:10px 0 6px">Fokus</div>
-    <div class="pill">Top-Fokus: <b style="color:var(--txt)">${focus}</b></div>
-    <div style="margin-top:10px;font-weight:900">Empfohlene Mission</div>
+    <b>Fokus</b>
+    <div style="margin-top:6px;">
+      <span class="pill">Top-Fokus: <b style="color:var(--txt)">${focus}</b></span>
+    </div>
+    <div style="margin-top:12px;"><b>Empfohlene Mission</b></div>
     <div style="margin-top:6px;color:var(--muted)">${mission}</div>
   `;
 }
 
 /** =========================
- *  VIEW SWITCHING
+ *  Views
  *  ========================= */
 function showPlay(){
   $("viewPlay").classList.remove("hidden");
   $("viewDash").classList.add("hidden");
+  $("viewComplete").classList.add("hidden");
   $("btnPlay").classList.add("primary");
   $("btnDash").classList.remove("primary");
 }
+
 function showDash(){
   $("viewDash").classList.remove("hidden");
   $("viewPlay").classList.add("hidden");
+  $("viewComplete").classList.add("hidden");
   $("btnDash").classList.add("primary");
   $("btnPlay").classList.remove("primary");
   renderDashboard();
 }
 
-function renderAll(){
-  renderTopStats();
-  renderMap();
-  renderCard();
-
-  // Monster-Defaulttext
-  setMonster(`Willkommen im Wald. Lies den Text, beantworte die Frage, öffne das Tor.`, "neutral");
+function showComplete(){
+  $("viewComplete").classList.remove("hidden");
+  $("viewPlay").classList.add("hidden");
+  $("viewDash").classList.add("hidden");
+  $("btnPlay").classList.remove("primary");
+  $("btnDash").classList.remove("primary");
 }
 
-$("btnPlay").onclick = () => showPlay();
-$("btnDash").onclick = () => showDash();
+/** =========================
+ *  Complete Screen
+ *  ========================= */
+function renderComplete(){
+  $("completeStars").textContent = `Sterne: ${state.stars}`;
+  $("completeText").innerHTML = `
+    Kapitel abgeschlossen.<br>
+    Abgeschlossene Knoten: <b>${Object.keys(state.done).length}</b> / <b>${MAP.nodes.length}</b><br>
+    Stufe am Ende: <b>${state.level}</b><br>
+    Öffne die Diagnose, um Fehlmuster und Fokus zu sehen.
+  `;
+}
 
+/** =========================
+ *  Render All
+ *  ========================= */
+function renderAll(){
+  renderTop();
+  renderMap();
+
+  if(state.chapterComplete){
+    setMonster("Kapitel ist abgeschlossen. Diagnose zeigt die Auswertung.");
+    renderComplete();
+    return;
+  }
+
+  renderCard();
+
+  // Default Guide Text (nicht überschreiben, wenn gerade Feedback gesetzt wurde)
+  if(!state.logs.length){
+    setMonster("Willkommen im Wald. Lies den Text. Beantworte die Frage. Weiter geht es über richtige Antworten.");
+  }
+}
+
+/** =========================
+ *  Buttons
+ *  ========================= */
+$("btnPlay").onclick = () => { showPlay(); renderAll(); };
+$("btnDash").onclick = () => { showDash(); };
 $("btnReset").onclick = () => {
   const ok = confirm("Alles zurücksetzen? Sterne, Fortschritt und Diagnose werden gelöscht.");
   if(!ok) return;
   state = defaultState();
   saveState();
   showPlay();
+  setMonster("Reset durchgeführt. Starte neu.");
   renderAll();
 };
 
+$("btnReplay").onclick = () => {
+  state = defaultState();
+  saveState();
+  showPlay();
+  setMonster("Neu gestartet. Los geht es.");
+  renderAll();
+};
+$("btnGoDash").onclick = () => showDash();
+
+/** Init */
 showPlay();
 renderAll();
 </script>
