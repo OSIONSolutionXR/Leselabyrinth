@@ -7,32 +7,34 @@
 
   <style>
     :root{
+      /* Hintergrund bleibt “Museum”-mäßig, Board wird kinderfreundlich */
       --bg1:#0b1020;
       --bg2:#0c1330;
 
-      --panel: rgba(17, 26, 51, .78);
-      --panel2: rgba(15, 23, 48, .62);
-      --stroke: rgba(255,255,255,.12);
-      --stroke2: rgba(255,255,255,.20);
+      /* Kinder-Palette */
+      --kidBlue:#2fd9ff;
+      --kidYellow:#ffd33d;
+      --kidGreen:#7cff6b;
+      --kidPink:#ff5dd8;
+      --kidPurple:#7a3cff;
+      --kidRed:#ff5a7a;
 
-      --txt:#edf3ff;
-      --muted:#b6c2e6;
+      --txt:#f4f8ff;
+      --muted:#c7d3ff;
+
+      --panel: rgba(18, 26, 56, .78);
+      --panel2: rgba(10, 16, 40, .50);
+      --stroke: rgba(255,255,255,.14);
+      --stroke2: rgba(255,255,255,.22);
 
       --good:#43e08b;
       --bad:#ff5a7a;
 
-      --accent1:#ff2d55;
-      --accent2:#7a3cff;
-
-      --kid1:#2fd9ff;
-      --kid2:#ffd33d;
-      --kid3:#7cff6b;
-
-      --radius: 20px;
-      --radius2: 16px;
+      --radius: 22px;
+      --radius2: 18px;
 
       --shadow: 0 18px 60px rgba(0,0,0,.30);
-      --shadowIn: 0 18px 40px rgba(0,0,0,.20) inset;
+      --shadowIn: 0 18px 45px rgba(0,0,0,.25) inset;
     }
 
     *{ box-sizing:border-box; }
@@ -41,33 +43,33 @@
       font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
       color:var(--txt);
       background:
-        radial-gradient(900px 500px at 15% 10%, rgba(122,60,255,.25), transparent 60%),
-        radial-gradient(900px 500px at 90% 12%, rgba(255,45,85,.22), transparent 60%),
-        radial-gradient(700px 400px at 50% 120%, rgba(47,217,255,.12), transparent 60%),
+        radial-gradient(1000px 600px at 14% 10%, rgba(122,60,255,.25), transparent 60%),
+        radial-gradient(1000px 600px at 90% 12%, rgba(255,93,216,.18), transparent 60%),
+        radial-gradient(1000px 600px at 55% 120%, rgba(47,217,255,.12), transparent 60%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
       overflow-x:hidden;
     }
 
-    /* Kleine “Sternchen”-Textur */
+    /* dezente Sternchen-Textur */
     body:before{
       content:"";
       position:fixed;
       inset:0;
       pointer-events:none;
-      opacity:.22;
+      opacity:.20;
       background-image:
         radial-gradient(circle, rgba(255,255,255,.14) 1px, transparent 1.5px),
         radial-gradient(circle, rgba(255,255,255,.10) 1px, transparent 1.5px);
-      background-size: 80px 80px, 120px 120px;
+      background-size: 86px 86px, 140px 140px;
       background-position: 10px 15px, 40px 60px;
       filter: blur(.2px);
     }
 
     header{
-      position:sticky; top:0; z-index:20;
+      position:sticky; top:0; z-index:50;
       padding:14px 16px;
       border-bottom:1px solid var(--stroke);
-      background: rgba(11,16,32,.85);
+      background: rgba(11,16,32,.86);
       backdrop-filter: blur(10px);
       display:flex;
       align-items:center;
@@ -79,50 +81,41 @@
     }
     .brand b{
       font-size:14px; letter-spacing:.8px;
-      background: linear-gradient(90deg,var(--accent1),var(--accent2));
+      background: linear-gradient(90deg, #ff2d55, #7a3cff);
       -webkit-background-clip:text; background-clip:text;
       color:transparent;
-      font-weight:900;
+      font-weight:950;
     }
-    .brand span{
-      font-size:12px;
-      color:var(--muted);
-      opacity:.95;
-    }
+    .brand span{ font-size:12px; color:var(--muted); opacity:.95; }
 
     .top-actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      align-items:center;
+      display:flex; gap:8px; flex-wrap:wrap;
+      justify-content:flex-end; align-items:center;
     }
-
     button{
       appearance:none;
       border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
       color:var(--txt);
       padding:10px 12px;
       border-radius:14px;
       cursor:pointer;
-      font-weight:800;
+      font-weight:900;
       letter-spacing:.2px;
-      transition: transform .12s ease, border-color .12s ease, filter .12s ease;
+      transition: transform .12s ease, filter .12s ease, border-color .12s ease;
       user-select:none;
     }
-    button:hover{ border-color: rgba(255,255,255,.22); transform: translateY(-1px); }
+    button:hover{ border-color: rgba(255,255,255,.24); transform: translateY(-1px); }
     button:active{ transform: translateY(0px) scale(.99); filter: brightness(.98); }
-
     button.primary{
       border:none;
       background: linear-gradient(90deg, rgba(255,45,85,.95), rgba(122,60,255,.95));
-      box-shadow: 0 12px 32px rgba(122,60,255,.16);
+      box-shadow: 0 14px 32px rgba(122,60,255,.18);
     }
 
     main{
       padding:16px;
-      max-width:1100px;
+      max-width:1120px;
       margin:0 auto;
     }
 
@@ -132,7 +125,6 @@
       border-radius: var(--radius);
       padding:14px;
       box-shadow: var(--shadow);
-      position:relative;
     }
 
     .layout{
@@ -141,10 +133,12 @@
       gap:14px;
     }
 
-    /* --- Guidebar oben --- */
+    /* =======================
+       TOP BAR (Guide + Stats + Map)
+       ======================= */
     .guidebar{
       display:grid;
-      grid-template-columns: 1.2fr 1fr 1.5fr;
+      grid-template-columns: 1.2fr 1fr 1.7fr;
       gap:12px;
       align-items:stretch;
     }
@@ -155,7 +149,10 @@
     .box{
       border:1px solid var(--stroke);
       border-radius: var(--radius);
-      background: rgba(15,23,48,.55);
+      background:
+        radial-gradient(350px 100px at 15% 15%, rgba(47,217,255,.10), transparent 60%),
+        radial-gradient(350px 100px at 85% 25%, rgba(255,211,61,.08), transparent 60%),
+        rgba(12,18,44,.55);
       padding:12px;
     }
 
@@ -165,13 +162,13 @@
       align-items:flex-start;
     }
     .avatar{
-      width:56px; height:56px;
-      border-radius: 18px;
-      border:1px solid var(--stroke);
+      width:62px; height:62px;
+      border-radius: 20px;
+      border:1px solid rgba(255,255,255,.18);
       background:
         radial-gradient(circle at 30% 30%, rgba(255,255,255,.20), transparent 50%),
-        linear-gradient(135deg, rgba(47,217,255,.40), rgba(255,211,61,.26)),
-        linear-gradient(135deg, rgba(255,45,85,.55), rgba(122,60,255,.50));
+        linear-gradient(135deg, rgba(47,217,255,.40), rgba(255,211,61,.28)),
+        linear-gradient(135deg, rgba(255,93,216,.35), rgba(122,60,255,.35));
       display:flex;
       align-items:center;
       justify-content:center;
@@ -179,54 +176,47 @@
       letter-spacing:.5px;
       color:rgba(255,255,255,.96);
       flex:0 0 auto;
-      box-shadow: 0 10px 28px rgba(0,0,0,.22);
+      box-shadow: 0 12px 28px rgba(0,0,0,.22);
     }
     .speech{
       flex:1;
-      padding:10px 12px;
+      padding:12px 12px;
       border-radius: var(--radius2);
       border:1px solid var(--stroke);
-      background: rgba(17,26,51,.60);
+      background: rgba(255,255,255,.04);
       line-height:1.35;
-      font-size:13.5px;
-      min-height:56px;
+      font-size:14px;
+      min-height:62px;
     }
 
     .pills{
       margin-top:10px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
     }
     .pill{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding:6px 10px;
+      display:inline-flex; gap:8px; align-items:center;
+      padding:7px 11px;
       border-radius:999px;
       border:1px solid var(--stroke);
       background: rgba(255,255,255,.05);
-      font-size:12px;
+      font-size:12.5px;
       color:var(--muted);
       white-space:nowrap;
     }
 
-    /* Sterne-Pill: Ziel für Animation */
+    /* Sterne-Anzeige: Ziel für Animation */
     .pill.stars{
-      border-color: rgba(255,211,61,.30);
+      border-color: rgba(255,211,61,.32);
       background:
-        radial-gradient(200px 40px at 30% 30%, rgba(255,211,61,.18), transparent 60%),
+        radial-gradient(220px 48px at 30% 30%, rgba(255,211,61,.20), transparent 60%),
         rgba(255,255,255,.05);
       position:relative;
       overflow:hidden;
     }
-    .pill.stars.pulse{
-      animation: starPulse .45s ease;
-    }
+    .pill.stars.pulse{ animation: starPulse .45s ease; }
     @keyframes starPulse{
       0%{ transform: scale(1); }
-      40%{ transform: scale(1.08); }
+      45%{ transform: scale(1.10); }
       100%{ transform: scale(1); }
     }
 
@@ -238,14 +228,19 @@
     .stat{
       border:1px solid var(--stroke);
       border-radius: var(--radius2);
-      background: rgba(17,26,51,.35);
+      background: rgba(255,255,255,.04);
       padding:10px 12px;
-      min-height:56px;
+      min-height:62px;
     }
-    .stat b{ display:block; font-size:12.5px; letter-spacing:.2px; }
-    .stat span{ color:var(--muted); font-size:12px; }
+    .stat b{
+      display:block;
+      font-size:12.5px;
+      letter-spacing:.2px;
+      color: rgba(255,255,255,.92);
+      font-weight:950;
+    }
+    .stat span{ color:var(--muted); font-size:12.5px; }
 
-    /* Map: horizontal scroll */
     .mapwrap{ display:flex; flex-direction:column; gap:10px; }
     .maphead{
       display:flex; justify-content:space-between;
@@ -262,59 +257,61 @@
       -webkit-overflow-scrolling: touch;
     }
     .node{
-      min-width: 180px;
+      min-width: 190px;
       border:1px solid var(--stroke);
       border-radius: var(--radius2);
       background:
-        radial-gradient(240px 50px at 15% 20%, rgba(47,217,255,.10), transparent 60%),
-        rgba(17,26,51,.30);
+        radial-gradient(260px 70px at 12% 22%, rgba(47,217,255,.12), transparent 60%),
+        radial-gradient(260px 70px at 85% 65%, rgba(255,211,61,.10), transparent 60%),
+        rgba(255,255,255,.03);
       padding:10px 12px;
       cursor:pointer;
       flex:0 0 auto;
-      transition: transform .12s ease, border-color .12s ease;
+      transition: transform .12s ease, border-color .12s ease, filter .12s ease;
     }
-    .node:hover{ border-color: rgba(255,255,255,.22); transform: translateY(-1px); }
-    .node.locked{ opacity:.45; cursor:not-allowed; filter: grayscale(.1); }
+    .node:hover{ border-color: rgba(255,255,255,.26); transform: translateY(-1px); }
+    .node.locked{ opacity:.45; cursor:not-allowed; filter: grayscale(.08); }
     .node.done{
       border-color: rgba(67,224,139,.35);
       background:
-        radial-gradient(260px 60px at 15% 20%, rgba(124,255,107,.12), transparent 60%),
+        radial-gradient(260px 70px at 12% 22%, rgba(124,255,107,.14), transparent 60%),
         rgba(67,224,139,.10);
     }
     .node small{ color:var(--muted); display:block; margin-bottom:4px; }
-    .node b{ display:block; font-size:13px; }
+    .node b{ display:block; font-size:13px; font-weight:950; }
 
-    /* --- Content unten --- */
+    /* =======================
+       BOTTOM CONTENT
+       ======================= */
     .content{
       display:grid;
       grid-template-columns: 1fr;
       gap:14px;
     }
     .titleRow{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:10px;
-      flex-wrap:wrap;
+      display:flex; justify-content:space-between; align-items:flex-start;
+      gap:10px; flex-wrap:wrap;
     }
     .titleRow h2{
       margin:0;
       font-size:16px;
       letter-spacing:.2px;
+      font-weight:950;
     }
 
     .card{
       border:1px solid var(--stroke);
       border-radius: var(--radius);
-      background: rgba(15,23,48,.55);
+      background: rgba(10,16,40,.52);
       padding:14px;
       position:relative;
+      overflow:hidden;
     }
 
     .scene{
       border-radius: var(--radius);
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
       padding:14px;
       display:flex;
       justify-content:space-between;
@@ -323,18 +320,18 @@
       margin-bottom:12px;
     }
     .scene .meta{ display:flex; flex-direction:column; gap:2px; }
-    .scene .meta small{ color:var(--muted); }
-    .scene .meta b{ font-size:16px; }
+    .scene .meta small{ color:var(--muted); font-size:12.5px; }
+    .scene .meta b{ font-size:18px; font-weight:1000; }
 
-    /* Lesetext: deutlich + kindgerecht */
+    /* Leseblock: sehr groß + Fokus */
     .readingBox{
       border-radius: var(--radius);
-      border:1px solid rgba(255,255,255,.22);
+      border:2px solid rgba(255,255,255,.20);
       background:
-        radial-gradient(900px 180px at 0% 0%, rgba(47,217,255,.16), transparent 55%),
-        radial-gradient(900px 180px at 100% 0%, rgba(255,211,61,.14), transparent 55%),
-        rgba(255,255,255,.035);
-      padding:16px;
+        radial-gradient(900px 220px at 0% 0%, rgba(47,217,255,.20), transparent 55%),
+        radial-gradient(900px 220px at 100% 0%, rgba(255,211,61,.18), transparent 55%),
+        rgba(255,255,255,.04);
+      padding:18px;
       margin:12px 0 14px;
       box-shadow: var(--shadowIn);
       position:relative;
@@ -347,9 +344,9 @@
       left:-60%;
       width:60%;
       height:180%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
       transform: rotate(18deg);
-      animation: gentleShine 6.5s linear infinite;
+      animation: gentleShine 6.2s linear infinite;
       opacity:.55;
       pointer-events:none;
     }
@@ -363,70 +360,74 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      margin-bottom:10px;
+      margin-bottom:12px;
       flex-wrap:wrap;
     }
     .readingLabel b{
-      font-size:12.5px;
+      font-size:13px;
       letter-spacing:.35px;
       text-transform:uppercase;
-      color:rgba(255,255,255,.90);
-      display:flex;
-      align-items:center;
-      gap:8px;
+      color:rgba(255,255,255,.92);
+      display:flex; align-items:center; gap:8px;
+      font-weight:1000;
     }
-    .readingLabel b:before{
-      content:"📖";
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,.25));
-    }
+    .readingLabel b:before{ content:"📖"; }
     .readingHint{
       color:var(--muted);
-      font-size:12px;
+      font-size:12.5px;
     }
 
+    /* Größer für Desktop, weil du genau das willst */
     .text{
-      font-size:22px;
+      font-size:30px;
       line-height:1.75;
-      font-weight:950;
+      font-weight:1000;
       letter-spacing:.15px;
-      text-shadow: 0 10px 24px rgba(0,0,0,.20);
+      text-shadow: 0 10px 24px rgba(0,0,0,.22);
     }
-    @media (max-width: 520px){
-      .text{ font-size:19px; }
+    @media (max-width: 700px){
+      .text{ font-size:22px; }
     }
 
     .question{
-      font-weight:950;
-      margin:10px 0 10px;
-      font-size:16px;
+      font-weight:1000;
+      margin:12px 0 12px;
+      font-size:22px;
       display:flex;
       align-items:center;
-      gap:8px;
+      gap:10px;
+      color: rgba(255,255,255,.97);
     }
-    .question:before{
-      content:"❓";
-      opacity:.95;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,.22));
+    .question .qicon{
+      width:28px; height:28px;
+      border-radius:10px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.16);
     }
 
-    /* Antwort-Buttons (kindgerecht + farbig + shimmer) */
+    /* Antwort-Buttons: bunter + kindgerecht + animiert */
     .answers{
       display:grid;
-      gap:10px;
+      gap:12px;
       margin-top:10px;
     }
+
     .option{
       position:relative;
       width:100%;
       text-align:left;
-      padding:14px 14px;
-      border-radius: 18px;
-      font-size:15px;
-      border:1px solid rgba(255,255,255,.16);
+      padding:16px 16px;
+      border-radius: 20px;
+      font-size:18px;
+      font-weight:950;
+      border:2px solid rgba(255,255,255,.14);
       background:
-        radial-gradient(260px 60px at 15% 25%, rgba(47,217,255,.16), transparent 60%),
-        radial-gradient(260px 60px at 85% 65%, rgba(255,211,61,.12), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+        radial-gradient(260px 70px at 12% 22%, rgba(47,217,255,.20), transparent 60%),
+        radial-gradient(260px 70px at 85% 65%, rgba(255,211,61,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
       overflow:hidden;
       transition: transform .12s ease, border-color .12s ease, filter .12s ease;
     }
@@ -437,9 +438,9 @@
       left:-80%;
       width:60%;
       height:220%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
       transform: rotate(20deg);
-      animation: shimmer 3.8s linear infinite;
+      animation: shimmer 3.5s linear infinite;
       opacity:.45;
       pointer-events:none;
     }
@@ -450,49 +451,66 @@
     .option:hover{
       border-color: rgba(255,255,255,.26);
       transform: translateY(-1px);
-      filter: brightness(1.04);
+      filter: brightness(1.05);
     }
     .option:active{
       transform: translateY(0px) scale(.99);
       filter: brightness(.98);
     }
 
-    /* Feedback states */
+    /* Feedback Effekte */
     .option.correctFlash{
-      border-color: rgba(67,224,139,.55);
+      border-color: rgba(67,224,139,.70);
       background:
-        radial-gradient(260px 60px at 15% 25%, rgba(124,255,107,.20), transparent 60%),
-        linear-gradient(180deg, rgba(67,224,139,.16), rgba(255,255,255,.02));
+        radial-gradient(260px 70px at 12% 22%, rgba(124,255,107,.26), transparent 60%),
+        linear-gradient(180deg, rgba(67,224,139,.18), rgba(255,255,255,.02));
+      animation: popGood .28s ease;
     }
-    .option.wrongFlash{
-      border-color: rgba(255,90,122,.55);
-      background:
-        radial-gradient(260px 60px at 15% 25%, rgba(255,90,122,.20), transparent 60%),
-        linear-gradient(180deg, rgba(255,90,122,.12), rgba(255,255,255,.02));
+    @keyframes popGood{
+      0%{ transform: scale(1); }
+      60%{ transform: scale(1.02); }
+      100%{ transform: scale(1); }
     }
 
+    .option.wrongFlash{
+      border-color: rgba(255,90,122,.80);
+      background:
+        radial-gradient(260px 70px at 12% 22%, rgba(255,90,122,.26), transparent 60%),
+        linear-gradient(180deg, rgba(255,90,122,.14), rgba(255,255,255,.02));
+      animation: shake .28s ease;
+    }
+    @keyframes shake{
+      0%{ transform: translateX(0); }
+      25%{ transform: translateX(-6px); }
+      50%{ transform: translateX(6px); }
+      75%{ transform: translateX(-4px); }
+      100%{ transform: translateX(0); }
+    }
+
+    /* Helpers: nur “Nochmal lesen” (Hinweis ist komplett raus) */
     .helpers{
       display:flex;
-      gap:8px;
+      gap:10px;
       flex-wrap:wrap;
       margin-top:12px;
       align-items:center;
     }
     .helpers button{
-      font-size:12px;
-      padding:9px 10px;
+      font-size:12.5px;
+      padding:10px 12px;
       border-radius:999px;
+      font-weight:950;
     }
 
     .hr{ height:1px; background:var(--stroke); margin:12px 0; }
 
     .feedback{
-      padding:12px;
+      padding:12px 14px;
       border-radius: var(--radius);
-      border:1px dashed rgba(255,255,255,.20);
-      background: rgba(255,255,255,.03);
+      border:1px dashed rgba(255,255,255,.22);
+      background: rgba(255,255,255,.04);
       color:var(--muted);
-      font-size:13px;
+      font-size:14px;
       line-height:1.4;
     }
 
@@ -510,21 +528,78 @@
       padding:8px 6px;
       text-align:left;
     }
-    .table th{ color:var(--muted); font-weight:950; }
+    .table th{ color:var(--muted); font-weight:1000; }
 
-    .good{ color:var(--good); font-weight:950; }
-    .bad{ color:var(--bad); font-weight:950; }
+    .good{ color:var(--good); font-weight:1000; }
+    .bad{ color:var(--bad); font-weight:1000; }
 
-    /* Stern-Fly Animation Element */
-    .flyStar{
-      position: fixed;
-      z-index: 9999;
-      font-size: 22px;
+    /* =======================
+       MEGA STAR OVERLAY (Wow-Effekt)
+       ======================= */
+    .starOverlay{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       pointer-events:none;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,.35));
+      z-index:9999;
+      opacity:0;
+      transition: opacity .10s ease;
+    }
+    .starOverlay.show{ opacity:1; }
+
+    .megaStar{
+      position:relative;
+      font-size: 150px;
+      transform: scale(.2) rotate(-12deg);
+      opacity:0;
+      filter: drop-shadow(0 22px 40px rgba(0,0,0,.35));
+      animation: none;
+    }
+    .megaStar.play{
+      animation: megaStarPop .62s cubic-bezier(.2,.9,.2,1) forwards;
+    }
+    @keyframes megaStarPop{
+      0%{ transform: scale(.2) rotate(-12deg); opacity:0; }
+      55%{ transform: scale(1.12) rotate(6deg); opacity:1; }
+      100%{ transform: scale(1) rotate(0deg); opacity:1; }
+    }
+
+    .sparkles{
+      position:absolute;
+      inset:-60px;
+      pointer-events:none;
+    }
+    .sparkle{
+      position:absolute;
+      width:10px; height:10px;
+      border-radius:999px;
+      background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,0));
+      filter: drop-shadow(0 12px 18px rgba(255,255,255,.18));
+      opacity:0;
+      animation: sparklePop .60s ease forwards;
+    }
+    @keyframes sparklePop{
+      0%{ transform: translate(0,0) scale(.2); opacity:0; }
+      40%{ opacity:1; }
+      100%{ transform: translate(var(--dx), var(--dy)) scale(1.3); opacity:0; }
+    }
+
+    /* Stern fliegt danach zur Sterne-Pill */
+    .flyStar{
+      position:fixed;
+      z-index:10000;
+      font-size: 28px;
+      pointer-events:none;
+      filter: drop-shadow(0 14px 26px rgba(0,0,0,.35));
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
-      transition: transform .55s cubic-bezier(.2,.9,.2,1), left .55s cubic-bezier(.2,.9,.2,1), top .55s cubic-bezier(.2,.9,.2,1), opacity .55s ease;
+      transition:
+        transform .60s cubic-bezier(.2,.9,.2,1),
+        left .60s cubic-bezier(.2,.9,.2,1),
+        top .60s cubic-bezier(.2,.9,.2,1),
+        opacity .60s ease;
     }
   </style>
 </head>
@@ -542,10 +617,17 @@
   </div>
 </header>
 
+<!-- Mega Star Overlay -->
+<div class="starOverlay" id="starOverlay" aria-hidden="true">
+  <div class="megaStar" id="megaStar">⭐
+    <div class="sparkles" id="sparkles"></div>
+  </div>
+</div>
+
 <main>
   <div class="layout">
 
-    <!-- TOP: Guidebar -->
+    <!-- TOP -->
     <section class="panel">
       <div class="guidebar">
 
@@ -577,8 +659,8 @@
               <span id="uiStatus"></span>
             </div>
             <div class="stat">
-              <b>Hinweis</b>
-              <span id="uiTip"></span>
+              <b>Fokus</b>
+              <span id="uiFocusTop"></span>
             </div>
           </div>
         </div>
@@ -596,7 +678,7 @@
       </div>
     </section>
 
-    <!-- BOTTOM: Content -->
+    <!-- BOTTOM -->
     <section class="panel">
       <div class="content">
 
@@ -605,7 +687,6 @@
           <div class="titleRow">
             <h2>Lesekarte</h2>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <span class="pill" id="uiFocus"></span>
               <span class="pill" id="uiNodeState"></span>
               <span class="pill" id="uiNodeId"></span>
             </div>
@@ -666,37 +747,44 @@
 </main>
 
 <script>
-/** =========================
- *  KONFIG
- *  ========================= */
+/* =========================
+   KONFIG
+   ========================= */
 const APP = {
-  BRAND: "OSION Solution XR",
-  APP_NAME: "Leselabyrinth",
   CHAPTER_ID: "wald_v1",
   MONSTER_NAME: "Momo",
   LEVEL_MIN: 1,
   LEVEL_MAX: 3,
-  TARGET_STREAK_UP: 3,
-  TARGET_MISTAKES_HOLD: 2
+  TARGET_STREAK_UP: 3
 };
 
+const STORE_KEY = "leselabyrinth_state_v4";
+
+/* Fokus -> Icon (Hinweis ist raus, stattdessen Icon passend zur Frage) */
+const FOCUS_ICON = {
+  "W-Frage": "❓",
+  "Detail": "👀",
+  "Wortverwechslung": "🔤",
+  "Satzverständnis": "🧠",
+  "Ursache/Wirkung": "🔁"
+};
+
+/* Hilfen: Hinweis ist raus. Nur “Nochmal lesen” bleibt als sanfte Führung. */
 const HELP_RULES = {
-  1: { syllables: true, hintButton: true, rereadButton: true },
-  2: { syllables: false, hintButton: true, rereadButton: true },
-  3: { syllables: false, hintButton: false, rereadButton: true }
+  1: { rereadButton: true },
+  2: { rereadButton: true },
+  3: { rereadButton: true }
 };
 
-const STORE_KEY = "leselabyrinth_state_v3";
-
-/** =========================
- *  CONTENT (IM CODE)
- *  WICHTIG: Jede Frage muss aus dem Lesetext lösbar sein.
- *  ========================= */
+/* =========================
+   CONTENT (IM CODE)
+   - Jede Frage muss aus dem Text lösbar sein.
+   ========================= */
 const CARDS = [
   {
     id:"n1",
-    chapter: APP.CHAPTER_ID,
     nodeTitle:"Start am Waldweg",
+    focus:"W-Frage",
     textByLevel:{
       1:["Momo geht in den Wald.","Ein Vogel singt im Baum."],
       2:["Momo geht in den Wald.","Ein kleiner Vogel singt laut im Baum."],
@@ -709,13 +797,12 @@ const CARDS = [
       3:["In den Wald.","In die Stadt.","Ins Meer."]
     },
     correctIndex:0,
-    hint:"Im Satz steht: Momo geht in den Wald.",
-    focus:"W-Frage"
+    hintText:"Im Text steht: Momo geht in den Wald."
   },
   {
     id:"n2",
-    chapter: APP.CHAPTER_ID,
     nodeTitle:"Die Holzbrücke",
+    focus:"Detail",
     textByLevel:{
       1:["Vor Momo ist eine Brücke.","Die Brücke ist aus Holz."],
       2:["Vor Momo ist eine kleine Brücke.","Die Brücke ist aus Holz."],
@@ -728,14 +815,12 @@ const CARDS = [
       3:["Aus Holz.","Aus Eis.","Aus Papier."]
     },
     correctIndex:0,
-    hint:"Im Text steht: Die Brücke ist aus Holz.",
-    focus:"Detail"
+    hintText:"Im Text steht: Die Brücke ist aus Holz."
   },
   {
     id:"n3",
-    chapter: APP.CHAPTER_ID,
     nodeTitle:"Der Apfelbaum",
-    // FIX: Farbe muss im Text stehen, sonst ist es nicht lösbar.
+    focus:"Wortverwechslung",
     textByLevel:{
       1:["Ein grüner Apfel fällt runter.","Momo schaut nach oben."],
       2:["Ein grüner Apfel fällt runter.","Momo schaut nach oben und lächelt."],
@@ -748,16 +833,15 @@ const CARDS = [
       3:["Grün.","Blau.","Schwarz."]
     },
     correctIndex:0,
-    hint:"Im Text steht: grüner Apfel.",
-    focus:"Wortverwechslung"
+    hintText:"Im Text steht: grüner Apfel."
   },
   {
     id:"n4",
-    chapter: APP.CHAPTER_ID,
     nodeTitle:"Der Schlüsselstein",
+    focus:"Satzverständnis",
     textByLevel:{
-      1:["Momo findet einen Stein.","Auf dem Stein ist ein Stern."],
-      2:["Momo findet einen Stein.","Auf dem Stein ist ein Stern.","Der Stern glitzert."],
+      1:["Momo findet einen Stein.","Auf dem Stein ist ein Stern.","Der Stern glitzert."],
+      2:["Momo findet einen Stein.","Auf dem Stein ist ein Stern.","Der Stern glitzert hell."],
       3:["Momo findet einen Stein.","Auf dem Stein ist ein Stern.","Der Stern glitzert hell im Licht."]
     },
     questionByLevel:{ 1:"Was ist auf dem Stein?", 2:"Was ist auf dem Stein?", 3:"Was ist auf dem Stein?" },
@@ -767,13 +851,12 @@ const CARDS = [
       3:["Ein Stern.","Ein Auto.","Ein Haus."]
     },
     correctIndex:0,
-    hint:"Im Text steht: Auf dem Stein ist ein Stern.",
-    focus:"Satzverständnis"
+    hintText:"Im Text steht: Auf dem Stein ist ein Stern."
   },
   {
     id:"n5",
-    chapter: APP.CHAPTER_ID,
     nodeTitle:"Die Boss-Tür",
+    focus:"Ursache/Wirkung",
     textByLevel:{
       1:["Vor Momo ist eine große Tür.","Momo braucht einen Schlüssel."],
       2:["Vor Momo ist eine große Tür.","Momo braucht einen Schlüssel.","Die Tür bleibt zu."],
@@ -786,26 +869,23 @@ const CARDS = [
       3:["Den Schlüssel.","Eine Leiter.","Einen Ball."]
     },
     correctIndex:0,
-    hint:"Im Text steht: Momo braucht einen Schlüssel.",
-    focus:"Ursache/Wirkung"
+    hintText:"Im Text steht: Momo braucht einen Schlüssel."
   }
 ];
 
 const MAP = {
-  chapterId: APP.CHAPTER_ID,
   nodes: [
     { id:"n1", unlockFrom:null },
     { id:"n2", unlockFrom:"n1" },
     { id:"n3", unlockFrom:"n2" },
     { id:"n4", unlockFrom:"n3" },
     { id:"n5", unlockFrom:"n4" }
-  ],
-  sidepaths: ["Quatsch-Tunnel","Kicherweg","Sackgasse","Rutschweg zurück zum Satz"]
+  ]
 };
 
-/** =========================
- *  STATE
- *  ========================= */
+/* =========================
+   STATE
+   ========================= */
 const defaultState = () => ({
   level: 1,
   stars: 0,
@@ -816,6 +896,15 @@ const defaultState = () => ({
   chapterComplete: false,
   logs: []
 });
+
+let state = loadState();
+
+/* pro Karte: merkt sich, ob schon ein Fehler passiert ist (für „zweite Chance“ Verhalten) */
+let cardLocal = {
+  attempts: 0,
+  options: null,
+  locked: false
+};
 
 function loadState(){
   try{
@@ -828,29 +917,24 @@ function loadState(){
   }
 }
 function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
-let state = loadState();
 
-/** =========================
- *  Utils
- *  ========================= */
 const $ = (id) => document.getElementById(id);
-function getCard(nodeId){ return CARDS.find(c => c.id === nodeId); }
+function getCard(id){ return CARDS.find(c=>c.id===id); }
 function shuffle(arr){
   for(let i=arr.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
+    const j=Math.floor(Math.random()*(i+1));
     [arr[i],arr[j]]=[arr[j],arr[i]];
   }
   return arr;
 }
-
 function isUnlocked(nodeId){
-  const node = MAP.nodes.find(n => n.id===nodeId);
+  const node = MAP.nodes.find(n=>n.id===nodeId);
   if(!node) return false;
   if(node.unlockFrom===null) return true;
   return !!state.done[node.unlockFrom];
 }
 function allNodesDone(){
-  return MAP.nodes.every(n => !!state.done[n.id]);
+  return MAP.nodes.every(n=>!!state.done[n.id]);
 }
 function nextUnlockedUndoneNode(){
   for(const n of MAP.nodes){
@@ -859,44 +943,78 @@ function nextUnlockedUndoneNode(){
   return null;
 }
 
-/** =========================
- *  Monster
- *  ========================= */
+/* =========================
+   Guide / Monster
+   ========================= */
 function setMonster(text, mood="neutral"){
   $("monsterAvatar").textContent = (APP.MONSTER_NAME || "M").slice(0,1).toUpperCase();
   const prefix =
     mood==="good" ? "Yes! " :
-    mood==="bad"  ? "Oh! "  :
-                    "";
+    mood==="bad"  ? "Oh! "  : "";
   $("monsterSpeech").innerHTML = `<b>${APP.MONSTER_NAME}</b><br>${prefix}${text}`;
 }
 
-/** =========================
- *  Hilfen / Anzeige
- *  ========================= */
 function helpSummary(level){
   const h = HELP_RULES[level];
   const parts = [];
-  if(h.syllables) parts.push("Silben");
-  if(h.hintButton) parts.push("Hinweis");
   if(h.rereadButton) parts.push("Nochmal lesen");
   return parts.length ? parts.join(" · ") : "keine";
 }
 
-/** =========================
- *  Stern Animation (Button -> Sterne Pill)
- *  ========================= */
-function flyStarFromElement(fromEl){
+function focusIcon(focus){
+  return FOCUS_ICON[focus] || "🎯";
+}
+
+/* =========================
+   Mega Star Animation (Center + Sparkles + Fly)
+   ========================= */
+function spawnSparkles(){
+  const box = $("sparkles");
+  box.innerHTML = "";
+  const count = 14;
+  for(let i=0;i<count;i++){
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    const angle = (Math.PI*2) * (i/count);
+    const r = 70 + Math.random()*80;
+    const dx = Math.cos(angle) * r;
+    const dy = Math.sin(angle) * r;
+    s.style.left = (50 + (Math.random()*12-6)) + "%";
+    s.style.top = (50 + (Math.random()*12-6)) + "%";
+    s.style.setProperty("--dx", dx.toFixed(1) + "px");
+    s.style.setProperty("--dy", dy.toFixed(1) + "px");
+    s.style.animationDelay = (Math.random()*0.08) + "s";
+    box.appendChild(s);
+  }
+}
+
+function playMegaStarThenFly(){
+  const overlay = $("starOverlay");
+  const mega = $("megaStar");
+  overlay.classList.add("show");
+  mega.classList.remove("play");
+  void mega.offsetWidth;
+
+  spawnSparkles();
+  mega.classList.add("play");
+  mega.style.opacity = "1";
+
+  // nach Pop: Stern fliegt zur Sterne-Pill
+  setTimeout(()=>{
+    overlay.classList.remove("show");
+    flyStarToPill();
+  }, 520);
+}
+
+function flyStarToPill(){
   const toEl = $("uiStarsPill");
-  if(!fromEl || !toEl) return;
-
-  const a = fromEl.getBoundingClientRect();
   const b = toEl.getBoundingClientRect();
+  const endX = b.left + b.width * 0.22;
+  const endY = b.top + b.height * 0.55;
 
-  const startX = a.left + a.width * 0.85;
-  const startY = a.top + a.height * 0.50;
-  const endX   = b.left + b.width * 0.20;
-  const endY   = b.top + b.height * 0.55;
+  // Start: Screen Center
+  const startX = window.innerWidth * 0.5;
+  const startY = window.innerHeight * 0.44;
 
   const star = document.createElement("div");
   star.className = "flyStar";
@@ -904,9 +1022,6 @@ function flyStarFromElement(fromEl){
   star.style.left = startX + "px";
   star.style.top  = startY + "px";
   document.body.appendChild(star);
-
-  // Start-Pop
-  star.style.transform = "translate(-50%, -50%) scale(1.15)";
 
   requestAnimationFrame(()=>{
     star.style.left = endX + "px";
@@ -917,22 +1032,23 @@ function flyStarFromElement(fromEl){
 
   setTimeout(()=>{
     star.style.opacity = "0";
-  }, 430);
+  }, 420);
 
   setTimeout(()=>{
     star.remove();
     toEl.classList.remove("pulse");
-    void toEl.offsetWidth; // reflow
+    void toEl.offsetWidth;
     toEl.classList.add("pulse");
-  }, 560);
+  }, 600);
 }
 
-/** =========================
- *  Render Top
- *  ========================= */
+/* =========================
+   RENDER TOP + MAP
+   ========================= */
 function renderTop(){
   $("uiHelp").textContent = `Hilfen: ${helpSummary(state.level)}`;
   $("uiProgress").textContent = `Abgeschlossen: ${Object.keys(state.done).length} / ${MAP.nodes.length}`;
+  $("uiStarsCount").textContent = String(state.stars);
 
   $("uiLevel").textContent = `Stufe ${state.level}`;
   const streakText =
@@ -942,23 +1058,17 @@ function renderTop(){
   $("uiStreak").textContent = streakText;
 
   $("uiStatus").textContent = state.chapterComplete ? "Kapitel abgeschlossen" : "läuft";
-  $("uiTip").textContent = "Lies zuerst den Text.";
-
-  $("uiStarsCount").textContent = String(state.stars);
 
   const c = state.currentNodeId ? getCard(state.currentNodeId) : null;
-  $("uiFocus").textContent = c ? `Fokus: ${c.focus}` : "Fokus: -";
+  $("uiFocusTop").textContent = c ? `${focusIcon(c.focus)} ${c.focus}` : "-";
+
   $("uiNodeState").textContent = (c && state.done[c.id]) ? "Status: erledigt" : "Status: offen";
   $("uiNodeId").textContent = state.currentNodeId ? `Knoten: ${state.currentNodeId.toUpperCase()}` : "Knoten: -";
 }
 
-/** =========================
- *  Render Map
- *  ========================= */
 function renderMap(){
   const wrap = $("map");
   wrap.innerHTML = "";
-
   MAP.nodes.forEach(n=>{
     const card = getCard(n.id);
     const unlocked = isUnlocked(n.id);
@@ -981,30 +1091,37 @@ function renderMap(){
   });
 }
 
-/** =========================
- *  Silben Demo (Platzhalter)
- *  ========================= */
+/* =========================
+   SILBEN (Demo)
+   ========================= */
 function syllabifySimple(word){
   return word.replace(/([aeiouäöüy]{1,2})([^aeiouäöüy])/gi, "$1-$2");
 }
-function applySyllablesToText(lines){
+function applySyllables(lines){
   return lines.map(line=>{
     return line.split(" ").map(w=>{
-      const clean = w.replace(/[.,!?]/g,"");
-      if(clean.length >= 7){
-        return w.replace(clean, syllabifySimple(clean));
-      }
+      const clean=w.replace(/[.,!?]/g,"");
+      if(clean.length>=7) return w.replace(clean, syllabifySimple(clean));
       return w;
     }).join(" ");
   });
 }
 
-/** =========================
- *  Card Rendering
- *  ========================= */
+/* =========================
+   CARD RENDERING
+   ========================= */
 let cardStartTs = null;
-let currentOptions = null; // [{text,isCorrect}]
-let lastOptionButtons = null;
+
+function buildOptions(card, level){
+  const answers = card.answersByLevel[level] || card.answersByLevel[1];
+  const correctIdx = card.correctIndex;
+
+  const base = answers.map((t, idx)=>({
+    text:t,
+    isCorrect: idx === correctIdx
+  }));
+  return shuffle([...base]);
+}
 
 function renderCard(){
   const nodeId = state.currentNodeId;
@@ -1015,18 +1132,18 @@ function renderCard(){
     return;
   }
 
+  // Local reset pro Karte
+  cardLocal.attempts = 0;
+  cardLocal.locked = false;
+
   const level = state.level;
-  let lines = c.textByLevel[level] || c.textByLevel[1];
+  const lines = c.textByLevel[level] || c.textByLevel[1];
   const question = c.questionByLevel[level] || c.questionByLevel[1];
-  const answers = c.answersByLevel[level] || c.answersByLevel[1];
+
   const helps = HELP_RULES[level];
+  const renderedLines = (level===1) ? applySyllables(lines) : lines;
 
-  let renderedLines = lines;
-  if(helps.syllables) renderedLines = applySyllablesToText(lines);
-
-  // Optionen bauen + mischen (Fix: richtige Antwort nicht immer oben)
-  const base = answers.map((t, idx)=>({ text:t, isCorrect: idx === c.correctIndex }));
-  currentOptions = shuffle([...base]);
+  cardLocal.options = buildOptions(c, level);
 
   $("card").innerHTML = `
     <div class="scene">
@@ -1034,7 +1151,7 @@ function renderCard(){
         <small>Szene</small>
         <b>${c.nodeTitle}</b>
       </div>
-      <span class="pill">🏁 Ziel: richtig lesen</span>
+      <span class="pill">${focusIcon(c.focus)} ${c.focus}</span>
     </div>
 
     <div class="readingBox" id="readingBox">
@@ -1042,19 +1159,21 @@ function renderCard(){
         <b>Lesetext</b>
         <div class="readingHint">Lies zuerst den Text. Dann beantworte die Frage.</div>
       </div>
-      <div class="text" id="cardText">
+      <div class="text">
         ${renderedLines.map(x=>`<div>${x}</div>`).join("")}
       </div>
     </div>
 
-    <div class="question">${question}</div>
+    <div class="question">
+      <span class="qicon">${focusIcon(c.focus)}</span>
+      <span>${question}</span>
+    </div>
 
     <div class="answers" id="answers"></div>
 
     <div class="helpers">
       ${helps.rereadButton ? `<button id="btnReread">Nochmal lesen</button>` : ""}
-      ${helps.hintButton ? `<button id="btnHint">Hinweis</button>` : ""}
-      <span class="pill">🎯 Fokus: <b style="color:var(--txt)">${c.focus}</b></span>
+      <span class="pill">Versuche: <b id="tryCount" style="color:var(--txt)">0</b></span>
     </div>
 
     <div class="hr"></div>
@@ -1062,39 +1181,31 @@ function renderCard(){
   `;
 
   const ansWrap = $("answers");
-  lastOptionButtons = [];
 
-  currentOptions.forEach((opt, idx)=>{
+  cardLocal.options.forEach((opt, idx)=>{
     const b = document.createElement("button");
     b.className = "option";
     b.textContent = opt.text;
     b.onclick = () => submitAnswer(idx, b);
     ansWrap.appendChild(b);
-    lastOptionButtons.push(b);
   });
 
   if(helps.rereadButton){
     $("btnReread").onclick = () => {
-      setMonster("Lies den Text noch einmal. Die Lösung steht im Satz.");
+      setMonster("Lies den Text noch einmal. Du findest die Lösung im Satz.");
       $("feedback").textContent = "Nochmal lesen aktiviert.";
       const box = $("readingBox");
-      box.style.borderColor = "rgba(255,255,255,.35)";
-      setTimeout(()=> box.style.borderColor = "rgba(255,255,255,.22)", 520);
-    };
-  }
-  if(helps.hintButton){
-    $("btnHint").onclick = () => {
-      setMonster(`Tipp: ${c.hint}`);
-      $("feedback").textContent = `Hinweis: ${c.hint}`;
+      box.style.borderColor = "rgba(255,255,255,.40)";
+      setTimeout(()=> box.style.borderColor = "rgba(255,255,255,.20)", 520);
     };
   }
 
   cardStartTs = performance.now();
 }
 
-/** =========================
- *  Adaptive Regeln
- *  ========================= */
+/* =========================
+   ADAPTIV
+   ========================= */
 function adaptAfterAnswer(correct){
   if(correct){
     state.streakCorrect += 1;
@@ -1107,33 +1218,28 @@ function adaptAfterAnswer(correct){
     } else {
       setMonster("Richtig. Weiter.", "good");
     }
-  }else{
+  } else {
     state.streakWrong += 1;
     state.streakCorrect = 0;
-
-    const side = MAP.sidepaths[Math.floor(Math.random()*MAP.sidepaths.length)];
-    setMonster(`Das war der ${side}. Lies den Satz noch einmal.`, "bad");
+    setMonster("Noch nicht. Lies den Text noch einmal.", "bad");
   }
 }
 
-/** =========================
- *  Submit
- *  ========================= */
-function lockOptions(){
-  if(!lastOptionButtons) return;
-  lastOptionButtons.forEach(btn => btn.disabled = true);
-}
-
+/* =========================
+   BUGFIX: Nach falsch darf man weiter klicken
+   - Keine globale Deaktivierung
+   - Falscher Button wird kurz “geshaked”, bleibt klickbar oder optional deaktiviert
+   ========================= */
 function submitAnswer(optionIdx, btnEl){
   const nodeId = state.currentNodeId;
   const c = getCard(nodeId);
-  if(!c || state.chapterComplete || !currentOptions) return;
+  if(!c || state.chapterComplete || !cardLocal.options || cardLocal.locked) return;
 
   const timeMs = Math.max(1, Math.round(performance.now() - (cardStartTs ?? performance.now())));
-  const chosen = currentOptions[optionIdx];
+  const chosen = cardLocal.options[optionIdx];
   const correct = !!chosen?.isCorrect;
 
-  // Logging
+  // Logging pro Versuch
   state.logs.push({
     ts: Date.now(),
     nodeId,
@@ -1141,18 +1247,24 @@ function submitAnswer(optionIdx, btnEl){
     correct,
     timeMs,
     focus: c.focus,
-    chosenText: chosen?.text ?? "",
-    correctText: (c.answersByLevel[state.level] || c.answersByLevel[1])[c.correctIndex]
+    chosenText: chosen?.text ?? ""
   });
 
-  lockOptions();
+  cardLocal.attempts += 1;
+  const tryCount = $("tryCount");
+  if(tryCount) tryCount.textContent = String(cardLocal.attempts);
 
   if(correct){
+    // Lock nur beim Erfolg (damit kein Doppelklick “mehr Sterne” erzeugt)
+    cardLocal.locked = true;
+
     state.stars += 1;
     state.done[nodeId] = true;
 
     if(btnEl) btnEl.classList.add("correctFlash");
-    flyStarFromElement(btnEl);
+
+    // MEGA STAR: Mitte -> Glitzer -> Fly
+    playMegaStarThenFly();
 
     $("uiStarsCount").textContent = String(state.stars);
     $("feedback").innerHTML = `<span class="good">Richtig.</span> ⭐ 1 Stern.`;
@@ -1171,21 +1283,30 @@ function submitAnswer(optionIdx, btnEl){
     state.currentNodeId = nextUnlockedUndoneNode();
     saveState();
 
-    // Mini-Delay für “Feedback Gefühl”, dann neue Karte
-    setTimeout(()=> renderAll(), 280);
+    // Mini Delay für Gefühl, dann nächste Karte
+    setTimeout(()=> renderAll(), 520);
     return;
   }
 
-  // Falsch
-  if(btnEl) btnEl.classList.add("wrongFlash");
-  $("feedback").innerHTML = `<span class="bad">Noch nicht.</span> Tipp: ${c.hint}`;
+  // FALSCH: NICHT festhängen. Keine globale Sperre.
+  if(btnEl){
+    btnEl.classList.add("wrongFlash");
+    // Optional: denselben falschen Button kurz deaktivieren, damit nicht gespammt wird
+    btnEl.disabled = true;
+    setTimeout(()=>{
+      btnEl.disabled = false;
+      btnEl.classList.remove("wrongFlash");
+    }, 520);
+  }
+
+  $("feedback").innerHTML = `<span class="bad">Noch nicht.</span> Lies den Text noch einmal.`;
   adaptAfterAnswer(false);
   saveState();
 }
 
-/** =========================
- *  Diagnose
- *  ========================= */
+/* =========================
+   DIAGNOSE
+   ========================= */
 function renderDashboard(){
   const logs = state.logs;
   const doneCount = Object.keys(state.done).length;
@@ -1220,7 +1341,7 @@ function renderDashboard(){
       const card = getCard(data.exampleNodeId);
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${focus}</td>
+        <td>${focusIcon(focus)} ${focus}</td>
         <td>${data.count}</td>
         <td>${card ? card.nodeTitle : data.exampleNodeId}</td>
       `;
@@ -1232,14 +1353,13 @@ function renderDashboard(){
   if(acc >= 80) strengths.push("Trefferquote ist hoch.");
   if(avgTime && avgTime < 6000) strengths.push("Tempo ist stabil.");
   if(doneCount >= 3) strengths.push("Viele Karten geschafft.");
-
   if(strengths.length===0) strengths.push("Startphase: weiter spielen, dann wird die Diagnose präziser.");
 
   const focus = rows.length ? rows[0][0] : "Aufmerksamkeit";
   const mission =
     acc >= 80 ? "8 Minuten pro Tag. Schwierigkeit stabil halten." :
-    acc >= 60 ? "8 Minuten pro Tag. Hinweis nur bei Bedarf." :
-                "8 Minuten pro Tag. Text zuerst, dann Frage. Hinweis nutzen.";
+    acc >= 60 ? "8 Minuten pro Tag. Text zuerst, dann Frage." :
+                "8 Minuten pro Tag. Text langsam lesen. Dann Frage.";
 
   $("dCoach").innerHTML = `
     <b>Stärken</b>
@@ -1248,16 +1368,16 @@ function renderDashboard(){
     </ul>
     <b>Fokus</b>
     <div style="margin-top:6px;">
-      <span class="pill">Top-Fokus: <b style="color:var(--txt)">${focus}</b></span>
+      <span class="pill">Top-Fokus: <b style="color:var(--txt)">${focusIcon(focus)} ${focus}</b></span>
     </div>
     <div style="margin-top:12px;"><b>Empfohlene Mission</b></div>
     <div style="margin-top:6px;color:var(--muted)">${mission}</div>
   `;
 }
 
-/** =========================
- *  Views
- *  ========================= */
+/* =========================
+   VIEWS
+   ========================= */
 function showPlay(){
   $("viewPlay").classList.remove("hidden");
   $("viewDash").classList.add("hidden");
@@ -1281,9 +1401,6 @@ function showComplete(){
   $("btnDash").classList.remove("primary");
 }
 
-/** =========================
- *  Complete Screen
- *  ========================= */
 function renderComplete(){
   $("completeStars").textContent = String(state.stars);
   $("completeText").innerHTML = `
@@ -1294,9 +1411,9 @@ function renderComplete(){
   `;
 }
 
-/** =========================
- *  Render All
- *  ========================= */
+/* =========================
+   RENDER ALL
+   ========================= */
 function renderAll(){
   renderTop();
   renderMap();
@@ -1307,23 +1424,17 @@ function renderAll(){
     return;
   }
 
-  // Guide Standardtext
+  // Standard-Guide
   if(state.logs.length === 0){
-    setMonster("Willkommen im Wald. Lies den Text. Beantworte die Frage. Sammle Sterne.");
-  } else {
-    // nicht aggressiv überschreiben, wenn gerade Feedback im Monster steht
-    // nur, wenn kein Text vorhanden wäre
-    if(!$("monsterSpeech").innerText.trim()){
-      setMonster("Weiter geht es. Lies den Text. Dann die Frage.");
-    }
+    setMonster("Willkommen. Lies den Text. Beantworte die Frage. Sammle Sterne.");
   }
 
   renderCard();
 }
 
-/** =========================
- *  Buttons
- *  ========================= */
+/* =========================
+   BUTTONS
+   ========================= */
 $("btnPlay").onclick = () => { showPlay(); renderAll(); };
 $("btnDash").onclick = () => { showDash(); };
 
@@ -1347,7 +1458,7 @@ $("btnReplay").onclick = () => {
 
 $("btnGoDash").onclick = () => showDash();
 
-/** Init */
+/* INIT */
 showPlay();
 renderAll();
 </script>
