@@ -29,10 +29,9 @@
 
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
 
-      /* Pergament-Bar Höhe: ca. 1/4 Screen */
-      --parchH: clamp(170px, 24vh, 260px);
+      /* ✅ Pergament-Bereich deutlich größer */
+      --parchH: clamp(230px, 30vh, 360px);
 
-      /* Safe Area */
       --safeB: env(safe-area-inset-bottom, 0px);
       --safeT: env(safe-area-inset-top, 0px);
     }
@@ -51,7 +50,7 @@
       overflow:hidden;
     }
 
-    /* Top HUD */
+    /* ===================== TOP HUD ===================== */
     .topbar{
       position: sticky;
       top: 0;
@@ -184,9 +183,7 @@
       transition: width .35s ease;
     }
 
-    /* ============================================================
-       NEW LAYOUT: FULL SCENE + BOTTOM PARCHMENT BAR
-       ============================================================ */
+    /* ===================== STAGE ===================== */
     .stageWrap{
       max-width: 1480px;
       margin: 0 auto;
@@ -200,7 +197,7 @@
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.16);
       box-shadow: var(--shadow);
-      height: calc(100vh - 92px - 18px); /* topbar approx + padding */
+      height: calc(100vh - 92px - 18px);
       min-height: 640px;
     }
     @media (max-width: 920px){
@@ -241,7 +238,6 @@
     .sceneFallback h3{ margin:0; font-size:18px; font-weight:1000; }
     .sceneFallback p{ margin:10px 0 0; color: var(--muted); line-height:1.35; font-weight:800; }
 
-    /* Overlay layer for items */
     .overlay{ position:absolute; inset:0; z-index: 10; }
 
     /* Hotspots */
@@ -263,8 +259,6 @@
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
       pointer-events:none;
     }
-    .hotspot.small img{ width: var(--w, 120px); }
-    .hotspot.tiny img{ width: var(--w, 70px); }
 
     /* Boss HUD */
     .bossHud{
@@ -347,11 +341,11 @@
       100%{ opacity:0; transform: translateX(-50%) translateY(-26px) scale(.9); }
     }
 
-    /* Fips MAIN (oben über Pergament) */
+    /* Fips MAIN */
     .fipsMain{
       position:absolute;
       left: 16px;
-      bottom: calc(var(--parchH) + 10px);
+      bottom: calc(var(--parchH) + 14px);
       z-index: 30;
       display:flex;
       align-items:flex-end;
@@ -359,7 +353,7 @@
       pointer-events:none;
     }
     @media (max-width: 720px){
-      .fipsMain{ left: 10px; bottom: calc(var(--parchH) + 8px); gap: 10px; }
+      .fipsMain{ left: 10px; bottom: calc(var(--parchH) + 10px); gap: 10px; }
     }
     .fipsMain .frame{
       width: 190px;
@@ -394,177 +388,7 @@
     .fipsMain .bubble b{ font-weight:1000; }
     .fipsMain .bubble .line{ color: var(--muted); margin-top:4px; font-size: 13px; line-height:1.35; }
 
-    /* ============================================================
-       Bottom Pergament Bar (PNG)
-       ============================================================ */
-    .pergBar{
-      position:absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: calc(var(--parchH) + var(--safeB));
-      z-index: 90;
-      display:flex;
-      align-items:stretch;
-      justify-content:center;
-      padding: 10px 14px calc(12px + var(--safeB));
-      pointer-events:none; /* Hintergrund blockt nichts */
-    }
-    .pergInner{
-      width: min(1320px, 98%);
-      height: 100%;
-      position: relative;
-      pointer-events:auto; /* Inhalte klickbar */
-    }
-    .pergBG{
-      position:absolute;
-      inset: 0;
-      background: url("assets/ui/panels/parchment.png") no-repeat center bottom;
-      background-size: contain;
-      filter: drop-shadow(0 24px 50px rgba(0,0,0,.55));
-      pointer-events:none;
-    }
-
-    .pergContent{
-      position: relative;
-      height: 100%;
-      padding: 18px 26px 18px;
-      display:flex;
-      gap: 16px;
-      align-items:stretch;
-    }
-    @media (max-width: 920px){
-      .pergContent{ padding: 14px 18px 14px; gap: 12px; }
-    }
-
-    .pergCol{
-      flex: 1;
-      min-width: 0;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-    }
-
-    .pergTopLine{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .pergTopLine .sceneMeta{
-      font-size: 12px;
-      color: rgba(20,12,6,.78);
-      font-weight: 1000;
-      letter-spacing: .2px;
-      text-shadow: 0 1px 0 rgba(255,255,255,.22);
-      opacity: .95;
-    }
-    .pergTopLine .qMeta{
-      text-align:right;
-      font-size: 12px;
-      color: rgba(20,12,6,.68);
-      font-weight: 1000;
-    }
-
-    .readText{
-      font-size: 18px;
-      line-height: 1.35;
-      font-weight: 1000;
-      color: rgba(18,10,6,.92);
-      text-shadow: 0 1px 0 rgba(255,255,255,.25);
-      padding-right: 10px;
-      max-height: 4.1em;
-      overflow:hidden;
-    }
-    @media (max-width: 920px){
-      .readText{ font-size: 16px; max-height: 3.9em; }
-    }
-
-    .questionLine{
-      font-size: 16px;
-      font-weight: 1000;
-      color: rgba(18,10,6,.92);
-      text-shadow: 0 1px 0 rgba(255,255,255,.25);
-      margin-top: 8px;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-
-    .answersRow{
-      margin-top: 12px;
-      display:grid;
-      grid-template-columns: repeat(3, minmax(160px, 1fr));
-      gap: 10px;
-      align-items:stretch;
-    }
-    @media (max-width: 980px){
-      .answersRow{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }
-    }
-    @media (max-width: 560px){
-      .answersRow{ grid-template-columns: 1fr; }
-    }
-
-    .ans{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap: 10px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(0,0,0,.12);
-      background: rgba(255,255,255,.28);
-      cursor:pointer;
-      user-select:none;
-      font-weight: 1000;
-      transition: transform .06s ease, background .2s ease, border-color .2s ease, filter .2s ease;
-      position:relative;
-      overflow:hidden;
-      color: rgba(20,12,6,.92);
-      text-shadow: 0 1px 0 rgba(255,255,255,.22);
-    }
-    .ans:hover{ border-color: rgba(0,0,0,.18); background: rgba(255,255,255,.36); }
-    .ans:active{ transform: translateY(1px); }
-    .ans.correct{ border-color: rgba(69,212,131,.55); background: rgba(69,212,131,.18); }
-    .ans.wrong{ border-color: rgba(255,107,107,.55); background: rgba(255,107,107,.18); }
-
-    .pergFoot{
-      margin-top: 10px;
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap: wrap;
-    }
-    .statusline{
-      font-size: 13px;
-      color: rgba(20,12,6,.72);
-      font-weight: 1000;
-      text-shadow: 0 1px 0 rgba(255,255,255,.20);
-    }
-    .statusline .good{ color: #0f6a3d; }
-    .statusline .bad{ color: #8d2020; }
-
-    .btnSmall{
-      appearance:none;
-      border: 1px solid rgba(0,0,0,.16);
-      background: rgba(255,255,255,.26);
-      color: rgba(20,12,6,.92);
-      border-radius: 999px;
-      padding: 10px 12px;
-      font-weight: 1000;
-      cursor:pointer;
-      transition: transform .05s ease, background .2s ease, border-color .2s ease;
-      text-shadow: 0 1px 0 rgba(255,255,255,.22);
-    }
-    .btnSmall:hover{ background: rgba(255,255,255,.34); border-color: rgba(0,0,0,.20); }
-    .btnSmall:active{ transform: translateY(1px); }
-    .btnSmall[disabled]{ opacity:.45; cursor:not-allowed; }
-
-    /* ============================================================
-       Drawer: Kapitel/Guide (minimiert)
-       ============================================================ */
+    /* ===================== Drawer Kapitel ===================== */
     .fabRow{
       position:absolute;
       right: 14px;
@@ -755,9 +579,204 @@
     .gateOpen .card h3{ margin:0; font-size: 18px; font-weight:1000; }
     .gateOpen .card p{ margin:10px 0 0; color: var(--muted); line-height:1.35; }
 
-    /* ============================================================
-       POSITIVE CELEBRATION FULLSCREEN (unchanged)
-       ============================================================ */
+    /* ===================== ✅ Bottom Pergament Bar (FIX) ===================== */
+    .pergBar{
+      position:absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(var(--parchH) + var(--safeB));
+      z-index: 90;
+      display:flex;
+      justify-content:center;
+      padding: 10px 14px calc(12px + var(--safeB));
+      pointer-events:none;
+    }
+    .pergInner{
+      width: min(1320px, 98%);
+      height: 100%;
+      position: relative;
+      pointer-events:auto;
+    }
+
+    /* ✅ PNG als IMG -> füllt die komplette Fläche */
+    .pergImg{
+      position:absolute;
+      inset: 0;
+      width:100%;
+      height:100%;
+      object-fit: fill; /* <- exakt die Bar füllen */
+      filter: drop-shadow(0 24px 50px rgba(0,0,0,.55));
+      pointer-events:none;
+      user-select:none;
+    }
+
+    /* Content sitzt darüber */
+    .pergContent{
+      position: relative;
+      height: 100%;
+      padding: 22px 30px 18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap: 10px;
+    }
+    @media (max-width: 920px){
+      .pergContent{ padding: 18px 22px 16px; }
+    }
+
+    .pergTopLine{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .sceneMeta{
+      font-size: 12px;
+      color: rgba(20,12,6,.78);
+      font-weight: 1000;
+      letter-spacing: .2px;
+      text-shadow: 0 1px 0 rgba(255,255,255,.22);
+      opacity: .95;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      max-width: 52%;
+    }
+
+    /* ✅ Antwortpunkte */
+    .qRight{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap: 6px;
+      min-width: 160px;
+    }
+    .qMeta{
+      text-align:right;
+      font-size: 12px;
+      color: rgba(20,12,6,.68);
+      font-weight: 1000;
+      text-shadow: 0 1px 0 rgba(255,255,255,.20);
+      white-space: nowrap;
+    }
+    .dots{
+      display:flex;
+      gap: 6px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap: wrap;
+      max-width: 220px;
+    }
+    .dot{
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(20,12,6,.28);
+      background: rgba(255,255,255,.22);
+      box-shadow: 0 2px 6px rgba(0,0,0,.12);
+    }
+    .dot.on{
+      background: rgba(69,212,131,.55);
+      border-color: rgba(15,106,61,.35);
+    }
+    .dot.now{
+      outline: 2px solid rgba(111,208,255,.55);
+      outline-offset: 1px;
+    }
+
+    .readText{
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 1000;
+      color: rgba(18,10,6,.92);
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+      max-height: 4.1em;
+      overflow:hidden;
+    }
+    @media (max-width: 920px){
+      .readText{ font-size: 16px; max-height: 3.9em; }
+    }
+
+    .questionLine{
+      font-size: 16px;
+      font-weight: 1000;
+      color: rgba(18,10,6,.92);
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    .answersRow{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 10px;
+      align-items:stretch;
+      margin-top: 6px;
+    }
+    @media (max-width: 980px){
+      .answersRow{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    }
+    @media (max-width: 560px){
+      .answersRow{ grid-template-columns: 1fr; }
+    }
+
+    .ans{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.28);
+      cursor:pointer;
+      user-select:none;
+      font-weight: 1000;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+      color: rgba(20,12,6,.92);
+      text-shadow: 0 1px 0 rgba(255,255,255,.22);
+      min-height: 48px;
+    }
+    .ans:hover{ border-color: rgba(0,0,0,.18); background: rgba(255,255,255,.36); }
+    .ans:active{ transform: translateY(1px); }
+    .ans.correct{ border-color: rgba(69,212,131,.55); background: rgba(69,212,131,.18); }
+    .ans.wrong{ border-color: rgba(255,107,107,.55); background: rgba(255,107,107,.18); }
+
+    .pergFoot{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .statusline{
+      font-size: 13px;
+      color: rgba(20,12,6,.72);
+      font-weight: 1000;
+      text-shadow: 0 1px 0 rgba(255,255,255,.20);
+    }
+    .statusline .good{ color: #0f6a3d; }
+    .statusline .bad{ color: #8d2020; }
+
+    .btnSmall{
+      appearance:none;
+      border: 1px solid rgba(0,0,0,.16);
+      background: rgba(255,255,255,.26);
+      color: rgba(20,12,6,.92);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 1000;
+      cursor:pointer;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+      text-shadow: 0 1px 0 rgba(255,255,255,.22);
+    }
+    .btnSmall:hover{ background: rgba(255,255,255,.34); border-color: rgba(0,0,0,.20); }
+    .btnSmall:active{ transform: translateY(1px); }
+    .btnSmall[disabled]{ opacity:.45; cursor:not-allowed; }
+
+    /* ===================== POSITIVE CELEBRATION (UNCHANGED) ===================== */
     .celebrate{
       position: fixed;
       inset: 0;
@@ -907,9 +926,7 @@
       border: 1px solid rgba(255,211,106,.25);
     }
 
-    /* ============================================================
-       NEW: NEGATIVE FEEDBACK FULLSCREEN (no black star)
-       ============================================================ */
+    /* ===================== NEGATIVE FEEDBACK ===================== */
     .oops{
       position: fixed;
       inset: 0;
@@ -967,7 +984,6 @@
       display:flex;
       align-items:center;
       gap: 10px;
-      animation: badgePop .35s ease;
     }
     .oopsBadge .miniMark{
       width: 24px; height: 24px;
@@ -1000,161 +1016,6 @@
       35%{ transform: scale(1.02) translateY(-6px); opacity:1; }
       100%{ transform: scale(1.00) translateY(0); opacity:1; }
     }
-
-    /* BONUS SUMMARY (unchanged) */
-    .bonus{
-      position: fixed;
-      inset: 0;
-      z-index: 240;
-      display:none;
-      place-items:center;
-      background:
-        radial-gradient(900px 500px at 50% 25%, rgba(255,211,106,.18), transparent 60%),
-        radial-gradient(900px 520px at 50% 80%, rgba(111,208,255,.14), transparent 60%),
-        linear-gradient(180deg, rgba(5,8,18,.70), rgba(5,8,18,.92));
-      backdrop-filter: blur(8px);
-    }
-    .bonus.show{ display:grid; animation: fadeIn .25s ease; }
-
-    .bonus .card{
-      width:min(980px, 94%);
-      border-radius: 28px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(8,10,24,.78);
-      box-shadow: 0 30px 90px rgba(0,0,0,.70);
-      overflow:hidden;
-    }
-    .bonus .top{
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.20);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      flex-wrap:wrap;
-    }
-    .bonus .top h3{
-      margin:0;
-      font-size: 18px;
-      font-weight: 1000;
-      letter-spacing:.2px;
-    }
-    .bonus .body{
-      padding: 14px 16px 16px;
-    }
-    .bonusGrid{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(160px, 1fr));
-      gap: 12px;
-      margin-top: 10px;
-    }
-    @media (max-width: 820px){
-      .bonusGrid{ grid-template-columns: 1fr; }
-    }
-    .bonusTile{
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      padding: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      position:relative;
-      overflow:hidden;
-    }
-    .bonusIcon{
-      width: 64px; height: 64px;
-      border-radius: 22px;
-      display:grid; place-items:center;
-      background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 16px 40px rgba(0,0,0,.35);
-      position:relative;
-      overflow:hidden;
-    }
-    .bonusIcon img{ width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
-    .bonusIcon::after{
-      content:"";
-      position:absolute;
-      inset:-30px;
-      background: radial-gradient(circle, rgba(255,211,106,.22), transparent 60%);
-      opacity:.55;
-      animation: bonusGlow 1.25s ease-in-out infinite;
-    }
-    @keyframes bonusGlow{
-      0%,100%{ transform: scale(.95); opacity:.35; }
-      50%{ transform: scale(1.05); opacity:1; }
-    }
-    .bonusCount{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-      align-items:flex-end;
-      min-width: 88px;
-      font-weight:1000;
-    }
-
-    /* Water world splash (unchanged) */
-    .splash{
-      position: fixed;
-      inset: 0;
-      z-index: 250;
-      display:none;
-      place-items:center;
-      background:
-        radial-gradient(900px 500px at 50% 25%, rgba(111,208,255,.22), transparent 60%),
-        linear-gradient(180deg, rgba(5,8,18,.75), rgba(5,8,18,.92));
-      backdrop-filter: blur(6px);
-    }
-    .splash.show{ display:grid; animation: fadeIn .35s ease; }
-    .splash .box{
-      width:min(920px, 94%);
-      border-radius: 24px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(8,10,24,.68);
-      box-shadow: 0 30px 80px rgba(0,0,0,.60);
-    }
-    .splash img{
-      width:100%;
-      height: 320px;
-      object-fit: cover;
-      display:block;
-    }
-    .splash .content{
-      padding: 14px 16px 16px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .splash h3{ margin:0; font-size: 18px; font-weight:1000; }
-    .splash p{ margin:6px 0 0; color: var(--muted); line-height:1.35; }
-
-    .reportGrid{
-      margin-top: 10px;
-      display:grid;
-      grid-template-columns: repeat(4, minmax(140px, 1fr));
-      gap: 10px;
-    }
-    @media (max-width: 820px){
-      .reportGrid{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }
-    }
-    .rep{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      padding: 10px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-    }
-    .rep .k{ color: var(--muted); font-weight: 1000; font-size: 12px; }
-    .rep .v{ font-weight: 1000; }
   </style>
 </head>
 
@@ -1235,12 +1096,10 @@
 
       <div class="overlay" id="overlay"></div>
 
-      <!-- Floating Buttons -->
       <div class="fabRow">
         <button class="fab" id="drawerBtn">Kapitel</button>
       </div>
 
-      <!-- Drawer (Kapitel + Guide) -->
       <div class="drawer" id="drawer">
         <div class="drawerHd">
           <h3>Kapitel: Funkelwald</h3>
@@ -1264,7 +1123,6 @@
         </div>
       </div>
 
-      <!-- Boss HUD -->
       <div class="bossHud" id="bossHud">
         <span class="bossName" id="bossName">Boss</span>
         <div class="bossBar">
@@ -1275,7 +1133,6 @@
       </div>
       <div class="dmg" id="dmg">-1</div>
 
-      <!-- Fips MAIN -->
       <div class="fipsMain">
         <div class="frame">
           <img id="fipsMainImg" src="assets/chars/fips/idle.png" alt="Fips" />
@@ -1286,7 +1143,6 @@
         </div>
       </div>
 
-      <!-- Gate open -->
       <div class="gateOpen" id="gateOpen">
         <div class="card">
           <h3>Das Tor öffnet sich</h3>
@@ -1294,36 +1150,34 @@
         </div>
       </div>
 
-      <!-- Bottom Pergament Bar -->
+      <!-- ✅ FIXED Pergament-Bar -->
       <div class="pergBar" id="pergBar">
         <div class="pergInner">
-          <div class="pergBG" aria-hidden="true"></div>
+          <img class="pergImg" src="assets/ui/panels/parchment.png" alt="" aria-hidden="true" />
 
           <div class="pergContent">
-            <div class="pergCol">
-              <div class="pergTopLine">
-                <div class="sceneMeta"><b>Szene</b> <span id="sceneTitle">–</span></div>
-                <div class="qMeta">
-                  <div id="qProgress">Frage 1/3</div>
-                  <div style="opacity:.9;">Erst lesen, dann antworten.</div>
-                </div>
+            <div class="pergTopLine">
+              <div class="sceneMeta"><b>Szene</b> <span id="sceneTitle">–</span></div>
+
+              <div class="qRight">
+                <div class="qMeta" id="qProgress">Frage 1/3</div>
+                <div class="dots" id="dots"></div>
               </div>
+            </div>
 
-              <div class="readText" id="readText">–</div>
-              <div class="questionLine" id="question">–</div>
+            <div class="readText" id="readText">–</div>
+            <div class="questionLine" id="question">–</div>
 
-              <div class="answersRow" id="answers"></div>
+            <div class="answersRow" id="answers"></div>
 
-              <div class="pergFoot">
-                <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                  <button class="btnSmall" id="reReadBtn">Nochmal lesen</button>
-                  <button class="btnSmall" id="nextBtn" disabled>Nächste Szene</button>
-                </div>
+            <div class="pergFoot">
+              <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btnSmall" id="reReadBtn">Nochmal lesen</button>
+                <button class="btnSmall" id="nextBtn" disabled>Nächste Szene</button>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -1332,7 +1186,7 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- FIPS CELEBRATION FULLSCREEN (positive, unchanged) -->
+  <!-- Positive Celebration (unchanged) -->
   <div class="celebrate" id="celebrate">
     <div class="stage">
       <div class="rays"></div>
@@ -1348,17 +1202,7 @@
             </linearGradient>
           </defs>
           <path fill="url(#gStar2)" stroke="rgba(255,255,255,.65)" stroke-width="4"
-            d="M100 14
-               L123 68
-               L184 74
-               L138 113
-               L152 170
-               L100 138
-               L48 170
-               L62 113
-               L16 74
-               L77 68
-               Z" />
+            d="M100 14 L123 68 L184 74 L138 113 L152 170 L100 138 L48 170 L62 113 L16 74 L77 68 Z" />
         </svg>
       </div>
 
@@ -1375,7 +1219,7 @@
     </div>
   </div>
 
-  <!-- NEW: Negative Feedback -->
+  <!-- Negative Feedback -->
   <div class="oops" id="oops">
     <div class="stage">
       <div class="oopsBadge">
@@ -1393,8 +1237,7 @@
             </linearGradient>
           </defs>
           <path fill="url(#gCloud)" stroke="rgba(255,255,255,.55)" stroke-width="10"
-            d="M180 320
-               C90 320, 60 260, 90 210
+            d="M180 320 C90 320, 60 260, 90 210
                C40 170, 70 110, 140 120
                C160 60, 250 50, 290 95
                C330 40, 430 40, 470 95
@@ -1413,45 +1256,8 @@
     </div>
   </div>
 
-  <!-- BONUS SUMMARY (optional collecting) -->
-  <div class="bonus" id="bonus">
-    <div class="card">
-      <div class="top">
-        <h3>Bonus</h3>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" id="bonusCloseBtn">Schließen</button>
-          <button class="btn primary" id="bonusOkBtn">Ok</button>
-        </div>
-      </div>
-      <div class="body">
-        <div class="tiny" style="font-weight:1000; opacity:.95;">Das ist Bonus. Sammeln ist keine Pflicht.</div>
-        <div class="bonusGrid" id="bonusGrid"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Water world splash -->
-  <div class="splash" id="splash">
-    <div class="box">
-      <img src="assets/scenes/wasserwelt.png" alt="Wasserwelt" />
-      <div class="content">
-        <div>
-          <h3>Kapitel 2: Wasserwelt</h3>
-          <p>Funkelwald ist geschafft. Als Nächstes wartet die Wasserwelt.</p>
-          <div class="reportGrid" id="reportGrid"></div>
-        </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn primary" id="closeSplashBtn">Schließen</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 <script>
 (() => {
-  // ------------------------------------------------------------
-  // Assets
-  // ------------------------------------------------------------
   const ASSETS = {
     scenes: {
       waldweg:     ["assets/scenes/waldweg.png","assets/scenes/waldweg.jpg","assets/scenes/Waldweg.png"],
@@ -1480,48 +1286,29 @@
     }
   };
 
-  // ------------------------------------------------------------
-  // Boss settings (9 questions = 9 HP)
-  // ------------------------------------------------------------
   const BOSS_HP_MAX = 9;
 
-  // ------------------------------------------------------------
-  // Nodes
-  // Sammeln ist komplett optional (Bonus only).
-  // ------------------------------------------------------------
   const NODES = [
     {
       id:"N1", key:"waldweg", title:"Waldweg",
       sparkHotspot: { x: 14, y: 78, r: 7 },
       interactables: [
-        { id:"star1", type:"collect_star",    img:ASSETS.interact.Stern,   x: 38, y: 70, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan1",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 73, y: 33, size:"small", once:true, points: 1, label:"Laterne" },
-        { id:"ap1",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 86, y: 40, size:"small", once:true, points: 1, label:"Apfel" }
+        { id:"star1", type:"collect_star",    img:ASSETS.interact.Stern,   x: 38, y: 70, w: 120, once:true, points: 1, label:"Stern" },
+        { id:"lan1",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 73, y: 33, w: 120, once:true, points: 1, label:"Laterne" },
+        { id:"ap1",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 86, y: 40, w: 120, once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
         { text:"Fips steht am Waldweg.<br>Eine Laterne leuchtet.<br>Fips bleibt ruhig und liest.",
           question:"Wo steht Fips?",
-          answers:[
-            { t:"Am Waldweg.", correct:true },
-            { t:"Im Wasser.", correct:false },
-            { t:"Auf dem Dach.", correct:false }
-          ]
+          answers:[ { t:"Am Waldweg.", correct:true }, { t:"Im Wasser.", correct:false }, { t:"Auf dem Dach.", correct:false } ]
         },
         { text:"Fips steht am Waldweg.<br>Eine Laterne leuchtet.<br>Fips bleibt ruhig und liest.",
           question:"Was leuchtet?",
-          answers:[
-            { t:"Die Laterne.", correct:true },
-            { t:"Ein Auto.", correct:false },
-            { t:"Ein Schuh.", correct:false }
-          ]
+          answers:[ { t:"Die Laterne.", correct:true }, { t:"Ein Auto.", correct:false }, { t:"Ein Schuh.", correct:false } ]
         },
         { text:"Fips steht am Waldweg.<br>Eine Laterne leuchtet.<br>Fips bleibt ruhig und liest.",
           question:"Was tut Fips?",
-          answers:[
-            { t:"Er liest.", correct:true },
-            { t:"Er rennt.", correct:false },
-            { t:"Er schläft.", correct:false }
-          ]
+          answers:[ { t:"Er liest.", correct:true }, { t:"Er rennt.", correct:false }, { t:"Er schläft.", correct:false } ]
         }
       ]
     },
@@ -1529,34 +1316,22 @@
       id:"N2", key:"holzbruecke", title:"Holzbrücke",
       sparkHotspot: { x: 82, y: 63, r: 7 },
       interactables: [
-        { id:"star2", type:"collect_star",    img:ASSETS.interact.Stern,   x: 55, y: 72, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan2",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 22, y: 42, size:"small", once:true, points: 1, label:"Laterne" },
-        { id:"ap2",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 80, y: 78, size:"tiny",  once:true, points: 1, label:"Apfel" }
+        { id:"star2", type:"collect_star",    img:ASSETS.interact.Stern,   x: 55, y: 72, w: 120, once:true, points: 1, label:"Stern" },
+        { id:"lan2",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 22, y: 42, w: 120, once:true, points: 1, label:"Laterne" },
+        { id:"ap2",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 80, y: 78, w: 70,  once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
         { text:"Vor Fips ist eine Holzbrücke.<br>Fips geht langsam.<br>Die Brücke knarrt leise.",
           question:"Was ist vor Fips?",
-          answers:[
-            { t:"Eine Holzbrücke.", correct:true },
-            { t:"Ein Auto.", correct:false },
-            { t:"Ein Flugzeug.", correct:false }
-          ]
+          answers:[ { t:"Eine Holzbrücke.", correct:true }, { t:"Ein Auto.", correct:false }, { t:"Ein Flugzeug.", correct:false } ]
         },
         { text:"Vor Fips ist eine Holzbrücke.<br>Fips geht langsam.<br>Die Brücke knarrt leise.",
           question:"Was macht die Brücke?",
-          answers:[
-            { t:"Sie knarrt leise.", correct:true },
-            { t:"Sie fliegt.", correct:false },
-            { t:"Sie schläft.", correct:false }
-          ]
+          answers:[ { t:"Sie knarrt leise.", correct:true }, { t:"Sie fliegt.", correct:false }, { t:"Sie schläft.", correct:false } ]
         },
         { text:"Vor Fips ist eine Holzbrücke.<br>Fips geht langsam.<br>Die Brücke knarrt leise.",
           question:"Wie geht Fips?",
-          answers:[
-            { t:"Langsam.", correct:true },
-            { t:"Rückwärts.", correct:false },
-            { t:"Unsichtbar.", correct:false }
-          ]
+          answers:[ { t:"Langsam.", correct:true }, { t:"Rückwärts.", correct:false }, { t:"Unsichtbar.", correct:false } ]
         }
       ]
     },
@@ -1564,34 +1339,22 @@
       id:"N3", key:"apfelbaum", title:"Apfelbaum",
       sparkHotspot: { x: 50, y: 18, r: 7 },
       interactables: [
-        { id:"star3", type:"collect_star",    img:ASSETS.interact.Stern,   x: 25, y: 77, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"ap3",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 78, y: 40, size:"small", once:true, points: 1, label:"Apfel" },
-        { id:"lan3",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 60, y: 70, size:"tiny",  once:true, points: 1, label:"Laterne" }
+        { id:"star3", type:"collect_star",    img:ASSETS.interact.Stern,   x: 25, y: 77, w: 120, once:true, points: 1, label:"Stern" },
+        { id:"ap3",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 78, y: 40, w: 120, once:true, points: 1, label:"Apfel" },
+        { id:"lan3",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 60, y: 70, w: 70,  once:true, points: 1, label:"Laterne" }
       ],
       readSteps: [
         { text:"Fips sieht einen Apfelbaum.<br>Ein Apfel hängt am Ast.<br>Fips lächelt.",
           question:"Was sieht Fips?",
-          answers:[
-            { t:"Einen Apfelbaum.", correct:true },
-            { t:"Einen Fernseher.", correct:false },
-            { t:"Eine Rakete.", correct:false }
-          ]
+          answers:[ { t:"Einen Apfelbaum.", correct:true }, { t:"Einen Fernseher.", correct:false }, { t:"Eine Rakete.", correct:false } ]
         },
         { text:"Fips sieht einen Apfelbaum.<br>Ein Apfel hängt am Ast.<br>Fips lächelt.",
           question:"Was hängt am Ast?",
-          answers:[
-            { t:"Ein Apfel.", correct:true },
-            { t:"Ein Hut.", correct:false },
-            { t:"Ein Ball.", correct:false }
-          ]
+          answers:[ { t:"Ein Apfel.", correct:true }, { t:"Ein Hut.", correct:false }, { t:"Ein Ball.", correct:false } ]
         },
         { text:"Fips sieht einen Apfelbaum.<br>Ein Apfel hängt am Ast.<br>Fips lächelt.",
           question:"Was macht Fips?",
-          answers:[
-            { t:"Er lächelt.", correct:true },
-            { t:"Er bellt.", correct:false },
-            { t:"Er schwimmt.", correct:false }
-          ]
+          answers:[ { t:"Er lächelt.", correct:true }, { t:"Er bellt.", correct:false }, { t:"Er schwimmt.", correct:false } ]
         }
       ]
     },
@@ -1599,34 +1362,22 @@
       id:"N4", key:"sternstein", title:"Sternstein",
       sparkHotspot: { x: 18, y: 34, r: 7 },
       interactables: [
-        { id:"star4", type:"collect_star",    img:ASSETS.interact.Stern,   x: 52, y: 73, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan4",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 78, y: 40, size:"small", once:true, points: 1, label:"Laterne" },
-        { id:"ap4",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 86, y: 84, size:"tiny",  once:true, points: 1, label:"Apfel" }
+        { id:"star4", type:"collect_star",    img:ASSETS.interact.Stern,   x: 52, y: 73, w: 120, once:true, points: 1, label:"Stern" },
+        { id:"lan4",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 78, y: 40, w: 120, once:true, points: 1, label:"Laterne" },
+        { id:"ap4",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 86, y: 84, w: 70,  once:true, points: 1, label:"Apfel" }
       ],
       readSteps: [
         { text:"Fips findet einen Sternstein.<br>Der Stein glitzert.<br>Fips tippt ihn an.",
           question:"Was findet Fips?",
-          answers:[
-            { t:"Einen Sternstein.", correct:true },
-            { t:"Einen Stuhl.", correct:false },
-            { t:"Einen Steinpilz.", correct:false }
-          ]
+          answers:[ { t:"Einen Sternstein.", correct:true }, { t:"Einen Stuhl.", correct:false }, { t:"Einen Steinpilz.", correct:false } ]
         },
         { text:"Fips findet einen Sternstein.<br>Der Stein glitzert.<br>Fips tippt ihn an.",
           question:"Was glitzert?",
-          answers:[
-            { t:"Der Stein.", correct:true },
-            { t:"Der Schuh.", correct:false },
-            { t:"Der Stuhl.", correct:false }
-          ]
+          answers:[ { t:"Der Stein.", correct:true }, { t:"Der Schuh.", correct:false }, { t:"Der Stuhl.", correct:false } ]
         },
         { text:"Fips findet einen Sternstein.<br>Der Stein glitzert.<br>Fips tippt ihn an.",
           question:"Was macht Fips?",
-          answers:[
-            { t:"Er tippt ihn an.", correct:true },
-            { t:"Er wirft ihn weg.", correct:false },
-            { t:"Er versteckt sich.", correct:false }
-          ]
+          answers:[ { t:"Er tippt ihn an.", correct:true }, { t:"Er wirft ihn weg.", correct:false }, { t:"Er versteckt sich.", correct:false } ]
         }
       ]
     },
@@ -1634,9 +1385,9 @@
       id:"N5", key:"bosstor", title:"Boss-Tor",
       sparkHotspot: { x: 90, y: 20, r: 7 },
       interactables: [
-        { id:"star5", type:"collect_star",    img:ASSETS.interact.Stern,   x: 40, y: 72, size:"small", once:true, points: 1, label:"Stern" },
-        { id:"lan5",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 70, y: 35, size:"small", once:true, points: 1, label:"Laterne" },
-        { id:"ap5",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 84, y: 74, size:"tiny",  once:true, points: 1, label:"Apfel" }
+        { id:"star5", type:"collect_star",    img:ASSETS.interact.Stern,   x: 40, y: 72, w: 120, once:true, points: 1, label:"Stern" },
+        { id:"lan5",  type:"collect_lantern", img:ASSETS.interact.Laterne, x: 70, y: 35, w: 120, once:true, points: 1, label:"Laterne" },
+        { id:"ap5",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 84, y: 74, w: 70,  once:true, points: 1, label:"Apfel" }
       ],
       boss: { name: "Torwächter", hpMax: BOSS_HP_MAX },
       readBoss: [
@@ -1680,27 +1431,23 @@
     }
   ];
 
-  // ------------------------------------------------------------
-  // Storage
-  // ------------------------------------------------------------
-  const STORAGE_KEY = "leselabyrinth_funkelwald_v7_fullscene_bottomparch_negativefx";
+  const STORAGE_KEY = "leselabyrinth_funkelwald_v8_parch_fix_dots";
 
   const defaultState = () => ({
     nodeIndex: 0,
     unlocked: [true, false, false, false, false],
     completed: [false, false, false, false, false],
 
-    stars: 0,
-    apples: 0,
-    lanterns: 0,
-    sparks: 0,
+    stars: 0, apples: 0, lanterns: 0, sparks: 0,
 
     streak: 0,
     level: 1,
     xp: 0,
     xpNeed: 110,
+
     heartsMax: 3,
     hearts: 3,
+
     focus: "W-Frage",
 
     scene: NODES.map(n => ({
@@ -1741,9 +1488,6 @@
 
   let state = loadState();
 
-  // ------------------------------------------------------------
-  // UI refs
-  // ------------------------------------------------------------
   const el = {
     sceneTitle: document.getElementById("sceneTitle"),
     readText: document.getElementById("readText"),
@@ -1753,6 +1497,7 @@
     nextBtn: document.getElementById("nextBtn"),
     statusLine: document.getElementById("statusLine"),
     qProgress: document.getElementById("qProgress"),
+    dots: document.getElementById("dots"),
 
     sceneImg: document.getElementById("sceneImg"),
     sceneFallback: document.getElementById("sceneFallback"),
@@ -1807,23 +1552,11 @@
     oopsText: document.getElementById("oopsText"),
     oopsFipsImg: document.getElementById("oopsFipsImg"),
 
-    bonus: document.getElementById("bonus"),
-    bonusGrid: document.getElementById("bonusGrid"),
-    bonusCloseBtn: document.getElementById("bonusCloseBtn"),
-    bonusOkBtn: document.getElementById("bonusOkBtn"),
-
-    splash: document.getElementById("splash"),
-    closeSplashBtn: document.getElementById("closeSplashBtn"),
-    reportGrid: document.getElementById("reportGrid"),
-
     drawerBtn: document.getElementById("drawerBtn"),
     drawer: document.getElementById("drawer"),
     drawerCloseBtn: document.getElementById("drawerCloseBtn"),
   };
 
-  // ------------------------------------------------------------
-  // Helpers
-  // ------------------------------------------------------------
   const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
 
   function toast(html, ms=2200){
@@ -1927,7 +1660,6 @@
     setTimeout(()=>img.remove(), 700);
   }
 
-  // deterministic shuffle per (scene + question + tries)
   function shuffledAnswersWithKey(answers, seedKey){
     const arr = answers.map((a,i)=>({a, i}));
     let h = 2166136261;
@@ -1949,9 +1681,21 @@
     return arr;
   }
 
-  // ------------------------------------------------------------
-  // Completion
-  // ------------------------------------------------------------
+  /* ✅ Antwortpunkte rendern */
+  function renderDots(total, currentIndex, correctArrayOrNull){
+    el.dots.innerHTML = "";
+    for(let i=0;i<total;i++){
+      const d = document.createElement("div");
+      d.className = "dot";
+      if(i === currentIndex) d.classList.add("now");
+
+      if(Array.isArray(correctArrayOrNull)){
+        if(!!correctArrayOrNull[i]) d.classList.add("on");
+      }
+      el.dots.appendChild(d);
+    }
+  }
+
   function markCompleted(i){
     state.completed[i] = true;
     state.scene[i].answered = true;
@@ -1959,26 +1703,8 @@
     gainXP(30);
     state.streak += 1;
     if(i < NODES.length - 1) state.unlocked[i+1] = true;
-
-    showBonusModal();
   }
 
-  function autoAdvance(){
-    const i = state.nodeIndex;
-    if(i < NODES.length - 1 && state.unlocked[i+1]){
-      setTimeout(() => {
-        if(state.nodeIndex === i && state.completed[i]){
-          state.nodeIndex = i+1;
-          saveState();
-          renderAll();
-        }
-      }, 900);
-    }
-  }
-
-  // ------------------------------------------------------------
-  // Scene image loader with fallbacks
-  // ------------------------------------------------------------
   async function setSceneImage(nodeKey){
     const candidates = ASSETS.scenes[nodeKey] || [];
     el.sceneFallback.classList.remove("show");
@@ -2006,9 +1732,6 @@
     return false;
   }
 
-  // ------------------------------------------------------------
-  // Render HUD
-  // ------------------------------------------------------------
   function renderHUD(){
     el.starsVal.textContent = state.stars;
     el.applesVal.textContent = state.apples;
@@ -2034,9 +1757,6 @@
     }
   }
 
-  // ------------------------------------------------------------
-  // Render Path
-  // ------------------------------------------------------------
   function renderPath(){
     el.pathList.innerHTML = "";
     const done = state.completed.filter(Boolean).length;
@@ -2069,13 +1789,9 @@
     });
   }
 
-  // ------------------------------------------------------------
-  // Boss UI
-  // ------------------------------------------------------------
-  function bossHitFX(dmg=1){
-    el.bossHud.classList.add("hit");
-    el.bossHud.classList.add("bossShake");
-    el.dmg.textContent = `-${dmg}`;
+  function bossHitFX(){
+    el.bossHud.classList.add("hit","bossShake");
+    el.dmg.textContent = `-1`;
     el.dmg.classList.remove("show");
     void el.dmg.offsetWidth;
     el.dmg.classList.add("show");
@@ -2098,9 +1814,6 @@
     }
   }
 
-  // ------------------------------------------------------------
-  // Celebration (positive, unchanged)
-  // ------------------------------------------------------------
   function clearConfetti(){ el.confetti.innerHTML = ""; }
 
   function spawnConfettiBurst(){
@@ -2144,131 +1857,12 @@
     }, 980);
   }
 
-  // ------------------------------------------------------------
-  // NEW: Negative feedback (cloud + sad fips)
-  // ------------------------------------------------------------
   function showOops(text){
     el.oopsText.textContent = text || "Nicht richtig";
     el.oopsFipsImg.src = ASSETS.fips.sad || ASSETS.fips.idle;
     el.oops.classList.add("show");
     clearTimeout(showOops._t);
-    showOops._t = setTimeout(() => {
-      el.oops.classList.remove("show");
-    }, 850);
-  }
-
-  // ------------------------------------------------------------
-  // Bonus modal
-  // ------------------------------------------------------------
-  function showBonusModal(){
-    el.bonusGrid.innerHTML = [
-      { label:"Sterne",   img:"assets/ui/icons/stern.png",           val: state.stars },
-      { label:"Äpfel",    img:"assets/ui/interactables/Apfel.png",   val: state.apples },
-      { label:"Laternen", img:"assets/ui/interactables/Laterne.png", val: state.lanterns },
-    ].map(x => `
-      <div class="bonusTile">
-        <div class="bonusIcon"><img src="${x.img}" alt="${x.label}"></div>
-        <div class="bonusCount">${x.label}<div style="font-size:24px;">${x.val}</div></div>
-      </div>
-    `).join("");
-    el.bonus.classList.add("show");
-  }
-  function hideBonusModal(){ el.bonus.classList.remove("show"); }
-
-  // ------------------------------------------------------------
-  // Render Scene
-  // ------------------------------------------------------------
-  async function renderScene(){
-    const i = state.nodeIndex;
-    const node = NODES[i];
-    const s = state.scene[i];
-
-    el.sceneTitle.textContent = node.title;
-    el.overlay.innerHTML = "";
-    el.gateOpen.classList.remove("show");
-
-    await setSceneImage(node.key);
-    renderBossUI(node, s);
-
-    let pack, qLabel, answers, seedKey;
-
-    if(node.boss){
-      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
-      pack = node.readBoss[step];
-      qLabel = `Bossfrage ${step+1}/${node.readBoss.length}`;
-      seedKey = `${node.id}|boss|${step}|${s.tries}`;
-      answers = shuffledAnswersWithKey(pack.answers, seedKey);
-    }else{
-      const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
-      pack = node.readSteps[qi];
-      qLabel = `Frage ${qi+1}/${node.readSteps.length}`;
-      seedKey = `${node.id}|q|${qi}|${s.tries}`;
-      answers = shuffledAnswersWithKey(pack.answers, seedKey);
-    }
-
-    el.readText.innerHTML = pack.text;
-    el.question.textContent = pack.question;
-    el.qProgress.textContent = qLabel;
-
-    renderAnswers(answers);
-
-    el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
-
-    // Interactables (optional) + protect against parchment collision
-    node.interactables.forEach(it => {
-      if(it.once && s.collected[it.id]) return;
-
-      // If item would land in parchment area, auto-shift upward a bit
-      let x = it.x;
-      let y = it.y;
-
-      // Bottom bar takes roughly 24% height. We keep items above ~76%.
-      if(y > 76) y = 74;
-
-      const hs = document.createElement("div");
-      hs.className = "hotspot " + (it.size || "");
-      hs.style.left = x + "%";
-      hs.style.top  = y + "%";
-      hs.style.setProperty("--w", it.size==="tiny" ? "70px" : "120px");
-      hs.title = it.label || "Tippen";
-
-      const img = document.createElement("img");
-      img.src = it.img;
-      img.alt = it.label || "Tippen";
-      hs.appendChild(img);
-
-      hs.addEventListener("click", (e) => {
-        e.stopPropagation();
-        onInteract(it, hs, e.clientX, e.clientY);
-      });
-
-      el.overlay.appendChild(hs);
-    });
-
-    // Secret spark (optional)
-    const sp = node.sparkHotspot;
-    if(sp && !s.sparkFound){
-      const hs = document.createElement("div");
-      hs.className = "hotspot";
-      hs.style.left = sp.x + "%";
-      hs.style.top  = (sp.y > 76 ? 74 : sp.y) + "%";
-      hs.style.width = (sp.r*2) + "%";
-      hs.style.height = (sp.r*2) + "%";
-      hs.style.borderRadius = "999px";
-      hs.style.opacity = "0.001";
-      hs.addEventListener("click", (e) => {
-        e.stopPropagation();
-        s.sparkFound = true;
-        state.sparks += 1;
-        pulse(el.pillSparks);
-        gainXP(10);
-        toast(`<b>Geheimfunke!</b>`);
-        setFips("excited", "Geheimfunke gefunden.");
-        saveState();
-        renderAll();
-      });
-      el.overlay.appendChild(hs);
-    }
+    showOops._t = setTimeout(() => el.oops.classList.remove("show"), 850);
   }
 
   function renderAnswers(shuffled){
@@ -2286,9 +1880,6 @@
     el.statusLine.innerHTML = `Status: <span class="tiny">${ok}</span>`;
   }
 
-  // ------------------------------------------------------------
-  // Interact (Bonus sammeln)
-  // ------------------------------------------------------------
   function onInteract(it, hsEl, cx, cy){
     const i = state.nodeIndex;
     const s = state.scene[i];
@@ -2322,11 +1913,9 @@
 
     saveState();
     renderHUD();
+    renderAll(); // sorgt dafür, dass ggf. entfernte Items auch wirklich verschwinden
   }
 
-  // ------------------------------------------------------------
-  // Answer logic
-  // ------------------------------------------------------------
   function onAnswer(chosen, btnEl){
     const i = state.nodeIndex;
     const node = NODES[i];
@@ -2341,8 +1930,6 @@
 
     if(chosen && chosen.correct){
       btnEl.classList.add("correct");
-
-      // POSITIVE FEEDBACK: untouched
       showFipsCelebration("Richtig");
       setFips("excited", "Richtig.");
       vibrate(45);
@@ -2357,9 +1944,8 @@
 
         if(s.bossHP > 0){
           s.bossHP = clamp(s.bossHP - 1, 0, node.boss.hpMax);
-          bossHitFX(1);
+          bossHitFX();
         }
-        renderBossUI(node, s);
 
         s.bossStep = clamp(s.bossStep + 1, 0, node.readBoss.length - 1);
 
@@ -2368,23 +1954,13 @@
           gainXP(40);
           markCompleted(i);
           el.gateOpen.classList.add("show");
-          setTimeout(() => {
-            el.gateOpen.classList.remove("show");
-            openReportAndSplash();
-          }, 1200);
+          setTimeout(() => el.gateOpen.classList.remove("show"), 1200);
         }else{
-          el.statusLine.innerHTML = `Status: <span class="good">Treffer.</span> ${s.bossHP}/${node.boss.hpMax}`;
+          el.statusLine.innerHTML = `Status: <span class="good">Treffer.</span>`;
         }
       }else{
         const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
-
-        if(s.correctSteps[qi]){
-          saveState();
-          renderAll();
-          return;
-        }
-
-        s.correctSteps[qi] = true;
+        if(!s.correctSteps[qi]) s.correctSteps[qi] = true;
 
         if(!s.xpGrantedSteps[qi]){
           s.xpGrantedSteps[qi] = true;
@@ -2397,7 +1973,6 @@
         }else{
           el.statusLine.innerHTML = `Status: <span class="good">Erledigt.</span>`;
           markCompleted(i);
-          autoAdvance();
         }
       }
 
@@ -2408,7 +1983,6 @@
       s.perfect = false;
       state.streak = 0;
 
-      // NEW NEGATIVE FEEDBACK (cloud + sad Fips)
       showOops("Nicht richtig");
       toast(`<b>Falsch.</b>`, 1400);
 
@@ -2421,31 +1995,106 @@
     }
   }
 
-  // ------------------------------------------------------------
-  // Abschlussbericht + Splash
-  // ------------------------------------------------------------
-  function openReportAndSplash(){
-    const items = [
-      ["Sterne (Bonus)", state.stars],
-      ["Äpfel (Bonus)", state.apples],
-      ["Laternen (Bonus)", state.lanterns],
-      ["Funken (Bonus)", state.sparks],
-      ["Stufe", state.level],
-      ["XP", `${state.xp}/${state.xpNeed}`],
-      ["Serie", state.streak],
-      ["Herzen", `${state.hearts}/${state.heartsMax}`],
-    ];
+  async function renderScene(){
+    const i = state.nodeIndex;
+    const node = NODES[i];
+    const s = state.scene[i];
 
-    el.reportGrid.innerHTML = items.map(([k,v]) => `
-      <div class="rep"><div class="k">${k}</div><div class="v">${v}</div></div>
-    `).join("");
+    el.sceneTitle.textContent = node.title;
+    el.overlay.innerHTML = "";
+    el.gateOpen.classList.remove("show");
 
-    el.splash.classList.add("show");
+    await setSceneImage(node.key);
+    renderBossUI(node, s);
+
+    let pack, qLabel, answers, seedKey;
+
+    if(node.boss){
+      const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
+      pack = node.readBoss[step];
+      qLabel = `Bossfrage ${step+1}/${node.readBoss.length}`;
+      seedKey = `${node.id}|boss|${step}|${s.tries}`;
+      answers = shuffledAnswersWithKey(pack.answers, seedKey);
+
+      /* ✅ 9 Punkte */
+      const total = node.readBoss.length;
+      const progressArr = Array(total).fill(false).map((_,idx)=> idx < step);
+      renderDots(total, step, progressArr);
+    }else{
+      const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
+      pack = node.readSteps[qi];
+      qLabel = `Frage ${qi+1}/${node.readSteps.length}`;
+      seedKey = `${node.id}|q|${qi}|${s.tries}`;
+      answers = shuffledAnswersWithKey(pack.answers, seedKey);
+
+      /* ✅ 3 Punkte (korrektSteps zeigt erledigte Fragen) */
+      renderDots(node.readSteps.length, qi, s.correctSteps);
+    }
+
+    el.readText.innerHTML = pack.text;
+    el.question.textContent = pack.question;
+    el.qProgress.textContent = qLabel;
+
+    renderAnswers(answers);
+
+    el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
+
+    // Interactables + Kollisionsschutz (Pergament-Bereich unten)
+    node.interactables.forEach(it => {
+      if(it.once && s.collected[it.id]) return;
+
+      let x = it.x;
+      let y = it.y;
+
+      // Bottom-Bar blockt ca. 30vh. Alles was zu weit unten ist, wird hochgeschoben.
+      if(y > 74) y = 72;
+
+      const hs = document.createElement("div");
+      hs.className = "hotspot";
+      hs.style.left = x + "%";
+      hs.style.top  = y + "%";
+      hs.style.setProperty("--w", (it.w || 120) + "px");
+      hs.title = it.label || "Tippen";
+
+      const img = document.createElement("img");
+      img.src = it.img;
+      img.alt = it.label || "Tippen";
+      hs.appendChild(img);
+
+      hs.addEventListener("click", (e) => {
+        e.stopPropagation();
+        onInteract(it, hs, e.clientX, e.clientY);
+      });
+
+      el.overlay.appendChild(hs);
+    });
+
+    // Secret spark (optional)
+    const sp = node.sparkHotspot;
+    if(sp && !s.sparkFound){
+      const hs = document.createElement("div");
+      hs.className = "hotspot";
+      hs.style.left = sp.x + "%";
+      hs.style.top  = (sp.y > 74 ? 72 : sp.y) + "%";
+      hs.style.width = (sp.r*2) + "%";
+      hs.style.height = (sp.r*2) + "%";
+      hs.style.borderRadius = "999px";
+      hs.style.opacity = "0.001";
+      hs.addEventListener("click", (e) => {
+        e.stopPropagation();
+        s.sparkFound = true;
+        state.sparks += 1;
+        pulse(el.pillSparks);
+        gainXP(10);
+        toast(`<b>Geheimfunke!</b>`);
+        setFips("excited", "Geheimfunke gefunden.");
+        saveState();
+        renderAll();
+      });
+      el.overlay.appendChild(hs);
+    }
   }
 
-  // ------------------------------------------------------------
-  // Buttons
-  // ------------------------------------------------------------
   el.reReadBtn.addEventListener("click", () => {
     toast(`<b>Nochmal lesen.</b>`, 1600);
     setFips("thinking", "Lies. Dann antworte.");
@@ -2474,33 +2123,20 @@
     setFips("idle", "Lies. Antworte. Sammeln ist Bonus.");
   });
 
-  el.bonusCloseBtn.addEventListener("click", hideBonusModal);
-  el.bonusOkBtn.addEventListener("click", hideBonusModal);
-  el.bonus.addEventListener("click", (e)=>{ if(e.target===el.bonus) hideBonusModal(); });
-
-  el.closeSplashBtn.addEventListener("click", () => {
-    el.splash.classList.remove("show");
-  });
-
-  // Drawer
   function toggleDrawer(force){
     const show = (force !== undefined) ? force : !el.drawer.classList.contains("show");
     el.drawer.classList.toggle("show", !!show);
   }
   el.drawerBtn.addEventListener("click", () => toggleDrawer());
   el.drawerCloseBtn.addEventListener("click", () => toggleDrawer(false));
-  el.drawer.addEventListener("click", (e)=>{ if(e.target === el.drawer) toggleDrawer(false); });
 
   window.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
     if(k === "h") el.helpBtn.click();
     if(k === "r") el.resetBtn.click();
-    if(k === "escape"){ hideBonusModal(); toggleDrawer(false); }
+    if(k === "escape") toggleDrawer(false);
   });
 
-  // ------------------------------------------------------------
-  // Render All
-  // ------------------------------------------------------------
   async function renderAll(){
     renderHUD();
     renderPath();
@@ -2510,7 +2146,6 @@
     el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
   }
 
-  // Initial
   setFips("idle", "Lies das Pergament. Beantworte Fragen. Sammeln ist Bonus.");
   renderAll().then(saveState);
 })();
