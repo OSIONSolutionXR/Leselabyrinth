@@ -28,6 +28,13 @@
       --radius: 22px;
 
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+
+      /* Pergament-Bar Höhe: ca. 1/4 Screen */
+      --parchH: clamp(170px, 24vh, 260px);
+
+      /* Safe Area */
+      --safeB: env(safe-area-inset-bottom, 0px);
+      --safeT: env(safe-area-inset-top, 0px);
     }
 
     *{ box-sizing:border-box; }
@@ -41,14 +48,14 @@
         radial-gradient(900px 600px at 70% 20%, rgba(111,208,255,.14), transparent 60%),
         radial-gradient(900px 700px at 50% 80%, rgba(255,211,106,.10), transparent 60%),
         linear-gradient(180deg, var(--bg0), var(--bg1) 40%, var(--bg2));
-      overflow-x:hidden;
+      overflow:hidden;
     }
 
     /* Top HUD */
     .topbar{
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 200;
       backdrop-filter: blur(12px);
       background: linear-gradient(180deg, rgba(8,10,24,.82), rgba(8,10,24,.38));
       border-bottom: 1px solid var(--stroke);
@@ -177,237 +184,40 @@
       transition: width .35s ease;
     }
 
-    /* Layout */
-    .wrap{
+    /* ============================================================
+       NEW LAYOUT: FULL SCENE + BOTTOM PARCHMENT BAR
+       ============================================================ */
+    .stageWrap{
       max-width: 1480px;
       margin: 0 auto;
-      padding: 16px 14px 26px;
-      display:grid;
-      gap: 14px;
-      grid-template-columns: 400px 1fr 360px;
-      align-items:start;
-    }
-    @media (max-width: 1200px){
-      .wrap{ grid-template-columns: 380px 1fr; }
-      .right{ display:none; }
-    }
-    @media (max-width: 980px){
-      .wrap{ grid-template-columns: 1fr; }
-      .right{ display:block; }
+      padding: 14px 14px 18px;
     }
 
-    .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .panel .hd{
-      padding: 14px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      border-bottom: 1px solid var(--stroke);
-      background: rgba(0,0,0,.16);
-    }
-    .panel .hd h2{
-      margin:0;
-      font-size: 14px;
-      letter-spacing: .2px;
-      opacity: .95;
-      font-weight:1000;
-    }
-    .panel .bd{ padding: 14px 16px; }
-
-    /* Pergament */
-    .parchment{
-      background:
-        radial-gradient(800px 340px at 20% 20%, rgba(255,240,205,.22), transparent 55%),
-        radial-gradient(700px 320px at 80% 35%, rgba(255,220,150,.18), transparent 60%),
-        linear-gradient(180deg, rgba(255,235,190,.16), rgba(255,235,190,.08));
-      border: 1px solid rgba(255,255,255,.14);
-    }
-    .parchment .bd{ padding: 16px 16px 16px; }
-    .paper{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.16);
-      background:
-        radial-gradient(700px 220px at 35% 10%, rgba(255,255,255,.15), transparent 60%),
-        radial-gradient(700px 260px at 65% 90%, rgba(0,0,0,.10), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06));
-      padding: 14px 14px;
-      box-shadow: 0 12px 26px rgba(0,0,0,.25) inset;
-      min-height: 190px;
-    }
-    .paper .label{
-      font-size: 12px;
-      color: rgba(255,255,255,.85);
-      letter-spacing: .2px;
-      font-weight: 1000;
-      opacity: .95;
-    }
-    .paper .text{
-      margin-top: 10px;
-      font-size: 22px;
-      line-height: 1.35;
-      font-weight: 1000;
-      letter-spacing: .1px;
-      text-shadow: 0 2px 18px rgba(0,0,0,.25);
-    }
-    @media (max-width: 560px){
-      .paper .text{ font-size: 18px; }
-    }
-
-    .q{
-      margin-top: 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.16);
-      padding: 12px 12px;
-    }
-    .q .qt{
-      display:flex; align-items:flex-start; justify-content:space-between; gap: 10px;
-      margin-bottom: 10px;
-    }
-    .q .qt h3{
-      margin:0;
-      font-size: 16px;
-      font-weight: 1000;
-    }
-    .qmeta{
-      display:flex;
-      flex-direction:column;
-      gap: 4px;
-      text-align:right;
-    }
-    .answers{ display:grid; gap: 10px; }
-    .ans{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      cursor:pointer;
-      user-select:none;
-      font-weight: 1000;
-      transition: transform .06s ease, background .2s ease, border-color .2s ease, filter .2s ease;
-      position:relative;
-      overflow:hidden;
-    }
-    .ans:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
-    .ans:active{ transform: translateY(1px); }
-    .ans.correct{ border-color: rgba(69,212,131,.55); background: rgba(69,212,131,.12); }
-    .ans.wrong{ border-color: rgba(255,107,107,.55); background: rgba(255,107,107,.12); }
-    .ans.correct::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: radial-gradient(220px 140px at 20% 0%, rgba(255,211,106,.25), transparent 55%),
-                  radial-gradient(220px 140px at 80% 100%, rgba(111,208,255,.18), transparent 55%);
-      pointer-events:none;
-      opacity:.9;
-      mix-blend-mode: screen;
-    }
-
-    .foot{
-      margin-top: 12px;
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap: wrap;
-    }
-    .row{ display:flex; gap: 10px; align-items:center; flex-wrap:wrap; }
-    .statusline{
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .statusline .good{ color: var(--good); font-weight: 1000; }
-    .statusline .bad{ color: var(--bad); font-weight: 1000; }
-
-    /* Right */
-    .right{
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-      position: sticky;
-      top: 80px;
-    }
-    @media (max-width: 980px){
-      .right{ position: static; }
-    }
-    .mini{ display:flex; gap: 12px; align-items:flex-start; }
-    .avatar{
-      width: 64px; height: 64px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.14);
-      display:grid; place-items:center;
-      overflow:hidden;
-    }
-    .avatar img{ width: 100%; height: 100%; object-fit: contain; }
-    .speech{
-      flex:1;
-      background: rgba(0,0,0,.14);
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 16px;
-      padding: 10px 12px;
-      min-height: 64px;
-    }
-    .speech .name{ font-weight: 1000; }
-    .speech .line{ margin-top: 4px; color: var(--muted); font-size: 13px; line-height:1.35; }
-
-    .pathlist{ display:flex; flex-direction:column; gap: 10px; }
-    .node{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      cursor:pointer;
-      user-select:none;
-    }
-    .node:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
-    .node.locked{ opacity:.5; cursor:not-allowed; }
-    .node.active{ outline: 2px solid rgba(111,208,255,.35); }
-    .node .left{ display:flex; gap:10px; align-items:center; }
-    .badge{
-      width: 30px; height: 30px;
-      border-radius: 11px;
-      display:grid; place-items:center;
-      font-weight: 1000;
-      background: rgba(111,208,255,.12);
-      border: 1px solid rgba(111,208,255,.20);
-    }
-
-    /* Scene */
     .sceneWrap{
       position: relative;
       border-radius: var(--radius);
       overflow:hidden;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.16);
-      min-height: 560px;
       box-shadow: var(--shadow);
+      height: calc(100vh - 92px - 18px); /* topbar approx + padding */
+      min-height: 640px;
     }
+    @media (max-width: 920px){
+      .sceneWrap{ min-height: 620px; height: calc(100vh - 122px - 18px); }
+    }
+
     .sceneImg{
       width: 100%;
-      height: min(66vh, 660px);
+      height: 100%;
       object-fit: cover;
       display:block;
       transform: scale(1.01);
     }
+
     .sceneFallback{
-      width:100%;
-      height: min(66vh, 660px);
+      position:absolute;
+      inset:0;
       display:none;
       place-items:center;
       background:
@@ -417,6 +227,7 @@
       color: rgba(255,255,255,.92);
       text-align:center;
       padding: 18px;
+      z-index: 5;
     }
     .sceneFallback.show{ display:grid; }
     .sceneFallback .box{
@@ -430,7 +241,8 @@
     .sceneFallback h3{ margin:0; font-size:18px; font-weight:1000; }
     .sceneFallback p{ margin:10px 0 0; color: var(--muted); line-height:1.35; font-weight:800; }
 
-    .overlay{ position:absolute; inset:0; z-index: 3; }
+    /* Overlay layer for items */
+    .overlay{ position:absolute; inset:0; z-index: 10; }
 
     /* Hotspots */
     .hotspot{
@@ -440,7 +252,7 @@
       user-select:none;
       touch-action: manipulation;
       transition: transform .08s ease, filter .2s ease, opacity .2s ease;
-      z-index: 10;
+      z-index: 12;
     }
     .hotspot:hover{ transform: translate(-50%,-50%) scale(1.05); filter: drop-shadow(0 0 22px rgba(255,211,106,.28)); }
     .hotspot:active{ transform: translate(-50%,-50%) scale(.99); }
@@ -453,47 +265,6 @@
     }
     .hotspot.small img{ width: var(--w, 120px); }
     .hotspot.tiny img{ width: var(--w, 70px); }
-
-    /* Fips MAIN */
-    .fipsMain{
-      position:absolute;
-      left: 18px;
-      bottom: 14px;
-      z-index: 6;
-      display:flex;
-      align-items:flex-end;
-      gap: 14px;
-      pointer-events:none;
-    }
-    .fipsMain .frame{
-      width: 210px;
-      height: 210px;
-      border-radius: 30px;
-      background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.16);
-      box-shadow: 0 18px 40px rgba(0,0,0,.35);
-      overflow:hidden;
-      display:grid;
-      place-items:center;
-      position: relative;
-    }
-    .fipsMain .frame img{
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      transform-origin:center;
-    }
-    .fipsMain .bubble{
-      max-width: 520px;
-      border-radius: 18px;
-      background: rgba(8,10,24,.60);
-      border: 1px solid rgba(255,255,255,.14);
-      backdrop-filter: blur(10px);
-      padding: 10px 12px;
-      box-shadow: 0 18px 40px rgba(0,0,0,.35);
-    }
-    .fipsMain .bubble b{ font-weight:1000; }
-    .fipsMain .bubble .line{ color: var(--muted); margin-top:4px; font-size: 13px; line-height:1.35; }
 
     /* Boss HUD */
     .bossHud{
@@ -540,17 +311,13 @@
       pointer-events:none;
       mix-blend-mode: screen;
     }
-    .bossHud.hit .bossHitFlash{
-      animation: bossFlash .32s ease forwards;
-    }
+    .bossHud.hit .bossHitFlash{ animation: bossFlash .32s ease forwards; }
     @keyframes bossFlash{
       0%{ opacity:0; transform: scale(.9); }
       40%{ opacity:1; transform: scale(1.05); }
       100%{ opacity:0; transform: scale(1.2); }
     }
-    .bossShake{
-      animation: bossShake .25s ease;
-    }
+    .bossShake{ animation: bossShake .25s ease; }
     @keyframes bossShake{
       0%{ transform: translateX(-50%) translateY(0); }
       25%{ transform: translateX(-50%) translateY(0) translateX(-6px); }
@@ -573,45 +340,347 @@
       pointer-events:none;
       opacity:0;
     }
-    .dmg.show{
-      animation: dmgFloat .55s ease forwards;
-    }
+    .dmg.show{ animation: dmgFloat .55s ease forwards; }
     @keyframes dmgFloat{
       0%{ opacity:0; transform: translateX(-50%) translateY(10px) scale(.95); }
       20%{ opacity:1; transform: translateX(-50%) translateY(0) scale(1.05); }
       100%{ opacity:0; transform: translateX(-50%) translateY(-26px) scale(.9); }
     }
 
-    /* Gate overlay */
-    .gateOpen{
+    /* Fips MAIN (oben über Pergament) */
+    .fipsMain{
       position:absolute;
-      inset:0;
-      z-index: 80;
-      display:none;
-      place-items:center;
-      background: radial-gradient(900px 500px at 50% 40%, rgba(255,211,106,.18), rgba(0,0,0,.55));
-      backdrop-filter: blur(2px);
+      left: 16px;
+      bottom: calc(var(--parchH) + 10px);
+      z-index: 30;
+      display:flex;
+      align-items:flex-end;
+      gap: 14px;
+      pointer-events:none;
     }
-    .gateOpen.show{ display:grid; animation: fadeIn .35s ease; }
-    @keyframes fadeIn{ from{ opacity:0 } to{ opacity:1 } }
-    .gateOpen .card{
-      width:min(560px, 92%);
+    @media (max-width: 720px){
+      .fipsMain{ left: 10px; bottom: calc(var(--parchH) + 8px); gap: 10px; }
+    }
+    .fipsMain .frame{
+      width: 190px;
+      height: 190px;
+      border-radius: 30px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      position: relative;
+    }
+    @media (max-width: 720px){
+      .fipsMain .frame{ width: 150px; height: 150px; border-radius: 26px; }
+    }
+    .fipsMain .frame img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform-origin:center;
+    }
+    .fipsMain .bubble{
+      max-width: 520px;
+      border-radius: 18px;
+      background: rgba(8,10,24,.60);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      padding: 10px 12px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+    .fipsMain .bubble b{ font-weight:1000; }
+    .fipsMain .bubble .line{ color: var(--muted); margin-top:4px; font-size: 13px; line-height:1.35; }
+
+    /* ============================================================
+       Bottom Pergament Bar (PNG)
+       ============================================================ */
+    .pergBar{
+      position:absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(var(--parchH) + var(--safeB));
+      z-index: 90;
+      display:flex;
+      align-items:stretch;
+      justify-content:center;
+      padding: 10px 14px calc(12px + var(--safeB));
+      pointer-events:none; /* Hintergrund blockt nichts */
+    }
+    .pergInner{
+      width: min(1320px, 98%);
+      height: 100%;
+      position: relative;
+      pointer-events:auto; /* Inhalte klickbar */
+    }
+    .pergBG{
+      position:absolute;
+      inset: 0;
+      background: url("assets/ui/panels/parchment.png") no-repeat center bottom;
+      background-size: contain;
+      filter: drop-shadow(0 24px 50px rgba(0,0,0,.55));
+      pointer-events:none;
+    }
+
+    .pergContent{
+      position: relative;
+      height: 100%;
+      padding: 18px 26px 18px;
+      display:flex;
+      gap: 16px;
+      align-items:stretch;
+    }
+    @media (max-width: 920px){
+      .pergContent{ padding: 14px 18px 14px; gap: 12px; }
+    }
+
+    .pergCol{
+      flex: 1;
+      min-width: 0;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .pergTopLine{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .pergTopLine .sceneMeta{
+      font-size: 12px;
+      color: rgba(20,12,6,.78);
+      font-weight: 1000;
+      letter-spacing: .2px;
+      text-shadow: 0 1px 0 rgba(255,255,255,.22);
+      opacity: .95;
+    }
+    .pergTopLine .qMeta{
+      text-align:right;
+      font-size: 12px;
+      color: rgba(20,12,6,.68);
+      font-weight: 1000;
+    }
+
+    .readText{
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 1000;
+      color: rgba(18,10,6,.92);
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+      padding-right: 10px;
+      max-height: 4.1em;
+      overflow:hidden;
+    }
+    @media (max-width: 920px){
+      .readText{ font-size: 16px; max-height: 3.9em; }
+    }
+
+    .questionLine{
+      font-size: 16px;
+      font-weight: 1000;
+      color: rgba(18,10,6,.92);
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+      margin-top: 8px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    .answersRow{
+      margin-top: 12px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 10px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .answersRow{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    }
+    @media (max-width: 560px){
+      .answersRow{ grid-template-columns: 1fr; }
+    }
+
+    .ans{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.28);
+      cursor:pointer;
+      user-select:none;
+      font-weight: 1000;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease, filter .2s ease;
+      position:relative;
+      overflow:hidden;
+      color: rgba(20,12,6,.92);
+      text-shadow: 0 1px 0 rgba(255,255,255,.22);
+    }
+    .ans:hover{ border-color: rgba(0,0,0,.18); background: rgba(255,255,255,.36); }
+    .ans:active{ transform: translateY(1px); }
+    .ans.correct{ border-color: rgba(69,212,131,.55); background: rgba(69,212,131,.18); }
+    .ans.wrong{ border-color: rgba(255,107,107,.55); background: rgba(255,107,107,.18); }
+
+    .pergFoot{
+      margin-top: 10px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap: wrap;
+    }
+    .statusline{
+      font-size: 13px;
+      color: rgba(20,12,6,.72);
+      font-weight: 1000;
+      text-shadow: 0 1px 0 rgba(255,255,255,.20);
+    }
+    .statusline .good{ color: #0f6a3d; }
+    .statusline .bad{ color: #8d2020; }
+
+    .btnSmall{
+      appearance:none;
+      border: 1px solid rgba(0,0,0,.16);
+      background: rgba(255,255,255,.26);
+      color: rgba(20,12,6,.92);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 1000;
+      cursor:pointer;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+      text-shadow: 0 1px 0 rgba(255,255,255,.22);
+    }
+    .btnSmall:hover{ background: rgba(255,255,255,.34); border-color: rgba(0,0,0,.20); }
+    .btnSmall:active{ transform: translateY(1px); }
+    .btnSmall[disabled]{ opacity:.45; cursor:not-allowed; }
+
+    /* ============================================================
+       Drawer: Kapitel/Guide (minimiert)
+       ============================================================ */
+    .fabRow{
+      position:absolute;
+      right: 14px;
+      top: 14px;
+      z-index: 95;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+    }
+    .fab{
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8,10,24,.55);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      padding: 10px 12px;
+      font-weight: 1000;
+      cursor:pointer;
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    .fab:hover{ background: rgba(8,10,24,.68); border-color: rgba(255,255,255,.20); }
+    .fab:active{ transform: translateY(1px); }
+
+    .drawer{
+      position:absolute;
+      right: 14px;
+      top: 58px;
+      width: min(420px, 94%);
+      max-height: min(70vh, 620px);
+      z-index: 110;
+      display:none;
+      overflow:hidden;
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.16);
-      background: rgba(8,10,24,.72);
-      box-shadow: 0 22px 60px rgba(0,0,0,.55);
-      padding: 16px 16px;
-      text-align:center;
+      background: rgba(8,10,24,.70);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 28px 90px rgba(0,0,0,.65);
     }
-    .gateOpen .card h3{ margin:0; font-size: 18px; font-weight:1000; }
-    .gateOpen .card p{ margin:10px 0 0; color: var(--muted); line-height:1.35; }
+    .drawer.show{ display:block; animation: pop .18s ease; }
+    @keyframes pop{ from{ transform: translateY(6px); opacity:.0;} to{ transform: translateY(0); opacity:1;} }
+
+    .drawerHd{
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .drawerHd h3{
+      margin:0;
+      font-size: 14px;
+      font-weight: 1000;
+      letter-spacing:.2px;
+    }
+    .drawerBd{
+      padding: 12px 14px 14px;
+      overflow:auto;
+      max-height: calc(min(70vh, 620px) - 54px);
+    }
+
+    .mini{ display:flex; gap: 12px; align-items:flex-start; }
+    .avatar{
+      width: 64px; height: 64px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      display:grid; place-items:center;
+      overflow:hidden;
+    }
+    .avatar img{ width: 100%; height: 100%; object-fit: contain; }
+    .speech{
+      flex:1;
+      background: rgba(0,0,0,.14);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px;
+      padding: 10px 12px;
+      min-height: 64px;
+    }
+    .speech .name{ font-weight: 1000; }
+    .speech .line{ margin-top: 4px; color: var(--muted); font-size: 13px; line-height:1.35; }
+
+    .pathlist{ display:flex; flex-direction:column; gap: 10px; margin-top: 12px; }
+    .node{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
+      user-select:none;
+    }
+    .node:hover{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.08); }
+    .node.locked{ opacity:.5; cursor:not-allowed; }
+    .node.active{ outline: 2px solid rgba(111,208,255,.35); }
+    .node .left{ display:flex; gap:10px; align-items:center; }
+    .badge{
+      width: 30px; height: 30px;
+      border-radius: 11px;
+      display:grid; place-items:center;
+      font-weight: 1000;
+      background: rgba(111,208,255,.12);
+      border: 1px solid rgba(111,208,255,.20);
+    }
 
     /* Toast */
     .toast{
       position: fixed;
       right: 14px;
       bottom: 14px;
-      z-index: 90;
+      z-index: 210;
       max-width: 460px;
       padding: 12px 14px;
       border-radius: 16px;
@@ -621,13 +690,12 @@
       display:none;
     }
     .toast.show{ display:block; animation: pop .18s ease; }
-    @keyframes pop{ from{ transform: translateY(6px); opacity:.0;} to{ transform: translateY(0); opacity:1;} }
     .toast b{ font-weight: 1000; }
 
     /* Pickup animation */
     .fly{
       position: fixed;
-      z-index: 100;
+      z-index: 220;
       width: 46px; height: 46px;
       pointer-events:none;
       filter: drop-shadow(0 0 18px rgba(255,211,106,.35));
@@ -662,13 +730,38 @@
       100%{ transform: rotate(0deg) scale(1); }
     }
 
+    /* Gate overlay */
+    .gateOpen{
+      position:absolute;
+      inset:0;
+      z-index: 120;
+      display:none;
+      place-items:center;
+      background: radial-gradient(900px 500px at 50% 40%, rgba(255,211,106,.18), rgba(0,0,0,.55));
+      backdrop-filter: blur(2px);
+      pointer-events:none;
+    }
+    .gateOpen.show{ display:grid; animation: fadeIn .35s ease; }
+    @keyframes fadeIn{ from{ opacity:0 } to{ opacity:1 } }
+    .gateOpen .card{
+      width:min(560px, 92%);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8,10,24,.72);
+      box-shadow: 0 22px 60px rgba(0,0,0,.55);
+      padding: 16px 16px;
+      text-align:center;
+    }
+    .gateOpen .card h3{ margin:0; font-size: 18px; font-weight:1000; }
+    .gateOpen .card p{ margin:10px 0 0; color: var(--muted); line-height:1.35; }
+
     /* ============================================================
-       CELEBRATION FULLSCREEN
+       POSITIVE CELEBRATION FULLSCREEN (unchanged)
        ============================================================ */
     .celebrate{
       position: fixed;
       inset: 0;
-      z-index: 160;
+      z-index: 260;
       display:none;
       place-items:center;
       pointer-events:none;
@@ -724,7 +817,6 @@
       0%,100%{ transform: translate(-50%,-50%) scale(1.00) rotate(0deg); }
       50%{ transform: translate(-50%,-50%) scale(1.03) rotate(2deg); }
     }
-
     .bigStarBack svg{ width:100%; height:100%; }
 
     .fipsGiant{
@@ -816,12 +908,104 @@
     }
 
     /* ============================================================
-       BONUS SUMMARY (collecting is optional, shown at end)
+       NEW: NEGATIVE FEEDBACK FULLSCREEN (no black star)
        ============================================================ */
+    .oops{
+      position: fixed;
+      inset: 0;
+      z-index: 255;
+      display:none;
+      place-items:center;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 50% 30%, rgba(255,107,107,.18), transparent 60%),
+        radial-gradient(900px 520px at 15% 70%, rgba(111,208,255,.10), transparent 60%),
+        linear-gradient(180deg, rgba(5,8,18,.60), rgba(5,8,18,.88));
+      backdrop-filter: blur(6px);
+    }
+    .oops.show{ display:grid; animation: fadeIn .14s ease; }
+
+    .oops .stage{
+      width:min(980px, 96%);
+      height: min(72vh, 620px);
+      position:relative;
+      border-radius: 34px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.16);
+      box-shadow: 0 40px 120px rgba(0,0,0,.70);
+    }
+
+    .oopsCloud{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width: min(74vh, 640px);
+      height: min(42vh, 360px);
+      transform: translate(-50%,-52%);
+      filter: drop-shadow(0 26px 70px rgba(0,0,0,.55));
+      opacity:.95;
+      animation: cloudPulse 1.1s ease-in-out infinite;
+    }
+    @keyframes cloudPulse{
+      0%,100%{ transform: translate(-50%,-52%) scale(1.00); }
+      50%{ transform: translate(-50%,-52%) scale(1.02); }
+    }
+
+    .oopsBadge{
+      position:absolute;
+      left: 18px;
+      top: 18px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8,10,24,.65);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+      font-weight: 1000;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      animation: badgePop .35s ease;
+    }
+    .oopsBadge .miniMark{
+      width: 24px; height: 24px;
+      display:grid; place-items:center;
+      border-radius: 10px;
+      background: rgba(255,107,107,.16);
+      border: 1px solid rgba(255,107,107,.28);
+    }
+
+    .oopsFips{
+      position:absolute;
+      left:50%;
+      top:55%;
+      transform: translate(-50%,-50%);
+      width: min(58vh, 520px);
+      height: min(58vh, 520px);
+      display:grid;
+      place-items:center;
+      filter: drop-shadow(0 40px 90px rgba(0,0,0,.55));
+    }
+    .oopsFips img{
+      width:100%;
+      height:100%;
+      object-fit: contain;
+      transform-origin:center;
+      animation: fipsOops .8s ease-out forwards;
+    }
+    @keyframes fipsOops{
+      0%{ transform: scale(.70) translateY(20px); opacity:0; }
+      35%{ transform: scale(1.02) translateY(-6px); opacity:1; }
+      100%{ transform: scale(1.00) translateY(0); opacity:1; }
+    }
+
+    /* BONUS SUMMARY (unchanged) */
     .bonus{
       position: fixed;
       inset: 0;
-      z-index: 140;
+      z-index: 240;
       display:none;
       place-items:center;
       background:
@@ -912,11 +1096,11 @@
       font-weight:1000;
     }
 
-    /* Water world splash */
+    /* Water world splash (unchanged) */
     .splash{
       position: fixed;
       inset: 0;
-      z-index: 150;
+      z-index: 250;
       display:none;
       place-items:center;
       background:
@@ -1038,47 +1222,10 @@
     </div>
   </div>
 
-  <div class="wrap">
-    <!-- LEFT -->
-    <div class="panel parchment">
-      <div class="hd">
-        <h2>Pergament</h2>
-        <span class="tiny"><b>Szene</b> <span id="sceneTitle">–</span></span>
-      </div>
-      <div class="bd">
-        <div class="paper">
-          <div class="label">LESETEXT</div>
-          <div class="text" id="readText">–</div>
-        </div>
-
-        <div class="q">
-          <div class="qt">
-            <div>
-              <h3 id="question">–</h3>
-              <div class="tiny" id="goalLine" style="margin-top:6px">Bonus: Sammle Dinge (optional)</div>
-            </div>
-            <div class="qmeta">
-              <span class="tiny">Erst lesen, dann antworten.</span>
-              <span class="tiny" id="qProgress">Frage 1/3</span>
-            </div>
-          </div>
-
-          <div class="answers" id="answers"></div>
-
-          <div class="foot">
-            <div class="row">
-              <button class="btn" id="reReadBtn">Nochmal lesen</button>
-              <button class="btn" id="nextBtn" disabled>Nächste Szene</button>
-            </div>
-            <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MIDDLE -->
+  <div class="stageWrap">
     <div class="sceneWrap" id="sceneWrap">
       <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
+
       <div class="sceneFallback" id="sceneFallback">
         <div class="box">
           <h3>Szene-Bild fehlt</h3>
@@ -1087,6 +1234,35 @@
       </div>
 
       <div class="overlay" id="overlay"></div>
+
+      <!-- Floating Buttons -->
+      <div class="fabRow">
+        <button class="fab" id="drawerBtn">Kapitel</button>
+      </div>
+
+      <!-- Drawer (Kapitel + Guide) -->
+      <div class="drawer" id="drawer">
+        <div class="drawerHd">
+          <h3>Kapitel: Funkelwald</h3>
+          <button class="btn" id="drawerCloseBtn" style="padding:10px 12px;">Schließen</button>
+        </div>
+        <div class="drawerBd">
+          <div class="mini">
+            <div class="avatar"><img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" /></div>
+            <div class="speech">
+              <div class="name">Fips</div>
+              <div class="line" id="fipsLine">Bonus: Sammeln. Hauptziel: Fragen richtig beantworten.</div>
+            </div>
+          </div>
+
+          <div class="tiny" style="margin-top:10px; font-weight:1000; opacity:.95;">
+            Status: <span id="chapterStatus">0/5 erledigt</span>
+          </div>
+
+          <div class="pathlist" id="pathList"></div>
+          <div class="tiny" id="unlockHint" style="margin-top:10px;">Freischaltung: Fragen richtig beantworten.</div>
+        </div>
+      </div>
 
       <!-- Boss HUD -->
       <div class="bossHud" id="bossHud">
@@ -1117,43 +1293,46 @@
           <p>Boss besiegt. Als Nächstes geht es in die Wasserwelt.</p>
         </div>
       </div>
-    </div>
 
-    <!-- RIGHT -->
-    <div class="right">
-      <div class="panel">
-        <div class="hd">
-          <h2>Guide</h2>
-          <span class="tiny">Fips der Funkenkobold</span>
-        </div>
-        <div class="bd">
-          <div class="mini">
-            <div class="avatar"><img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" /></div>
-            <div class="speech">
-              <div class="name">Fips</div>
-              <div class="line" id="fipsLine">Bonus: Sammeln. Hauptziel: Fragen richtig beantworten.</div>
+      <!-- Bottom Pergament Bar -->
+      <div class="pergBar" id="pergBar">
+        <div class="pergInner">
+          <div class="pergBG" aria-hidden="true"></div>
+
+          <div class="pergContent">
+            <div class="pergCol">
+              <div class="pergTopLine">
+                <div class="sceneMeta"><b>Szene</b> <span id="sceneTitle">–</span></div>
+                <div class="qMeta">
+                  <div id="qProgress">Frage 1/3</div>
+                  <div style="opacity:.9;">Erst lesen, dann antworten.</div>
+                </div>
+              </div>
+
+              <div class="readText" id="readText">–</div>
+              <div class="questionLine" id="question">–</div>
+
+              <div class="answersRow" id="answers"></div>
+
+              <div class="pergFoot">
+                <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                  <button class="btnSmall" id="reReadBtn">Nochmal lesen</button>
+                  <button class="btnSmall" id="nextBtn" disabled>Nächste Szene</button>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
 
-      <div class="panel">
-        <div class="hd">
-          <h2>Kapitel: Funkelwald</h2>
-          <span class="tiny" id="chapterStatus">0/5 erledigt</span>
-        </div>
-        <div class="bd">
-          <div class="pathlist" id="pathList"></div>
-          <div style="height:10px"></div>
-          <div class="tiny" id="unlockHint">Freischaltung: Fragen richtig beantworten.</div>
-        </div>
-      </div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <!-- FIPS CELEBRATION FULLSCREEN -->
+  <!-- FIPS CELEBRATION FULLSCREEN (positive, unchanged) -->
   <div class="celebrate" id="celebrate">
     <div class="stage">
       <div class="rays"></div>
@@ -1196,12 +1375,50 @@
     </div>
   </div>
 
+  <!-- NEW: Negative Feedback -->
+  <div class="oops" id="oops">
+    <div class="stage">
+      <div class="oopsBadge">
+        <div class="miniMark" aria-hidden="true">!</div>
+        <div id="oopsText">Nicht richtig</div>
+      </div>
+
+      <div class="oopsCloud" aria-hidden="true">
+        <svg viewBox="0 0 900 500" width="100%" height="100%">
+          <defs>
+            <linearGradient id="gCloud" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="rgba(230,240,255,.95)"/>
+              <stop offset="0.55" stop-color="rgba(200,220,255,.92)"/>
+              <stop offset="1" stop-color="rgba(255,200,200,.88)"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#gCloud)" stroke="rgba(255,255,255,.55)" stroke-width="10"
+            d="M180 320
+               C90 320, 60 260, 90 210
+               C40 170, 70 110, 140 120
+               C160 60, 250 50, 290 95
+               C330 40, 430 40, 470 95
+               C520 65, 600 85, 610 150
+               C690 135, 760 190, 720 265
+               C760 310, 720 370, 640 355
+               C600 410, 520 430, 470 395
+               C430 450, 320 450, 290 395
+               C250 430, 170 410, 180 320 Z"/>
+        </svg>
+      </div>
+
+      <div class="oopsFips">
+        <img id="oopsFipsImg" src="assets/chars/fips/sad.png" alt="Fips traurig" />
+      </div>
+    </div>
+  </div>
+
   <!-- BONUS SUMMARY (optional collecting) -->
   <div class="bonus" id="bonus">
     <div class="card">
       <div class="top">
         <h3>Bonus</h3>
-        <div class="row">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn" id="bonusCloseBtn">Schließen</button>
           <button class="btn primary" id="bonusOkBtn">Ok</button>
         </div>
@@ -1223,7 +1440,7 @@
           <p>Funkelwald ist geschafft. Als Nächstes wartet die Wasserwelt.</p>
           <div class="reportGrid" id="reportGrid"></div>
         </div>
-        <div class="row">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn primary" id="closeSplashBtn">Schließen</button>
         </div>
       </div>
@@ -1241,7 +1458,6 @@
       holzbruecke: ["assets/scenes/holzbruecke.png","assets/scenes/holzbruecke.jpg","assets/scenes/Holzbruecke.png"],
       apfelbaum:   ["assets/scenes/apfelbaum.png","assets/scenes/apfelbaum.jpg","assets/scenes/Apfelbaum.png"],
       sternstein:  ["assets/scenes/sternstein.png","assets/scenes/sternstein.jpg","assets/scenes/Sternstein.png"],
-      // Boss-Tor Fallbacks
       bosstor:     ["assets/scenes/bosstor.png","assets/scenes/bossTor.png","assets/scenes/boss_tor.png","assets/scenes/BossTor.png","assets/scenes/bosstor.jpg","assets/scenes/bosstor.webp"],
       wasserwelt:  ["assets/scenes/wasserwelt.png","assets/scenes/wasserwelt.jpg","assets/scenes/Wasserwelt.png"],
     },
@@ -1423,7 +1639,6 @@
         { id:"ap5",   type:"collect_apple",   img:ASSETS.interact.Apfel,   x: 84, y: 74, size:"tiny",  once:true, points: 1, label:"Apfel" }
       ],
       boss: { name: "Torwächter", hpMax: BOSS_HP_MAX },
-      // 9 boss questions (HP = 9)
       readBoss: [
         { text:"Vor Fips ist ein großes Tor.<br>Fips braucht einen Schlüssel.<br>Das Tor bleibt zu.",
           question:"Was braucht Fips?",
@@ -1468,14 +1683,13 @@
   // ------------------------------------------------------------
   // Storage
   // ------------------------------------------------------------
-  const STORAGE_KEY = "leselabyrinth_funkelwald_v6_optionalCollect_shuffleAnswers_boss9";
+  const STORAGE_KEY = "leselabyrinth_funkelwald_v7_fullscene_bottomparch_negativefx";
 
   const defaultState = () => ({
     nodeIndex: 0,
     unlocked: [true, false, false, false, false],
     completed: [false, false, false, false, false],
 
-    // Bonus counts
     stars: 0,
     apples: 0,
     lanterns: 0,
@@ -1484,7 +1698,7 @@
     streak: 0,
     level: 1,
     xp: 0,
-    xpNeed: 110,           // XP curve slightly higher because collecting is optional now
+    xpNeed: 110,
     heartsMax: 3,
     hearts: 3,
     focus: "W-Frage",
@@ -1538,7 +1752,6 @@
     reReadBtn: document.getElementById("reReadBtn"),
     nextBtn: document.getElementById("nextBtn"),
     statusLine: document.getElementById("statusLine"),
-    goalLine: document.getElementById("goalLine"),
     qProgress: document.getElementById("qProgress"),
 
     sceneImg: document.getElementById("sceneImg"),
@@ -1559,6 +1772,7 @@
 
     pathList: document.getElementById("pathList"),
     chapterStatus: document.getElementById("chapterStatus"),
+    unlockHint: document.getElementById("unlockHint"),
 
     hearts: document.getElementById("hearts"),
     starsVal: document.getElementById("starsVal"),
@@ -1589,6 +1803,10 @@
     fipsGiantImg: document.getElementById("fipsGiantImg"),
     celebrateText: document.getElementById("celebrateText"),
 
+    oops: document.getElementById("oops"),
+    oopsText: document.getElementById("oopsText"),
+    oopsFipsImg: document.getElementById("oopsFipsImg"),
+
     bonus: document.getElementById("bonus"),
     bonusGrid: document.getElementById("bonusGrid"),
     bonusCloseBtn: document.getElementById("bonusCloseBtn"),
@@ -1597,6 +1815,10 @@
     splash: document.getElementById("splash"),
     closeSplashBtn: document.getElementById("closeSplashBtn"),
     reportGrid: document.getElementById("reportGrid"),
+
+    drawerBtn: document.getElementById("drawerBtn"),
+    drawer: document.getElementById("drawer"),
+    drawerCloseBtn: document.getElementById("drawerCloseBtn"),
   };
 
   // ------------------------------------------------------------
@@ -1705,16 +1927,14 @@
     setTimeout(()=>img.remove(), 700);
   }
 
-  // Answer shuffle (prevents "correct always first")
+  // deterministic shuffle per (scene + question + tries)
   function shuffledAnswersWithKey(answers, seedKey){
-    // deterministic shuffle per (scene + question + tries) -> feels random but stable
     const arr = answers.map((a,i)=>({a, i}));
     let h = 2166136261;
     for(let i=0;i<seedKey.length;i++){
       h ^= seedKey.charCodeAt(i);
       h = Math.imul(h, 16777619);
     }
-    // Fisher-Yates using xorshift
     let x = h >>> 0;
     function rnd(){
       x ^= x << 13; x >>>= 0;
@@ -1736,14 +1956,10 @@
     state.completed[i] = true;
     state.scene[i].answered = true;
 
-    // XP tuned up (collecting no longer required)
-    // + completion bonus
     gainXP(30);
-
     state.streak += 1;
     if(i < NODES.length - 1) state.unlocked[i+1] = true;
 
-    // show bonus summary at end of each node (optional collecting)
     showBonusModal();
   }
 
@@ -1883,7 +2099,7 @@
   }
 
   // ------------------------------------------------------------
-  // Celebration (Fullscreen)
+  // Celebration (positive, unchanged)
   // ------------------------------------------------------------
   function clearConfetti(){ el.confetti.innerHTML = ""; }
 
@@ -1929,7 +2145,20 @@
   }
 
   // ------------------------------------------------------------
-  // Bonus modal (collecting is optional)
+  // NEW: Negative feedback (cloud + sad fips)
+  // ------------------------------------------------------------
+  function showOops(text){
+    el.oopsText.textContent = text || "Nicht richtig";
+    el.oopsFipsImg.src = ASSETS.fips.sad || ASSETS.fips.idle;
+    el.oops.classList.add("show");
+    clearTimeout(showOops._t);
+    showOops._t = setTimeout(() => {
+      el.oops.classList.remove("show");
+    }, 850);
+  }
+
+  // ------------------------------------------------------------
+  // Bonus modal
   // ------------------------------------------------------------
   function showBonusModal(){
     el.bonusGrid.innerHTML = [
@@ -1959,7 +2188,6 @@
     el.gateOpen.classList.remove("show");
 
     await setSceneImage(node.key);
-
     renderBossUI(node, s);
 
     let pack, qLabel, answers, seedKey;
@@ -1982,20 +2210,25 @@
     el.question.textContent = pack.question;
     el.qProgress.textContent = qLabel;
 
-    el.goalLine.textContent = `Bonus: Sammeln ist optional.`;
-
     renderAnswers(answers);
 
     el.nextBtn.disabled = !(state.completed[i] && i < NODES.length-1 && state.unlocked[i+1]);
 
-    // Interactables always available, but optional
+    // Interactables (optional) + protect against parchment collision
     node.interactables.forEach(it => {
       if(it.once && s.collected[it.id]) return;
 
+      // If item would land in parchment area, auto-shift upward a bit
+      let x = it.x;
+      let y = it.y;
+
+      // Bottom bar takes roughly 24% height. We keep items above ~76%.
+      if(y > 76) y = 74;
+
       const hs = document.createElement("div");
       hs.className = "hotspot " + (it.size || "");
-      hs.style.left = it.x + "%";
-      hs.style.top  = it.y + "%";
+      hs.style.left = x + "%";
+      hs.style.top  = y + "%";
       hs.style.setProperty("--w", it.size==="tiny" ? "70px" : "120px");
       hs.title = it.label || "Tippen";
 
@@ -2018,7 +2251,7 @@
       const hs = document.createElement("div");
       hs.className = "hotspot";
       hs.style.left = sp.x + "%";
-      hs.style.top  = sp.y + "%";
+      hs.style.top  = (sp.y > 76 ? 74 : sp.y) + "%";
       hs.style.width = (sp.r*2) + "%";
       hs.style.height = (sp.r*2) + "%";
       hs.style.borderRadius = "999px";
@@ -2028,7 +2261,7 @@
         s.sparkFound = true;
         state.sparks += 1;
         pulse(el.pillSparks);
-        gainXP(10); // small bonus
+        gainXP(10);
         toast(`<b>Geheimfunke!</b>`);
         setFips("excited", "Geheimfunke gefunden.");
         saveState();
@@ -2039,12 +2272,11 @@
   }
 
   function renderAnswers(shuffled){
-    // shuffled is [{a, i}]
     el.answers.innerHTML = "";
-    shuffled.forEach((wrap, idx) => {
+    shuffled.forEach((wrap) => {
       const div = document.createElement("div");
       div.className = "ans";
-      div.innerHTML = `<span>${wrap.a.t}</span><span class="tiny">Antwort</span>`;
+      div.textContent = wrap.a.t;
       div.addEventListener("click", () => onAnswer(wrap.a, div));
       el.answers.appendChild(div);
     });
@@ -2065,7 +2297,6 @@
     if(it.once) s.collected[it.id] = true;
     burstAtHotspot(hsEl);
 
-    // XP for collecting reduced (optional bonus)
     if(it.type === "collect_star"){
       state.stars += (it.points || 1);
       pulse(el.pillStars);
@@ -2090,14 +2321,11 @@
     }
 
     saveState();
-    renderAll();
+    renderHUD();
   }
 
   // ------------------------------------------------------------
-  // Answer
-  // - Correct answers are shuffled
-  // - XP only once per question
-  // - Boss: 9 questions, HP reduces 1 per correct new question
+  // Answer logic
   // ------------------------------------------------------------
   function onAnswer(chosen, btnEl){
     const i = state.nodeIndex;
@@ -2114,6 +2342,7 @@
     if(chosen && chosen.correct){
       btnEl.classList.add("correct");
 
+      // POSITIVE FEEDBACK: untouched
       showFipsCelebration("Richtig");
       setFips("excited", "Richtig.");
       vibrate(45);
@@ -2121,26 +2350,22 @@
       if(node.boss){
         const step = clamp(s.bossStep, 0, node.readBoss.length - 1);
 
-        // XP only once per boss question
         if(!s.bossXpGrantedSteps[step]){
           s.bossXpGrantedSteps[step] = true;
           gainXP(14);
         }
 
-        // Deal boss damage once per unique correct step
-        // Only if this step wasn't already cleared:
         if(s.bossHP > 0){
           s.bossHP = clamp(s.bossHP - 1, 0, node.boss.hpMax);
           bossHitFX(1);
         }
         renderBossUI(node, s);
 
-        // advance to next boss question (up to 9)
         s.bossStep = clamp(s.bossStep + 1, 0, node.readBoss.length - 1);
 
         if(s.bossHP === 0){
           el.statusLine.innerHTML = `Status: <span class="good">Boss besiegt.</span>`;
-          gainXP(40); // boss clear bonus
+          gainXP(40);
           markCompleted(i);
           el.gateOpen.classList.add("show");
           setTimeout(() => {
@@ -2153,7 +2378,6 @@
       }else{
         const qi = clamp(s.qIndex, 0, node.readSteps.length - 1);
 
-        // If already solved this question: no XP, no progress
         if(s.correctSteps[qi]){
           saveState();
           renderAll();
@@ -2162,13 +2386,11 @@
 
         s.correctSteps[qi] = true;
 
-        // XP only once per question
         if(!s.xpGrantedSteps[qi]){
           s.xpGrantedSteps[qi] = true;
           gainXP(16);
         }
 
-        // move to next question or complete node
         if(qi < node.readSteps.length - 1){
           s.qIndex = qi + 1;
           el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
@@ -2185,10 +2407,15 @@
       btnEl.classList.add("wrong");
       s.perfect = false;
       state.streak = 0;
+
+      // NEW NEGATIVE FEEDBACK (cloud + sad Fips)
+      showOops("Nicht richtig");
+      toast(`<b>Falsch.</b>`, 1400);
+
       loseHeart();
       el.statusLine.innerHTML = `Status: <span class="bad">Falsch.</span>`;
-      toast(`<b>Falsch.</b>`, 1400);
       setFips("thinking", "Nochmal lesen.");
+
       saveState();
       renderAll();
     }
@@ -2255,11 +2482,20 @@
     el.splash.classList.remove("show");
   });
 
+  // Drawer
+  function toggleDrawer(force){
+    const show = (force !== undefined) ? force : !el.drawer.classList.contains("show");
+    el.drawer.classList.toggle("show", !!show);
+  }
+  el.drawerBtn.addEventListener("click", () => toggleDrawer());
+  el.drawerCloseBtn.addEventListener("click", () => toggleDrawer(false));
+  el.drawer.addEventListener("click", (e)=>{ if(e.target === el.drawer) toggleDrawer(false); });
+
   window.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
     if(k === "h") el.helpBtn.click();
     if(k === "r") el.resetBtn.click();
-    if(k === "escape") hideBonusModal();
+    if(k === "escape"){ hideBonusModal(); toggleDrawer(false); }
   });
 
   // ------------------------------------------------------------
