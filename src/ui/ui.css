@@ -5,19 +5,11 @@
   --bg1:#0b1030;
   --bg2:#171a3a;
 
-  --panel: rgba(18,22,44,.62);
-  --panel2: rgba(18,22,44,.42);
-  --stroke: rgba(255,255,255,.12);
-  --stroke2: rgba(255,255,255,.18);
-
   --text:#eaf0ff;
   --muted:#b9c2e8;
 
   --good:#45d483;
   --bad:#ff6b6b;
-  --gold:#ffd36a;
-  --blue:#6fd0ff;
-  --pink:#ff4fa3;
 
   --shadow: 0 18px 60px rgba(0,0,0,.35);
   --maxw: 1400px;
@@ -43,7 +35,34 @@ body{
 
 #app{ min-height:100%; }
 
-/* ---------- TOPBAR ---------- */
+/* -------------------------------------------------------
+   ABSICHERUNG: NIEMALS PNG/Icons unlimitiert rendern
+-------------------------------------------------------- */
+img{
+  max-width: 100%;
+  height: auto;
+}
+
+/* Icons in Pills IMMER begrenzen – auch wenn Klassen fehlen */
+.pill img,
+.pillBig img{
+  width: 28px !important;
+  height: 28px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+}
+
+/* Herzen IMMER begrenzen – auch wenn Klassen fehlen */
+#hearts img{
+  width: 34px !important;
+  height: 34px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+}
+
+/* -------------------------------------------------------
+   TOPBAR
+-------------------------------------------------------- */
 .topbar{
   position: sticky;
   top:0;
@@ -96,7 +115,9 @@ body{
   line-height: 1.2;
 }
 
-/* ---------- HUD (2 Reihen) ---------- */
+/* -------------------------------------------------------
+   HUD (2 Reihen)
+-------------------------------------------------------- */
 .hud{
   display:flex;
   flex-direction:column;
@@ -111,12 +132,6 @@ body{
   flex-wrap: wrap;
   justify-content:flex-end;
 }
-
-/* oben: kompakter */
-.hudTop{ opacity: .98; }
-
-/* unten: große Collectibles */
-.hudBottom{ justify-content:flex-end; }
 
 .actions{
   display:flex;
@@ -133,7 +148,7 @@ body{
   color: var(--muted);
 }
 
-/* ---------- Pills ---------- */
+/* Pills */
 .pill{
   display:flex;
   align-items:center;
@@ -154,35 +169,18 @@ body{
   background: rgba(18,22,44,.66);
 }
 
-/* Zahlen deutlich größer */
 .pillBig b{
   font-size: 18px;
 }
 
-/* Collectible Icons */
-.iconBig{
-  width: 38px;
-  height: 38px;
-  object-fit: contain;
-  display:block;
-  filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
-}
-
-/* Hearts */
+/* Herzen Layout */
 .hearts{
   display:flex;
   gap: 10px;
   align-items:center;
 }
-.heartIcon{
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-  display:block;
-  filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
-}
 
-/* ---------- XP Pill ---------- */
+/* XP */
 .xp{
   display:flex;
   flex-direction:column;
@@ -196,7 +194,7 @@ body{
 }
 .xp small{
   color: var(--muted);
-  font-weight: 900;
+  font-weight: 1000;
   letter-spacing:.2px;
 }
 .xpbar{
@@ -237,7 +235,9 @@ body{
   cursor:not-allowed;
 }
 
-/* ---------- STAGE / SCENE ---------- */
+/* -------------------------------------------------------
+   STAGE / SCENE
+-------------------------------------------------------- */
 .stageWrap{
   max-width: var(--maxw);
   margin: 0 auto;
@@ -312,42 +312,9 @@ body{
   box-shadow: 0 14px 36px rgba(0,0,0,.35);
 }
 
-/* Drawer */
-.drawer{
-  position:absolute;
-  top: 14px;
-  right: 14px;
-  width: min(560px, calc(100% - 28px));
-  max-height: calc(100% - 28px);
-  background: rgba(18,22,44,.76);
-  border: 1px solid rgba(255,255,255,.16);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  overflow:hidden;
-  z-index: 20;
-  display:none;
-}
-.drawer.open{ display:block; }
-.drawerHd{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 10px;
-  padding: 12px 14px;
-  background: rgba(10,12,26,.35);
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-.drawerHd h3{
-  margin:0;
-  font-size: 14px;
-  font-weight: 1000;
-}
-.drawerBd{
-  padding: 12px 14px 14px;
-  overflow:auto;
-}
-
-/* Fips */
+/* -------------------------------------------------------
+   FIPS + PERGAMENT (Questfeld)
+-------------------------------------------------------- */
 .fipsMain{
   position:absolute;
   left: 14px;
@@ -358,6 +325,7 @@ body{
   align-items:flex-end;
   pointer-events:none;
 }
+
 .fipsMain .frame{
   width: 110px;
   height: 110px;
@@ -369,12 +337,14 @@ body{
   overflow:hidden;
   box-shadow: 0 18px 50px rgba(0,0,0,.35);
 }
+
 .fipsMain .frame img{
   width: 100%;
   height: 100%;
   object-fit: contain;
   display:block;
 }
+
 .fipsMain .bubble{
   max-width: 380px;
   padding: 12px 14px;
@@ -383,6 +353,7 @@ body{
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: 0 14px 36px rgba(0,0,0,.35);
 }
+
 .fipsMain .bubble .line{
   font-size: 12px;
   color: var(--muted);
@@ -390,7 +361,7 @@ body{
   line-height: 1.2;
 }
 
-/* Pergament / Questfeld */
+/* Questfeld rechts daneben */
 .pergBar{
   position:absolute;
   left: 150px;
@@ -399,6 +370,7 @@ body{
   z-index: 20;
   pointer-events: none;
 }
+
 .pergInner{
   position: relative;
   border-radius: 18px;
@@ -408,6 +380,7 @@ body{
   pointer-events: auto;
   max-height: 240px;
 }
+
 .pergInner::after{
   content:"";
   position:absolute;
@@ -419,6 +392,7 @@ body{
     rgba(10,12,26,.80)
   );
 }
+
 .pergImg{
   position:absolute;
   inset:0;
@@ -428,6 +402,7 @@ body{
   opacity: .95;
   filter: saturate(1.05) contrast(1.05);
 }
+
 .pergContent{
   position: relative;
   z-index: 2;
@@ -446,20 +421,24 @@ body{
   justify-content:space-between;
   gap: 12px;
 }
+
 .sceneMeta{
   font-size: 12px;
   color: rgba(234,240,255,.80);
 }
+
 .qRight{
   display:flex;
   align-items:center;
   gap: 10px;
 }
+
 .qMeta{
   font-size: 12px;
   color: rgba(234,240,255,.80);
   font-weight: 1000;
 }
+
 .dots{
   display:flex;
   gap:6px;
@@ -529,6 +508,7 @@ body{
   justify-content:space-between;
   flex-wrap: wrap;
 }
+
 .statusline{
   font-size: 12px;
   color: rgba(234,240,255,.80);
@@ -572,9 +552,8 @@ body{
 /* Mobile */
 @media (max-width: 900px){
   .pergBar{ left: 14px; right: 14px; }
-  .pergInner, .pergContent{ max-height: 260px; }
-  .heartIcon{ width: 30px; height: 30px; }
-  .iconBig{ width: 34px; height: 34px; }
+  #hearts img{ width: 30px !important; height: 30px !important; }
+  .pill img, .pillBig img{ width: 26px !important; height: 26px !important; }
 }
 @media (max-width: 640px){
   .topbar-inner{ padding: 10px 12px 8px; }
