@@ -1,6 +1,3 @@
-export const STORAGE_KEY = "leselabyrinth_funkelwald_v9_modular";
-export const BOSS_HP_MAX = 9;
-
 export const ASSETS = {
   scenes: {
     waldweg:     ["assets/scenes/waldweg.png","assets/scenes/waldweg.jpg","assets/scenes/Waldweg.png"],
@@ -29,3 +26,5 @@ export const ASSETS = {
   }
 };
 
+export const BOSS_HP_MAX = 9;
+export const STORAGE_KEY = "leselabyrinth_funkelwald_modular_v1";
