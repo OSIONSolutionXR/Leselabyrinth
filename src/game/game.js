@@ -1,12 +1,8 @@
 import { mountUILayout, bindElements } from "../ui/ui-layout.js";
 import { toast, pulse, setFips, renderDots, showCelebrate, showOops } from "../ui/ui.js";
 import { clamp, shuffledAnswersWithKey, vibrate } from "../core/utils.js";
-
-// ✅ FIX: createDefaultState kommt NICHT aus storage.js
-import { createDefaultState } from "../core/state.js";
-import { loadState, saveState } from "../core/storage.js";
-
-import { ASSETS, STORAGE_KEY, BOSS_HP_MAX } from "../data/assets.js";
+import { loadState, saveState, resetState } from "../core/state.js";
+import { ASSETS, BOSS_HP_MAX } from "../data/assets.js";
 import { NODES } from "../data/nodes.js";
 import { renderBossUI, bossHitFX } from "./boss.js";
 import { burstAtHotspot, flyToHUD } from "./interactions.js";
@@ -15,7 +11,8 @@ const root = document.getElementById("app");
 mountUILayout(root);
 const el = bindElements();
 
-let state = loadState(createDefaultState({ NODES, BOSS_HP_MAX, STORAGE_KEY }));
+// ✅ State kommt jetzt sauber aus core/state.js
+let state = loadState();
 
 function gainXP(amount){
   state.xp += amount;
@@ -409,8 +406,7 @@ el.nextBtn.addEventListener("click", () => {
 
 el.resetBtn.addEventListener("click", () => {
   if(!confirm("Wirklich alles zurücksetzen?")) return;
-  state = createDefaultState({ NODES, BOSS_HP_MAX, STORAGE_KEY });
-  saveState(state);
+  state = resetState();
   renderAll();
   toast(el, "<b>Reset.</b> Alles zurückgesetzt.");
   setFips(el, ASSETS, "idle", "Los geht’s. Lesen, dann antworten.");
