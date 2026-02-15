@@ -1,6 +1,5 @@
 /* src/ui/ui.css */
 
-/* ---------- THEME ---------- */
 :root{
   --bg0:#070a14;
   --bg1:#0b1030;
@@ -20,11 +19,9 @@
   --blue:#6fd0ff;
   --pink:#ff4fa3;
 
-  --radius: 18px;
   --shadow: 0 18px 60px rgba(0,0,0,.35);
-
-  /* Bühne */
   --maxw: 1400px;
+
   --sceneH: 600px;
   --sceneH-md: 500px;
   --sceneH-sm: 380px;
@@ -66,6 +63,13 @@ body{
   gap: 10px;
 }
 
+.brandRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+}
+
 .brand{
   display:flex;
   align-items:center;
@@ -92,22 +96,34 @@ body{
   line-height: 1.2;
 }
 
-/* HUD */
+/* ---------- HUD (2 Reihen) ---------- */
 .hud{
   display:flex;
-  align-items:center;
-  flex-wrap: wrap;
+  flex-direction:column;
   gap: 10px;
+}
+
+.hudTop,
+.hudBottom{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
   justify-content:flex-end;
 }
 
-/* Reihenlogik */
-#pillHearts, #pillStars, #pillApples, #pillLanterns, #pillSparks { order: 20; }
-#pillXP { order: 10; }
-#resetBtn, #helpBtn { order: 11; }
-.hud > .pill:last-of-type { order: 9; } /* Serie/Stufe/Fokus */
+/* oben: kompakter */
+.hudTop{ opacity: .98; }
 
-/* ---------- Micro Text ---------- */
+/* unten: große Collectibles */
+.hudBottom{ justify-content:flex-end; }
+
+.actions{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+}
+
 .sep{
   opacity:.5;
   padding: 0 6px;
@@ -131,75 +147,39 @@ body{
   white-space: nowrap;
 }
 
-/* Collectibles größer + besser erkennbar */
-#pillHearts, #pillStars, #pillApples, #pillLanterns, #pillSparks{
+.pillBig{
   padding: 10px 16px;
-  gap:12px;
+  gap: 12px;
   border-color: rgba(255,255,255,.18);
   background: rgba(18,22,44,.66);
 }
 
-/* Zahlen größer */
-#pillStars b, #pillApples b, #pillLanterns b, #pillSparks b{
+/* Zahlen deutlich größer */
+.pillBig b{
   font-size: 18px;
 }
-#pillHearts .tiny,
-#pillStars .tiny,
-#pillApples .tiny,
-#pillLanterns .tiny,
-#pillSparks .tiny{
-  font-size: 13px;
-}
 
-/* Icons generell */
-.pill .icon{
-  width: 28px;
-  height: 28px;
+/* Collectible Icons */
+.iconBig{
+  width: 38px;
+  height: 38px;
   object-fit: contain;
   display:block;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
 }
 
-/* Icons Collectibles NOCH größer */
-#pillStars .icon,
-#pillApples .icon,
-#pillLanterns .icon,
-#pillSparks .icon{
-  width: 34px;
-  height: 34px;
-}
-
-/* Hearts container (robust) */
+/* Hearts */
 .hearts{
   display:flex;
-  gap:10px;
+  gap: 10px;
   align-items:center;
 }
-
-/* Variante A: JS rendert Herzen als DIVs */
-.hearts .h{
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.20);
-  border: 1px solid rgba(255,255,255,.18);
-}
-.hearts .h.on{
-  background: rgba(255,107,107,.95);
-  border-color: rgba(255,107,107,.55);
-  box-shadow: 0 0 0 3px rgba(255,107,107,.14);
-}
-
-/* Variante B: JS rendert Herzen als IMG → groß und niemals riesig */
-#hearts{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-#hearts img{
-  width: 32px !important;
-  height: 32px !important;
+.heartIcon{
+  width: 34px;
+  height: 34px;
   object-fit: contain;
   display:block;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
 }
 
 /* ---------- XP Pill ---------- */
@@ -212,7 +192,7 @@ body{
   background: rgba(18,22,44,.55);
   border: 1px solid rgba(255,255,255,.12);
   box-shadow: 0 10px 24px rgba(0,0,0,.25);
-  min-width: 220px;
+  min-width: 240px;
 }
 .xp small{
   color: var(--muted);
@@ -286,15 +266,13 @@ body{
   .sceneImg{ height: var(--sceneH-sm); }
 }
 
-/* Fallback */
 .sceneFallback{
   position:absolute;
   inset:0;
   display:none;
   place-items:center;
   padding: 18px;
-  background: radial-gradient(800px 480px at 40% 30%, rgba(255,255,255,.08), transparent 60%),
-              rgba(8,10,25,.55);
+  background: rgba(8,10,25,.55);
   z-index: 6;
 }
 .sceneFallback .box{
@@ -308,7 +286,6 @@ body{
 .sceneFallback h3{ margin: 0 0 6px; }
 .sceneFallback p{ margin: 0; color: var(--muted); font-size: 13px; line-height: 1.25; }
 
-/* Overlay */
 .overlay{
   position:absolute;
   inset:0;
@@ -316,35 +293,12 @@ body{
   z-index: 5;
 }
 
-/* Hotspots */
-.hotspot{
-  position:absolute;
-  transform: translate(-50%, -50%);
-  width: var(--w, 110px);
-  height: var(--w, 110px);
-  pointer-events: auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  filter: drop-shadow(0 12px 18px rgba(0,0,0,.45));
-}
-.hotspot img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: transform .12s ease;
-}
-.hotspot:hover img{ transform: scale(1.05); }
-
-/* Kapitel button */
+/* Kapitel Button */
 .fabRow{
   position:absolute;
   top: 14px;
   right: 14px;
   z-index: 10;
-  display:flex;
-  gap:10px;
-  align-items:center;
 }
 .fab{
   border:0;
@@ -357,7 +311,6 @@ body{
   color: var(--text);
   box-shadow: 0 14px 36px rgba(0,0,0,.35);
 }
-.fab:hover{ border-color: rgba(255,255,255,.28); }
 
 /* Drawer */
 .drawer{
@@ -375,7 +328,6 @@ body{
   display:none;
 }
 .drawer.open{ display:block; }
-
 .drawerHd{
   display:flex;
   align-items:center;
@@ -395,118 +347,12 @@ body{
   overflow:auto;
 }
 
-.mini{
-  display:flex;
-  gap: 10px;
-  align-items:center;
-}
-.avatar{
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.10);
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-}
-.avatar img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display:block;
-}
-.speech .name{
-  font-weight: 1000;
-  font-size: 13px;
-}
-.speech .line{
-  font-size: 12px;
-  color: var(--muted);
-  margin-top:2px;
-  line-height: 1.2;
-}
-
-.pathlist{
-  display:grid;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-/* ---------- BOSS HUD ---------- */
-.bossHud{
-  position:absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 12;
-  display:none;
-  align-items:center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 999px;
-  background: rgba(18,22,44,.68);
-  border: 1px solid rgba(255,255,255,.16);
-  box-shadow: 0 14px 36px rgba(0,0,0,.35);
-}
-.bossHud.on{ display:flex; }
-
-.bossName{ font-weight: 1000; }
-
-.bossBar{
-  position: relative;
-  width: 240px;
-  height: 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.10);
-  border: 1px solid rgba(255,255,255,.10);
-  overflow:hidden;
-}
-#bossBarFill{
-  height: 100%;
-  width: 100%;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(255,107,107,.95), rgba(255,211,106,.95));
-  transition: width .18s ease;
-}
-.bossHitFlash{
-  position:absolute;
-  inset:0;
-  background: rgba(255,255,255,.35);
-  opacity: 0;
-  pointer-events:none;
-}
-.bossHud.hit .bossHitFlash{ animation: bossFlash .18s ease; }
-@keyframes bossFlash{
-  0%{ opacity:0; }
-  30%{ opacity:.85; }
-  100%{ opacity:0; }
-}
-
-.dmg{
-  position:absolute;
-  top: 62px;
-  left: 150px;
-  z-index: 13;
-  font-weight: 1000;
-  color: rgba(255,107,107,.95);
-  text-shadow: 0 10px 24px rgba(0,0,0,.45);
-  opacity: 0;
-  transform: translateY(0);
-  pointer-events:none;
-}
-.dmg.show{ animation: dmgFloat .45s ease; }
-@keyframes dmgFloat{
-  0%{ opacity:0; transform: translateY(6px) scale(.95); }
-  20%{ opacity:1; }
-  100%{ opacity:0; transform: translateY(-14px) scale(1); }
-}
-
-/* ---------- FIPS MAIN ---------- */
+/* Fips */
 .fipsMain{
   position:absolute;
   left: 14px;
   bottom: 14px;
-  z-index: 30; /* WICHTIG: über Pergament */
+  z-index: 40;
   display:flex;
   gap: 12px;
   align-items:flex-end;
@@ -544,42 +390,15 @@ body{
   line-height: 1.2;
 }
 
-/* ---------- GATE OPEN ---------- */
-.gateOpen{
-  position:absolute;
-  inset:0;
-  display:none;
-  place-items:center;
-  padding: 18px;
-  background: rgba(8,10,25,.55);
-  z-index: 18;
-}
-.gateOpen.show{ display:grid; }
-.gateOpen .card{
-  max-width: 520px;
-  background: rgba(18,22,44,.72);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 18px;
-  padding: 14px 16px;
-  box-shadow: var(--shadow);
-}
-.gateOpen h3{ margin:0 0 6px; }
-.gateOpen p{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.25; }
-
-/* ---------- PARCHMENT = Questfeld (kleiner, Bild sichtbar) ---------- */
+/* Pergament / Questfeld */
 .pergBar{
   position:absolute;
-
-  /* nicht mehr volle Breite: Questfeld rechts neben Fips */
-  left: 150px;                 /* Platz für Fips */
+  left: 150px;
   right: 14px;
   bottom: 14px;
-
   z-index: 20;
   pointer-events: none;
 }
-
-/* Panel */
 .pergInner{
   position: relative;
   border-radius: 18px;
@@ -587,25 +406,8 @@ body{
   box-shadow: var(--shadow);
   border: 1px solid rgba(255,255,255,.16);
   pointer-events: auto;
-
-  /* begrenzt Höhe, damit Szene sichtbar bleibt */
   max-height: 240px;
 }
-
-/* Pergament als Hintergrund */
-.pergInner::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image: url("../../assets/ui/panels/parchment.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: .95;
-  filter: saturate(1.05) contrast(1.05);
-}
-
-/* Lesbarkeit-Layer */
 .pergInner::after{
   content:"";
   position:absolute;
@@ -617,9 +419,15 @@ body{
     rgba(10,12,26,.80)
   );
 }
-
-.pergImg{ display:none; }
-
+.pergImg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  opacity: .95;
+  filter: saturate(1.05) contrast(1.05);
+}
 .pergContent{
   position: relative;
   z-index: 2;
@@ -629,18 +437,7 @@ body{
   gap: 10px;
   width: 100%;
   max-height: 240px;
-  overflow: auto;              /* scroll statt die Szene zu verdecken */
-}
-
-/* Scrollbar dezent */
-.pergContent::-webkit-scrollbar{ height:10px; width:10px; }
-.pergContent::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.14);
-  border-radius: 999px;
-}
-.pergContent::-webkit-scrollbar-track{
-  background: rgba(0,0,0,.18);
-  border-radius: 999px;
+  overflow: auto;
 }
 
 .pergTopLine{
@@ -657,14 +454,12 @@ body{
   display:flex;
   align-items:center;
   gap: 10px;
-  justify-content:flex-end;
 }
 .qMeta{
   font-size: 12px;
   color: rgba(234,240,255,.80);
   font-weight: 1000;
 }
-
 .dots{
   display:flex;
   gap:6px;
@@ -683,7 +478,6 @@ body{
   box-shadow: 0 0 0 3px rgba(111,208,255,.14);
 }
 
-/* Lesetext kompakter */
 .readText{
   padding: 10px 12px;
   border-radius: 12px;
@@ -694,13 +488,11 @@ body{
   font-size: 14px;
 }
 
-/* Frage */
 .questionLine{
   font-weight: 1000;
   font-size: 15px;
 }
 
-/* Antworten kompakter, damit Questfeld klein bleibt */
 .answersRow{
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -730,7 +522,6 @@ body{
   box-shadow: 0 0 0 2px rgba(255,107,107,.16) inset;
 }
 
-/* Footer kompakt */
 .pergFoot{
   display:flex;
   gap: 10px;
@@ -757,8 +548,7 @@ body{
 .btnSmall:hover{ border-color: rgba(255,255,255,.28); }
 .btnSmall:disabled{ opacity:.45; cursor:not-allowed; }
 
-/* ---------- TOAST ---------- */
-.toast,
+/* Toast */
 #toast{
   position: fixed;
   left: 50%;
@@ -774,113 +564,20 @@ body{
   pointer-events:none;
   transition: opacity .12s ease, transform .12s ease;
 }
-.toast.show,
 #toast.show{
   opacity: 1;
   transform: translateX(-50%) translateY(-2px);
 }
 
-/* ---------- OVERLAYS: CELEBRATE / OOPS ---------- */
-.celebrate,
-.oops{
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display:none;
-  place-items:center;
-  background: rgba(6,8,18,.72);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.celebrate.show,
-.oops.show{
-  display:grid;
-}
-
-.celebrate .stage,
-.oops .stage{
-  position: relative;
-  width: min(92vw, 980px);
-  height: min(84vh, 720px);
-  border-radius: 22px;
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-  background:
-    radial-gradient(900px 520px at 30% 20%, rgba(255,79,163,.18), transparent 60%),
-    radial-gradient(900px 520px at 70% 30%, rgba(111,208,255,.14), transparent 60%),
-    rgba(10,12,26,.75);
-}
-
-.rays{
-  position:absolute;
-  inset:-40%;
-  background: conic-gradient(from 90deg,
-    rgba(255,79,163,.14),
-    rgba(111,208,255,.10),
-    rgba(255,211,106,.10),
-    rgba(255,79,163,.14)
-  );
-  animation: raysSpin 10s linear infinite;
-  opacity:.75;
-}
-@keyframes raysSpin{
-  0%{ transform: rotate(0deg); }
-  100%{ transform: rotate(360deg); }
-}
-
-.celebrateBadge,
-.oopsBadge{
-  position:absolute;
-  left: 50%;
-  top: 18px;
-  transform: translateX(-50%);
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(18,22,44,.72);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 18px 60px rgba(0,0,0,.45);
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  font-weight: 1000;
-}
-
-.miniStar,
-.miniMark{
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  display:grid;
-  place-items:center;
-  background: rgba(255,255,255,.10);
-  border: 1px solid rgba(255,255,255,.14);
-}
-
-.confetti{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-}
-
-/* ---------- MOBILE ---------- */
+/* Mobile */
 @media (max-width: 900px){
-  /* auf kleineren Screens: Questfeld wieder über volle Breite, aber flacher */
-  .pergBar{
-    left: 14px;
-    right: 14px;
-  }
-  .pergInner{ max-height: 260px; }
-  .fipsMain .frame{ width: 96px; height: 96px; }
-  #hearts img{ width: 28px !important; height: 28px !important; }
-  #pillStars .icon, #pillApples .icon, #pillLanterns .icon, #pillSparks .icon{
-    width: 30px; height: 30px;
-  }
+  .pergBar{ left: 14px; right: 14px; }
+  .pergInner, .pergContent{ max-height: 260px; }
+  .heartIcon{ width: 30px; height: 30px; }
+  .iconBig{ width: 34px; height: 34px; }
 }
-
 @media (max-width: 640px){
   .topbar-inner{ padding: 10px 12px 8px; }
   .stageWrap{ padding: 12px 12px 18px; }
-  .xp{ min-width: 180px; }
-  .bossBar{ width: 190px; }
+  .xp{ min-width: 200px; }
 }
