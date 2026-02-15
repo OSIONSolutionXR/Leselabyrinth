@@ -148,14 +148,13 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- ✅ OPTIONAL: Celebration / Oops Overlays (falls du sie weiter nutzt)
-       Wenn du diese Overlays wirklich brauchst, müssen deren CSS-Klassen ebenfalls in ui.css vorhanden sein.
-       Du hattest sie in der letzten Version drin (groß). Wenn du sie behalten willst, sag Bescheid,
-       dann gebe ich dir ui.css + overlays 1:1 vollständig, ohne Kürzung. -->
+  <!-- ✅ Overlays: sicher drin lassen (CSS-Klassen sind in ui.css vorhanden) -->
+  <div class="celebrate" id="celebrate"></div>
+  <div class="oops" id="oops"></div>
 
-  <!-- ===================== JS LOADER ===================== -->
-  <!-- ✅ Topbar-Höhe messen, damit nichts abgeschnitten wird -->
+  <!-- ===================== JS START ===================== -->
   <script type="module">
+    // ✅ Topbar-Höhe messen -> SceneWrap passt immer (kein Abschneiden)
     function syncTopbarHeight(){
       const tb = document.getElementById("topbar");
       if(!tb) return;
@@ -166,7 +165,7 @@
     window.addEventListener("load", syncTopbarHeight);
     syncTopbarHeight();
 
-    // ✅ Game Start (dein modularer Entry)
+    // ✅ Game Start (modularer Entry)
     import "./src/game/main.js";
   </script>
 </body>
