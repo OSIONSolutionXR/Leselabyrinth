@@ -586,42 +586,9 @@ body{
 .toast.show{ display:block; }
 
 /* POS/NEG Animationen bleiben wie gehabt (dein aktueller Stand) */
-.celebrate, .oops {
-  position: fixed;
-  inset: 0;
-  z-index: 260;
-  display:none;
-  place-items:center;
-  pointer-events:none;
-}
+.celebrate, .oops { position: fixed; inset: 0; z-index: 260; display:none; place-items:center; pointer-events:none; }
 .celebrate.show, .oops.show{ display:grid; }
 
-/* =========================================================
-   ✅ Mini-Korrekturen (damit JS-Klassen nicht ins Leere laufen)
-   ========================================================= */
-
-/* UI Pulse (wird in JS via classList.add("pulse") verwendet) */
+/* ✅ Mini-Korrektur: UI-Pulse (wird von ui.js genutzt) */
 .pulse { animation: pulse .22s ease; }
-@keyframes pulse {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.03); }
-  100% { transform: scale(1); }
-}
-
-/* Optional: wenn dein JS wiggle/bossShake nutzt */
-.wiggle { animation: wiggle .45s ease; }
-@keyframes wiggle{
-  0%{ transform: rotate(0deg) scale(1); }
-  30%{ transform: rotate(-6deg) scale(1.06); }
-  60%{ transform: rotate(6deg) scale(1.06); }
-  100%{ transform: rotate(0deg) scale(1); }
-}
-
-.bossShake{ animation: bossShake .25s ease; }
-@keyframes bossShake{
-  0%{ transform: translateX(-50%) translateY(0); }
-  25%{ transform: translateX(-50%) translateY(0) translateX(-6px); }
-  50%{ transform: translateX(-50%) translateY(0) translateX(6px); }
-  75%{ transform: translateX(-50%) translateY(0) translateX(-3px); }
-  100%{ transform: translateX(-50%) translateY(0) translateX(0); }
-}
+@keyframes pulse { 0%{transform:scale(1)} 50%{transform:scale(1.03)} 100%{transform:scale(1)} }
