@@ -5,14 +5,72 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Leselabyrinth – Funkelwald (MVP)</title>
 
-  <link rel="stylesheet" href="src/ui/ui.css" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="./src/ui/ui.css" />
 </head>
 
 <body>
-  <!-- game.js erwartet dieses Root-Element -->
+  <!-- Root -->
   <div id="app"></div>
 
-  <!-- Game Start -->
-  <script type="module" src="src/game/main.js"></script>
+  <!-- BOOT (zeigt IMMER etwas an, auch wenn Imports kaputt sind) -->
+  <script type="module">
+    const app = document.getElementById("app");
+
+    // Sofort sichtbar: Script läuft wirklich
+    app.innerHTML = `
+      <div style="padding:18px; font-family:system-ui; font-weight:900;">
+        BOOT OK – JS läuft. Lade Game…
+      </div>
+    `;
+
+    try {
+      // Wichtig: relativer Pfad mit ./ (GitHub Pages ist pingelig, Cache auch)
+      await import("./src/game/game.js");
+
+      // Falls game.js selbst UI mountet, darf dieser Text danach verschwinden – ist ok.
+      console.log("[BOOT] game.js imported");
+    } catch (err) {
+      console.error("[BOOT] import error:", err);
+      const msg = (err && (err.stack || err.message)) ? (err.stack || err.message) : String(err);
+
+      app.innerHTML = `
+        <div style="
+          min-height:100vh; display:flex; align-items:center; justify-content:center;
+          padding:24px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+          color:#eaf0ff;">
+          <div style="
+            max-width: 980px; width: 100%;
+            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(255,255,255,.06);
+            border-radius: 16px;
+            padding: 18px 18px 14px;">
+            <div style="font-weight:900; font-size:18px; margin-bottom:10px;">
+              Startfehler (Import)
+            </div>
+            <pre style="
+              white-space: pre-wrap;
+              background: rgba(0,0,0,.35);
+              border: 1px solid rgba(255,255,255,.12);
+              border-radius: 12px;
+              padding: 12px;
+              overflow:auto;
+              max-height: 70vh;
+              line-height: 1.35;
+              font-size: 13px;">${escapeHtml(msg)}</pre>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
 </body>
 </html>
