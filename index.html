@@ -3,13 +3,139 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Leselabyrinth – Funkelwald (MVP)</title>
+  <title>Leselabyrinth – Funkelwald</title>
 
   <link rel="stylesheet" href="src/ui/ui.css" />
 </head>
-<body>
-  <div id="app"></div>
 
-  <script type="module" src="src/game/game.js"></script>
+<body>
+  <div class="topbar" id="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>
+          <div class="title">Leselabyrinth – Funkelwald</div>
+          <div class="sub">Kinder-RPG Lesetraining · Szene-Pfad · Progression · Bonus-Sammeln</div>
+        </div>
+      </div>
+
+      <div class="hud">
+        <div class="pill" id="pillHearts" title="Leben (3 Herzen)">
+          <span class="tiny"><b>Leben</b></span>
+          <div class="hearts" id="hearts"></div>
+        </div>
+
+        <div class="pill" id="pillStars" title="Sterne (Bonus)">
+          <img class="icon" src="assets/ui/icons/stern.png" alt="Stern" />
+          <span><b id="starsVal">0</b></span>
+          <span class="sep">|</span>
+          <span class="tiny">Sterne</span>
+        </div>
+
+        <div class="pill" id="pillApples" title="Äpfel (Bonus)">
+          <img class="icon" src="assets/ui/interactables/Apfel.png" alt="Apfel" />
+          <span><b id="applesVal">0</b></span>
+          <span class="sep">|</span>
+          <span class="tiny">Äpfel</span>
+        </div>
+
+        <div class="pill" id="pillLanterns" title="Laternen (Bonus)">
+          <img class="icon" src="assets/ui/interactables/Laterne.png" alt="Laterne" />
+          <span><b id="lanternsVal">0</b></span>
+          <span class="sep">|</span>
+          <span class="tiny">Laternen</span>
+        </div>
+
+        <div class="pill" id="pillSparks" title="Geheimfunken (Bonus)">
+          <img class="icon" src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke" />
+          <span><b id="sparksVal">0</b></span>
+          <span class="sep">|</span>
+          <span class="tiny">Funken</span>
+        </div>
+
+        <div class="pill" title="Serie, Stufe, Fokus">
+          <span class="tiny">Serie</span> <b id="streakVal">0</b>
+          <span class="sep">|</span>
+          <span class="tiny">Stufe</span> <b id="levelVal">1</b>
+          <span class="sep">|</span>
+          <span class="tiny">Fokus</span> <b id="focusVal">W-Frage</b>
+        </div>
+
+        <div class="xp" id="pillXP" title="XP Fortschritt">
+          <small><b>XP</b> <span id="xpVal">0</span>/<span id="xpNeed">100</span></small>
+          <div class="xpbar"><div id="xpBar"></div></div>
+        </div>
+
+        <button class="btn" id="resetBtn">Reset</button>
+        <button class="btn primary" id="helpBtn">Hilfe</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stageWrap">
+    <div class="sceneWrap" id="sceneWrap">
+      <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
+
+      <div class="sceneFallback" id="sceneFallback">
+        <div class="box">
+          <h3>Szene-Bild fehlt</h3>
+          <p>Pfad prüfen: assets/scenes/…</p>
+        </div>
+      </div>
+
+      <div class="overlay" id="overlay"></div>
+
+      <div class="bossHud" id="bossHud">
+        <span class="bossName" id="bossName">Boss</span>
+        <div class="bossBar">
+          <div id="bossBarFill"></div>
+          <div class="bossHitFlash"></div>
+        </div>
+        <span class="tiny"><b id="bossHPText">9</b>/9</span>
+      </div>
+
+      <div class="fipsMain">
+        <div class="frame">
+          <img id="fipsMainImg" src="assets/chars/fips/idle.png" alt="Fips" />
+        </div>
+        <div class="bubble">
+          <b>Fips</b>
+          <div class="line" id="fipsMainLine">Lies. Antworte. Sammeln ist Bonus.</div>
+        </div>
+      </div>
+
+      <div class="pergBar" id="pergBar">
+        <div class="pergInner">
+          <img class="pergImg" src="assets/ui/panels/parchment.png" alt="" aria-hidden="true" />
+          <div class="pergContent">
+            <div class="pergTopLine">
+              <div class="sceneMeta"><b>Szene</b> <span id="sceneTitle">–</span></div>
+              <div class="qRight">
+                <div class="qMeta" id="qProgress">Frage 1/3</div>
+                <div class="dots" id="dots"></div>
+              </div>
+            </div>
+
+            <div class="readText" id="readText">–</div>
+            <div class="questionLine" id="question">–</div>
+            <div class="answersRow" id="answers"></div>
+
+            <div class="pergFoot">
+              <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btnSmall" id="reReadBtn">Nochmal lesen</button>
+                <button class="btnSmall" id="nextBtn" disabled>Nächste Szene</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="src/main.js"></script>
 </body>
 </html>
