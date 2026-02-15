@@ -330,37 +330,37 @@ body{
 
 /* =========================
    OVERLAY (Interaktives)
-   Ziel:
-   - NICHT mehr „untereinander stapeln“
-   - KEINE Riesen-Icons mehr
-   - JS darf left/top setzen, wir überschreiben das NICHT
+   HARD-FIX:
+   - Alles bleibt innerhalb der Szene
+   - JS kann width/height setzen -> wir deckeln es hart
+   - Positionierung bleibt über left/top vom JS
 ========================= */
 .overlay{
   position:absolute;
   inset:0;
-  pointer-events: none;
-  z-index: 6;
+  pointer-events:none;
+  z-index:6;
 
-  /* FIX 1: nichts darf aus der Szene herauslaufen */
-  overflow: hidden;
+  /* verhindert, dass irgendwas aus der Szene rausläuft */
+  overflow:hidden;
 }
 
-/* Alles, was im Overlay landet, MUSS absolut sein (sonst entsteht diese „lange Seite“).
-   WICHTIG: wir setzen KEIN left/top/transform mehr -> Position kommt vom JS. */
+/* ALLE Overlay-Kinder absolut + hart begrenzen */
 .overlay > *{
-  position: absolute !important;
-  pointer-events: auto;
-  max-width: none;
-  max-height: none;
+  position:absolute !important;
+  pointer-events:auto;
+
+  max-width: var(--hotMax) !important;
+  max-height: var(--hotMax) !important;
 }
 
-/* Hotspot-Container (wenn du ihn nutzt) */
+/* Hotspot-Container (wenn genutzt) */
 .hotspot{
   position:absolute;
   transform: translate(-50%, -50%);
   width: clamp(var(--hotMin), var(--w, var(--hotIdeal)), var(--hotMax));
   height: clamp(var(--hotMin), var(--w, var(--hotIdeal)), var(--hotMax));
-  pointer-events: auto;
+  pointer-events:auto;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -375,25 +375,26 @@ body{
   transition: transform .12s ease;
 }
 
-/* Fallback: falls JS nur <img> direkt in #overlay wirft (ohne .hotspot) */
+/* Fallback: falls JS nur <img> direkt in #overlay wirft (ohne .hotspot)
+   -> HARD CAP + Zentrierung erzwingen */
 .overlay img{
-  width: clamp(var(--hotMin), var(--ovw, var(--hotIdeal)), var(--hotMax));
-  height: clamp(var(--hotMin), var(--ovw, var(--hotIdeal)), var(--hotMax));
-  object-fit: contain;
+  width: clamp(var(--hotMin), var(--ovw, var(--hotIdeal)), var(--hotMax)) !important;
+  height: clamp(var(--hotMin), var(--ovw, var(--hotIdeal)), var(--hotMax)) !important;
+  object-fit: contain !important;
   filter: drop-shadow(0 12px 18px rgba(0,0,0,.45));
   transition: transform .12s ease;
 
-  /* FIX 2: wenn JS nur left/top setzt, sitzt es sauber mittig */
-  transform: translate(-50%, -50%);
+  /* falls JS nur left/top setzt */
+  transform: translate(-50%, -50%) !important;
 }
 
+/* Hover sauber (Zentrierung bleibt) */
 .hotspot:hover img{
   transform: scale(1.05);
 }
 
-/* FIX 3: Hover darf nicht die Zentrierung verlieren */
 .overlay img:hover{
-  transform: translate(-50%, -50%) scale(1.05);
+  transform: translate(-50%, -50%) scale(1.05) !important;
 }
 
 /* =========================
