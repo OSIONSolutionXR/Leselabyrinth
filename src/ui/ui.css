@@ -23,7 +23,7 @@
   --radius: 18px;
   --shadow: 0 18px 60px rgba(0,0,0,.35);
 
-  /* Bühne größer */
+  /* Bühne */
   --maxw: 1400px;
   --sceneH: 600px;
   --sceneH-md: 500px;
@@ -62,7 +62,7 @@ body{
   margin: 0 auto;
   padding: 12px 18px 10px;
   display:flex;
-  flex-direction:column; /* damit wir HUD wie 2 Reihen aufbauen können */
+  flex-direction:column;
   gap: 10px;
 }
 
@@ -101,19 +101,11 @@ body{
   justify-content:flex-end;
 }
 
-/* Reihenlogik per order:
-   - Reihe 1: Serie/Stufe/Fokus + XP + Buttons (kompakt)
-   - Reihe 2: Leben/Sterne/Äpfel/Laternen/Funken (groß)
-*/
+/* Reihenlogik */
 #pillHearts, #pillStars, #pillApples, #pillLanterns, #pillSparks { order: 20; }
 #pillXP { order: 10; }
 #resetBtn, #helpBtn { order: 11; }
-.hud > .pill:last-of-type { order: 9; } /* das "Serie/Stufe/Fokus"-Pill ist im Layout ein normales .pill ohne id */
-
-/* optisch: zweite Reihe (Collectibles) soll insgesamt unterhalb stehen */
-#pillHearts, #pillStars, #pillApples, #pillLanterns, #pillSparks{
-  flex: 0 0 auto;
-}
+.hud > .pill:last-of-type { order: 9; } /* Serie/Stufe/Fokus */
 
 /* ---------- Micro Text ---------- */
 .sep{
@@ -139,15 +131,17 @@ body{
   white-space: nowrap;
 }
 
-/* Collectibles größer + Icons klar */
+/* Collectibles größer + besser erkennbar */
 #pillHearts, #pillStars, #pillApples, #pillLanterns, #pillSparks{
-  padding: 10px 14px;
-  gap:10px;
-  border-color: rgba(255,255,255,.16);
-  background: rgba(18,22,44,.62);
+  padding: 10px 16px;
+  gap:12px;
+  border-color: rgba(255,255,255,.18);
+  background: rgba(18,22,44,.66);
 }
+
+/* Zahlen größer */
 #pillStars b, #pillApples b, #pillLanterns b, #pillSparks b{
-  font-size: 16px;
+  font-size: 18px;
 }
 #pillHearts .tiny,
 #pillStars .tiny,
@@ -157,32 +151,34 @@ body{
   font-size: 13px;
 }
 
-/* Icons größer */
+/* Icons generell */
 .pill .icon{
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
   display:block;
 }
+
+/* Icons Collectibles NOCH größer */
 #pillStars .icon,
 #pillApples .icon,
 #pillLanterns .icon,
 #pillSparks .icon{
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
 }
 
 /* Hearts container (robust) */
 .hearts{
   display:flex;
-  gap:8px;
+  gap:10px;
   align-items:center;
 }
 
 /* Variante A: JS rendert Herzen als DIVs */
 .hearts .h{
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
   background: rgba(255,255,255,.20);
   border: 1px solid rgba(255,255,255,.18);
@@ -193,20 +189,20 @@ body{
   box-shadow: 0 0 0 3px rgba(255,107,107,.14);
 }
 
-/* Variante B: JS rendert Herzen als IMG → NIE riesig */
+/* Variante B: JS rendert Herzen als IMG → groß und niemals riesig */
 #hearts{
   display:flex;
-  gap:8px;
+  gap:10px;
   align-items:center;
 }
 #hearts img{
-  width: 24px !important;
-  height: 24px !important;
+  width: 32px !important;
+  height: 32px !important;
   object-fit: contain;
   display:block;
 }
 
-/* ---------- XP Pill (kompakt, sauber) ---------- */
+/* ---------- XP Pill ---------- */
 .xp{
   display:flex;
   flex-direction:column;
@@ -290,7 +286,7 @@ body{
   .sceneImg{ height: var(--sceneH-sm); }
 }
 
-/* Fallback (missing scene) */
+/* Fallback */
 .sceneFallback{
   position:absolute;
   inset:0;
@@ -312,7 +308,7 @@ body{
 .sceneFallback h3{ margin: 0 0 6px; }
 .sceneFallback p{ margin: 0; color: var(--muted); font-size: 13px; line-height: 1.25; }
 
-/* Overlay for hotspots */
+/* Overlay */
 .overlay{
   position:absolute;
   inset:0;
@@ -320,7 +316,7 @@ body{
   z-index: 5;
 }
 
-/* Hotspots clickable */
+/* Hotspots */
 .hotspot{
   position:absolute;
   transform: translate(-50%, -50%);
@@ -340,7 +336,7 @@ body{
 }
 .hotspot:hover img{ transform: scale(1.05); }
 
-/* Kapitel floating button */
+/* Kapitel button */
 .fabRow{
   position:absolute;
   top: 14px;
@@ -505,12 +501,12 @@ body{
   100%{ opacity:0; transform: translateY(-14px) scale(1); }
 }
 
-/* ---------- FIPS MAIN (bigger) ---------- */
+/* ---------- FIPS MAIN ---------- */
 .fipsMain{
   position:absolute;
   left: 14px;
   bottom: 14px;
-  z-index: 11;
+  z-index: 30; /* WICHTIG: über Pergament */
   display:flex;
   gap: 12px;
   align-items:flex-end;
@@ -570,27 +566,33 @@ body{
 .gateOpen h3{ margin:0 0 6px; }
 .gateOpen p{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.25; }
 
-/* ---------- PARCHMENT BAR (Text + Antworten "auf Pergament") ---------- */
+/* ---------- PARCHMENT = Questfeld (kleiner, Bild sichtbar) ---------- */
 .pergBar{
   position:absolute;
-  left: 14px;
+
+  /* nicht mehr volle Breite: Questfeld rechts neben Fips */
+  left: 150px;                 /* Platz für Fips */
   right: 14px;
   bottom: 14px;
-  z-index: 15;
+
+  z-index: 20;
   pointer-events: none;
 }
 
-/* Wir nutzen parchment.png als Hintergrund für das ganze Pergament-Panel */
+/* Panel */
 .pergInner{
   position: relative;
-  border-radius: 20px;
+  border-radius: 18px;
   overflow:hidden;
   box-shadow: var(--shadow);
   border: 1px solid rgba(255,255,255,.16);
   pointer-events: auto;
+
+  /* begrenzt Höhe, damit Szene sichtbar bleibt */
+  max-height: 240px;
 }
 
-/* Hintergrundbild: Pergament */
+/* Pergament als Hintergrund */
 .pergInner::before{
   content:"";
   position:absolute;
@@ -603,7 +605,7 @@ body{
   filter: saturate(1.05) contrast(1.05);
 }
 
-/* Lesbarkeit-Layer (damit Text/Buttons nicht im Bild untergehen) */
+/* Lesbarkeit-Layer */
 .pergInner::after{
   content:"";
   position:absolute;
@@ -611,21 +613,34 @@ body{
   background: linear-gradient(
     180deg,
     rgba(10,12,26,.78),
-    rgba(10,12,26,.64) 55%,
-    rgba(10,12,26,.78)
+    rgba(10,12,26,.60) 55%,
+    rgba(10,12,26,.80)
   );
 }
 
-.pergImg{ display:none; } /* wir brauchen das linke Bild nicht mehr */
+.pergImg{ display:none; }
 
 .pergContent{
   position: relative;
   z-index: 2;
-  padding: 14px 16px 16px;
+  padding: 12px 14px 12px;
   display:flex;
   flex-direction:column;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
+  max-height: 240px;
+  overflow: auto;              /* scroll statt die Szene zu verdecken */
+}
+
+/* Scrollbar dezent */
+.pergContent::-webkit-scrollbar{ height:10px; width:10px; }
+.pergContent::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.14);
+  border-radius: 999px;
+}
+.pergContent::-webkit-scrollbar-track{
+  background: rgba(0,0,0,.18);
+  border-radius: 999px;
 }
 
 .pergTopLine{
@@ -668,22 +683,24 @@ body{
   box-shadow: 0 0 0 3px rgba(111,208,255,.14);
 }
 
-/* Lesetext auf Pergament */
+/* Lesetext kompakter */
 .readText{
-  padding: 12px 14px;
-  border-radius: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.12);
   color: var(--text);
-  line-height: 1.35;
+  line-height: 1.32;
+  font-size: 14px;
 }
 
+/* Frage */
 .questionLine{
   font-weight: 1000;
-  font-size: 16px;
+  font-size: 15px;
 }
 
-/* Antworten "auf Pergament" */
+/* Antworten kompakter, damit Questfeld klein bleibt */
 .answersRow{
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -694,8 +711,8 @@ body{
 }
 
 .ans{
-  padding: 12px 12px;
-  border-radius: 14px;
+  padding: 10px 10px;
+  border-radius: 12px;
   background: rgba(18,22,44,.55);
   border: 1px solid rgba(255,255,255,.14);
   cursor:pointer;
@@ -713,7 +730,7 @@ body{
   box-shadow: 0 0 0 2px rgba(255,107,107,.16) inset;
 }
 
-/* Footer */
+/* Footer kompakt */
 .pergFoot{
   display:flex;
   gap: 10px;
@@ -725,14 +742,12 @@ body{
   font-size: 12px;
   color: rgba(234,240,255,.80);
 }
-.good{ color: var(--good); font-weight: 1000; }
-.bad{ color: var(--bad); font-weight: 1000; }
 
 .btnSmall{
   border: 0;
   cursor:pointer;
   font-weight: 1000;
-  padding: 10px 12px;
+  padding: 9px 12px;
   border-radius: 999px;
   color: var(--text);
   background: rgba(18,22,44,.58);
@@ -848,11 +863,24 @@ body{
   pointer-events:none;
 }
 
-/* ---------- MOBILE TWEAKS ---------- */
+/* ---------- MOBILE ---------- */
+@media (max-width: 900px){
+  /* auf kleineren Screens: Questfeld wieder über volle Breite, aber flacher */
+  .pergBar{
+    left: 14px;
+    right: 14px;
+  }
+  .pergInner{ max-height: 260px; }
+  .fipsMain .frame{ width: 96px; height: 96px; }
+  #hearts img{ width: 28px !important; height: 28px !important; }
+  #pillStars .icon, #pillApples .icon, #pillLanterns .icon, #pillSparks .icon{
+    width: 30px; height: 30px;
+  }
+}
+
 @media (max-width: 640px){
   .topbar-inner{ padding: 10px 12px 8px; }
   .stageWrap{ padding: 12px 12px 18px; }
   .xp{ min-width: 180px; }
   .bossBar{ width: 190px; }
-  #pillHearts img{ width: 22px !important; height: 22px !important; }
 }
