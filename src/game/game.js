@@ -3,8 +3,11 @@
 import { mountUILayout, bindElements } from "../ui/ui-layout.js";
 import { toast, pulse, setFips, renderDots, showCelebrate, showOops } from "../ui/ui.js";
 import { clamp, shuffledAnswersWithKey, vibrate } from "../core/utils.js";
-import { createDefaultState, loadState, saveState } from "../core/storage.js";
-import { ASSETS, STORAGE_KEY, BOSS_HP_MAX } from "../data/assets.js";
+
+// ✅ WICHTIG: State kommt aus core/state.js (nicht mehr core/storage.js)
+import { loadState, saveState, resetState } from "../core/state.js";
+
+import { ASSETS, BOSS_HP_MAX } from "../data/assets.js";
 import { NODES } from "../data/nodes.js";
 import { renderBossUI, bossHitFX } from "./boss.js";
 import { burstAtHotspot, flyToHUD } from "./interactions.js";
@@ -13,7 +16,8 @@ const root = document.getElementById("app");
 mountUILayout(root);
 const el = bindElements();
 
-let state = loadState(createDefaultState({ NODES, BOSS_HP_MAX, STORAGE_KEY }));
+// ✅ State ohne createDefaultState laden (kommt intern aus state.js)
+let state = loadState();
 
 function gainXP(amount){
   state.xp += amount;
@@ -329,8 +333,8 @@ async function renderScene(){
     if(it.once && s.collected[it.id]) return;
 
     // ✅ FIX: harte Begrenzung, damit Hotspots nie aus dem Bild rutschen
-    let x = clamp(it.x, 6, 94);
-    let y = clamp(it.y, 10, 88);
+    const x = clamp(it.x, 6, 94);
+    const y = clamp(it.y, 10, 88);
 
     const hs = document.createElement("div");
     hs.className = "hotspot";
@@ -407,8 +411,10 @@ el.nextBtn.addEventListener("click", () => {
 
 el.resetBtn.addEventListener("click", () => {
   if(!confirm("Wirklich alles zurücksetzen?")) return;
-  state = createDefaultState({ NODES, BOSS_HP_MAX, STORAGE_KEY });
-  saveState(state);
+
+  // ✅ Reset kommt aus state.js (setzt + speichert intern)
+  state = resetState();
+
   renderAll();
   toast(el, "<b>Reset.</b> Alles zurückgesetzt.");
   setFips(el, ASSETS, "idle", "Los geht’s. Lesen, dann antworten.");
