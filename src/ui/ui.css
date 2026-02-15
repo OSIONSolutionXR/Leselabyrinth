@@ -25,13 +25,16 @@
   --radius: 18px;
   --shadow: 0 18px 60px rgba(0,0,0,.35);
 
-  /* harte Limits gegen „Riesen-Icons“ */
-  --hotMin: 56px;
-  --hotIdeal: 86px;
-  --hotMax: 140px;
+  /* Overlay-Icon Limits */
+  --hotMin: 44px;
+  --hotIdeal: 68px;
+  --hotMax: 110px;
 
-  /* Quest Panel Größe (neu) */
+  /* Quest Panel */
   --questMaxW: 920px;
+
+  /* ungefährer Platzbedarf der Topbar -> Szene wird daran angepasst */
+  --topbarSpace: 124px; /* Desktop */
 }
 
 *{ box-sizing:border-box; }
@@ -50,28 +53,16 @@ body{
 #app{ min-height:100%; }
 
 /* =========================
-   GLOBAL HARD-CAP (Herz)
-========================= */
-img[src*="herz" i]:not(.heartIcon){
-  width: clamp(var(--hotMin), var(--hotIdeal), var(--hotMax)) !important;
-  height: auto !important;
-  max-width: var(--hotMax) !important;
-  max-height: var(--hotMax) !important;
-  object-fit: contain !important;
-  aspect-ratio: 1 / 1 !important;
-}
-
-/* =========================
-   TOPBAR
+   TOPBAR (KOMPAKT)
 ========================= */
 .topbar{
   position: sticky;
   top:0;
   z-index: 50;
-  padding: 14px 18px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  background: linear-gradient(180deg, rgba(8,10,25,.88), rgba(8,10,25,.55));
+  padding: 10px 14px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(180deg, rgba(8,10,25,.88), rgba(8,10,25,.50));
   border-bottom: 1px solid rgba(255,255,255,.10);
 }
 
@@ -79,17 +70,18 @@ img[src*="herz" i]:not(.heartIcon){
   max-width: 1200px;
   margin: 0 auto;
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:space-between;
-  gap: 14px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-wrap: nowrap; /* kein 2-zeiliges Chaos */
 }
 
+/* Brand links klein */
 .brandRow{
   display:flex;
   align-items:center;
-  gap: 10px;
   min-width: 260px;
+  flex: 0 0 auto;
 }
 
 .brand{
@@ -99,8 +91,8 @@ img[src*="herz" i]:not(.heartIcon){
 }
 
 .dot{
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,79,163,.9) 35%, rgba(111,208,255,.85) 100%);
   box-shadow: 0 0 0 3px rgba(255,255,255,.06);
@@ -110,59 +102,65 @@ img[src*="herz" i]:not(.heartIcon){
   font-weight: 1000;
   letter-spacing:.2px;
   line-height: 1.05;
+  font-size: 18px;
 }
 .brand .sub{
   font-size: 12px;
   color: var(--muted);
-  opacity:.92;
+  opacity:.88;
   line-height: 1.15;
+  margin-top: 2px;
 }
 
 /* =========================
-   HUD (2 Reihen)
+   HUD – EINZEILIG + KOMPAKT
 ========================= */
 .hud{
   display:flex;
-  flex-direction:column;
-  gap:10px;
-  align-items:flex-end;
-  flex: 1 1 auto;
-}
-
-.hudTop{
-  display:flex;
   align-items:center;
   justify-content:flex-end;
   gap: 10px;
-  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
+/* wir lassen hudTop & hudBottom existieren, aber machen sie zu EINER kompakten Zeile */
+.hudTop,
 .hudBottom{
   display:flex;
   align-items:center;
-  justify-content:flex-end;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
-/* Pills */
+/* hudBottom wird scrollfähig, falls es eng wird */
+.hudBottom{
+  max-width: 55vw;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.hudBottom::-webkit-scrollbar{ height: 0; }
+
+/* Chips (statt fette Pills) */
 .pill{
   display:flex;
   align-items:center;
   gap:8px;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 999px;
-  background: rgba(18,22,44,.55);
+  background: rgba(18,22,44,.48);
   border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  box-shadow: 0 10px 20px rgba(0,0,0,.22);
   user-select:none;
   white-space: nowrap;
+  font-size: 13px;
 }
 
 .pill .tiny{
   font-size: 12px;
   color: var(--muted);
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .sep{
@@ -177,54 +175,56 @@ img[src*="herz" i]:not(.heartIcon){
   100%{ transform:scale(1); }
 }
 
-/* BIG Pills */
+/* pillBig neutralisieren (damit es nicht aufbläht) */
 .pillBig{
-  padding: 10px 14px;
-  gap: 10px;
-  border-color: rgba(255,255,255,.14);
-}
-
-.iconBig{
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-  filter: drop-shadow(0 8px 14px rgba(0,0,0,.35));
-}
-
-.hearts{
-  display:flex;
-  align-items:center;
+  padding: 8px 10px;
   gap: 8px;
 }
 
-.heartIcon{
-  width: 22px;
-  height: 22px;
+/* Icons kleiner */
+.iconBig{
+  width: 18px;
+  height: 18px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 14px rgba(0,0,0,.35));
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.32));
 }
 
-/* XP */
+/* Hearts im HUD klein + sauber */
+.hearts{
+  display:flex;
+  align-items:center;
+  gap: 6px;
+}
+
+.heartIcon{
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.32));
+}
+
+/* XP kompakt */
 .xp{
   display:flex;
   flex-direction:column;
   gap:6px;
-  padding: 10px 14px;
-  border-radius: 16px;
-  background: rgba(18,22,44,.55);
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: rgba(18,22,44,.48);
   border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 10px 24px rgba(0,0,0,.25);
-  min-width: 200px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.22);
+  min-width: 180px;
 }
 
 .xp small{
   color: var(--muted);
-  font-weight: 900;
+  font-weight: 1000;
   letter-spacing:.2px;
+  font-size: 12px;
 }
 
 .xpbar{
-  height: 8px;
+  height: 7px;
   border-radius: 999px;
   overflow:hidden;
   background: rgba(255,255,255,.08);
@@ -238,7 +238,7 @@ img[src*="herz" i]:not(.heartIcon){
   background: linear-gradient(90deg, rgba(255,79,163,.95), rgba(111,208,255,.9));
 }
 
-/* Actions */
+/* Actions kompakt */
 .actions{
   display:flex;
   align-items:center;
@@ -248,21 +248,21 @@ img[src*="herz" i]:not(.heartIcon){
 .btn{
   border: 0;
   cursor:pointer;
-  font-weight: 900;
-  padding: 10px 14px;
+  font-weight: 1000;
+  padding: 9px 12px;
   border-radius: 999px;
   color: var(--text);
-  background: rgba(18,22,44,.55);
+  background: rgba(18,22,44,.48);
   border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+  box-shadow: 0 12px 26px rgba(0,0,0,.22);
+  font-size: 13px;
 }
-
 .btn:hover{ border-color: rgba(255,255,255,.25); }
 
 .btn.primary{
-  background: linear-gradient(135deg, rgba(255,79,163,.9), rgba(111,208,255,.85));
+  background: linear-gradient(135deg, rgba(255,79,163,.92), rgba(111,208,255,.86));
   color:#081028;
-  border-color: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.20);
 }
 
 .btn:disabled{
@@ -270,26 +270,30 @@ img[src*="herz" i]:not(.heartIcon){
   cursor:not-allowed;
 }
 
-/* Responsive HUD */
+/* Responsive: auf kleineren Screens Subline aus, HUD scrollt */
 @media (max-width: 980px){
-  .topbar-inner{ align-items:flex-start; }
-  .hud{ align-items:flex-start; width: 100%; }
-  .hudTop, .hudBottom{ justify-content:flex-start; }
+  :root{ --topbarSpace: 118px; }
+  .brand .sub{ display:none; }
+  .brand .title{ font-size: 17px; }
+  .xp{ min-width: 160px; }
+  .hudBottom{ max-width: 62vw; }
 }
 
-@media (max-width: 520px){
-  .xp{ min-width: 160px; }
-  .iconBig{ width: 24px; height: 24px; }
-  .heartIcon{ width: 20px; height: 20px; }
+@media (max-width: 640px){
+  :root{ --topbarSpace: 106px; }
+  .brandRow{ min-width: 200px; }
+  .xp{ min-width: 150px; }
+  .pill{ padding: 7px 9px; }
+  .btn{ padding: 8px 10px; }
 }
 
 /* =========================
-   STAGE / SCENE
+   STAGE / SCENE (SICHTBAR, OHNE SCROLL-ZWANG)
 ========================= */
 .stageWrap{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 18px 18px 28px;
+  padding: 10px 14px 18px; /* weniger Padding */
 }
 
 .sceneWrap{
@@ -301,18 +305,18 @@ img[src*="herz" i]:not(.heartIcon){
   background: rgba(10,12,26,.55);
 }
 
+/* Szene bekommt dynamische Höhe: Viewport - TopbarSpace - StagePadding */
 .sceneImg{
   width: 100%;
-  height: min(68vh, 560px);
+  height: clamp(380px, calc(100vh - var(--topbarSpace) - 36px), 680px);
   object-fit: cover;
   display:block;
 }
 
-@media (max-width: 980px){
-  .sceneImg{ height: 420px; }
-}
 @media (max-width: 640px){
-  .sceneImg{ height: 320px; }
+  .sceneImg{
+    height: clamp(320px, calc(100vh - var(--topbarSpace) - 26px), 560px);
+  }
 }
 
 /* Missing image fallback */
@@ -323,7 +327,6 @@ img[src*="herz" i]:not(.heartIcon){
   place-items:center;
   background: rgba(8,10,25,.55);
 }
-
 .sceneFallback .box{
   width: min(520px, 92%);
   padding: 14px 16px;
@@ -332,16 +335,8 @@ img[src*="herz" i]:not(.heartIcon){
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: var(--shadow);
 }
-
-.sceneFallback h3{
-  margin:0 0 6px;
-  font-size: 16px;
-}
-.sceneFallback p{
-  margin:0;
-  color: var(--muted);
-  font-size: 13px;
-}
+.sceneFallback h3{ margin:0 0 6px; font-size: 16px; }
+.sceneFallback p{ margin:0; color: var(--muted); font-size: 13px; }
 
 /* =========================
    OVERLAY (Interaktives)
@@ -368,7 +363,7 @@ img[src*="herz" i]:not(.heartIcon){
   display:flex;
   align-items:center;
   justify-content:center;
-  filter: drop-shadow(0 12px 18px rgba(0,0,0,.45));
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.45));
 }
 
 .hotspot img{
@@ -382,13 +377,13 @@ img[src*="herz" i]:not(.heartIcon){
   width: clamp(var(--hotMin), var(--ovw, var(--hotIdeal)), var(--hotMax)) !important;
   height: clamp(var(--hotMin), var(--ovw, var(--hotIdeal)), var(--hotMax)) !important;
   object-fit: contain !important;
-  filter: drop-shadow(0 12px 18px rgba(0,0,0,.45));
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.45));
   transition: transform .12s ease;
   transform: translate(-50%, -50%) !important;
 }
 
-.hotspot:hover img{ transform: scale(1.05); }
-.overlay img:hover{ transform: translate(-50%, -50%) scale(1.05) !important; }
+.hotspot:hover img{ transform: scale(1.06); }
+.overlay img:hover{ transform: translate(-50%, -50%) scale(1.06) !important; }
 
 /* =========================
    FAB / DRAWER
@@ -406,12 +401,12 @@ img[src*="herz" i]:not(.heartIcon){
   border: 0;
   cursor:pointer;
   font-weight: 1000;
-  padding: 10px 14px;
+  padding: 9px 12px;
   border-radius: 999px;
   color: var(--text);
-  background: rgba(18,22,44,.60);
+  background: rgba(18,22,44,.58);
   border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+  box-shadow: 0 12px 26px rgba(0,0,0,.22);
 }
 .fab:hover{ border-color: rgba(255,255,255,.25); }
 
@@ -423,13 +418,12 @@ img[src*="herz" i]:not(.heartIcon){
   max-height: calc(100% - 24px);
   overflow:auto;
   border-radius: 18px;
-  background: rgba(18,22,44,.70);
+  background: rgba(18,22,44,.72);
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: var(--shadow);
   z-index: 20;
   display:none;
 }
-
 .drawer.open{ display:block; }
 
 .drawerHd{
@@ -441,37 +435,19 @@ img[src*="herz" i]:not(.heartIcon){
   border-bottom: 1px solid rgba(255,255,255,.12);
   background: rgba(8,10,25,.35);
 }
-
-.drawerHd h3{
-  margin:0;
-  font-size: 15px;
-  font-weight: 1000;
-}
-
+.drawerHd h3{ margin:0; font-size: 15px; font-weight: 1000; }
 .drawerBd{ padding: 12px 14px 14px; }
 
-.mini{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
+.mini{ display:flex; gap:10px; align-items:center; }
 .avatar{
-  width: 48px;
-  height: 48px;
+  width: 48px; height: 48px;
   border-radius: 14px;
   overflow:hidden;
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.10);
-  display:grid;
-  place-items:center;
+  display:grid; place-items:center;
 }
-
-.avatar img{
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-}
+.avatar img{ width: 44px; height: 44px; object-fit: contain; }
 
 .speech .name{ font-weight: 1000; }
 .speech .line{ font-size: 12px; color: var(--muted); margin-top:2px; }
@@ -484,7 +460,8 @@ img[src*="herz" i]:not(.heartIcon){
 }
 
 /* =========================
-   FIPS (unten links)
+   FIPS (unten links) – DEZENT
+   -> Textline ausblenden, damit nichts "erklärt" wird
 ========================= */
 .fipsMain{
   position:absolute;
@@ -495,44 +472,38 @@ img[src*="herz" i]:not(.heartIcon){
   gap: 10px;
   align-items:flex-end;
   pointer-events:none;
+  opacity: .92;
 }
 
 .fipsMain .frame{
-  width: 82px;
-  height: 82px;
-  border-radius: 18px;
-  background: rgba(18,22,44,.55);
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(18,22,44,.52);
   border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 16px 42px rgba(0,0,0,.35);
+  box-shadow: 0 14px 34px rgba(0,0,0,.35);
   display:grid;
   place-items:center;
   overflow:hidden;
 }
-
 .fipsMain .frame img{
-  width: 74px;
-  height: 74px;
+  width: 58px;
+  height: 58px;
   object-fit: contain;
 }
 
 .fipsMain .bubble{
-  max-width: 280px;
+  max-width: 240px;
   padding: 10px 12px;
   border-radius: 14px;
-  background: rgba(18,22,44,.62);
+  background: rgba(18,22,44,.56);
   border: 1px solid rgba(255,255,255,.12);
   box-shadow: 0 14px 36px rgba(0,0,0,.35);
 }
+.fipsMain .bubble b{ font-weight: 1000; font-size: 13px; }
 
-.fipsMain .bubble b{
-  font-weight: 1000;
-  font-size: 13px;
-}
-.fipsMain .bubble .line{
-  font-size: 12px;
-  color: var(--muted);
-  margin-top:2px;
-}
+/* WICHTIG: keine erklärenden Sätze im Spielbild */
+.fipsMain .bubble .line{ display:none; }
 
 /* =========================
    BOSS HUD
@@ -563,21 +534,18 @@ img[src*="herz" i]:not(.heartIcon){
   border: 1px solid rgba(255,255,255,.10);
   position: relative;
 }
-
 #bossBarFill{
   height: 100%;
   width: 0%;
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(255,107,107,.95), rgba(255,211,106,.9));
 }
-
 .bossHitFlash{
   position:absolute;
   inset:0;
   opacity:0;
   background: rgba(255,255,255,.25);
 }
-
 .dmg{
   position:absolute;
   top: 56px;
@@ -592,7 +560,6 @@ img[src*="herz" i]:not(.heartIcon){
   opacity:0;
   pointer-events:none;
 }
-
 .dmg.show{ animation: dmgPop .55s ease; }
 @keyframes dmgPop{
   0%{ opacity:0; transform: translateX(-50%) translateY(0) scale(.95); }
@@ -601,8 +568,29 @@ img[src*="herz" i]:not(.heartIcon){
 }
 
 /* =========================
-   QUEST PANEL (MODERN)  ✅ NEU
-   -> ersetzt dein Pergament-„Riesenblock“
+   GATE OPEN
+========================= */
+.gateOpen{
+  position:absolute;
+  inset:0;
+  z-index: 30;
+  display:none;
+  place-items:center;
+  background: rgba(8,10,25,.55);
+}
+.gateOpen .card{
+  width: min(520px, 92%);
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(18,22,44,.75);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: var(--shadow);
+}
+.gateOpen h3{ margin:0 0 6px; }
+.gateOpen p{ margin:0; color: var(--muted); }
+
+/* =========================
+   QUEST PANEL (MODERN, KOMPAKT)
 ========================= */
 .pergBar{
   position:absolute;
@@ -611,8 +599,6 @@ img[src*="herz" i]:not(.heartIcon){
   bottom: 14px;
   z-index: 10;
   pointer-events:none;
-
-  /* zentriert, aber klein */
   display:flex;
   justify-content:center;
 }
@@ -622,17 +608,12 @@ img[src*="herz" i]:not(.heartIcon){
   width: min(var(--questMaxW), 100%);
   border-radius: 22px;
   overflow:hidden;
-
-  /* modern glass card */
   background: linear-gradient(180deg, rgba(10,12,26,.58), rgba(10,12,26,.38));
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: 0 18px 70px rgba(0,0,0,.45);
-
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
-
-/* Pergament-Textur komplett deaktivieren (später optional wieder aktivieren) */
 .pergImg{ display:none !important; }
 
 .pergContent{
@@ -651,7 +632,7 @@ img[src*="herz" i]:not(.heartIcon){
 .sceneMeta{
   font-size: 12px;
   color: var(--muted);
-  font-weight: 900;
+  font-weight: 1000;
 }
 .sceneMeta b{ color: var(--text); }
 
@@ -664,7 +645,7 @@ img[src*="herz" i]:not(.heartIcon){
 .qMeta{
   font-size: 12px;
   color: var(--muted);
-  font-weight: 900;
+  font-weight: 1000;
 }
 
 .dots{
@@ -672,7 +653,6 @@ img[src*="herz" i]:not(.heartIcon){
   gap: 6px;
   align-items:center;
 }
-
 .dots .d{
   width: 10px;
   height: 10px;
@@ -685,7 +665,6 @@ img[src*="herz" i]:not(.heartIcon){
   border-color: rgba(255,255,255,.22);
 }
 
-/* Lesetext: knapper, klarer, besser */
 .readText{
   padding: 10px 12px;
   border-radius: 16px;
@@ -702,7 +681,7 @@ img[src*="herz" i]:not(.heartIcon){
   font-size: 16px;
 }
 
-/* Antworten klar in 1 Reihe, kompakt */
+/* Antworten */
 .answersRow{
   margin-top: 10px;
   display:grid;
@@ -754,7 +733,6 @@ img[src*="herz" i]:not(.heartIcon){
   color: var(--muted);
 }
 
-/* Buttons unten rechts */
 .btnSmall{
   border: 0;
   cursor:pointer;
@@ -810,11 +788,8 @@ img[src*="herz" i]:not(.heartIcon){
   place-items:center;
   background: rgba(8,10,25,.55);
 }
-
 .celebrate.show,
-.oops.show{
-  display:grid;
-}
+.oops.show{ display:grid; }
 
 .celebrate .stage,
 .oops .stage{
