@@ -29,6 +29,9 @@
   --hotMin: 56px;
   --hotIdeal: 86px;
   --hotMax: 140px;
+
+  /* Quest Panel Größe (neu) */
+  --questMaxW: 920px;
 }
 
 *{ box-sizing:border-box; }
@@ -47,23 +50,14 @@ body{
 #app{ min-height:100%; }
 
 /* =========================
-   GLOBAL HARD-CAP (FIXT DEIN PROBLEM)
-   - trifft NUR "herz" assets
-   - lässt HUD-Herzen (.heartIcon) in Ruhe
-   - gewinnt gegen inline width/height aus JS
+   GLOBAL HARD-CAP (Herz)
 ========================= */
-
-/* alle Herz-Bilder außerhalb HUD hart deckeln */
 img[src*="herz" i]:not(.heartIcon){
   width: clamp(var(--hotMin), var(--hotIdeal), var(--hotMax)) !important;
   height: auto !important;
   max-width: var(--hotMax) !important;
   max-height: var(--hotMax) !important;
   object-fit: contain !important;
-}
-
-/* falls Script height erzwingt: auch hart deckeln */
-img[src*="herz" i]:not(.heartIcon){
   aspect-ratio: 1 / 1 !important;
 }
 
@@ -203,7 +197,6 @@ img[src*="herz" i]:not(.heartIcon){
   gap: 8px;
 }
 
-/* HUD-Herzen bewusst klein */
 .heartIcon{
   width: 22px;
   height: 22px;
@@ -364,8 +357,6 @@ img[src*="herz" i]:not(.heartIcon){
 .overlay > *{
   position: absolute !important;
   pointer-events: auto;
-  max-width: none;
-  max-height: none;
 }
 
 .hotspot{
@@ -396,13 +387,8 @@ img[src*="herz" i]:not(.heartIcon){
   transform: translate(-50%, -50%) !important;
 }
 
-.hotspot:hover img{
-  transform: scale(1.05);
-}
-
-.overlay img:hover{
-  transform: translate(-50%, -50%) scale(1.05) !important;
-}
+.hotspot:hover img{ transform: scale(1.05); }
+.overlay img:hover{ transform: translate(-50%, -50%) scale(1.05) !important; }
 
 /* =========================
    FAB / DRAWER
@@ -607,9 +593,7 @@ img[src*="herz" i]:not(.heartIcon){
   pointer-events:none;
 }
 
-.dmg.show{
-  animation: dmgPop .55s ease;
-}
+.dmg.show{ animation: dmgPop .55s ease; }
 @keyframes dmgPop{
   0%{ opacity:0; transform: translateX(-50%) translateY(0) scale(.95); }
   20%{ opacity:1; transform: translateX(-50%) translateY(-6px) scale(1); }
@@ -617,72 +601,50 @@ img[src*="herz" i]:not(.heartIcon){
 }
 
 /* =========================
-   TOR / GATE OPEN
-========================= */
-.gateOpen{
-  position:absolute;
-  inset:0;
-  z-index: 30;
-  display:none;
-  place-items:center;
-  background: rgba(8,10,25,.55);
-}
-
-.gateOpen .card{
-  width: min(520px, 92%);
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: rgba(18,22,44,.75);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-}
-
-.gateOpen h3{ margin:0 0 6px; }
-.gateOpen p{ margin:0; color: var(--muted); }
-
-/* =========================
-   PERGAMENT BAR (Questfeld)
+   QUEST PANEL (MODERN)  ✅ NEU
+   -> ersetzt dein Pergament-„Riesenblock“
 ========================= */
 .pergBar{
   position:absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
   z-index: 10;
   pointer-events:none;
+
+  /* zentriert, aber klein */
+  display:flex;
+  justify-content:center;
 }
 
 .pergInner{
-  position: relative;
-  border-radius: 18px;
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(18,22,44,.35);
-  box-shadow: 0 18px 60px rgba(0,0,0,.35);
   pointer-events:auto;
+  width: min(var(--questMaxW), 100%);
+  border-radius: 22px;
+  overflow:hidden;
+
+  /* modern glass card */
+  background: linear-gradient(180deg, rgba(10,12,26,.58), rgba(10,12,26,.38));
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 18px 70px rgba(0,0,0,.45);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.pergImg{
-  position:absolute;
-  inset:0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: .42;
-  filter: saturate(1.05) contrast(1.05);
-  pointer-events:none;
-}
+/* Pergament-Textur komplett deaktivieren (später optional wieder aktivieren) */
+.pergImg{ display:none !important; }
 
 .pergContent{
   position: relative;
-  padding: 12px 14px 14px;
+  padding: 14px 16px 16px;
 }
 
 .pergTopLine{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  gap:10px;
+  gap: 12px;
   margin-bottom: 10px;
 }
 
@@ -723,22 +685,24 @@ img[src*="herz" i]:not(.heartIcon){
   border-color: rgba(255,255,255,.22);
 }
 
+/* Lesetext: knapper, klarer, besser */
 .readText{
   padding: 10px 12px;
-  border-radius: 14px;
+  border-radius: 16px;
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.10);
   color: var(--text);
   line-height: 1.35;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .questionLine{
   margin-top: 10px;
   font-weight: 1000;
-  font-size: 15px;
+  font-size: 16px;
 }
 
+/* Antworten klar in 1 Reihe, kompakt */
 .answersRow{
   margin-top: 10px;
   display:grid;
@@ -752,16 +716,20 @@ img[src*="herz" i]:not(.heartIcon){
 
 .ans{
   padding: 12px 12px;
-  border-radius: 14px;
-  background: rgba(18,22,44,.55);
-  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  background: rgba(18,22,44,.58);
+  border: 1px solid rgba(255,255,255,.14);
   cursor:pointer;
-  font-weight: 900;
+  font-weight: 1000;
   text-align:center;
   user-select:none;
+  transition: transform .08s ease, border-color .12s ease;
 }
 
-.ans:hover{ border-color: rgba(255,255,255,.22); }
+.ans:hover{
+  border-color: rgba(255,255,255,.26);
+  transform: translateY(-1px);
+}
 
 .ans.correct{
   border-color: rgba(69,212,131,.55);
@@ -786,6 +754,7 @@ img[src*="herz" i]:not(.heartIcon){
   color: var(--muted);
 }
 
+/* Buttons unten rechts */
 .btnSmall{
   border: 0;
   cursor:pointer;
@@ -801,9 +770,9 @@ img[src*="herz" i]:not(.heartIcon){
 .btnSmall:disabled{ opacity:.45; cursor:not-allowed; }
 
 @media (max-width: 640px){
-  .pergContent{ padding: 10px 10px 12px; }
-  .readText{ font-size: 13px; }
-  .questionLine{ font-size: 14px; }
+  .pergContent{ padding: 12px 12px 14px; }
+  .readText{ font-size: 14px; }
+  .questionLine{ font-size: 15px; }
 }
 
 /* =========================
