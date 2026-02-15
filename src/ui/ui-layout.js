@@ -1,64 +1,79 @@
+// src/ui/ui-layout.js
+
 export function mountUILayout(root) {
   root.innerHTML = `
     <div class="topbar">
       <div class="topbar-inner">
-        <div class="brand">
-          <div class="dot"></div>
-          <div>
-            <div class="title">Leselabyrinth – Funkelwald</div>
-            <div class="sub">Kinder-RPG Lesetraining · Szene-Pfad · Progression · Bonus-Sammeln</div>
+        <div class="brandRow">
+          <div class="brand">
+            <div class="dot"></div>
+            <div>
+              <div class="title">Leselabyrinth – Funkelwald</div>
+              <div class="sub">Kinder-RPG Lesetraining · Szene-Pfad · Progression · Bonus-Sammeln</div>
+            </div>
           </div>
         </div>
 
+        <!-- HUD: 2 Reihen -->
         <div class="hud">
-          <div class="pill" id="pillHearts" title="Leben (3 Herzen)">
-            <span class="tiny"><b>Leben</b></span>
-            <div class="hearts" id="hearts"></div>
+          <div class="hudTop">
+            <div class="pill" title="Serie, Stufe, Fokus">
+              <span class="tiny">Serie</span> <b id="streakVal">0</b>
+              <span class="sep">|</span>
+              <span class="tiny">Stufe</span> <b id="levelVal">1</b>
+              <span class="sep">|</span>
+              <span class="tiny">Fokus</span> <b id="focusVal">W-Frage</b>
+            </div>
+
+            <div class="xp" id="pillXP" title="XP Fortschritt">
+              <small><b>XP</b> <span id="xpVal">0</span>/<span id="xpNeed">100</span></small>
+              <div class="xpbar"><div id="xpBar"></div></div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" id="resetBtn">Reset</button>
+              <button class="btn primary" id="helpBtn">Hilfe</button>
+            </div>
           </div>
 
-          <div class="pill" id="pillStars" title="Sterne (Bonus)">
-            <img class="icon" src="assets/ui/icons/stern.png" alt="Stern" />
-            <span><b id="starsVal">0</b></span>
-            <span class="sep">|</span>
-            <span class="tiny">Sterne</span>
-          </div>
+          <div class="hudBottom">
+            <div class="pill pillBig" id="pillHearts" title="Leben (3 Herzen)">
+              <span class="tiny"><b>Leben</b></span>
+              <div class="hearts" id="hearts" aria-label="Leben">
+                <img class="heartIcon" src="assets/ui/icons/herz.png" alt="Herz 1" id="heart1" />
+                <img class="heartIcon" src="assets/ui/icons/herz.png" alt="Herz 2" id="heart2" />
+                <img class="heartIcon" src="assets/ui/icons/herz.png" alt="Herz 3" id="heart3" />
+              </div>
+            </div>
 
-          <div class="pill" id="pillApples" title="Äpfel (Bonus)">
-            <img class="icon" src="assets/ui/interactables/Apfel.png" alt="Apfel" />
-            <span><b id="applesVal">0</b></span>
-            <span class="sep">|</span>
-            <span class="tiny">Äpfel</span>
-          </div>
+            <div class="pill pillBig" id="pillStars" title="Sterne (Bonus)">
+              <img class="iconBig" src="assets/ui/icons/stern.png" alt="Stern" />
+              <span><b id="starsVal">0</b></span>
+              <span class="sep">|</span>
+              <span class="tiny">Sterne</span>
+            </div>
 
-          <div class="pill" id="pillLanterns" title="Laternen (Bonus)">
-            <img class="icon" src="assets/ui/interactables/Laterne.png" alt="Laterne" />
-            <span><b id="lanternsVal">0</b></span>
-            <span class="sep">|</span>
-            <span class="tiny">Laternen</span>
-          </div>
+            <div class="pill pillBig" id="pillApples" title="Äpfel (Bonus)">
+              <img class="iconBig" src="assets/ui/interactables/Apfel.png" alt="Apfel" />
+              <span><b id="applesVal">0</b></span>
+              <span class="sep">|</span>
+              <span class="tiny">Äpfel</span>
+            </div>
 
-          <div class="pill" id="pillSparks" title="Geheimfunken (Bonus)">
-            <img class="icon" src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke" />
-            <span><b id="sparksVal">0</b></span>
-            <span class="sep">|</span>
-            <span class="tiny">Funken</span>
-          </div>
+            <div class="pill pillBig" id="pillLanterns" title="Laternen (Bonus)">
+              <img class="iconBig" src="assets/ui/interactables/Laterne.png" alt="Laterne" />
+              <span><b id="lanternsVal">0</b></span>
+              <span class="sep">|</span>
+              <span class="tiny">Laternen</span>
+            </div>
 
-          <div class="pill" title="Serie, Stufe, Fokus">
-            <span class="tiny">Serie</span> <b id="streakVal">0</b>
-            <span class="sep">|</span>
-            <span class="tiny">Stufe</span> <b id="levelVal">1</b>
-            <span class="sep">|</span>
-            <span class="tiny">Fokus</span> <b id="focusVal">W-Frage</b>
+            <div class="pill pillBig" id="pillSparks" title="Geheimfunken (Bonus)">
+              <img class="iconBig" src="assets/ui/icons/geheimfunke.png" alt="Geheimfunke" />
+              <span><b id="sparksVal">0</b></span>
+              <span class="sep">|</span>
+              <span class="tiny">Funken</span>
+            </div>
           </div>
-
-          <div class="xp" id="pillXP" title="XP Fortschritt">
-            <small><b>XP</b> <span id="xpVal">0</span>/<span id="xpNeed">100</span></small>
-            <div class="xpbar"><div id="xpBar"></div></div>
-          </div>
-
-          <button class="btn" id="resetBtn">Reset</button>
-          <button class="btn primary" id="helpBtn">Hilfe</button>
         </div>
       </div>
     </div>
@@ -229,13 +244,19 @@ export function bindElements() {
     unlockHint: $("unlockHint"),
 
     hearts: $("hearts"),
+    heart1: $("heart1"),
+    heart2: $("heart2"),
+    heart3: $("heart3"),
+
     starsVal: $("starsVal"),
     applesVal: $("applesVal"),
     lanternsVal: $("lanternsVal"),
     sparksVal: $("sparksVal"),
+
     streakVal: $("streakVal"),
     levelVal: $("levelVal"),
     focusVal: $("focusVal"),
+
     xpVal: $("xpVal"),
     xpNeed: $("xpNeed"),
     xpBar: $("xpBar"),
@@ -266,4 +287,3 @@ export function bindElements() {
     drawerCloseBtn: $("drawerCloseBtn"),
   };
 }
-
