@@ -1,8 +1,10 @@
+// src/game/game.js
+
 import { mountUILayout, bindElements } from "../ui/ui-layout.js";
 import { toast, pulse, setFips, renderDots, showCelebrate, showOops } from "../ui/ui.js";
 import { clamp, shuffledAnswersWithKey, vibrate } from "../core/utils.js";
-import { loadState, saveState, resetState } from "../core/state.js";
-import { ASSETS, BOSS_HP_MAX } from "../data/assets.js";
+import { createDefaultState, loadState, saveState } from "../core/storage.js";
+import { ASSETS, STORAGE_KEY, BOSS_HP_MAX } from "../data/assets.js";
 import { NODES } from "../data/nodes.js";
 import { renderBossUI, bossHitFX } from "./boss.js";
 import { burstAtHotspot, flyToHUD } from "./interactions.js";
@@ -11,8 +13,7 @@ const root = document.getElementById("app");
 mountUILayout(root);
 const el = bindElements();
 
-// ✅ State kommt jetzt sauber aus core/state.js
-let state = loadState();
+let state = loadState(createDefaultState({ NODES, BOSS_HP_MAX, STORAGE_KEY }));
 
 function gainXP(amount){
   state.xp += amount;
@@ -327,9 +328,9 @@ async function renderScene(){
   node.interactables.forEach(it => {
     if(it.once && s.collected[it.id]) return;
 
-    let x = it.x;
-    let y = it.y;
-    if(y > 74) y = 72;
+    // ✅ FIX: harte Begrenzung, damit Hotspots nie aus dem Bild rutschen
+    let x = clamp(it.x, 6, 94);
+    let y = clamp(it.y, 10, 88);
 
     const hs = document.createElement("div");
     hs.className = "hotspot";
@@ -355,8 +356,8 @@ async function renderScene(){
   if(sp && !s.sparkFound){
     const hs = document.createElement("div");
     hs.className = "hotspot";
-    hs.style.left = sp.x + "%";
-    hs.style.top  = (sp.y > 74 ? 72 : sp.y) + "%";
+    hs.style.left = clamp(sp.x, 6, 94) + "%";
+    hs.style.top  = clamp(sp.y, 10, 88) + "%";
     hs.style.width = (sp.r*2) + "%";
     hs.style.height = (sp.r*2) + "%";
     hs.style.borderRadius = "999px";
@@ -406,7 +407,8 @@ el.nextBtn.addEventListener("click", () => {
 
 el.resetBtn.addEventListener("click", () => {
   if(!confirm("Wirklich alles zurücksetzen?")) return;
-  state = resetState();
+  state = createDefaultState({ NODES, BOSS_HP_MAX, STORAGE_KEY });
+  saveState(state);
   renderAll();
   toast(el, "<b>Reset.</b> Alles zurückgesetzt.");
   setFips(el, ASSETS, "idle", "Los geht’s. Lesen, dann antworten.");
