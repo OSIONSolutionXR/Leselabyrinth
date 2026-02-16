@@ -1,10 +1,10 @@
 /* =========================================================
-   Leselabyrinth – Funkelwald (Stabil Layout V1)
-   Ziel:
-   - HUD oben kompakt in 1 Reihe
-   - Links: Panel (Fips + Text + Frage + Antworten) ~ 18–22vw
-   - Rechts: Szene frei sichtbar
-   - Pergament-Textur entfernt, UI bleibt funktional
+   Leselabyrinth – Funkelwald (Stabil Layout V2)
+   Fokus:
+   - Links Panel: Lesen + Frage + Antworten
+   - Rechts Szene: frei, interaktiv
+   - HUD oben kompakt
+   - Boss HUD + FX + Interactions FX vollständig
    ========================================================= */
 
 /* ---------- Reset ---------- */
@@ -21,13 +21,10 @@ body{
   overflow-x:hidden;
 }
 
-/* App root */
 #app{ min-height:100%; }
 
 /* ---------- Variables ---------- */
 :root{
-  --bg0:#070a14;
-  --bg1:#0b1030;
   --panel: rgba(18,22,44,.62);
   --panel2: rgba(18,22,44,.42);
   --stroke: rgba(255,255,255,.12);
@@ -40,21 +37,16 @@ body{
   --blue:#6fd0ff;
   --pink:#ff4fa3;
 
-  /* Sizing */
   --topbarH: 84px;
   --hudGap: 10px;
 
-  /* Left panel width (10–20% gewünscht) */
   --leftW: clamp(260px, 18vw, 360px);
-
-  /* Icon sizing (Herz = gleiche Größe wie andere Symbole) */
   --icon: 18px;
 
-  /* Spacing */
   --r: 18px;
 }
 
-/* ---------- Topbar (kompakt, kein Scroll-Zwang) ---------- */
+/* ---------- Topbar ---------- */
 .topbar{
   position: sticky;
   top:0;
@@ -70,7 +62,6 @@ body{
   padding: 10px 14px;
 }
 
-/* neue Row (aus deinem ui-layout.js) */
 .brandHudRow{
   display:flex;
   align-items:center;
@@ -104,7 +95,6 @@ body{
   opacity: .95;
 }
 
-/* HUD Row */
 .hudRow{
   display:flex;
   align-items:center;
@@ -114,7 +104,6 @@ body{
   flex-wrap: wrap;
 }
 
-/* Pills */
 .pill, .xp, .actions .btn, .actions .btn.primary{
   border:1px solid var(--stroke);
   background: rgba(10,14,32,.45);
@@ -133,13 +122,8 @@ body{
 }
 .pill .tiny{ font-size: 12px; color: var(--muted); }
 .pill .sep{ opacity:.45; margin:0 2px; }
+.pillBig{ gap: 10px; padding: 8px 12px; }
 
-.pillBig{
-  gap: 10px;
-  padding: 8px 12px;
-}
-
-/* XP */
 .xp{
   padding: 8px 12px;
   min-width: 220px;
@@ -167,11 +151,7 @@ body{
   box-shadow: 0 0 18px rgba(111,208,255,.25);
 }
 
-/* Actions */
-.actions{
-  display:flex;
-  gap: 10px;
-}
+.actions{ display:flex; gap: 10px; }
 .btn{
   cursor:pointer;
   padding: 9px 14px;
@@ -187,31 +167,16 @@ body{
 }
 .btn:active{ transform: translateY(1px); }
 
-/* Icon sizing (Herz = gleich groß wie Stern/Apfel/Laterne/Funken) */
-.iconBig{
-  width: var(--icon);
-  height: var(--icon);
-  object-fit: contain;
-  display:block;
-}
-.heartIcon{
+.iconBig, .heartIcon{
   width: var(--icon);
   height: var(--icon);
   object-fit: contain;
   display:block;
 }
 
-/* Hearts row */
-.hearts{
-  display:flex;
-  align-items:center;
-  gap: 8px;
-}
+.hearts{ display:flex; align-items:center; gap: 8px; }
 
-/* Pulse (aus ui.js) */
-.pulse{
-  animation: pulse .22s ease-out;
-}
+.pulse{ animation: pulse .22s ease-out; }
 @keyframes pulse{
   0%{ transform: scale(1); }
   50%{ transform: scale(1.03); }
@@ -236,7 +201,6 @@ body{
   min-height: calc(100vh - var(--topbarH) - 28px);
 }
 
-/* Szene Bild: rechts frei sichtbar */
 .sceneImg{
   position:absolute;
   inset:0;
@@ -247,7 +211,7 @@ body{
   transform: scale(1.01);
 }
 
-/* dunkle Kante links, damit Panel lesbar ist */
+/* links dunkler Verlauf für Lesbarkeit */
 .sceneWrap::before{
   content:"";
   position:absolute;
@@ -262,12 +226,12 @@ body{
   z-index: 1;
 }
 
-/* overlay layer for pickups etc. */
+/* overlay layer */
 .overlay{
   position:absolute;
   inset:0;
   z-index: 2;
-  pointer-events:none; /* bewusst: nur hotspots schalten wieder auf auto */
+  pointer-events:none;
 }
 
 /* ---------- Left Panel ---------- */
@@ -282,10 +246,8 @@ body{
   align-items: stretch;
 }
 
-/* Pergament-Texture entfernen */
 .pergImg{ display:none; }
 
-/* Container */
 .pergInner{
   width:100%;
   border-radius: 22px;
@@ -297,7 +259,6 @@ body{
   display:flex;
 }
 
-/* Content */
 .pergContent{
   width:100%;
   padding: 14px;
@@ -306,7 +267,6 @@ body{
   gap: 10px;
 }
 
-/* Topline: Szene + Frage progress */
 .pergTopLine{
   display:flex;
   align-items:flex-start;
@@ -331,10 +291,7 @@ body{
   font-size: 12px;
   color: var(--muted);
 }
-.dots{
-  display:flex;
-  gap: 6px;
-}
+.dots{ display:flex; gap: 6px; }
 .dots .d{
   width: 7px; height: 7px; border-radius: 99px;
   background: rgba(255,255,255,.18);
@@ -346,7 +303,6 @@ body{
   box-shadow: 0 0 14px rgba(111,208,255,.25);
 }
 
-/* Read text + Question */
 .readText{
   padding: 10px 12px;
   border-radius: 16px;
@@ -362,7 +318,6 @@ body{
   margin-top: 2px;
 }
 
-/* Answers */
 .answersRow{
   display:flex;
   flex-direction: column;
@@ -385,7 +340,6 @@ body{
   background: rgba(10,14,32,.48);
 }
 .ans:active{ transform: scale(.99); }
-
 .ans.correct{
   border-color: rgba(69,212,131,.55);
   box-shadow: 0 0 0 2px rgba(69,212,131,.12) inset, 0 18px 50px rgba(69,212,131,.12);
@@ -395,7 +349,6 @@ body{
   box-shadow: 0 0 0 2px rgba(255,107,107,.10) inset, 0 18px 50px rgba(255,107,107,.10);
 }
 
-/* Footer buttons */
 .pergFoot{
   margin-top: auto;
   display:flex;
@@ -419,12 +372,9 @@ body{
   color: var(--text);
   font-weight: 900;
 }
-.btnSmall:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
+.btnSmall:disabled{ opacity:.45; cursor:not-allowed; }
 
-/* ---------- Fips (links unten) ---------- */
+/* ---------- Fips ---------- */
 .fipsMain{
   position:absolute;
   left: calc(var(--leftW) + 22px);
@@ -446,11 +396,7 @@ body{
   place-items:center;
   overflow:hidden;
 }
-.fipsMain img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+.fipsMain img{ width: 100%; height: 100%; object-fit: contain; }
 .fipsMain .bubble{
   max-width: 420px;
   border-radius: 18px;
@@ -461,13 +407,9 @@ body{
   box-shadow: 0 18px 55px rgba(0,0,0,.35);
 }
 .fipsMain .bubble b{ font-weight: 1000; }
-.fipsMain .bubble .line{
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 4px;
-}
+.fipsMain .bubble .line{ color: var(--muted); font-size: 12px; margin-top: 4px; }
 
-/* ---------- Drawer Button ---------- */
+/* ---------- Drawer ---------- */
 .fabRow{
   position:absolute;
   right: 14px;
@@ -484,7 +426,6 @@ body{
   font-weight: 1000;
 }
 
-/* Drawer */
 .drawer{
   position:absolute;
   right: 14px;
@@ -512,7 +453,7 @@ body{
 .drawerBd{ padding: 12px 14px; }
 .pathlist{ margin-top: 12px; }
 
-/* ---------- Boss HUD (oben rechts im Bild) ---------- */
+/* ---------- Boss HUD ---------- */
 .bossHud{
   position:absolute;
   right: 14px;
@@ -527,6 +468,8 @@ body{
   background: rgba(10,14,32,.45);
   backdrop-filter: blur(10px);
 }
+.bossHud.show{ display:flex; }
+
 .bossName{ font-weight: 1000; }
 .bossBar{
   width: 140px;
@@ -543,10 +486,20 @@ body{
   border-radius:999px;
   background: linear-gradient(90deg, rgba(255,107,107,1), rgba(255,211,106,1));
 }
-.bossHitFlash{
-  position:absolute;
-  inset:0;
-  opacity:0;
+
+/* Boss FX */
+.bossHud.hit{
+  box-shadow: 0 0 0 2px rgba(255,107,107,.18) inset, 0 24px 80px rgba(0,0,0,.45);
+}
+.bossHud.bossShake{
+  animation: bossShake .26s ease-in-out;
+}
+@keyframes bossShake{
+  0%{ transform: translateX(0); }
+  25%{ transform: translateX(-4px); }
+  50%{ transform: translateX(4px); }
+  75%{ transform: translateX(-3px); }
+  100%{ transform: translateX(0); }
 }
 
 /* Damage pop */
@@ -563,16 +516,14 @@ body{
   border: 1px solid rgba(255,255,255,.12);
   font-weight: 1000;
 }
-.dmg.show{
-  animation: dmgpop .6s ease-out forwards;
-}
+.dmg.show{ animation: dmgpop .6s ease-out forwards; }
 @keyframes dmgpop{
   0%{ opacity:0; transform: translateY(10px) scale(.98); }
   30%{ opacity:1; transform: translateY(0) scale(1); }
   100%{ opacity:0; transform: translateY(-10px) scale(1); }
 }
 
-/* ---------- Fallback ---------- */
+/* ---------- Fallback / Gate / Toast ---------- */
 .sceneFallback{
   position:absolute;
   inset:0;
@@ -581,6 +532,7 @@ body{
   place-items:center;
   background: rgba(0,0,0,.55);
 }
+.sceneFallback.show{ display:grid; }
 .sceneFallback .box{
   width:min(520px, calc(100% - 28px));
   border-radius: 22px;
@@ -589,7 +541,6 @@ body{
   padding: 16px;
 }
 
-/* ---------- Gate Open ---------- */
 .gateOpen{
   position:absolute;
   inset:0;
@@ -598,6 +549,7 @@ body{
   place-items:center;
   background: rgba(0,0,0,.55);
 }
+.gateOpen.show{ display:grid; }
 .gateOpen .card{
   width:min(520px, calc(100% - 28px));
   border-radius: 22px;
@@ -606,7 +558,6 @@ body{
   padding: 16px;
 }
 
-/* ---------- Toast ---------- */
 .toast{
   position: fixed;
   left: 50%;
@@ -628,7 +579,7 @@ body{
   transition: opacity .15s ease, transform .15s ease;
 }
 
-/* ---------- Celebrate / Oops overlays ---------- */
+/* ---------- Celebrate / Oops ---------- */
 .celebrate, .oops{
   position: fixed;
   inset:0;
@@ -642,7 +593,6 @@ body{
   inset:0;
   background: radial-gradient(1200px 800px at 50% 40%, rgba(255,255,255,.10), rgba(0,0,0,.65));
 }
-
 .celebrateBadge, .oopsBadge{
   position:absolute;
   left:50%;
@@ -656,20 +606,7 @@ body{
   font-weight: 1000;
 }
 
-/* ---------- Popup items (falls du später extra Pop-Klassen nutzt) ---------- */
-.starPop, .applePop, .lanternPop, .sparkPop{
-  display:none;
-}
-.starPop.show, .applePop.show, .lanternPop.show, .sparkPop.show{
-  display:block;
-}
-
-/* =========================================================
-   Ergänzungen: Hotspots klickbar + Drawer-Klasse + Heart-Fallback
-   (kein Stückwerk mehr – alles hier drin)
-   ========================================================= */
-
-/* Hotspots (Bonus-Items) */
+/* ---------- Interactions FX ---------- */
 .hotspot{
   position:absolute;
   transform: translate(-50%, -50%);
@@ -677,7 +614,7 @@ body{
   height: var(--w, 120px);
   display:grid;
   place-items:center;
-  pointer-events:auto; /* WICHTIG: overlay ist none */
+  pointer-events:auto;
   z-index: 3;
 }
 .hotspot img{
@@ -685,17 +622,35 @@ body{
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 18px 30px rgba(0,0,0,.35));
+  transition: transform .12s ease;
+}
+.hotspot:active img{ transform: scale(.96); }
+
+/* Burst */
+.sparkBurst{
+  position:absolute;
+  inset:-10px;
+  border-radius: 999px;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(255,211,106,.35) 28%, rgba(255,79,163,.18) 48%, rgba(0,0,0,0) 70%);
+  animation: burst .52s ease-out forwards;
+}
+@keyframes burst{
+  0%{ transform: scale(.55); opacity:.0; }
+  15%{ opacity:.9; }
+  100%{ transform: scale(1.25); opacity:0; }
 }
 
-/* unsichtbarer Funken-Kreis bleibt klickbar */
-.hotspot.sparkHotspot{
-  pointer-events:auto;
-}
-
-/* Fallback: alte heart/off Klassen */
-.heart.off{
-  opacity: .25;
-  filter: grayscale(1);
+/* Fly */
+.fly{
+  position: fixed;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  pointer-events:none;
+  z-index: 300;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.45));
 }
 
 /* ---------- Responsive ---------- */
@@ -703,7 +658,6 @@ body{
   :root{ --leftW: clamp(240px, 34vw, 360px); }
   .fipsMain{ left: 14px; bottom: 14px; transform: scale(1.02); }
 }
-
 @media (max-width: 720px){
   :root{ --leftW: calc(100% - 28px); }
   .pergBar{
