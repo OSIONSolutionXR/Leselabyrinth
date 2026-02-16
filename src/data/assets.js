@@ -1,3 +1,4 @@
+// src/data/assets.js
 export const ASSETS = {
   scenes: {
     waldweg:     ["assets/scenes/waldweg.png","assets/scenes/waldweg.jpg","assets/scenes/Waldweg.png"],
