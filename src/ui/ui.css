@@ -1,592 +1,336 @@
-/* ===========================
-   Leselabyrinth – UI (stable)
-   - compact top HUD (no scroll)
-   - stable overlays (toast/celebrate/oops)
-   - hearts same size as other icons
-   =========================== */
+/* =========================================================
+   Leselabyrinth – Funkelwald (Stabil Layout V1)
+   Ziel:
+   - HUD oben kompakt in 1 Reihe
+   - Links: Panel (Fips + Text + Frage + Antworten) ~ 18–22vw
+   - Rechts: Szene frei sichtbar
+   - Pergament-Textur entfernt, UI bleibt funktional
+   ========================================================= */
 
+/* ---------- Reset ---------- */
+*{ box-sizing:border-box; }
+html, body { height:100%; }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:#eaf0ff;
+  background:
+    radial-gradient(1200px 800px at 30% 20%, rgba(255,79,163,.15), transparent 55%),
+    radial-gradient(1200px 800px at 70% 30%, rgba(111,208,255,.12), transparent 60%),
+    linear-gradient(180deg, #070a14, #0b1030 45%, #070a14);
+  overflow-x:hidden;
+}
+
+/* App root */
+#app{ min-height:100%; }
+
+/* ---------- Variables ---------- */
 :root{
   --bg0:#070a14;
   --bg1:#0b1030;
-  --bg2:#171a3a;
-
   --panel: rgba(18,22,44,.62);
   --panel2: rgba(18,22,44,.42);
   --stroke: rgba(255,255,255,.12);
   --stroke2: rgba(255,255,255,.18);
-
   --text:#eaf0ff;
   --muted:#b9c2e8;
-
   --good:#45d483;
   --bad:#ff6b6b;
   --gold:#ffd36a;
   --blue:#6fd0ff;
   --pink:#ff4fa3;
 
-  /* Compact HUD sizing */
-  --hudGap: 12px;
-  --hudPadX: 18px;
-  --hudPadY: 10px;
+  /* Sizing */
+  --topbarH: 84px;
+  --hudGap: 10px;
 
-  --pillH: 44px;
-  --pillRadius: 999px;
+  /* Left panel width (10–20% gewünscht) */
+  --leftW: clamp(260px, 18vw, 360px);
 
-  /* 🔒 One source of truth for ALL HUD icons */
-  --hudIcon: 22px;   /* <- Stern/Apfel/Laterne/Funken */
-  --heartIcon: 22px; /* <- Herz EXAKT GLEICH */
+  /* Icon sizing (Herz = gleiche Größe wie andere Symbole) */
+  --icon: 18px;
 
-  --shadow: 0 18px 50px rgba(0,0,0,.45);
+  /* Spacing */
+  --r: 18px;
 }
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
-body{
-  margin:0;
-  color:var(--text);
-  background:
-    radial-gradient(1200px 700px at 70% 20%, rgba(120,90,255,.16), transparent 60%),
-    radial-gradient(900px 600px at 15% 10%, rgba(255,80,160,.12), transparent 55%),
-    linear-gradient(180deg, var(--bg0), var(--bg1) 45%, var(--bg2));
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  overflow:hidden; /* verhindert Scroll-Chaos */
-}
-
-/* Root app fills screen */
-#app{
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-/* ===========================
-   TOPBAR / HUD
-   =========================== */
+/* ---------- Topbar (kompakt, kein Scroll-Zwang) ---------- */
 .topbar{
-  flex:0 0 auto;
-  width:100%;
-  background:
-    radial-gradient(900px 220px at 50% 0%, rgba(255,255,255,.06), transparent 65%),
-    linear-gradient(180deg, rgba(10,14,34,.92), rgba(10,14,34,.58));
-  border-bottom:1px solid rgba(255,255,255,.08);
-  backdrop-filter: blur(10px);
-}
-.topbar-inner{
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: var(--hudPadY) var(--hudPadX);
+  position: sticky;
+  top:0;
+  z-index: 50;
+  backdrop-filter: blur(14px);
+  background: linear-gradient(180deg, rgba(7,10,20,.82), rgba(7,10,20,.55));
+  border-bottom:1px solid var(--stroke);
 }
 
-/* Brand row: compact */
-.brandRow{
+.topbar-inner{
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 14px;
+}
+
+/* neue Row (aus deinem ui-layout.js) */
+.brandHudRow{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap: var(--hudGap);
-  margin-bottom: 10px;
+  gap: 14px;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
+
+/* Brand */
 .brand{
   display:flex;
+  align-items:center;
   gap: 10px;
-  align-items:flex-start;
   min-width: 260px;
 }
 .brand .dot{
-  width:10px;height:10px;border-radius:50%;
-  margin-top: 6px;
-  background: radial-gradient(circle at 35% 30%, #fff, rgba(255,255,255,.2) 35%, transparent 60%),
-              linear-gradient(135deg, var(--pink), var(--blue));
-  box-shadow: 0 0 14px rgba(255,79,163,.35);
+  width:10px;height:10px;border-radius:99px;
+  background: radial-gradient(circle at 30% 30%, #fff, rgba(255,79,163,.25) 35%, rgba(255,79,163,.0) 60%),
+              linear-gradient(135deg, rgba(255,79,163,1), rgba(111,208,255,1));
+  box-shadow: 0 0 0 2px rgba(255,255,255,.08), 0 0 22px rgba(255,79,163,.35);
 }
 .brand .title{
-  font-size: 20px;
   font-weight: 900;
-  letter-spacing: .2px;
-  line-height: 1.15;
+  letter-spacing:.2px;
+  font-size: 18px;
+  line-height: 1.1;
 }
 .brand .sub{
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
   opacity: .95;
-  margin-top: 2px;
 }
 
-/* HUD container: two rows, compact, wraps nicely */
-.hud{
-  display:flex;
-  flex-direction:column;
-  gap: 10px;
-}
-.hudTop,
-.hudBottom{
+/* HUD Row */
+.hudRow{
   display:flex;
   align-items:center;
   justify-content:flex-end;
   gap: var(--hudGap);
-  flex-wrap:wrap;
+  flex: 1 1 520px;
+  flex-wrap: wrap;
 }
 
-/* Generic pill */
-.pill, .xp{
-  height: var(--pillH);
+/* Pills */
+.pill, .xp, .actions .btn, .actions .btn.primary{
+  border:1px solid var(--stroke);
+  background: rgba(10,14,32,.45);
+  backdrop-filter: blur(10px);
+  border-radius: 999px;
+}
+
+.pill{
   display:flex;
   align-items:center;
-  gap: 10px;
-  padding: 0 14px;
-  border-radius: var(--pillRadius);
-  background: rgba(18,22,44,.46);
-  border: 1px solid var(--stroke);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-  backdrop-filter: blur(8px);
+  gap: 8px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  color: var(--text);
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
 }
-.pill .tiny{
-  font-size: 12px;
-  color: var(--muted);
-  opacity: .95;
-  font-weight: 800;
-}
-.pill b{
-  font-size: 14px;
-  font-weight: 1000;
-}
-.sep{
-  opacity:.55;
-  font-weight: 900;
-}
+.pill .tiny{ font-size: 12px; color: var(--muted); }
+.pill .sep{ opacity:.45; margin:0 2px; }
 
-/* Bigger pills (icons row) but still compact */
 .pillBig{
-  height: var(--pillH);
-  padding: 0 14px;
   gap: 10px;
+  padding: 8px 12px;
 }
 
-/* XP pill */
+/* XP */
 .xp{
+  padding: 8px 12px;
   min-width: 220px;
-  justify-content:space-between;
-  gap: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
 }
 .xp small{
-  font-size: 13px;
+  display:flex;
+  gap:8px;
+  align-items:center;
   color: var(--muted);
-  font-weight: 900;
-  white-space: nowrap;
 }
 .xpbar{
-  flex:1 1 auto;
+  margin-top:6px;
   height: 8px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.10);
+  border-radius: 99px;
+  background: rgba(255,255,255,.08);
   overflow:hidden;
-  border: 1px solid rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.08);
 }
 #xpBar{
-  height: 100%;
-  width: 0%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--pink), var(--blue));
-  box-shadow: 0 0 16px rgba(111,208,255,.25);
-  transition: width .22s ease;
+  height:100%;
+  width:0%;
+  border-radius:99px;
+  background: linear-gradient(90deg, rgba(255,79,163,1), rgba(111,208,255,1));
+  box-shadow: 0 0 18px rgba(111,208,255,.25);
 }
 
-/* Pulse effect when values change */
-.pulse{
-  animation: pillPulse .28s ease;
-}
-@keyframes pillPulse{
-  0%{ transform: scale(1); }
-  55%{ transform: scale(1.02); }
-  100%{ transform: scale(1); }
-}
-
-/* Buttons top right */
+/* Actions */
 .actions{
   display:flex;
-  align-items:center;
   gap: 10px;
 }
 .btn{
-  height: var(--pillH);
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(18,22,44,.35);
-  color: var(--text);
-  font-weight: 900;
-  letter-spacing: .2px;
   cursor:pointer;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  padding: 9px 14px;
+  color: var(--text);
+  font-weight: 800;
+  border-radius: 999px;
+  border:1px solid var(--stroke);
+  background: rgba(10,14,32,.45);
 }
-.btn:hover{ border-color: rgba(255,255,255,.24); }
-.btn:active{ transform: translateY(1px); }
 .btn.primary{
-  border: none;
-  background: linear-gradient(135deg, rgba(255,79,163,.95), rgba(111,208,255,.95));
-  color: #111;
+  border-color: rgba(255,79,163,.35);
+  background: linear-gradient(135deg, rgba(255,79,163,.75), rgba(111,208,255,.55));
+}
+.btn:active{ transform: translateY(1px); }
+
+/* Icon sizing (Proof: Herz = gleich groß wie Stern/Apfel/Laterne/Funken) */
+.iconBig{
+  width: var(--icon);
+  height: var(--icon);
+  object-fit: contain;
+  display:block;
+}
+.heartIcon{
+  width: var(--icon);   /* <- exakt identisch zu .iconBig */
+  height: var(--icon);  /* <- exakt identisch zu .iconBig */
+  object-fit: contain;
+  display:block;
 }
 
-/* ===========================
-   HUD Icons sizing (IMPORTANT!)
-   =========================== */
-.iconBig{
-  width: var(--hudIcon);
-  height: var(--hudIcon);
-  object-fit: contain;
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
-}
+/* Hearts row */
 .hearts{
   display:flex;
   align-items:center;
-  gap: 10px;
-}
-.heartIcon{
-  width: var(--heartIcon);
-  height: var(--heartIcon);
-  object-fit: contain;
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+  gap: 8px;
 }
 
-/* Make hearts pill match others (no oversized heart zone) */
-#pillHearts{
-  min-width: 220px;
-  justify-content:flex-start;
-  gap: 14px;
+/* Pulse (aus ui.js) */
+.pulse{
+  animation: pulse .22s ease-out;
+}
+@keyframes pulse{
+  0%{ transform: scale(1); }
+  50%{ transform: scale(1.03); }
+  100%{ transform: scale(1); }
 }
 
-/* ===========================
-   STAGE / SCENE
-   =========================== */
+/* ---------- Stage / Scene ---------- */
 .stageWrap{
-  flex:1 1 auto;
-  min-height:0;
-  overflow:hidden;
-  display:flex;
-}
-.sceneWrap{
-  position:relative;
-  width:100%;
-  height:100%;
-  overflow:hidden;
+  /* bleibt unter Topbar sichtbar */
+  min-height: calc(100vh - var(--topbarH));
+  padding: 14px;
 }
 
-/* Scene image full screen behind UI */
+.sceneWrap{
+  position: relative;
+  width: min(1400px, 100%);
+  margin: 0 auto;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid var(--stroke);
+  background: rgba(5,8,18,.55);
+  box-shadow: 0 35px 90px rgba(0,0,0,.45);
+  min-height: calc(100vh - var(--topbarH) - 28px);
+}
+
+/* Szene Bild: rechts frei sichtbar */
 .sceneImg{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
   object-fit: cover;
-  filter: saturate(1.05) contrast(1.02);
-  transform: scale(1.02);
+  filter: saturate(1.06) contrast(1.06);
+  transform: scale(1.01);
 }
 
-/* Soft vignette overlay */
-#overlay{
+/* dunkle Kante links, damit Panel lesbar ist */
+.sceneWrap::before{
+  content:"";
   position:absolute;
   inset:0;
   pointer-events:none;
   background:
-    radial-gradient(1200px 700px at 50% 40%, rgba(0,0,0,.0), rgba(0,0,0,.45) 72%, rgba(0,0,0,.70) 100%),
-    linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.30));
+    linear-gradient(90deg,
+      rgba(7,10,20,.78) 0%,
+      rgba(7,10,20,.58) 18%,
+      rgba(7,10,20,.18) 40%,
+      rgba(7,10,20,.0) 62%);
+  z-index: 1;
 }
 
-/* Scene fallback */
-.sceneFallback{
+/* overlay layer for pickups etc. */
+.overlay{
   position:absolute;
   inset:0;
-  display:none;
-  place-items:center;
-  background: rgba(0,0,0,.6);
-}
-.sceneFallback .box{
-  width:min(520px, 92vw);
-  border-radius: 18px;
-  padding: 18px 18px;
-  background: rgba(18,22,44,.78);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: var(--shadow);
-}
-
-/* Floating action button */
-.fabRow{
-  position:absolute;
-  right: 18px;
-  top: 18px;
-  z-index: 40;
-}
-.fab{
-  height: 42px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(18,22,44,.45);
-  color: var(--text);
-  font-weight: 950;
-  cursor:pointer;
-  backdrop-filter: blur(8px);
-}
-.fab:hover{ border-color: rgba(255,255,255,.26); }
-
-/* ===========================
-   Drawer
-   =========================== */
-.drawer{
-  position:absolute;
-  right: 14px;
-  top: 68px;
-  width: min(420px, 92vw);
-  max-height: calc(100% - 86px);
-  border-radius: 20px;
-  background: rgba(12,16,34,.78);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(12px);
-  transform: translateY(-10px);
-  opacity: 0;
+  z-index: 2;
   pointer-events:none;
-  z-index: 50;
-  overflow:hidden;
-}
-.drawer.open{
-  transform: translateY(0);
-  opacity: 1;
-  pointer-events:auto;
-  transition: transform .18s ease, opacity .18s ease;
-}
-.drawerHd{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 14px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-.drawerHd h3{
-  margin:0;
-  font-size: 16px;
-  font-weight: 1000;
-}
-.drawerBd{
-  padding: 14px 14px 16px;
-  overflow:auto;
-}
-.mini{
-  display:flex;
-  gap: 12px;
-  align-items:center;
-}
-.avatar{
-  width:54px;height:54px;
-  border-radius: 14px;
-  overflow:hidden;
-  background: rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.10);
-}
-.avatar img{ width:100%;height:100%;object-fit:contain; }
-.speech .name{
-  font-weight:1000;
-  margin-bottom: 2px;
-}
-.speech .line{
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 750;
-}
-.pathlist{
-  margin-top: 12px;
-  display:flex;
-  flex-direction:column;
-  gap: 8px;
-}
-.tiny{
-  font-size: 12px;
-  color: var(--muted);
 }
 
-/* ===========================
-   Boss HUD
-   =========================== */
-.bossHud{
-  position:absolute;
-  left: 18px;
-  top: 18px;
-  display:none;
-  align-items:center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 999px;
-  background: rgba(18,22,44,.55);
-  border:1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(10px);
-  z-index: 45;
-}
-.bossName{
-  font-weight: 1000;
-  letter-spacing:.2px;
-}
-.bossBar{
-  width: 180px;
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.10);
-  border: 1px solid rgba(255,255,255,.10);
-  overflow:hidden;
-  position:relative;
-}
-#bossBarFill{
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(90deg, #ff5252, #ff9f6a);
-  border-radius: 999px;
-  transition: width .18s ease;
-}
-.bossHitFlash{
-  position:absolute; inset:0;
-  background: rgba(255,255,255,.35);
-  opacity:0;
-}
-.dmg{
-  position:absolute;
-  left: 220px;
-  top: 8px;
-  z-index: 46;
-  font-weight: 1000;
-  color: #fff;
-  opacity:0;
-  transform: translateY(6px);
-  text-shadow: 0 10px 30px rgba(0,0,0,.6);
-}
-.dmg.show{
-  animation: dmgPop .55s ease;
-}
-@keyframes dmgPop{
-  0%{ opacity:0; transform: translateY(10px) scale(.98); }
-  20%{ opacity:1; }
-  100%{ opacity:0; transform: translateY(-12px) scale(1.03); }
-}
-
-/* ===========================
-   Fips Main Bubble
-   =========================== */
-.fipsMain{
-  position:absolute;
-  left: 18px;
-  bottom: 18px;
-  display:flex;
-  align-items:flex-end;
-  gap: 12px;
-  z-index: 30;
-  max-width: min(520px, 92vw);
-}
-.fipsMain .frame{
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
-  overflow:hidden;
-  background: rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
-}
-.fipsMain .frame img{ width:100%; height:100%; object-fit:contain; }
-.fipsMain .bubble{
-  flex:1 1 auto;
-  border-radius: 18px;
-  padding: 12px 14px;
-  background: rgba(18,22,44,.55);
-  border: 1px solid rgba(255,255,255,.12);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 16px 40px rgba(0,0,0,.35);
-}
-.fipsMain .bubble b{
-  font-weight: 1000;
-}
-.fipsMain .bubble .line{
-  margin-top: 4px;
-  color: var(--muted);
-  font-weight: 750;
-  font-size: 13px;
-}
-
-/* ===========================
-   Gate Open Card
-   =========================== */
-.gateOpen{
-  position:absolute;
-  inset:0;
-  display:none;
-  place-items:center;
-  z-index: 70;
-  background: rgba(0,0,0,.55);
-}
-.gateOpen .card{
-  width: min(520px, 92vw);
-  border-radius: 20px;
-  padding: 16px 18px;
-  background: rgba(18,22,44,.82);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-}
-
-/* ===========================
-   Pergament / Quest UI (bottom)
-   =========================== */
+/* ---------- Left Panel (Pergament wird zu modernem Panel) ---------- */
 .pergBar{
   position:absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 18px;
-  width: min(1120px, 96vw);
-  z-index: 35;
+  left: 14px;
+  top: 14px;
+  bottom: 14px;
+  width: var(--leftW);
+  z-index: 10;
+
+  display:flex;
+  align-items: stretch;
 }
+
+/* Pergament-Texture entfernen */
+.pergImg{ display:none; }
+
+/* Container */
 .pergInner{
-  position:relative;
-  border-radius: 22px;
-  overflow:hidden;
-  background: rgba(18,22,44,.52);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 22px 70px rgba(0,0,0,.50);
-  backdrop-filter: blur(10px);
-}
-
-/* parchment texture - subtle */
-.pergImg{
-  position:absolute;
-  inset:0;
   width:100%;
-  height:100%;
-  object-fit: cover;
-  opacity:.14;
-  filter: contrast(1.05) saturate(.9);
-  pointer-events:none;
-}
-.pergContent{
-  position:relative;
-  padding: 14px 16px 14px;
+  border-radius: 22px;
+  border: 1px solid var(--stroke2);
+  background: linear-gradient(180deg, rgba(18,22,44,.78), rgba(18,22,44,.52));
+  backdrop-filter: blur(12px);
+  box-shadow: 0 22px 60px rgba(0,0,0,.45);
+  overflow:hidden;
+  display:flex;
 }
 
-/* top line inside perg */
+/* Content */
+.pergContent{
+  width:100%;
+  padding: 14px;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Topline: Szene + Frage progress */
 .pergTopLine{
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-  margin-bottom: 10px;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 10px;
 }
 .sceneMeta{
-  font-weight: 950;
-  color: var(--muted);
   font-size: 13px;
+  color: var(--muted);
 }
 .sceneMeta b{ color: var(--text); }
+
 .qRight{
   display:flex;
   align-items:center;
   gap: 10px;
+  justify-content:flex-end;
+  white-space: nowrap;
 }
 .qMeta{
-  font-size: 13px;
-  font-weight: 1000;
+  font-weight: 900;
+  font-size: 12px;
   color: var(--muted);
 }
 .dots{
@@ -594,122 +338,293 @@ body{
   gap: 6px;
 }
 .dots .d{
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
+  width: 7px; height: 7px; border-radius: 99px;
   background: rgba(255,255,255,.18);
-  border: 1px solid rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.12);
 }
 .dots .d.on{
-  background: linear-gradient(135deg, var(--pink), var(--blue));
-  border: none;
-  box-shadow: 0 0 12px rgba(255,79,163,.20);
+  background: linear-gradient(135deg, rgba(255,79,163,1), rgba(111,208,255,1));
+  border-color: rgba(255,255,255,.15);
+  box-shadow: 0 0 14px rgba(111,208,255,.25);
 }
 
-/* read text and question */
+/* Read text + Question */
 .readText{
+  padding: 10px 12px;
   border-radius: 16px;
-  padding: 12px 12px;
-  background: rgba(0,0,0,.22);
-  border: 1px solid rgba(255,255,255,.08);
-  font-size: 16px;
-  line-height: 1.35;
-  font-weight: 800;
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.10);
   color: rgba(234,240,255,.95);
+  line-height: 1.35;
+  font-size: 14px;
 }
 .questionLine{
-  margin-top: 10px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 1000;
-  letter-spacing:.2px;
+  margin-top: 2px;
 }
 
-/* answers row */
+/* Answers: vertikal im linken Panel (klar, kinder-tauglich) */
 .answersRow{
-  margin-top: 10px;
   display:flex;
-  gap: 12px;
-  align-items:stretch;
-  justify-content:space-between;
-  flex-wrap:wrap;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
 }
 .ans{
-  flex: 1 1 260px;
-  min-height: 46px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding: 10px 12px;
-  border-radius: 999px;
-  background: rgba(18,22,44,.42);
-  border: 1px solid rgba(255,255,255,.14);
-  color: var(--text);
-  font-weight: 1000;
-  letter-spacing: .2px;
-  cursor:pointer;
   user-select:none;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  cursor:pointer;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(10,14,32,.35);
+  font-weight: 900;
+  text-align:center;
+  transition: transform .08s ease, background .18s ease, border-color .18s ease;
 }
-.ans:hover{ border-color: rgba(255,255,255,.24); }
+.ans:hover{
+  border-color: rgba(255,255,255,.22);
+  background: rgba(10,14,32,.48);
+}
+.ans:active{ transform: scale(.99); }
+
 .ans.correct{
-  border-color: rgba(69,212,131,.45);
-  box-shadow: 0 0 0 3px rgba(69,212,131,.12);
+  border-color: rgba(69,212,131,.55);
+  box-shadow: 0 0 0 2px rgba(69,212,131,.12) inset, 0 18px 50px rgba(69,212,131,.12);
 }
 .ans.wrong{
-  border-color: rgba(255,107,107,.45);
-  box-shadow: 0 0 0 3px rgba(255,107,107,.12);
+  border-color: rgba(255,107,107,.55);
+  box-shadow: 0 0 0 2px rgba(255,107,107,.10) inset, 0 18px 50px rgba(255,107,107,.10);
 }
 
-/* footer inside perg */
+/* Footer buttons */
 .pergFoot{
-  margin-top: 12px;
+  margin-top: auto;
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-  flex-wrap:wrap;
+  align-items:flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.08);
 }
 .statusline{
+  font-size: 12px;
   color: var(--muted);
-  font-weight: 900;
-  font-size: 13px;
 }
 .btnSmall{
-  height: 42px;
-  padding: 0 14px;
+  cursor:pointer;
+  padding: 10px 12px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.14);
-  background: rgba(18,22,44,.36);
+  background: rgba(10,14,32,.38);
   color: var(--text);
-  font-weight: 950;
-  cursor:pointer;
+  font-weight: 900;
 }
-.btnSmall:hover{ border-color: rgba(255,255,255,.24); }
 .btnSmall:disabled{
   opacity:.45;
   cursor:not-allowed;
 }
 
-/* ===========================
-   Toast
-   =========================== */
-.toast{
-  position:fixed;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%) translateY(10px);
-  padding: 12px 16px;
-  border-radius: 999px;
-  background: rgba(18,22,44,.72);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-  color: var(--text);
-  font-weight: 950;
-  opacity:0;
-  pointer-events:none;
-  z-index: 90;
+/* ---------- Fips (größer links unten, optional) ---------- */
+.fipsMain{
+  position:absolute;
+  left: calc(var(--leftW) + 22px);
+  bottom: 14px;
+  z-index: 9;
+  display:flex;
+  align-items:flex-end;
+  gap: 10px;
+
+  /* du wolltest Fips größer */
+  transform: scale(1.05);
+  transform-origin: left bottom;
+}
+.fipsMain .frame{
+  width: 66px;
+  height: 66px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.20);
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.fipsMain img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.fipsMain .bubble{
+  max-width: 420px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(18,22,44,.62);
   backdrop-filter: blur(10px);
+  padding: 10px 12px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.35);
+}
+.fipsMain .bubble b{ font-weight: 1000; }
+.fipsMain .bubble .line{
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ---------- Drawer Button ---------- */
+.fabRow{
+  position:absolute;
+  right: 14px;
+  top: 14px;
+  z-index: 12;
+}
+.fab{
+  cursor:pointer;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(10,14,32,.50);
+  color: var(--text);
+  font-weight: 1000;
+}
+
+/* Drawer */
+.drawer{
+  position:absolute;
+  right: 14px;
+  top: 58px;
+  width: min(420px, calc(100% - 28px));
+  max-height: calc(100% - 72px);
+  overflow:auto;
+  z-index: 20;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(18,22,44,.70);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 80px rgba(0,0,0,.50);
+  display:none;
+}
+.drawer.open{ display:block; }
+.drawerHd{
+  padding: 12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.drawerBd{ padding: 12px 14px; }
+.pathlist{ margin-top: 12px; }
+
+/* ---------- Boss HUD (oben rechts im Bild) ---------- */
+.bossHud{
+  position:absolute;
+  right: 14px;
+  top: 60px;
+  z-index: 13;
+  display:none; /* ui.js steuert show/hide */
+  align-items:center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(10,14,32,.45);
+  backdrop-filter: blur(10px);
+}
+.bossName{ font-weight: 1000; }
+.bossBar{
+  width: 140px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.10);
+  position:relative;
+}
+#bossBarFill{
+  height:100%;
+  width:100%;
+  border-radius:999px;
+  background: linear-gradient(90deg, rgba(255,107,107,1), rgba(255,211,106,1));
+}
+.bossHitFlash{
+  position:absolute;
+  inset:0;
+  opacity:0;
+}
+
+/* Damage pop */
+.dmg{
+  position:absolute;
+  right: 40px;
+  top: 110px;
+  z-index: 14;
+  opacity:0;
+  transform: translateY(6px);
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.12);
+  font-weight: 1000;
+}
+.dmg.show{
+  animation: dmgpop .6s ease-out forwards;
+}
+@keyframes dmgpop{
+  0%{ opacity:0; transform: translateY(10px) scale(.98); }
+  30%{ opacity:1; transform: translateY(0) scale(1); }
+  100%{ opacity:0; transform: translateY(-10px) scale(1); }
+}
+
+/* ---------- Fallback ---------- */
+.sceneFallback{
+  position:absolute;
+  inset:0;
+  z-index: 5;
+  display:none;
+  place-items:center;
+  background: rgba(0,0,0,.55);
+}
+.sceneFallback .box{
+  width:min(520px, calc(100% - 28px));
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(18,22,44,.70);
+  padding: 16px;
+}
+
+/* ---------- Gate Open ---------- */
+.gateOpen{
+  position:absolute;
+  inset:0;
+  z-index: 30;
+  display:none;
+  place-items:center;
+  background: rgba(0,0,0,.55);
+}
+.gateOpen .card{
+  width:min(520px, calc(100% - 28px));
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(18,22,44,.78);
+  padding: 16px;
+}
+
+/* ---------- Toast ---------- */
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%) translateY(10px);
+  opacity:0;
+  z-index: 100;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(18,22,44,.78);
+  backdrop-filter: blur(12px);
+  font-weight: 1000;
+  box-shadow: 0 24px 80px rgba(0,0,0,.55);
 }
 .toast.show{
   opacity:1;
@@ -717,123 +632,65 @@ body{
   transition: opacity .15s ease, transform .15s ease;
 }
 
-/* ===========================
-   Celebrate / Oops overlays
-   =========================== */
+/* ---------- Celebrate / Oops overlays ---------- */
 .celebrate, .oops{
-  position:fixed;
+  position: fixed;
   inset:0;
+  z-index: 200;
   display:none;
-  z-index: 100;
 }
 .celebrate.show, .oops.show{ display:block; }
+
 .celebrate .stage, .oops .stage{
   position:absolute;
   inset:0;
-  background: radial-gradient(800px 500px at 50% 45%, rgba(0,0,0,.12), rgba(0,0,0,.70));
-  backdrop-filter: blur(2px);
+  background: radial-gradient(1200px 800px at 50% 40%, rgba(255,255,255,.10), rgba(0,0,0,.65));
 }
-.celebrateBadge{
-  position:absolute;
-  left: 50%;
-  top: 16%;
-  transform: translateX(-50%);
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  padding: 12px 16px;
-  border-radius: 999px;
-  background: rgba(18,22,44,.80);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-  font-weight: 1000;
-}
-.miniStar{
-  width: 28px;
-  height: 28px;
-  display:grid;
-  place-items:center;
-  border-radius: 999px;
-  background: rgba(255,211,106,.18);
-  color: var(--gold);
-  border: 1px solid rgba(255,211,106,.25);
-}
-.rays{
+
+.celebrateBadge, .oopsBadge{
   position:absolute;
   left:50%;
-  top:52%;
-  transform: translate(-50%,-50%);
-  width: min(70vh, 620px);
-  height: min(70vh, 620px);
-  border-radius: 999px;
-  background: conic-gradient(
-    from 0deg,
-    rgba(255,79,163,.16),
-    rgba(111,208,255,.14),
-    rgba(255,211,106,.10),
-    rgba(255,79,163,.16)
-  );
-  filter: blur(1px);
-  opacity:.55;
-  animation: raysSpin 6s linear infinite;
-}
-@keyframes raysSpin{
-  from{ transform: translate(-50%,-50%) rotate(0deg); }
-  to{ transform: translate(-50%,-50%) rotate(360deg); }
-}
-
-/* Oops badge */
-.oopsBadge{
-  position:absolute;
-  left: 50%;
-  top: 16%;
+  top: 18%;
   transform: translateX(-50%);
-  display:flex;
-  align-items:center;
-  gap: 10px;
   padding: 12px 16px;
   border-radius: 999px;
-  background: rgba(18,22,44,.80);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(18,22,44,.78);
+  backdrop-filter: blur(12px);
   font-weight: 1000;
 }
-.miniMark{
-  width: 28px;
-  height: 28px;
-  display:grid;
-  place-items:center;
-  border-radius: 999px;
-  background: rgba(255,107,107,.16);
-  color: var(--bad);
-  border: 1px solid rgba(255,107,107,.25);
+
+/* ---------- Popup items: nur bei .show sichtbar (falls vorhanden) ---------- */
+/* Wenn deine Popups andere Klassen haben: sag mir die Namen, dann passe ich das exakt an. */
+.starPop, .applePop, .lanternPop, .sparkPop{
+  display:none;
+}
+.starPop.show, .applePop.show, .lanternPop.show, .sparkPop.show{
+  display:block;
 }
 
-/* Confetti container (optional) */
-.confetti{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-}
-
-/* ===========================
-   RESPONSIVE
-   =========================== */
+/* ---------- Responsive ---------- */
 @media (max-width: 980px){
-  body{ overflow:hidden; }
-  .topbar-inner{ padding: 10px 14px; }
-  .brand .title{ font-size: 18px; }
-  .brand .sub{ font-size: 12px; }
-  .xp{ min-width: 200px; }
-  .pergBar{ bottom: 12px; }
-  .pergContent{ padding: 12px 12px; }
-  .readText{ font-size: 15px; }
-  .questionLine{ font-size: 17px; }
+  :root{ --leftW: clamp(240px, 34vw, 360px); }
+  .fipsMain{ left: 14px; bottom: 14px; transform: scale(1.02); }
 }
-@media (max-width: 560px){
-  .brandRow{ margin-bottom: 8px; }
-  .pill, .xp, .btn{ height: 42px; }
-  .xp{ min-width: 180px; }
-  .ans{ flex: 1 1 100%; }
-  .fipsMain{ display:none; } /* auf sehr kleinen Screens nicht im Weg */
+
+@media (max-width: 720px){
+  :root{ --leftW: calc(100% - 28px); }
+  .pergBar{
+    left: 14px;
+    right: 14px;
+    top: auto;
+    bottom: 14px;
+    width: auto;
+    height: auto;
+    max-height: 52vh;
+  }
+  .sceneWrap::before{
+    background: linear-gradient(180deg,
+      rgba(7,10,20,.18) 0%,
+      rgba(7,10,20,.0) 35%,
+      rgba(7,10,20,.72) 70%,
+      rgba(7,10,20,.82) 100%);
+  }
 }
