@@ -1,4 +1,5 @@
-import { STORAGE_KEY, BOSS_HP_MAX } from "../data/assets.js";
+// src/core/state.js
+import { STORAGE_KEY } from "../data/assets.js";
 import { NODES } from "../data/nodes.js";
 import { loadJSON, saveJSON } from "./storage.js";
 
@@ -33,7 +34,7 @@ export function defaultState(){
 
       bossHP: n.boss ? n.boss.hpMax : 0,
       bossStep: 0,
-      bossXpGrantedSteps: Array(BOSS_HP_MAX).fill(false)
+      bossXpGrantedSteps: Array((n.readBoss && n.readBoss.length) ? n.readBoss.length : 0).fill(false)
     }))
   };
 }
@@ -43,11 +44,23 @@ export function loadState(){
   const d = defaultState();
   if(!parsed) return d;
 
-  return {
+  // defensive merge
+  const merged = {
     ...d,
     ...parsed,
     scene: (parsed.scene && parsed.scene.length === NODES.length) ? parsed.scene : d.scene
   };
+
+  // sicherstellen, dass bossXpGrantedSteps passt (falls Nodes geändert wurden)
+  merged.scene = merged.scene.map((s, idx) => {
+    const n = NODES[idx];
+    const need = (n.readBoss && n.readBoss.length) ? n.readBoss.length : 0;
+    const arr = Array.isArray(s.bossXpGrantedSteps) ? s.bossXpGrantedSteps.slice(0, need) : [];
+    while(arr.length < need) arr.push(false);
+    return { ...s, bossXpGrantedSteps: arr, bossHP: n.boss ? Math.min(s.bossHP ?? n.boss.hpMax, n.boss.hpMax) : 0 };
+  });
+
+  return merged;
 }
 
 export function saveState(state){
@@ -59,4 +72,3 @@ export function resetState(){
   saveState(s);
   return s;
 }
-
