@@ -1,12 +1,10 @@
 // src/ui/ui-layout.js
-// Layout: kompakte Topbar + Bühne + Pergament (unten)
+// Layout V2: Topbar + 2-Spalten Stage (links UI, rechts Szene)
 
 export function mountUILayout(root) {
   root.innerHTML = `
     <div class="topbar">
       <div class="topbar-inner">
-
-        <!-- BRAND + HUD in 1 Row -->
         <div class="brandHudRow">
 
           <div class="brand">
@@ -18,7 +16,6 @@ export function mountUILayout(root) {
           </div>
 
           <div class="hudRow">
-            <!-- Serie / Stufe / Fokus -->
             <div class="pill" title="Serie, Stufe, Fokus">
               <span class="tiny">Serie</span> <b id="streakVal">0</b>
               <span class="sep">|</span>
@@ -27,13 +24,11 @@ export function mountUILayout(root) {
               <span class="tiny">Fokus</span> <b id="focusVal">W-Frage</b>
             </div>
 
-            <!-- XP -->
             <div class="xp" id="pillXP" title="XP Fortschritt">
               <small><b>XP</b> <span id="xpVal">0</span>/<span id="xpNeed">100</span></small>
               <div class="xpbar"><div id="xpBar"></div></div>
             </div>
 
-            <!-- Ressourcen -->
             <div class="pill pillBig" id="pillHearts" title="Leben (3 Herzen)">
               <span class="tiny"><b>Leben</b></span>
               <div class="hearts" id="hearts" aria-label="Leben">
@@ -71,113 +66,122 @@ export function mountUILayout(root) {
               <span class="tiny">Funken</span>
             </div>
 
-            <!-- Actions -->
             <div class="actions">
               <button class="btn" id="resetBtn">Reset</button>
               <button class="btn primary" id="helpBtn">Hilfe</button>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
 
     <div class="stageWrap">
-      <div class="sceneWrap" id="sceneWrap">
-        <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
+      <div class="stageGrid">
 
-        <div class="sceneFallback" id="sceneFallback">
-          <div class="box">
-            <h3>Szene-Bild fehlt</h3>
-            <p>Das Bild wurde nicht gefunden. Pfad prüfen: assets/scenes/…</p>
-          </div>
-        </div>
+        <!-- LINKS: Fragenpanel -->
+        <aside class="leftPanel" id="leftPanel">
+          <div class="leftCard">
 
-        <div class="overlay" id="overlay"></div>
+            <div class="lpTop">
+              <div class="sceneMeta">
+                <b>Szene</b> <span id="sceneTitle">–</span>
+              </div>
 
-        <div class="fabRow">
-          <button class="fab" id="drawerBtn">Kapitel</button>
-        </div>
-
-        <div class="drawer" id="drawer">
-          <div class="drawerHd">
-            <h3>Kapitel: Funkelwald</h3>
-            <button class="btn" id="drawerCloseBtn" style="padding:10px 12px;">Schließen</button>
-          </div>
-          <div class="drawerBd">
-            <div class="mini">
-              <div class="avatar"><img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" /></div>
-              <div class="speech">
-                <div class="name">Fips</div>
-                <div class="line" id="fipsLine">Bonus: Sammeln. Hauptziel: Fragen richtig beantworten.</div>
+              <div class="qRight">
+                <div class="qMeta" id="qProgress">Frage 1/3</div>
+                <div class="dots" id="dots"></div>
               </div>
             </div>
 
-            <div class="tiny" style="margin-top:10px; font-weight:1000; opacity:.95;">
-              Status: <span id="chapterStatus">0/5 erledigt</span>
+            <div class="fipsInline">
+              <div class="fipsFrame">
+                <img id="fipsMainImg" src="assets/chars/fips/idle.png" alt="Fips" />
+              </div>
+              <div class="fipsTalk">
+                <div class="fipsName">Fips</div>
+                <div class="fipsLine" id="fipsMainLine">Bonus: Sammeln. Hauptziel: Fragen richtig beantworten.</div>
+              </div>
             </div>
 
-            <div class="pathlist" id="pathList"></div>
-            <div class="tiny" id="unlockHint" style="margin-top:10px;">Freischaltung: Fragen richtig beantworten.</div>
+            <div class="readText" id="readText">–</div>
+            <div class="questionLine" id="question">–</div>
+
+            <div class="answersRow" id="answers"></div>
+
+            <div class="lpFoot">
+              <div class="statusline" id="statusLine">Status: offen</div>
+              <div class="lpBtns">
+                <button class="btnSmall" id="reReadBtn">Nochmal lesen</button>
+                <button class="btnSmall" id="nextBtn" disabled>Nächste Szene</button>
+              </div>
+            </div>
           </div>
-        </div>
+        </aside>
 
-        <div class="bossHud" id="bossHud">
-          <span class="bossName" id="bossName">Boss</span>
-          <div class="bossBar">
-            <div id="bossBarFill"></div>
-            <div class="bossHitFlash"></div>
-          </div>
-          <span class="tiny"><b id="bossHPText">9</b>/9</span>
-        </div>
-        <div class="dmg" id="dmg">-1</div>
+        <!-- RECHTS: Szene -->
+        <section class="rightStage">
+          <div class="sceneWrap" id="sceneWrap">
+            <img id="sceneImg" class="sceneImg" src="" alt="Szene" />
 
-        <div class="fipsMain">
-          <div class="frame">
-            <img id="fipsMainImg" src="assets/chars/fips/idle.png" alt="Fips" />
-          </div>
-          <div class="bubble">
-            <b>Fips</b>
-            <div class="line" id="fipsMainLine">Bonus: Sammeln. Hauptziel: Fragen richtig beantworten.</div>
-          </div>
-        </div>
+            <div class="sceneFallback" id="sceneFallback">
+              <div class="box">
+                <h3>Szene-Bild fehlt</h3>
+                <p>Das Bild wurde nicht gefunden. Pfad prüfen: assets/scenes/…</p>
+              </div>
+            </div>
 
-        <div class="gateOpen" id="gateOpen">
-          <div class="card">
-            <h3>Das Tor öffnet sich</h3>
-            <p>Boss besiegt. Als Nächstes geht es in die Wasserwelt.</p>
-          </div>
-        </div>
+            <div class="overlay" id="overlay"></div>
 
-        <div class="pergBar" id="pergBar">
-          <div class="pergInner">
-            <img class="pergImg" src="assets/ui/panels/parchment.png" alt="" aria-hidden="true" />
+            <div class="fabRow">
+              <button class="fab" id="drawerBtn">Kapitel</button>
+            </div>
 
-            <div class="pergContent">
-              <div class="pergTopLine">
-                <div class="sceneMeta"><b>Szene</b> <span id="sceneTitle">–</span></div>
-
-                <div class="qRight">
-                  <div class="qMeta" id="qProgress">Frage 1/3</div>
-                  <div class="dots" id="dots"></div>
+            <div class="drawer" id="drawer">
+              <div class="drawerHd">
+                <h3>Kapitel: Funkelwald</h3>
+                <button class="btn" id="drawerCloseBtn" style="padding:10px 12px;">Schließen</button>
+              </div>
+              <div class="drawerBd">
+                <div class="mini">
+                  <div class="avatar">
+                    <img id="fipsAvatar" src="assets/chars/fips/idle.png" alt="Fips" />
+                  </div>
+                  <div class="speech">
+                    <div class="name">Fips</div>
+                    <div class="line" id="fipsLine">Bonus: Sammeln. Hauptziel: Fragen richtig beantworten.</div>
+                  </div>
                 </div>
-              </div>
 
-              <div class="readText" id="readText">–</div>
-              <div class="questionLine" id="question">–</div>
-
-              <div class="answersRow" id="answers"></div>
-
-              <div class="pergFoot">
-                <div class="statusline" id="statusLine">Status: <span class="tiny">offen</span></div>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                  <button class="btnSmall" id="reReadBtn">Nochmal lesen</button>
-                  <button class="btnSmall" id="nextBtn" disabled>Nächste Szene</button>
+                <div class="tiny" style="margin-top:10px; font-weight:1000; opacity:.95;">
+                  Status: <span id="chapterStatus">0/5 erledigt</span>
                 </div>
+
+                <div class="pathlist" id="pathList"></div>
+                <div class="tiny" id="unlockHint" style="margin-top:10px;">Freischaltung: Fragen richtig beantworten.</div>
               </div>
             </div>
+
+            <div class="bossHud" id="bossHud">
+              <span class="bossName" id="bossName">Boss</span>
+              <div class="bossBar">
+                <div id="bossBarFill"></div>
+                <div class="bossHitFlash"></div>
+              </div>
+              <span class="tiny"><b id="bossHPText">9</b>/9</span>
+            </div>
+
+            <div class="dmg" id="dmg">-1</div>
+
+            <div class="gateOpen" id="gateOpen">
+              <div class="card">
+                <h3>Das Tor öffnet sich</h3>
+                <p>Boss besiegt. Als Nächstes geht es in die Wasserwelt.</p>
+              </div>
+            </div>
+
           </div>
-        </div>
+        </section>
 
       </div>
     </div>
@@ -186,12 +190,11 @@ export function mountUILayout(root) {
 
     <div class="celebrate" id="celebrate">
       <div class="stage">
-        <div class="rays"></div>
         <div class="celebrateBadge" id="celebrateBadge">
           <div class="miniStar" aria-hidden="true">★</div>
           <div id="celebrateText">Richtig</div>
         </div>
-        <div class="confetti" id="confetti"></div>
+
         <div style="position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);width:min(66vh,560px);height:min(66vh,560px);display:grid;place-items:center;filter:drop-shadow(0 40px 90px rgba(0,0,0,.55));">
           <img id="fipsGiantImg" src="assets/chars/fips/excited.png" alt="Fips" style="width:100%;height:100%;object-fit:contain;" />
         </div>
@@ -227,6 +230,7 @@ export function bindElements() {
     qProgress: $("qProgress"),
     dots: $("dots"),
 
+    sceneWrap: $("sceneWrap"),
     sceneImg: $("sceneImg"),
     sceneFallback: $("sceneFallback"),
     overlay: $("overlay"),
@@ -278,7 +282,6 @@ export function bindElements() {
     toast: $("toast"),
 
     celebrate: $("celebrate"),
-    confetti: $("confetti"),
     fipsGiantImg: $("fipsGiantImg"),
     celebrateText: $("celebrateText"),
 
