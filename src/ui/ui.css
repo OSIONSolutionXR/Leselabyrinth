@@ -1,8 +1,10 @@
-/* src/ui/ui.css */
+/* ===========================
+   Leselabyrinth – UI (stable)
+   - compact top HUD (no scroll)
+   - stable overlays (toast/celebrate/oops)
+   - hearts same size as other icons
+   =========================== */
 
-/* =========================
-   ROOT / GLOBAL
-========================= */
 :root{
   --bg0:#070a14;
   --bg1:#0b1030;
@@ -22,851 +24,816 @@
   --blue:#6fd0ff;
   --pink:#ff4fa3;
 
-  --radius: 18px;
-  --shadow: 0 18px 60px rgba(0,0,0,.35);
+  /* Compact HUD sizing */
+  --hudGap: 12px;
+  --hudPadX: 18px;
+  --hudPadY: 10px;
 
-  /* harte Limits gegen „Riesen-Icons“ */
-  --hotMin: 56px;
-  --hotIdeal: 86px;
-  --hotMax: 140px;
+  --pillH: 44px;
+  --pillRadius: 999px;
+
+  /* 🔒 One source of truth for ALL HUD icons */
+  --hudIcon: 22px;   /* <- Stern/Apfel/Laterne/Funken */
+  --heartIcon: 22px; /* <- Herz EXAKT GLEICH */
+
+  --shadow: 0 18px 50px rgba(0,0,0,.45);
 }
 
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
 body{
   margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text);
+  color:var(--text);
   background:
-    radial-gradient(1200px 600px at 20% 20%, rgba(255,80,170,.18), transparent 55%),
-    radial-gradient(900px 600px at 80% 30%, rgba(80,210,255,.14), transparent 55%),
-    linear-gradient(135deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-  overflow-x:hidden;
+    radial-gradient(1200px 700px at 70% 20%, rgba(120,90,255,.16), transparent 60%),
+    radial-gradient(900px 600px at 15% 10%, rgba(255,80,160,.12), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1) 45%, var(--bg2));
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  overflow:hidden; /* verhindert Scroll-Chaos */
 }
 
-#app{ min-height:100%; }
-
-/* =========================
-   TOPBAR
-========================= */
-.topbar{
-  position: sticky;
-  top:0;
-  z-index: 50;
-  padding: 14px 18px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  background: linear-gradient(180deg, rgba(8,10,25,.88), rgba(8,10,25,.55));
-  border-bottom: 1px solid rgba(255,255,255,.10);
-}
-
-.topbar-inner{
-  max-width: 1200px;
-  margin: 0 auto;
+/* Root app fills screen */
+#app{
+  height:100%;
   display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap: 14px;
-  flex-wrap: wrap;
+  flex-direction:column;
+  overflow:hidden;
 }
 
+/* ===========================
+   TOPBAR / HUD
+   =========================== */
+.topbar{
+  flex:0 0 auto;
+  width:100%;
+  background:
+    radial-gradient(900px 220px at 50% 0%, rgba(255,255,255,.06), transparent 65%),
+    linear-gradient(180deg, rgba(10,14,34,.92), rgba(10,14,34,.58));
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+}
+.topbar-inner{
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: var(--hudPadY) var(--hudPadX);
+}
+
+/* Brand row: compact */
 .brandRow{
   display:flex;
   align-items:center;
-  gap: 10px;
-  min-width: 260px;
+  justify-content:space-between;
+  gap: var(--hudGap);
+  margin-bottom: 10px;
 }
-
 .brand{
   display:flex;
-  align-items:center;
-  gap:10px;
+  gap: 10px;
+  align-items:flex-start;
+  min-width: 260px;
 }
-
-.dot{
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,79,163,.9) 35%, rgba(111,208,255,.85) 100%);
-  box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+.brand .dot{
+  width:10px;height:10px;border-radius:50%;
+  margin-top: 6px;
+  background: radial-gradient(circle at 35% 30%, #fff, rgba(255,255,255,.2) 35%, transparent 60%),
+              linear-gradient(135deg, var(--pink), var(--blue));
+  box-shadow: 0 0 14px rgba(255,79,163,.35);
 }
-
 .brand .title{
-  font-weight: 1000;
-  letter-spacing:.2px;
-  line-height: 1.05;
-}
-.brand .sub{
-  font-size: 12px;
-  color: var(--muted);
-  opacity:.92;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: .2px;
   line-height: 1.15;
 }
+.brand .sub{
+  font-size: 13px;
+  color: var(--muted);
+  opacity: .95;
+  margin-top: 2px;
+}
 
-/* =========================
-   HUD (2 Reihen)
-========================= */
+/* HUD container: two rows, compact, wraps nicely */
 .hud{
   display:flex;
   flex-direction:column;
-  gap:10px;
-  align-items:flex-end;
-  flex: 1 1 auto;
-}
-
-.hudTop{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
   gap: 10px;
-  flex-wrap: wrap;
 }
-
+.hudTop,
 .hudBottom{
   display:flex;
   align-items:center;
   justify-content:flex-end;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: var(--hudGap);
+  flex-wrap:wrap;
 }
 
-/* Pills */
-.pill{
+/* Generic pill */
+.pill, .xp{
+  height: var(--pillH);
   display:flex;
   align-items:center;
-  gap:8px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(18,22,44,.55);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 10px 24px rgba(0,0,0,.25);
-  user-select:none;
-  white-space: nowrap;
+  gap: 10px;
+  padding: 0 14px;
+  border-radius: var(--pillRadius);
+  background: rgba(18,22,44,.46);
+  border: 1px solid var(--stroke);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  backdrop-filter: blur(8px);
 }
-
 .pill .tiny{
   font-size: 12px;
   color: var(--muted);
+  opacity: .95;
   font-weight: 800;
 }
-
+.pill b{
+  font-size: 14px;
+  font-weight: 1000;
+}
 .sep{
-  opacity:.45;
-  margin: 0 2px;
+  opacity:.55;
+  font-weight: 900;
 }
 
-.pill.pulse{ animation: pillPulse .22s ease; }
-@keyframes pillPulse{
-  0%{ transform:scale(1); }
-  50%{ transform:scale(1.04); }
-  100%{ transform:scale(1); }
-}
-
-/* BIG Pills */
+/* Bigger pills (icons row) but still compact */
 .pillBig{
-  padding: 10px 14px;
+  height: var(--pillH);
+  padding: 0 14px;
   gap: 10px;
-  border-color: rgba(255,255,255,.14);
 }
 
-.iconBig{
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-  filter: drop-shadow(0 8px 14px rgba(0,0,0,.35));
-}
-
-/* XP */
+/* XP pill */
 .xp{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  padding: 10px 14px;
-  border-radius: 16px;
-  background: rgba(18,22,44,.55);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 10px 24px rgba(0,0,0,.25);
-  min-width: 200px;
+  min-width: 220px;
+  justify-content:space-between;
+  gap: 12px;
 }
-
 .xp small{
+  font-size: 13px;
   color: var(--muted);
   font-weight: 900;
-  letter-spacing:.2px;
+  white-space: nowrap;
 }
-
 .xpbar{
+  flex:1 1 auto;
   height: 8px;
   border-radius: 999px;
+  background: rgba(255,255,255,.10);
   overflow:hidden;
-  background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.10);
 }
-
 #xpBar{
   height: 100%;
   width: 0%;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255,79,163,.95), rgba(111,208,255,.9));
+  background: linear-gradient(90deg, var(--pink), var(--blue));
+  box-shadow: 0 0 16px rgba(111,208,255,.25);
+  transition: width .22s ease;
 }
 
-/* Actions */
+/* Pulse effect when values change */
+.pulse{
+  animation: pillPulse .28s ease;
+}
+@keyframes pillPulse{
+  0%{ transform: scale(1); }
+  55%{ transform: scale(1.02); }
+  100%{ transform: scale(1); }
+}
+
+/* Buttons top right */
 .actions{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap: 10px;
 }
-
 .btn{
-  border: 0;
-  cursor:pointer;
-  font-weight: 900;
-  padding: 10px 14px;
+  height: var(--pillH);
+  padding: 0 16px;
   border-radius: 999px;
-  color: var(--text);
-  background: rgba(18,22,44,.55);
   border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+  background: rgba(18,22,44,.35);
+  color: var(--text);
+  font-weight: 900;
+  letter-spacing: .2px;
+  cursor:pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
 }
-
-.btn:hover{ border-color: rgba(255,255,255,.25); }
-
+.btn:hover{ border-color: rgba(255,255,255,.24); }
+.btn:active{ transform: translateY(1px); }
 .btn.primary{
-  background: linear-gradient(135deg, rgba(255,79,163,.9), rgba(111,208,255,.85));
-  color:#081028;
-  border-color: rgba(255,255,255,.18);
+  border: none;
+  background: linear-gradient(135deg, rgba(255,79,163,.95), rgba(111,208,255,.95));
+  color: #111;
 }
 
-.btn:disabled{
-  opacity:.45;
-  cursor:not-allowed;
+/* ===========================
+   HUD Icons sizing (IMPORTANT!)
+   =========================== */
+.iconBig{
+  width: var(--hudIcon);
+  height: var(--hudIcon);
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+}
+.hearts{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+.heartIcon{
+  width: var(--heartIcon);
+  height: var(--heartIcon);
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
 }
 
-/* Responsive HUD */
-@media (max-width: 980px){
-  .topbar-inner{ align-items:flex-start; }
-  .hud{ align-items:flex-start; width: 100%; }
-  .hudTop, .hudBottom{ justify-content:flex-start; }
+/* Make hearts pill match others (no oversized heart zone) */
+#pillHearts{
+  min-width: 220px;
+  justify-content:flex-start;
+  gap: 14px;
 }
 
-@media (max-width: 520px){
-  .xp{ min-width: 160px; }
-  .iconBig{ width: 24px; height: 24px; }
-}
-
-/* =========================
-   HERZ (HUD) ENTFERNT
-   - Leben-Pill komplett ausblenden
-========================= */
-#pillHearts{ display:none !important; }
-#heart1, #heart2, #heart3{ display:none !important; }
-
-/* =========================
+/* ===========================
    STAGE / SCENE
-========================= */
+   =========================== */
 .stageWrap{
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 18px 18px 28px;
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden;
+  display:flex;
 }
-
 .sceneWrap{
-  position: relative;
-  border-radius: 22px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: var(--shadow);
-  background: rgba(10,12,26,.55);
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
 }
 
+/* Scene image full screen behind UI */
 .sceneImg{
-  width: 100%;
-  height: min(68vh, 560px);
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
   object-fit: cover;
-  display:block;
+  filter: saturate(1.05) contrast(1.02);
+  transform: scale(1.02);
 }
 
-@media (max-width: 980px){
-  .sceneImg{ height: 420px; }
-}
-@media (max-width: 640px){
-  .sceneImg{ height: 320px; }
+/* Soft vignette overlay */
+#overlay{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(1200px 700px at 50% 40%, rgba(0,0,0,.0), rgba(0,0,0,.45) 72%, rgba(0,0,0,.70) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.30));
 }
 
-/* Missing image fallback */
+/* Scene fallback */
 .sceneFallback{
   position:absolute;
   inset:0;
   display:none;
   place-items:center;
-  background: rgba(8,10,25,.55);
+  background: rgba(0,0,0,.6);
 }
-
 .sceneFallback .box{
-  width: min(520px, 92%);
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: rgba(18,22,44,.70);
-  border: 1px solid rgba(255,255,255,.14);
+  width:min(520px, 92vw);
+  border-radius: 18px;
+  padding: 18px 18px;
+  background: rgba(18,22,44,.78);
+  border: 1px solid rgba(255,255,255,.12);
   box-shadow: var(--shadow);
 }
 
-.sceneFallback h3{
-  margin:0 0 6px;
-  font-size: 16px;
-}
-.sceneFallback p{
-  margin:0;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-/* =========================
-   OVERLAY (Interaktives)
-   Ziel:
-   - NICHT mehr „untereinander stapeln“
-   - KEINE Riesen-Icons mehr
-   - JS darf left/top setzen, wir überschreiben das NICHT
-========================= */
-.overlay{
-  position:absolute;
-  inset:0;
-  pointer-events: none;
-  z-index: 6;
-}
-
-/* Alles, was im Overlay landet, MUSS absolut sein (sonst entsteht diese „lange Seite“).
-   WICHTIG: wir setzen KEIN left/top/transform mehr -> Position kommt vom JS. */
-.overlay > *{
-  position: absolute !important;
-  pointer-events: auto;
-  max-width: none;
-  max-height: none;
-}
-
-/* Hotspot-Container (wenn du ihn nutzt) */
-.hotspot{
-  position:absolute;
-  transform: translate(-50%, -50%);
-  width: clamp(var(--hotMin), var(--w, var(--hotIdeal)), var(--hotMax));
-  height: clamp(var(--hotMin), var(--w, var(--hotIdeal)), var(--hotMax));
-  pointer-events: auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  filter: drop-shadow(0 12px 18px rgba(0,0,0,.45));
-}
-
-/* Bild im Hotspot */
-.hotspot img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: transform .12s ease;
-}
-
-/* Fallback: falls JS nur <img> direkt in #overlay wirft (ohne .hotspot) */
-.overlay img{
-  width: clamp(var(--hotMin), var(--ovw, var(--hotIdeal)), var(--hotMax));
-  height: clamp(var(--hotMin), var(--ovw, var(--hotIdeal)), var(--hotMax));
-  object-fit: contain;
-  filter: drop-shadow(0 12px 18px rgba(0,0,0,.45));
-  transition: transform .12s ease;
-}
-
-.hotspot:hover img,
-.overlay img:hover{
-  transform: scale(1.05);
-}
-
-/* =========================
-   FAB / DRAWER
-========================= */
+/* Floating action button */
 .fabRow{
   position:absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 12;
-  display:flex;
-  gap:10px;
+  right: 18px;
+  top: 18px;
+  z-index: 40;
 }
-
 .fab{
-  border: 0;
-  cursor:pointer;
-  font-weight: 1000;
-  padding: 10px 14px;
+  height: 42px;
+  padding: 0 16px;
   border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(18,22,44,.45);
   color: var(--text);
-  background: rgba(18,22,44,.60);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+  font-weight: 950;
+  cursor:pointer;
+  backdrop-filter: blur(8px);
 }
-.fab:hover{ border-color: rgba(255,255,255,.25); }
+.fab:hover{ border-color: rgba(255,255,255,.26); }
 
+/* ===========================
+   Drawer
+   =========================== */
 .drawer{
   position:absolute;
-  top: 12px;
-  left: 12px;
-  width: min(380px, 92vw);
-  max-height: calc(100% - 24px);
-  overflow:auto;
-  border-radius: 18px;
-  background: rgba(18,22,44,.70);
+  right: 14px;
+  top: 68px;
+  width: min(420px, 92vw);
+  max-height: calc(100% - 86px);
+  border-radius: 20px;
+  background: rgba(12,16,34,.78);
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: var(--shadow);
-  z-index: 20;
-  display:none;
+  backdrop-filter: blur(12px);
+  transform: translateY(-10px);
+  opacity: 0;
+  pointer-events:none;
+  z-index: 50;
+  overflow:hidden;
 }
-
-.drawer.open{ display:block; }
-
+.drawer.open{
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events:auto;
+  transition: transform .18s ease, opacity .18s ease;
+}
 .drawerHd{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap: 10px;
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.12);
-  background: rgba(8,10,25,.35);
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
 }
-
 .drawerHd h3{
   margin:0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 1000;
 }
-
-.drawerBd{ padding: 12px 14px 14px; }
-
+.drawerBd{
+  padding: 14px 14px 16px;
+  overflow:auto;
+}
 .mini{
   display:flex;
-  gap:10px;
+  gap: 12px;
   align-items:center;
 }
-
 .avatar{
-  width: 48px;
-  height: 48px;
+  width:54px;height:54px;
   border-radius: 14px;
   overflow:hidden;
   background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.10);
-  display:grid;
-  place-items:center;
+  border:1px solid rgba(255,255,255,.10);
 }
-
-.avatar img{
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
+.avatar img{ width:100%;height:100%;object-fit:contain; }
+.speech .name{
+  font-weight:1000;
+  margin-bottom: 2px;
 }
-
-.speech .name{ font-weight: 1000; }
-.speech .line{ font-size: 12px; color: var(--muted); margin-top:2px; }
-
+.speech .line{
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 750;
+}
 .pathlist{
-  margin-top: 10px;
+  margin-top: 12px;
   display:flex;
   flex-direction:column;
   gap: 8px;
 }
-
-/* =========================
-   FIPS (unten links)
-========================= */
-.fipsMain{
-  position:absolute;
-  left: 12px;
-  bottom: 12px;
-  z-index: 11;
-  display:flex;
-  gap: 10px;
-  align-items:flex-end;
-  pointer-events:none;
-}
-
-.fipsMain .frame{
-  width: 82px;
-  height: 82px;
-  border-radius: 18px;
-  background: rgba(18,22,44,.55);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 16px 42px rgba(0,0,0,.35);
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-}
-
-.fipsMain .frame img{
-  width: 74px;
-  height: 74px;
-  object-fit: contain;
-}
-
-.fipsMain .bubble{
-  max-width: 280px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(18,22,44,.62);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 14px 36px rgba(0,0,0,.35);
-}
-
-.fipsMain .bubble b{
-  font-weight: 1000;
-  font-size: 13px;
-}
-.fipsMain .bubble .line{
+.tiny{
   font-size: 12px;
   color: var(--muted);
-  margin-top:2px;
 }
 
-/* =========================
-   BOSS HUD
-========================= */
+/* ===========================
+   Boss HUD
+   =========================== */
 .bossHud{
   position:absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 13;
+  left: 18px;
+  top: 18px;
   display:none;
   align-items:center;
   gap: 10px;
   padding: 10px 12px;
   border-radius: 999px;
-  background: rgba(18,22,44,.65);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 16px 42px rgba(0,0,0,.35);
+  background: rgba(18,22,44,.55);
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(10px);
+  z-index: 45;
 }
-
-.bossName{ font-weight: 1000; }
+.bossName{
+  font-weight: 1000;
+  letter-spacing:.2px;
+}
 .bossBar{
-  width: 220px;
+  width: 180px;
   height: 10px;
   border-radius: 999px;
-  overflow:hidden;
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.10);
   border: 1px solid rgba(255,255,255,.10);
-  position: relative;
+  overflow:hidden;
+  position:relative;
 }
-
 #bossBarFill{
   height: 100%;
-  width: 0%;
+  width: 100%;
+  background: linear-gradient(90deg, #ff5252, #ff9f6a);
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255,107,107,.95), rgba(255,211,106,.9));
+  transition: width .18s ease;
 }
-
 .bossHitFlash{
-  position:absolute;
-  inset:0;
+  position:absolute; inset:0;
+  background: rgba(255,255,255,.35);
   opacity:0;
-  background: rgba(255,255,255,.25);
 }
-
 .dmg{
   position:absolute;
-  top: 56px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 14;
+  left: 220px;
+  top: 8px;
+  z-index: 46;
   font-weight: 1000;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255,107,107,.18);
-  border: 1px solid rgba(255,107,107,.35);
+  color: #fff;
   opacity:0;
-  pointer-events:none;
+  transform: translateY(6px);
+  text-shadow: 0 10px 30px rgba(0,0,0,.6);
 }
-
 .dmg.show{
   animation: dmgPop .55s ease;
 }
 @keyframes dmgPop{
-  0%{ opacity:0; transform: translateX(-50%) translateY(0) scale(.95); }
-  20%{ opacity:1; transform: translateX(-50%) translateY(-6px) scale(1); }
-  100%{ opacity:0; transform: translateX(-50%) translateY(-18px) scale(1); }
+  0%{ opacity:0; transform: translateY(10px) scale(.98); }
+  20%{ opacity:1; }
+  100%{ opacity:0; transform: translateY(-12px) scale(1.03); }
 }
 
-/* =========================
-   TOR / GATE OPEN
-========================= */
+/* ===========================
+   Fips Main Bubble
+   =========================== */
+.fipsMain{
+  position:absolute;
+  left: 18px;
+  bottom: 18px;
+  display:flex;
+  align-items:flex-end;
+  gap: 12px;
+  z-index: 30;
+  max-width: min(520px, 92vw);
+}
+.fipsMain .frame{
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  overflow:hidden;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+.fipsMain .frame img{ width:100%; height:100%; object-fit:contain; }
+.fipsMain .bubble{
+  flex:1 1 auto;
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: rgba(18,22,44,.55);
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.35);
+}
+.fipsMain .bubble b{
+  font-weight: 1000;
+}
+.fipsMain .bubble .line{
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 750;
+  font-size: 13px;
+}
+
+/* ===========================
+   Gate Open Card
+   =========================== */
 .gateOpen{
   position:absolute;
   inset:0;
-  z-index: 30;
   display:none;
   place-items:center;
-  background: rgba(8,10,25,.55);
+  z-index: 70;
+  background: rgba(0,0,0,.55);
 }
-
 .gateOpen .card{
-  width: min(520px, 92%);
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: rgba(18,22,44,.75);
+  width: min(520px, 92vw);
+  border-radius: 20px;
+  padding: 16px 18px;
+  background: rgba(18,22,44,.82);
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: var(--shadow);
 }
 
-.gateOpen h3{ margin:0 0 6px; }
-.gateOpen p{ margin:0; color: var(--muted); }
-
-/* =========================
-   PERGAMENT BAR (Questfeld)
-========================= */
+/* ===========================
+   Pergament / Quest UI (bottom)
+   =========================== */
 .pergBar{
   position:absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  z-index: 10;
-  pointer-events:none;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 18px;
+  width: min(1120px, 96vw);
+  z-index: 35;
 }
-
 .pergInner{
-  position: relative;
-  border-radius: 18px;
+  position:relative;
+  border-radius: 22px;
   overflow:hidden;
+  background: rgba(18,22,44,.52);
   border: 1px solid rgba(255,255,255,.12);
-  background: rgba(18,22,44,.35);
-  box-shadow: 0 18px 60px rgba(0,0,0,.35);
-  pointer-events:auto;
+  box-shadow: 0 22px 70px rgba(0,0,0,.50);
+  backdrop-filter: blur(10px);
 }
 
+/* parchment texture - subtle */
 .pergImg{
   position:absolute;
   inset:0;
-  width: 100%;
-  height: 100%;
+  width:100%;
+  height:100%;
   object-fit: cover;
-  opacity: .42;
-  filter: saturate(1.05) contrast(1.05);
+  opacity:.14;
+  filter: contrast(1.05) saturate(.9);
   pointer-events:none;
 }
-
 .pergContent{
-  position: relative;
-  padding: 12px 14px 14px;
+  position:relative;
+  padding: 14px 16px 14px;
 }
 
+/* top line inside perg */
 .pergTopLine{
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:space-between;
-  gap:10px;
+  gap: 12px;
   margin-bottom: 10px;
 }
-
 .sceneMeta{
-  font-size: 12px;
+  font-weight: 950;
   color: var(--muted);
-  font-weight: 900;
+  font-size: 13px;
 }
 .sceneMeta b{ color: var(--text); }
-
 .qRight{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap: 10px;
 }
-
 .qMeta{
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 1000;
   color: var(--muted);
-  font-weight: 900;
 }
-
 .dots{
   display:flex;
   gap: 6px;
-  align-items:center;
 }
-
 .dots .d{
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
-  background: rgba(255,255,255,.16);
+  background: rgba(255,255,255,.18);
   border: 1px solid rgba(255,255,255,.10);
 }
 .dots .d.on{
-  background: linear-gradient(135deg, rgba(255,79,163,.9), rgba(111,208,255,.85));
-  border-color: rgba(255,255,255,.22);
+  background: linear-gradient(135deg, var(--pink), var(--blue));
+  border: none;
+  box-shadow: 0 0 12px rgba(255,79,163,.20);
 }
 
+/* read text and question */
 .readText{
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.10);
-  color: var(--text);
+  border-radius: 16px;
+  padding: 12px 12px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.08);
+  font-size: 16px;
   line-height: 1.35;
-  font-size: 14px;
+  font-weight: 800;
+  color: rgba(234,240,255,.95);
 }
-
 .questionLine{
   margin-top: 10px;
+  font-size: 18px;
   font-weight: 1000;
-  font-size: 15px;
+  letter-spacing:.2px;
 }
 
+/* answers row */
 .answersRow{
   margin-top: 10px;
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  display:flex;
+  gap: 12px;
+  align-items:stretch;
+  justify-content:space-between;
+  flex-wrap:wrap;
 }
-
-@media (max-width: 820px){
-  .answersRow{ grid-template-columns: 1fr; }
-}
-
 .ans{
-  padding: 12px 12px;
-  border-radius: 14px;
-  background: rgba(18,22,44,.55);
-  border: 1px solid rgba(255,255,255,.12);
-  cursor:pointer;
-  font-weight: 900;
+  flex: 1 1 260px;
+  min-height: 46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-align:center;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(18,22,44,.42);
+  border: 1px solid rgba(255,255,255,.14);
+  color: var(--text);
+  font-weight: 1000;
+  letter-spacing: .2px;
+  cursor:pointer;
   user-select:none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
 }
-
-.ans:hover{ border-color: rgba(255,255,255,.22); }
-
+.ans:hover{ border-color: rgba(255,255,255,.24); }
 .ans.correct{
-  border-color: rgba(69,212,131,.55);
-  box-shadow: 0 0 0 2px rgba(69,212,131,.18) inset;
+  border-color: rgba(69,212,131,.45);
+  box-shadow: 0 0 0 3px rgba(69,212,131,.12);
 }
 .ans.wrong{
-  border-color: rgba(255,107,107,.55);
-  box-shadow: 0 0 0 2px rgba(255,107,107,.16) inset;
+  border-color: rgba(255,107,107,.45);
+  box-shadow: 0 0 0 3px rgba(255,107,107,.12);
 }
 
+/* footer inside perg */
 .pergFoot{
+  margin-top: 12px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 10px;
+  gap: 12px;
+  flex-wrap:wrap;
 }
-
 .statusline{
-  font-size: 12px;
   color: var(--muted);
+  font-weight: 900;
+  font-size: 13px;
 }
-
 .btnSmall{
-  border: 0;
-  cursor:pointer;
-  font-weight: 1000;
-  padding: 10px 12px;
+  height: 42px;
+  padding: 0 14px;
   border-radius: 999px;
-  color: var(--text);
-  background: rgba(18,22,44,.55);
   border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 12px 30px rgba(0,0,0,.20);
+  background: rgba(18,22,44,.36);
+  color: var(--text);
+  font-weight: 950;
+  cursor:pointer;
 }
-.btnSmall:hover{ border-color: rgba(255,255,255,.25); }
-.btnSmall:disabled{ opacity:.45; cursor:not-allowed; }
-
-@media (max-width: 640px){
-  .pergContent{ padding: 10px 10px 12px; }
-  .readText{ font-size: 13px; }
-  .questionLine{ font-size: 14px; }
+.btnSmall:hover{ border-color: rgba(255,255,255,.24); }
+.btnSmall:disabled{
+  opacity:.45;
+  cursor:not-allowed;
 }
 
-/* =========================
-   TOAST
-========================= */
+/* ===========================
+   Toast
+   =========================== */
 .toast{
-  position: fixed;
+  position:fixed;
   left: 50%;
   bottom: 18px;
-  transform: translateX(-50%);
-  z-index: 100;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(18,22,44,.70);
+  transform: translateX(-50%) translateY(10px);
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: rgba(18,22,44,.72);
   border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 20px 60px rgba(0,0,0,.45);
-  opacity: 0;
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-weight: 950;
+  opacity:0;
   pointer-events:none;
-  transition: opacity .12s ease, transform .12s ease;
+  z-index: 90;
+  backdrop-filter: blur(10px);
 }
 .toast.show{
-  opacity: 1;
-  transform: translateX(-50%) translateY(-2px);
+  opacity:1;
+  transform: translateX(-50%) translateY(0);
+  transition: opacity .15s ease, transform .15s ease;
 }
 
-/* =========================
-   CELEBRATE / OOPS
-========================= */
-.celebrate,
-.oops{
-  position: fixed;
+/* ===========================
+   Celebrate / Oops overlays
+   =========================== */
+.celebrate, .oops{
+  position:fixed;
   inset:0;
-  z-index: 120;
   display:none;
-  place-items:center;
-  background: rgba(8,10,25,.55);
+  z-index: 100;
 }
-
-.celebrate.show,
-.oops.show{
-  display:grid;
-}
-
-.celebrate .stage,
-.oops .stage{
-  position: relative;
-  width: min(92vw, 900px);
-  height: min(72vh, 640px);
-  border-radius: 22px;
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(10,12,26,.45);
-  box-shadow: var(--shadow);
-}
-
-.rays{
+.celebrate.show, .oops.show{ display:block; }
+.celebrate .stage, .oops .stage{
   position:absolute;
-  inset:-30%;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255,211,106,.22), transparent 50%),
-    conic-gradient(from 0deg, rgba(255,79,163,.16), rgba(111,208,255,.14), rgba(255,211,106,.14), rgba(255,79,163,.16));
-  filter: blur(8px);
-  opacity:.7;
+  inset:0;
+  background: radial-gradient(800px 500px at 50% 45%, rgba(0,0,0,.12), rgba(0,0,0,.70));
+  backdrop-filter: blur(2px);
 }
-
-.celebrateBadge,
-.oopsBadge{
+.celebrateBadge{
   position:absolute;
-  top: 18px;
-  left: 18px;
+  left: 50%;
+  top: 16%;
+  transform: translateX(-50%);
   display:flex;
   align-items:center;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 12px 16px;
   border-radius: 999px;
-  background: rgba(18,22,44,.70);
+  background: rgba(18,22,44,.80);
   border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+  box-shadow: var(--shadow);
   font-weight: 1000;
 }
-
-.miniStar,
-.miniMark{
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
+.miniStar{
+  width: 28px;
+  height: 28px;
   display:grid;
   place-items:center;
-  background: rgba(255,255,255,.10);
+  border-radius: 999px;
+  background: rgba(255,211,106,.18);
+  color: var(--gold);
+  border: 1px solid rgba(255,211,106,.25);
+}
+.rays{
+  position:absolute;
+  left:50%;
+  top:52%;
+  transform: translate(-50%,-50%);
+  width: min(70vh, 620px);
+  height: min(70vh, 620px);
+  border-radius: 999px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255,79,163,.16),
+    rgba(111,208,255,.14),
+    rgba(255,211,106,.10),
+    rgba(255,79,163,.16)
+  );
+  filter: blur(1px);
+  opacity:.55;
+  animation: raysSpin 6s linear infinite;
+}
+@keyframes raysSpin{
+  from{ transform: translate(-50%,-50%) rotate(0deg); }
+  to{ transform: translate(-50%,-50%) rotate(360deg); }
+}
+
+/* Oops badge */
+.oopsBadge{
+  position:absolute;
+  left: 50%;
+  top: 16%;
+  transform: translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: rgba(18,22,44,.80);
   border: 1px solid rgba(255,255,255,.14);
+  box-shadow: var(--shadow);
+  font-weight: 1000;
+}
+.miniMark{
+  width: 28px;
+  height: 28px;
+  display:grid;
+  place-items:center;
+  border-radius: 999px;
+  background: rgba(255,107,107,.16);
+  color: var(--bad);
+  border: 1px solid rgba(255,107,107,.25);
+}
+
+/* Confetti container (optional) */
+.confetti{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 980px){
+  body{ overflow:hidden; }
+  .topbar-inner{ padding: 10px 14px; }
+  .brand .title{ font-size: 18px; }
+  .brand .sub{ font-size: 12px; }
+  .xp{ min-width: 200px; }
+  .pergBar{ bottom: 12px; }
+  .pergContent{ padding: 12px 12px; }
+  .readText{ font-size: 15px; }
+  .questionLine{ font-size: 17px; }
+}
+@media (max-width: 560px){
+  .brandRow{ margin-bottom: 8px; }
+  .pill, .xp, .btn{ height: 42px; }
+  .xp{ min-width: 180px; }
+  .ans{ flex: 1 1 100%; }
+  .fipsMain{ display:none; } /* auf sehr kleinen Screens nicht im Weg */
 }
