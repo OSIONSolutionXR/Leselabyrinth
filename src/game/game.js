@@ -1,5 +1,6 @@
 // src/game/game.js
-import * as UI from "../ui/ui.js";
+
+import { mountUILayout, bindElements } from "../ui/ui-layout.js";
 import * as U from "../core/utils.js";
 import * as State from "../core/state.js";
 
@@ -24,7 +25,7 @@ const vibrate =
     } catch {}
   });
 
-// deterministische Shuffle-Funktion (falls utils.js die nicht exportiert)
+// deterministic shuffle (stable but mixed)
 function hash32(str) {
   let h = 0x811c9dc5;
   for (let i = 0; i < str.length; i++) {
@@ -41,7 +42,7 @@ function mulberry32(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-function shuffledAnswersWithKeyFallback(answers, seedKey) {
+function shuffledAnswersWithKey(answers, seedKey) {
   const seed = hash32(String(seedKey || ""));
   const rnd = mulberry32(seed);
   const arr = (answers || []).map((a, idx) => ({ a, idx }));
@@ -51,21 +52,20 @@ function shuffledAnswersWithKeyFallback(answers, seedKey) {
   }
   return arr;
 }
-const shuffledAnswersWithKey =
-  U.shuffledAnswersWithKey || shuffledAnswersWithKeyFallback;
 
 // ------------------------------------------------------------
-// Boot: UI V2 initialisieren
+// Boot
 // ------------------------------------------------------------
 const root = document.getElementById("app");
-const el = UI.initUI(root);
+mountUILayout(root);
+const el = bindElements();
 
-// State kommt aus core/state.js
+// State
 let state =
   (State.loadState && State.loadState()) ||
-  (State.defaultState && State.defaultState());
+  (State.defaultState && State.defaultState()) ||
+  null;
 
-// Fallback state, wenn core/state.js anders ist
 if (!state) {
   state = {
     nodeIndex: 0,
@@ -99,7 +99,63 @@ if (!state) {
 }
 
 // ------------------------------------------------------------
-// Helpers
+// UI helper (ohne extra ui.js Abhängigkeit)
+// ------------------------------------------------------------
+let _toastTimer = null;
+let _celebrateTimer = null;
+let _oopsTimer = null;
+
+function showToast(msg, ms = 1500) {
+  clearTimeout(_toastTimer);
+  el.toast.textContent = String(msg ?? "");
+  el.toast.classList.add("show");
+  _toastTimer = setTimeout(() => el.toast.classList.remove("show"), ms);
+}
+
+function showCelebrate(text = "Richtig", ms = 800) {
+  clearTimeout(_celebrateTimer);
+  el.celebrateText.textContent = text;
+  el.celebrate.classList.add("show");
+  _celebrateTimer = setTimeout(() => el.celebrate.classList.remove("show"), ms);
+}
+
+function showOops(text = "Nicht richtig", ms = 800) {
+  clearTimeout(_oopsTimer);
+  el.oopsText.textContent = text;
+  el.oops.classList.add("show");
+  _oopsTimer = setTimeout(() => el.oops.classList.remove("show"), ms);
+}
+
+function setFips(mood = "idle", line = "") {
+  const src = ASSETS.fips?.[mood] || ASSETS.fips?.idle || "";
+  if (el.fipsMainImg) el.fipsMainImg.src = src;
+  if (el.fipsAvatar) el.fipsAvatar.src = src;
+  if (el.fipsGiantImg) el.fipsGiantImg.src = ASSETS.fips?.excited || src;
+  if (el.oopsFipsImg) el.oopsFipsImg.src = ASSETS.fips?.sad || src;
+
+  if (el.fipsMainLine) el.fipsMainLine.textContent = line || "";
+  if (el.fipsLine) el.fipsLine.textContent = line || "";
+}
+
+function renderDots(total, activeIndex, doneArr = []) {
+  if (!el.dots) return;
+  el.dots.innerHTML = "";
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement("div");
+    d.className = "d" + (i === activeIndex || doneArr[i] ? " on" : "");
+    el.dots.appendChild(d);
+  }
+}
+
+function pulse(node) {
+  if (!node) return;
+  node.classList.remove("pulse");
+  void node.offsetHeight;
+  node.classList.add("pulse");
+}
+
+// ------------------------------------------------------------
+// Persistence
 // ------------------------------------------------------------
 function save() {
   try {
@@ -107,6 +163,9 @@ function save() {
   } catch {}
 }
 
+// ------------------------------------------------------------
+// Progression
+// ------------------------------------------------------------
 function gainXP(amount) {
   state.xp += amount;
 
@@ -114,59 +173,43 @@ function gainXP(amount) {
     state.xp -= state.xpNeed;
     state.level += 1;
     state.xpNeed = Math.round(state.xpNeed * 1.18 + 10);
-
-    UI.showToast(`Stufe ${state.level} erreicht!`, 1800);
+    showToast(`Level Up! Stufe ${state.level} erreicht.`, 1800);
     setFips("excited", `Stufe ${state.level}. Weiter.`);
   }
 
-  UI.setHUD({ xp: state.xp, xpNeed: state.xpNeed, level: state.level });
-}
-
-function setFips(mood, line) {
-  // Minimal: wir benutzen nur das Bild + Text im linken Panel
-  if (el.fipsMainLine) el.fipsMainLine.textContent = line || "";
-  if (el.fipsMainImg) {
-    // Wenn du später mehr Stimmungen willst: hier map mood->asset
-    // Für jetzt: gleiche Figur, du kannst im assets.js gern moods hinterlegen.
-    // Wir lassen src wie er ist, außer du gibst konkrete Pfade.
-  }
-}
-
-function resetScene(i) {
-  const s = state.scene[i];
-  s.tries = 0;
-  s.answered = false;
-  s.perfect = true;
-  s.collected = {};
-  s.sparkFound = false;
-
-  s.qIndex = 0;
-  s.correctSteps = [false, false, false];
-  s.xpGrantedSteps = [false, false, false];
-
-  const node = NODES[i];
-  if (node.boss) {
-    s.bossHP = node.boss.hpMax;
-    s.bossStep = 0;
-    s.bossXpGrantedSteps = Array((node.readBoss || []).length || 9).fill(false);
-  }
+  pulse(el.pillXP);
 }
 
 function loseHeart() {
   state.hearts = clamp(state.hearts - 1, 0, state.heartsMax);
-  UI.setHUD({ hearts: state.hearts });
+  pulse(el.pillHearts);
   vibrate(60);
 
   if (state.hearts === 0) {
-    UI.showToast("Keine Herzen mehr. Szene startet neu.", 2200);
+    showToast("Keine Herzen mehr. Szene startet neu.", 2200);
 
     const i = state.nodeIndex;
-    resetScene(i);
+    const s = state.scene[i];
+
+    s.tries = 0;
+    s.answered = false;
+    s.perfect = true;
+    s.collected = {};
+    s.sparkFound = false;
+
+    s.qIndex = 0;
+    s.correctSteps = [false, false, false];
+    s.xpGrantedSteps = [false, false, false];
+
+    if (NODES[i].boss) {
+      s.bossHP = NODES[i].boss.hpMax;
+      s.bossStep = 0;
+      s.bossXpGrantedSteps = Array((NODES[i].readBoss || []).length || 9).fill(false);
+    }
 
     state.hearts = state.heartsMax;
     state.streak = 0;
 
-    UI.setHUD({ hearts: state.hearts, streak: state.streak });
     setFips("sad", "Nochmal.");
     vibrate(140);
   }
@@ -174,10 +217,8 @@ function loseHeart() {
 
 async function setSceneImage(nodeKey) {
   const candidates = (ASSETS.scenes && ASSETS.scenes[nodeKey]) || [];
-
-  // fallback handling
-  if (el.sceneFallback) el.sceneFallback.style.display = "none";
-  if (el.sceneImg) el.sceneImg.style.display = "block";
+  el.sceneFallback.classList.remove("show");
+  el.sceneImg.style.display = "block";
 
   const tryLoad = (src) =>
     new Promise((resolve) => {
@@ -197,28 +238,43 @@ async function setSceneImage(nodeKey) {
 
   el.sceneImg.removeAttribute("src");
   el.sceneImg.style.display = "none";
-  if (el.sceneFallback) el.sceneFallback.style.display = "grid";
-  UI.showToast("Szene-Bild fehlt. Pfad prüfen.", 2600);
+  el.sceneFallback.classList.add("show");
+  showToast("Szene-Bild fehlt. Dateiname/Pfad prüfen.", 2600);
   return false;
 }
 
+// ------------------------------------------------------------
+// Render
+// ------------------------------------------------------------
 function renderHUD() {
-  UI.setHUD({
-    stars: state.stars,
-    apples: state.apples,
-    lanterns: state.lanterns,
-    sparks: state.sparks,
-    streak: state.streak,
-    level: state.level,
-    focus: state.focus,
-    xp: state.xp,
-    xpNeed: state.xpNeed,
-    hearts: state.hearts,
-  });
+  el.starsVal.textContent = state.stars;
+  el.applesVal.textContent = state.apples;
+  el.lanternsVal.textContent = state.lanterns;
+  el.sparksVal.textContent = state.sparks;
+
+  el.streakVal.textContent = state.streak;
+  el.levelVal.textContent = state.level;
+  el.focusVal.textContent = state.focus;
+
+  el.xpVal.textContent = state.xp;
+  el.xpNeed.textContent = state.xpNeed;
+
+  const pct = clamp((state.xp / state.xpNeed) * 100, 0, 100);
+  el.xpBar.style.width = pct.toFixed(1) + "%";
+
+  // Herzen NICHT neu bauen (sonst verschwinden sie wieder je nach CSS).
+  // Wir bauen sie neu, aber mit CSS-Klasse .heart, die jetzt in ui.css existiert.
+  el.hearts.innerHTML = "";
+  for (let i = 0; i < state.heartsMax; i++) {
+    const img = document.createElement("img");
+    img.src = ASSETS.icons.herz;
+    img.alt = "Herz";
+    img.className = "heart" + (i < state.hearts ? "" : " off");
+    el.hearts.appendChild(img);
+  }
 }
 
 function renderPath() {
-  // nodes werden im drawer angezeigt – wir füllen pathList weiter wie vorher
   el.pathList.innerHTML = "";
   const done = state.completed.filter(Boolean).length;
   el.chapterStatus.textContent = `${done}/${NODES.length} erledigt`;
@@ -250,7 +306,6 @@ function renderPath() {
       state.nodeIndex = i;
       save();
       renderAll();
-      toggleDrawer(false);
     });
 
     el.pathList.appendChild(btn);
@@ -265,25 +320,21 @@ function markCompleted(i) {
   state.streak += 1;
 
   if (i < NODES.length - 1) state.unlocked[i + 1] = true;
-
-  UI.setHUD({ streak: state.streak });
 }
 
 function renderAnswers(shuffled) {
-  UI.setAnswers(
-    shuffled.map((w) => w.a.t),
-    {
-      onPick: (index) => {
-        const chosen = shuffled[index]?.a;
-        // finde dazugehöriges Element (damit markAnswer funktioniert)
-        const btnEl = el.answers?.children?.[index];
-        onAnswer(chosen, index, btnEl);
-      },
-    }
-  );
+  el.answers.innerHTML = "";
+  shuffled.forEach((wrap) => {
+    const div = document.createElement("div");
+    div.className = "ans";
+    div.textContent = wrap.a.t;
+    div.addEventListener("click", () => onAnswer(wrap.a, div));
+    el.answers.appendChild(div);
+  });
 
   const i = state.nodeIndex;
-  UI.setStatus(state.completed[i] ? "Status: erledigt" : "Status: offen");
+  const ok = state.completed[i] ? "erledigt" : "offen";
+  el.statusLine.innerHTML = `Status: <span class="tiny">${ok}</span>`;
 }
 
 function onInteract(it, hsEl, cx, cy) {
@@ -291,28 +342,31 @@ function onInteract(it, hsEl, cx, cy) {
   const s = state.scene[i];
   if (state.completed[i]) return;
 
-  // Sammeln ist Bonus, nie Pflicht
+  // Sammeln ist Bonus
   if (it.once) s.collected[it.id] = true;
   burstAtHotspot(hsEl);
 
   if (it.type === "collect_star") {
     state.stars += it.points || 1;
+    pulse(el.pillStars);
     gainXP(3);
     setFips("happy", "Bonus: Stern.");
-    flyToHUD(cx, cy, ASSETS.interact.Stern, el.pillStars);
-    UI.showToast("Bonus!", 1200);
+    flyToHUD(cx, cy, ASSETS.icons.stern, el.pillStars);
+    showToast("Bonus", 1200);
   } else if (it.type === "collect_apple") {
     state.apples += it.points || 1;
+    pulse(el.pillApples);
     gainXP(2);
     setFips("happy", "Bonus: Apfel.");
     flyToHUD(cx, cy, ASSETS.interact.Apfel, el.pillApples);
-    UI.showToast("Bonus!", 1200);
+    showToast("Bonus", 1200);
   } else if (it.type === "collect_lantern") {
     state.lanterns += it.points || 1;
+    pulse(el.pillLanterns);
     gainXP(2);
     setFips("happy", "Bonus: Laterne.");
     flyToHUD(cx, cy, ASSETS.interact.Laterne, el.pillLanterns);
-    UI.showToast("Bonus!", 1200);
+    showToast("Bonus", 1200);
   }
 
   save();
@@ -320,23 +374,32 @@ function onInteract(it, hsEl, cx, cy) {
   renderAll();
 }
 
-function onAnswer(chosen, idx, btnEl) {
+function autoAdvanceIfPossible() {
+  const i = state.nodeIndex;
+  if (i < NODES.length - 1 && state.unlocked[i + 1]) {
+    setTimeout(() => {
+      state.nodeIndex = i + 1;
+      save();
+      renderAll();
+    }, 650);
+  }
+}
+
+function onAnswer(chosen, btnEl) {
   const i = state.nodeIndex;
   const node = NODES[i];
   const s = state.scene[i];
 
   if (state.completed[i]) return;
 
+  const cards = [...el.answers.querySelectorAll(".ans")];
+  cards.forEach((c) => c.classList.remove("correct", "wrong"));
+
   s.tries += 1;
 
-  // reset classes
-  [...(el.answers?.querySelectorAll(".ans") || [])].forEach((c) =>
-    c.classList.remove("correct", "wrong")
-  );
-
   if (chosen && chosen.correct) {
-    if (btnEl) btnEl.classList.add("correct");
-    UI.showCelebrate("Richtig", 900);
+    btnEl.classList.add("correct");
+    showCelebrate("Richtig");
     setFips("excited", "Richtig.");
     vibrate(45);
 
@@ -357,22 +420,21 @@ function onAnswer(chosen, idx, btnEl) {
       s.bossStep = clamp(s.bossStep + 1, 0, total - 1);
 
       if (s.bossHP === 0) {
-        UI.setStatus("Status: Boss besiegt.");
+        el.statusLine.innerHTML = `Status: <span class="good">Boss besiegt.</span>`;
         gainXP(40);
         markCompleted(i);
+        el.gateOpen.classList.add("show");
+        setTimeout(() => el.gateOpen.classList.remove("show"), 1200);
 
-        if (el.gateOpen) {
-          el.gateOpen.style.display = "grid";
-          setTimeout(() => (el.gateOpen.style.display = "none"), 1200);
-        }
+        autoAdvanceIfPossible();
       } else {
-        UI.setStatus("Status: Treffer.");
+        el.statusLine.innerHTML = `Status: <span class="good">Treffer.</span>`;
       }
     } else {
       const total = (node.readSteps || []).length || 3;
       const qi = clamp(s.qIndex, 0, total - 1);
 
-      s.correctSteps[qi] = true;
+      if (!s.correctSteps[qi]) s.correctSteps[qi] = true;
 
       if (!s.xpGrantedSteps[qi]) {
         s.xpGrantedSteps[qi] = true;
@@ -381,27 +443,28 @@ function onAnswer(chosen, idx, btnEl) {
 
       if (qi < total - 1) {
         s.qIndex = qi + 1;
-        UI.setStatus("Status: Richtig.");
+        el.statusLine.innerHTML = `Status: <span class="good">Richtig.</span>`;
       } else {
-        UI.setStatus("Status: Erledigt.");
+        el.statusLine.innerHTML = `Status: <span class="good">Erledigt.</span>`;
         markCompleted(i);
+
+        // Nach 3/3 richtig automatisch weiter
+        autoAdvanceIfPossible();
       }
     }
 
     save();
     renderAll();
   } else {
-    if (btnEl) btnEl.classList.add("wrong");
-
+    btnEl.classList.add("wrong");
     s.perfect = false;
     state.streak = 0;
-    UI.setHUD({ streak: state.streak });
 
-    UI.showOops("Nicht richtig", 900);
-    UI.showToast("Falsch.", 1200);
+    showOops("Nicht richtig");
+    showToast("Falsch.", 1200);
 
     loseHeart();
-    UI.setStatus("Status: Falsch.");
+    el.statusLine.innerHTML = `Status: <span class="bad">Falsch.</span>`;
     setFips("thinking", "Nochmal.");
 
     save();
@@ -414,60 +477,56 @@ async function renderScene() {
   const node = NODES[i];
   const s = state.scene[i];
 
-  await setSceneImage(node.key);
+  el.sceneTitle.textContent = node.title;
+  el.overlay.innerHTML = "";
+  el.gateOpen.classList.remove("show");
 
-  // Boss UI aus boss.js weiter nutzen
+  await setSceneImage(node.key);
   renderBossUI(el, node, s);
 
-  // Fragepaket wählen
-  let pack, total, stepOrQi, seedKey;
+  let pack, qLabel, answers, seedKey;
 
   if (node.boss) {
-    total = (node.readBoss || []).length || 9;
-    stepOrQi = clamp(s.bossStep, 0, total - 1);
+    const total = (node.readBoss || []).length || 9;
+    const step = clamp(s.bossStep, 0, total - 1);
 
-    pack = node.readBoss[stepOrQi];
+    pack = node.readBoss[step];
+    qLabel = `Bossfrage ${step + 1}/${total}`;
 
-    seedKey = `${node.id}|boss|${stepOrQi}|${s.tries}`;
-    const answers = shuffledAnswersWithKey(pack.answers, seedKey);
+    seedKey = `${node.id}|boss|${step}|${s.tries}`;
+    answers = shuffledAnswersWithKey(pack.answers, seedKey);
 
-    UI.setReadText(pack.text);
-    UI.setQuestion(pack.question);
-    UI.setQuestionProgress(total, stepOrQi);
-    renderAnswers(answers);
-
-    // Boss HUD Anzeige aktualisieren
-    UI.showBossHud({ name: node.boss?.name || "Boss", hp: s.bossHP, max: node.boss.hpMax });
+    const progressArr = Array(total).fill(false).map((_, idx) => idx < step);
+    renderDots(total, step, progressArr);
   } else {
-    total = (node.readSteps || []).length || 3;
-    stepOrQi = clamp(s.qIndex, 0, total - 1);
+    const total = (node.readSteps || []).length || 3;
+    const qi = clamp(s.qIndex, 0, total - 1);
 
-    pack = node.readSteps[stepOrQi];
+    pack = node.readSteps[qi];
+    qLabel = `Frage ${qi + 1}/${total}`;
 
-    seedKey = `${node.id}|q|${stepOrQi}|${s.tries}`;
-    const answers = shuffledAnswersWithKey(pack.answers, seedKey);
+    seedKey = `${node.id}|q|${qi}|${s.tries}`;
+    answers = shuffledAnswersWithKey(pack.answers, seedKey);
 
-    UI.setReadText(pack.text);
-    UI.setQuestion(pack.question);
-    UI.setQuestionProgress(total, stepOrQi);
-    renderAnswers(answers);
-
-    UI.hideBossHud();
+    renderDots(total, qi, s.correctSteps);
   }
 
-  // Next Button
+  el.readText.innerHTML = pack.text;
+  el.question.textContent = pack.question;
+  el.qProgress.textContent = qLabel;
+
+  renderAnswers(answers);
+
+  // Next nur als Backup, Auto-Advance macht das eigentliche Weiter
   el.nextBtn.disabled = !(state.completed[i] && i < NODES.length - 1 && state.unlocked[i + 1]);
 
-  // Overlay reset
-  if (el.overlay) el.overlay.innerHTML = "";
-
-  // Interactables (Bonus)
+  // Interactables
   (node.interactables || []).forEach((it) => {
     if (it.once && s.collected[it.id]) return;
 
     let x = it.x;
     let y = it.y;
-    if (y > 90) y = 90;
+    if (y > 74) y = 72;
 
     const hs = document.createElement("div");
     hs.className = "hotspot";
@@ -489,36 +548,33 @@ async function renderScene() {
     el.overlay.appendChild(hs);
   });
 
-  // Geheimfunke (unsichtbarer Hotspot)
+  // Geheimfunke
   const sp = node.sparkHotspot;
   if (sp && !s.sparkFound) {
     const hs = document.createElement("div");
-    hs.className = "hotspot sparkHotspot";
+    hs.className = "hotspot";
     hs.style.left = sp.x + "%";
-    hs.style.top = (sp.y > 90 ? 90 : sp.y) + "%";
+    hs.style.top = (sp.y > 74 ? 72 : sp.y) + "%";
     hs.style.width = sp.r * 2 + "%";
     hs.style.height = sp.r * 2 + "%";
     hs.style.borderRadius = "999px";
     hs.style.opacity = "0.001";
-
     hs.addEventListener("click", (e) => {
       e.stopPropagation();
       s.sparkFound = true;
       state.sparks += 1;
+      pulse(el.pillSparks);
       gainXP(10);
-      UI.setHUD({ sparks: state.sparks });
-      UI.showToast("Geheimfunke!", 1700);
+      showToast("Geheimfunke!", 1600);
       setFips("excited", "Gefunden.");
       save();
       renderAll();
     });
-
     el.overlay.appendChild(hs);
   }
 }
 
 function toggleDrawer(force) {
-  if (!el.drawer) return;
   const isOpen = el.drawer.classList.contains("open");
   const next = force !== undefined ? !!force : !isOpen;
   el.drawer.classList.toggle("open", next);
@@ -528,13 +584,16 @@ async function renderAll() {
   renderHUD();
   renderPath();
   await renderScene();
+
+  const i = state.nodeIndex;
+  el.nextBtn.disabled = !(state.completed[i] && i < NODES.length - 1 && state.unlocked[i + 1]);
 }
 
 // ------------------------------------------------------------
 // Events
 // ------------------------------------------------------------
 el.reReadBtn.addEventListener("click", () => {
-  UI.showToast("Nochmal lesen.", 1200);
+  showToast("Nochmal lesen.", 1200);
   setFips("thinking", "Lies. Dann antworte.");
 });
 
@@ -555,42 +614,15 @@ el.resetBtn.addEventListener("click", () => {
   } else if (State.defaultState) {
     state = State.defaultState();
     save();
-  } else {
-    // Notfall: lokaler Reset
-    state.nodeIndex = 0;
-    state.unlocked = NODES.map((_, idx) => idx === 0);
-    state.completed = NODES.map(() => false);
-    state.stars = state.apples = state.lanterns = state.sparks = 0;
-    state.streak = 0;
-    state.level = 1;
-    state.xp = 0;
-    state.xpNeed = 110;
-    state.heartsMax = 3;
-    state.hearts = 3;
-    state.focus = "W-Frage";
-    state.scene = NODES.map((n) => ({
-      tries: 0,
-      answered: false,
-      perfect: true,
-      sparkFound: false,
-      collected: {},
-      qIndex: 0,
-      correctSteps: [false, false, false],
-      xpGrantedSteps: [false, false, false],
-      bossHP: n.boss ? n.boss.hpMax : 0,
-      bossStep: 0,
-      bossXpGrantedSteps: Array(9).fill(false),
-    }));
-    save();
   }
 
   renderAll();
-  UI.showToast("Reset. Alles zurückgesetzt.", 1800);
+  showToast("Reset. Alles zurückgesetzt.", 1800);
   setFips("idle", "Los geht’s. Lesen, dann antworten.");
 });
 
 el.helpBtn.addEventListener("click", () => {
-  UI.showToast("Lesen · Antworten · Weiter. Sammeln ist Bonus.", 5200);
+  showToast("So geht’s: Lesen · Antworten · Weiter. Sammeln ist Bonus.", 5200);
   setFips("idle", "Sammeln ist Bonus.");
 });
 
