@@ -1,11 +1,16 @@
+// src/game/boss.js
 import { clamp, vibrate } from "../core/utils.js";
 
 export function renderBossUI(el, node, sceneState) {
-  if (node.boss) {
+  if (!el?.bossHud) return;
+
+  if (node?.boss) {
     el.bossHud.classList.add("show");
     el.bossName.textContent = node.boss.name;
-    const hpMax = node.boss.hpMax;
+
+    const hpMax = node.boss.hpMax || 9;
     const hp = clamp(sceneState.bossHP, 0, hpMax);
+
     el.bossHPText.textContent = hp;
     el.bossBarFill.style.width = ((hp / hpMax) * 100) + "%";
   } else {
@@ -13,15 +18,20 @@ export function renderBossUI(el, node, sceneState) {
   }
 }
 
-export function bossHitFX(el) {
+export function bossHitFX(el, dmg = 1) {
+  if (!el?.bossHud) return;
+
   el.bossHud.classList.add("hit", "bossShake");
-  el.dmg.textContent = `-1`;
-  el.dmg.classList.remove("show");
-  void el.dmg.offsetWidth;
-  el.dmg.classList.add("show");
+
+  if (el.dmg) {
+    el.dmg.textContent = `-${dmg}`;
+    el.dmg.classList.remove("show");
+    void el.dmg.offsetWidth;
+    el.dmg.classList.add("show");
+  }
+
   vibrate(50);
 
   setTimeout(() => el.bossHud.classList.remove("hit"), 380);
   setTimeout(() => el.bossHud.classList.remove("bossShake"), 260);
 }
-
